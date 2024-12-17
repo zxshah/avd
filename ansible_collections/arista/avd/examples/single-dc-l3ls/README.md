@@ -400,10 +400,8 @@ l3leaf:
     loopback_ipv4_pool: 10.255.0.0/27 # (2)!
     loopback_ipv4_offset: 2 # (3)!
     vtep_loopback_ipv4_pool: 10.255.1.0/27 # (4)!
-    uplink_interfaces: ['Ethernet1', 'Ethernet2'] # (5)!
     uplink_switches: ['dc1-spine1', 'dc1-spine2'] # (6)!
     uplink_ipv4_pool: 10.255.255.0/26 # (7)!
-    mlag_interfaces: ['Ethernet3', 'Ethernet4'] # (8)!
     mlag_peer_ipv4_pool: 10.255.1.64/27 # (9)!
     mlag_peer_l3_ipv4_pool: 10.255.1.96/27 # (10)!
     virtual_router_mac_address: 00:1c:73:00:00:99 # (11)!
@@ -417,33 +415,25 @@ l3leaf:
         - name: dc1-leaf1a
           id: 1
           mgmt_ip: 172.16.1.101/24
-          uplink_switch_interfaces: # (16)!
-            - Ethernet1
-            - Ethernet1
+          uplink_switch_interfaces: [Ethernet1, Ethernet1]# (16)!
         - name: dc1-leaf1b
           id: 2
           mgmt_ip: 172.16.1.102/24
-          uplink_switch_interfaces:
-            - Ethernet2
-            - Ethernet2
-
-    DC1_L3_LEAF2:
+          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+    - group: DC1_L3_LEAF2
       bgp_as: 65102
       nodes:
         - name: dc1-leaf2a
           id: 3
           mgmt_ip: 172.16.1.103/24
-          uplink_switch_interfaces:
-            - Ethernet3
-            - Ethernet3
+          uplink_switch_interfaces: [Ethernet3, Ethernet3]
         - name: dc1-leaf2b
           id: 4
           mgmt_ip: 172.16.1.104/24
-          uplink_switch_interfaces:
-            - Ethernet4
-            - Ethernet4
+          uplink_switch_interfaces: [Ethernet4, Ethernet4]
 ```
 
+###Need to change the numbering TODO
 1. `platform` references default settings defined in AVD specific to certain switch platforms.
 2. `loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for Loopback0. Please note that this IP pool is identical to the one used for the spine switches in this example. To avoid setting the same IP addresses for several devices, we define the option `loopback_ipv4_offset`.
 3. `loopback_ipv4_offset` offsets all assigned loopback IP addresses counting from the beginning of the IP scope. This is required to avoid overlapping IPs when the same IP pool is used for two different node_types (like spine and l3leaf in this example). The offset is "2" because each spine switch uses one loopback address.
@@ -476,22 +466,17 @@ l2leaf:
         - name: dc1-leaf1c
           id: 1
           mgmt_ip: 172.16.1.151/24
-          uplink_switch_interfaces:
-            - Ethernet8
-            - Ethernet8
-
+          uplink_switch_interfaces: [Ethernet8, Ethernet8]
     - group: DC1_L2_LEAF2
       uplink_switches: ['dc1-leaf2a', 'dc1-leaf2b']
       nodes:
         - name: dc1-leaf2c
           id: 2
           mgmt_ip: 172.16.1.152/24
-          uplink_switch_interfaces:
-            - Ethernet8
-            - Ethernet8
+          uplink_switch_interfaces: [Ethernet8, Ethernet8]
 ```
 
-An L2 leaf switch is more simple than an L3 switch. Hence there are fewer settings to define.
+An L2 leaf switch is simpler than an L3 switch. Hence there are fewer settings to define.
 
 ## Specifying network services (VRFs and VLANs) in the EVPN/VXLAN fabric
 
@@ -578,25 +563,45 @@ This defines the settings for the relevant switch ports to which the endpoints c
 As an example, here is the configuration for `dc1-leaf1-server1`:
 
 ```yaml title="CONNECTED_ENDPOINTS.yml"
-  dc1-leaf1-server1:
+servers:
+  - name: dc1-leaf1-server1
     adapters: # (1)!
-    - endpoint_ports: [ PCI1, PCI2 ] # (2)!
-      switch_ports: [ Ethernet5, Ethernet5 ] # (3)!
-      switches: [ dc1-leaf1a, dc1-leaf1b ] # (4)!
-      vlans: 11-12,21-22 # (5)!
-      native_vlan: 4092 # (6)!
-      mode: trunk # (7)!
-      spanning_tree_portfast: edge # (8)!
-      port_channel: # (9)!
-        endpoint_port_channel: Bond1
-        mode: active
+      - endpoint_ports: [ PCI1, PCI2 ] # (2)!
+        switch_ports: [ Ethernet5, Ethernet5 ] # (3)!
+        switches: [ dc1-leaf1a, dc1-leaf1b ] # (4)!
+        vlans: 11-12,21-22 # (5)!
+        native_vlan: 4092 # (6)!
+        mode: trunk # (7)!
+        spanning_tree_portfast: edge # (8)!
+        port_channel: # (9)!
+          endpoint_port_channel: Bond1
+          mode: active
 
-    - endpoint_ports: [ iLO ]
-      switch_ports: [ Ethernet5 ]
-      switches: [ dc1-leaf1c ]
-      vlans: 11
-      mode: access
-      spanning_tree_portfast: edge
+      - endpoint_ports: [ iLO ]
+        switch_ports: [ Ethernet5 ]
+        switches: [ dc1-leaf1c ]
+        vlans: 11
+        mode: access
+        spanning_tree_portfast: edge
+  - name: dc1-leaf2-server1
+    adapters: 
+      - endpoint_ports: [ PCI1, PCI2 ] 
+        switch_ports: [ Ethernet5, Ethernet5 ]
+        switches: [ dc1-leaf2a, dc1-leaf2b ]
+        vlans: 11-12,21-22
+        native_vlan: 4092 
+        mode: trunk
+        spanning_tree_portfast: edge
+        port_channel:
+          endpoint_port_channel: Bond1 #this is not in the group vars 
+          mode: active
+  
+      - endpoint_ports: [ iLO ]
+        switch_ports: [ Ethernet5 ]
+        switches: [ dc1-leaf2c ]
+        vlans: 11
+        mode: access
+        spanning_tree_portfast: edge
 ```
 
 1. The relevant `adapters` are defined. For example, the `type` set to `server` and `ilo` is purely for documentation and readability. It has no operational significance.

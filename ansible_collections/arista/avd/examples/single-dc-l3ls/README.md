@@ -433,25 +433,12 @@ l3leaf:
           uplink_switch_interfaces: [Ethernet4, Ethernet4]
 ```
 
+### Need to change the numbering TODO
 
 1. `platform` references default settings defined in AVD specific to certain switch platforms.
 2. `loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for Loopback0. Please note that this IP pool is identical to the one used for the spine switches in this example. To avoid setting the same IP addresses for several devices, we define the option `loopback_ipv4_offset`.
 3. `loopback_ipv4_offset` offsets all assigned loopback IP addresses counting from the beginning of the IP scope. This is required to avoid overlapping IPs when the same IP pool is used for two different node_types (like spine and l3leaf in this example). The offset is "2" because each spine switch uses one loopback address.
 4. `vtep_loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the VTEP (Loopback1).
-<<<<<<< HEAD
-5. `uplink_interfaces` used by the `l3leaf` nodes to connect to the spine switches.
-6. `uplink_switches` defines the uplink switches, which are dc1-spine1 and dc1-spine2. Note that the `uplink_interfaces` and `uplink_switches` are paired vertically.
-7. `uplink_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the uplink interfaces that were just defined.
-8. `mlag_interfaces` defines the MLAG interfaces used on each leaf switch.
-9. `mlag_peer_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the MLAG peer link interface VLAN4094.
-10. `mlag_peer_l3_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the iBGP peering established between the two leaf switches via the SVI/IRB interface VLAN4093.
-11. `virtual_router_mac_address` defines the MAC address used for the anycast gateway on the various subnets. This is the MAC address connected endpoints will learn when ARPing for their default gateway.
-12. `spanning_tree_priority` sets the spanning tree priority. Since spanning tree in an L3LS network is effectively only running locally on the switch, the same priority across all L3 leaf switches can be reused.
-13. `spanning_tree_mode` defines the spanning tree mode. In this case, we are using MSTP, which is the default. However, other modes are supported should they be required, for example, for connectivity to legacy or third-party vendor environments.
-14. `node_groups` defines settings common to more than one node. For example, when exactly two nodes are part of a node group for leaf switches, AVD will, by default, automatically generate MLAG configuration.
-15. `bgp_as` is defined once since an MLAG pair shares a single BGP AS number.
-16. `uplink_switch_interfaces` defines the interfaces used on the uplink switches (Ethernet1 on dc1-spine1 and dc1-spine2 in this example).
-=======
 5. `uplink_switches` defines the uplink switches, which are dc1-spine1 and dc1-spine2. Note that the `uplink_interfaces` and `uplink_switches` are paired vertically.
 6. `uplink_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the uplink interfaces that were just defined.
 7. `mlag_peer_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the MLAG peer link interface VLAN4094.
@@ -462,7 +449,6 @@ l3leaf:
 12. `node_groups` defines settings common to more than one node. For example, when exactly two nodes are part of a node group for leaf switches, AVD will, by default, automatically generate MLAG configuration.
 13. `bgp_as` is defined once since an MLAG pair shares a single BGP AS number.
 14. `uplink_switch_interfaces` defines the interfaces used on the uplink switches (Ethernet1 on dc1-spine1 and dc1-spine2 in this example).
->>>>>>> 7e2cb1b78 (remove quotes and fix annotation numbering)
 
 Finally, more of the same, but this time for the L2 leaf switches:
 
@@ -597,18 +583,18 @@ servers:
         mode: access
         spanning_tree_portfast: edge
   - name: dc1-leaf2-server1
-    adapters: 
-      - endpoint_ports: [ PCI1, PCI2 ] 
+    adapters:
+      - endpoint_ports: [ PCI1, PCI2 ]
         switch_ports: [ Ethernet5, Ethernet5 ]
         switches: [ dc1-leaf2a, dc1-leaf2b ]
         vlans: 11-12,21-22
-        native_vlan: 4092 
+        native_vlan: 4092
         mode: trunk
         spanning_tree_portfast: edge
         port_channel:
-          endpoint_port_channel: Bond1 #this is not in the group vars 
+          endpoint_port_channel: Bond1 #this is not in the group vars
           mode: active
-  
+
       - endpoint_ports: [ iLO ]
         switch_ports: [ Ethernet5 ]
         switches: [ dc1-leaf2c ]

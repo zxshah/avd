@@ -295,6 +295,7 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1.yml` file defines settin
 examples/single-dc-l3ls/group_vars/DC1.yml
 --8<--
 ```
+
 The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_SPINES.yml` covers the spine switches.
 
 ```yaml title="DC1_SPINES.yml"
@@ -302,7 +303,6 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_SPINES.yml` covers the s
 examples/single-dc-l3ls/group_vars/DC1_SPINES.yml
 --8<--
 ```
-
 
 The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
 

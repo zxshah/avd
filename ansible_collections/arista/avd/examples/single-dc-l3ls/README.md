@@ -274,7 +274,7 @@ The first section defines how the Ansible host connects to the devices:
 
 ```yaml title="FABRIC.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC.yml[2-16]
+examples/single-dc-l3ls/group_vars/FABRIC.yml [2-16]
 --8<--
 ```
 

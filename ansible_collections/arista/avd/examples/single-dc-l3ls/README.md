@@ -274,27 +274,27 @@ The first section defines how the Ansible host connects to the devices:
 
 ```yaml title="FABRIC.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC.yml [2-16]
+examples/single-dc-l3ls/group_vars/FABRIC.yml:2:16
 --8<--
 ```
 
-<!-- ```yaml title="FABRIC.yml"
-ansible_connection: ansible.netcommon.httpapi # (1)!
-ansible_network_os: arista.eos.eos # (2)!
-ansible_user: ansible # (3)!
-ansible_password: ansible
-ansible_become: true
-ansible_become_method: enable # (4)!
-ansible_httpapi_use_ssl: true # (5)!
-ansible_httpapi_validate_certs: false # (6)!
-```
-
-1. The Ansible host must use eAPI
-2. Network OS which in this case is Arista EOS
-3. The username/password combo
-4. How to escalate privileges to get write access
-5. Use SSL
-6. Do not validate SSL certificates -->
+# ```yaml title="FABRIC.yml"
+# ansible_connection: ansible.netcommon.httpapi # (1)!
+# ansible_network_os: arista.eos.eos # (2)!
+# ansible_user: ansible # (3)!
+# ansible_password: ansible
+# ansible_become: true
+# ansible_become_method: enable # (4)!
+# ansible_httpapi_use_ssl: true # (5)!
+# ansible_httpapi_validate_certs: false # (6)!
+# ```
+# 
+# 1. The Ansible host must use eAPI
+# 2. Network OS which in this case is Arista EOS
+# 3. The username/password combo
+# 4. How to escalate privileges to get write access
+# 5. Use SSL
+# 6. Do not validate SSL certificates 
 
 The following section specifies variables that generate configuration to be applied to all devices in the fabric:
 

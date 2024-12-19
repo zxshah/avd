@@ -273,6 +273,12 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/FABRIC.yml` file defines gen
 The first section defines how the Ansible host connects to the devices:
 
 ```yaml title="FABRIC.yml"
+--8<--
+examples/single-dc-l3ls/group_vars/FABRIC.yml[2-16]
+--8<--
+```
+
+<!-- ```yaml title="FABRIC.yml"
 ansible_connection: ansible.netcommon.httpapi # (1)!
 ansible_network_os: arista.eos.eos # (2)!
 ansible_user: ansible # (3)!
@@ -288,7 +294,7 @@ ansible_httpapi_validate_certs: false # (6)!
 3. The username/password combo
 4. How to escalate privileges to get write access
 5. Use SSL
-6. Do not validate SSL certificates
+6. Do not validate SSL certificates -->
 
 The following section specifies variables that generate configuration to be applied to all devices in the fabric:
 

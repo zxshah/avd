@@ -281,184 +281,43 @@ examples/single-dc-l3ls/group_vars/FABRIC.yml:2:16
 The following section specifies variables that generate configuration to be applied to all devices in the fabric:
 
 ```yaml title="FABRIC.yml"
-fabric_name: FABRIC # (1)!
-
-underlay_routing_protocol: ebgp
-overlay_routing_protocol: ebgp
-
-local_users: # (2)!
-  - name: ansible
-    privilege: 15
-    role: network-admin
-    sha512_password: $6$7u4j1rkb3VELgcZE$EJt2Qff8kd/TapRoci0XaIZsL4tFzgq1YZBLD9c6f/knXzvcYY0NcMKndZeCv0T268knGKhOEwZAxqKjlMm920
-  - name: admin
-    privilege: 15
-    role: network-admin
-    no_password: true
-
-bgp_peer_groups: # (3)!
-  evpn_overlay_peers:
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
-  ipv4_underlay_peers:
-    password: 7x4B4rnJhZB438m9+BrBfQ==
-  mlag_ipv4_underlay_peer:
-    password: 4b21pAdCvWeAqpcKDFMdWw==
-
-p2p_uplinks_mtu: 1500 # (4)!
-
-default_interfaces: # (5)!
-  - types: [ spine ]
-    platforms: [ default ]
-    uplink_interfaces: [ Ethernet1-2 ]
-    downlink_interfaces: [ Ethernet1-8 ]
-  - types: [ l3leaf ]
-    platforms: [ default ]
-    uplink_interfaces: [ Ethernet1-2 ]
-    mlag_interfaces: [ Ethernet3-4 ]
-    downlink_interfaces: [ Ethernet8 ]
-  - types: [ l2leaf ]
-    platforms: [ default ]
-    uplink_interfaces: [ Ethernet1-2 ]
-
-cvp_instance_ips:
-  - 192.168.1.12 # (6)!
-terminattr_smashexcludes: "ale,flexCounter,hardware,kni,pulse,strata"
-terminattr_ingestexclude: "/Sysdb/cell/1/agent,/Sysdb/cell/2/agent"
-terminattr_disable_aaa: true
-
-name_servers: # (7)!
-  - 192.168.1.1
-
-ntp_settings: # (8)!
-  server_vrf: use_mgmt_interface_vrf
-  servers:
-    - name: 192.168.200.5
+--8<--
+examples/single-dc-l3ls/group_vars/FABRIC.yml:18:88
+--8<--
 ```
-
-1. The name of the fabric for internal AVD use. This name *must* match the name of an Ansible Group (and therefore a corresponding group_vars file) covering all network devices.
-2. Local users/passwords and their privilege levels. In this case, the `ansible` user is set with the password `ansible` and an `admin` user is set with no password.
-3. BGP peer groups and their passwords (all passwords are "arista").
-4. Point-to-point interface MTU, in this case, is set to 1500 since the example uses vEOS, but when using hardware, this should be set to 9214 instead.
-5. Defines which interfaces to use for uplinks, MLAG peer-links and downlinks. In this example they are specified per node type.
-   1. `uplink_interfaces` specify which local interfaces connect to an upstream device.
-   2. `mlag_interfaces` specify which local interfaces connect to an MLAG peer.
-   3. `downlink_interfaces` specify which local interfaces connect to a downstream device.
-6. Relevant settings for the `TerminAttr` software agent on EOS, responsible for streaming telemetry back to CloudVision Portal.
-7. DNS Server specification. Used in this example primarily to resolve the IP address of the NTP server.
-8. NTP server settings. Correct and synchronized time on EOS is required for proper connectivity to CloudVision Portal.
 
 ## Setting device specific configuration parameters
 
 The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1.yml` file defines settings that apply to all children of the `DC1` group as specified in the inventory described earlier. However, this time the settings defined are no longer fabric-wide but are limited to DC1. This example is of limited benefit with only a single data center. Still, it allows us to scale the configuration to a scenario with multiple data centers in the future.
 
 ```yaml title="DC1.yml"
----
-mgmt_gateway: 172.16.1.1 # (1)!
+--8<--
+examples/single-dc-l3ls/group_vars/DC1.yml
+--8<--
+```
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_SPINES.yml` covers the spine switches.
 
-spine:
-  defaults:
-    platform: vEOS-lab # (2)!
-    loopback_ipv4_pool: 10.255.0.0/27 # (3)!
-    bgp_as: 65100 # (4)!
-
-  nodes: # (5)!
-    - name: dc1-spine1
-      id: 1 # (6)!
-      mgmt_ip: 172.16.1.11/24 # (7)!
-
-    - name: dc1-spine2
-      id: 2
-      mgmt_ip: 172.16.1.12/24
+```yaml title="DC1_SPINES.yml"
+--8<--
+examples/single-dc-l3ls/group_vars/DC1_SPINES.yml
+--8<--
 ```
 
-1. The default gateway for the management interface of all devices in DC1 is defined.
-2. `platform` references default settings defined in AVD specific to certain switch platforms.
-3. `loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for Loopback0.
-4. `bgp_as` defines the BGP AS number.
-5. `nodes` defines the actual spine switches, using the hostnames defined in the inventory.
-6. `id` is used to calculate the various IP addresses, for example, the IPv4 address for the Loopback0 interface. In this case, dc1-spine1 will get the IPv4 address 10.255.0.1/27 assigned to the Loopback0 interface.
-7. `mgmt_ip` defines the IPv4 address of the management interface. As stated earlier, Ansible will perform name lookups using the hostnames specified in the inventory unless using the `ansible_host` option. However, there is no automatic mechanism to grab the result of the name lookup and use that to generate the management interface configuration.
 
-The following section covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches:
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
 
-```yaml title="DC1.yml"
-l3leaf:
-  defaults:
-    platform: vEOS-lab # (1)!
-    loopback_ipv4_pool: 10.255.0.0/27 # (2)!
-    loopback_ipv4_offset: 2 # (3)!
-    vtep_loopback_ipv4_pool: 10.255.1.0/27 # (4)!
-    uplink_switches: [dc1-spine1, dc1-spine2] # (5)!
-    uplink_ipv4_pool: 10.255.255.0/26 # (6)!
-    mlag_peer_ipv4_pool: 10.255.1.64/27 # (7)!
-    mlag_peer_l3_ipv4_pool: 10.255.1.96/27 # (8)!
-    virtual_router_mac_address: 00:1c:73:00:00:99 # (9)!
-    spanning_tree_priority: 4096 # (10)!
-    spanning_tree_mode: mstp # (11)!
-
-  node_groups: # (12)!
-    - group: DC1_L3_LEAF1
-      bgp_as: 65101 # (13)!
-      nodes:
-        - name: dc1-leaf1a
-          id: 1
-          mgmt_ip: 172.16.1.101/24
-          uplink_switch_interfaces: [Ethernet1, Ethernet1]# (14)!
-        - name: dc1-leaf1b
-          id: 2
-          mgmt_ip: 172.16.1.102/24
-          uplink_switch_interfaces: [Ethernet2, Ethernet2]
-    - group: DC1_L3_LEAF2
-      bgp_as: 65102
-      nodes:
-        - name: dc1-leaf2a
-          id: 3
-          mgmt_ip: 172.16.1.103/24
-          uplink_switch_interfaces: [Ethernet3, Ethernet3]
-        - name: dc1-leaf2b
-          id: 4
-          mgmt_ip: 172.16.1.104/24
-          uplink_switch_interfaces: [Ethernet4, Ethernet4]
+```yaml title="DC1_L3_LEAVES.yml"
+--8<--
+examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES.yml
+--8<--
 ```
-
-1. `platform` references default settings defined in AVD specific to certain switch platforms.
-2. `loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for Loopback0. Please note that this IP pool is identical to the one used for the spine switches in this example. To avoid setting the same IP addresses for several devices, we define the option `loopback_ipv4_offset`.
-3. `loopback_ipv4_offset` offsets all assigned loopback IP addresses counting from the beginning of the IP scope. This is required to avoid overlapping IPs when the same IP pool is used for two different node_types (like spine and l3leaf in this example). The offset is "2" because each spine switch uses one loopback address.
-4. `vtep_loopback_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the VTEP (Loopback1).
-5. `uplink_switches` defines the uplink switches, which are dc1-spine1 and dc1-spine2. Note that the `uplink_interfaces` and `uplink_switches` are paired vertically.
-6. `uplink_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the uplink interfaces that were just defined.
-7. `mlag_peer_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the MLAG peer link interface VLAN4094.
-8. `mlag_peer_l3_ipv4_pool` defines the IP scope from which AVD assigns IPv4 addresses for the iBGP peering established between the two leaf switches via the SVI/IRB interface VLAN4093.
-9. `virtual_router_mac_address` defines the MAC address used for the anycast gateway on the various subnets. This is the MAC address connected endpoints will learn when ARPing for their default gateway.
-10. `spanning_tree_priority` sets the spanning tree priority. Since spanning tree in an L3LS network is effectively only running locally on the switch, the same priority across all L3 leaf switches can be re-used.
-11. `spanning_tree_mode` defines the spanning tree mode. In this case, we are using MSTP, which is the default. However, other modes are supported should they be required, for example, for connectivity to legacy or third-party vendor environments.
-12. `node_groups` defines settings common to more than one node. For example, when exactly two nodes are part of a node group for leaf switches, AVD will, by default, automatically generate MLAG configuration.
-13. `bgp_as` is defined once since an MLAG pair shares a single BGP AS number.
-14. `uplink_switch_interfaces` defines the interfaces used on the uplink switches (Ethernet1 on dc1-spine1 and dc1-spine2 in this example).
 
 Finally, more of the same, but this time for the L2 leaf switches:
 
-```yaml title="DC1.yml"
-l2leaf:
-  defaults:
-    platform: vEOS-lab
-    spanning_tree_mode: mstp
-
-  node_groups:
-    - group: DC1_L2_LEAF1
-      uplink_switches: [dc1-leaf1a, dc1-leaf1b]
-      nodes:
-        - name: dc1-leaf1c
-          id: 1
-          mgmt_ip: 172.16.1.151/24
-          uplink_switch_interfaces: [Ethernet8, Ethernet8]
-    - group: DC1_L2_LEAF2
-      uplink_switches: [dc1-leaf2a, dc1-leaf2b]
-      nodes:
-        - name: dc1-leaf2c
-          id: 2
-          mgmt_ip: 172.16.1.152/24
-          uplink_switch_interfaces: [Ethernet8, Ethernet8]
+```yaml title="DC1_L2_LEAVES.yml"
+--8<--
+examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES.yml
+--8<--
 ```
 
 An L2 leaf switch is simpler than an L3 switch. Hence there are fewer settings to define.
@@ -468,68 +327,10 @@ An L2 leaf switch is simpler than an L3 switch. Hence there are fewer settings t
 The `ansible-avd-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES.yml` file defines All VRF and VLANs. This means that regardless of where a given VRF or VLAN must exist, its existence is defined in this file, but it does not indicate ***where*** in the fabric it exists. That was done at the bottom of the inventory file previously described in the [Inventory](#content-of-the-inventoryyml-file) section.
 
 ```yaml title="NETWORK_SERVICES.yml"
-tenants: # (1)!
-  - name: TENANT1
-    mac_vrf_vni_base: 10000 # (2)!
-    vrfs: # (3)!
-      - name: VRF10
-        vrf_vni: 10 # (4)!
-        vtep_diagnostic: # (5)!
-          loopback: 10 # (6)!
-          loopback_ip_range: 10.255.10.0/27 # (7)!
-        svis: # (8)!
-          - id: 11
-            name: VRF10_VLAN11 # (9)!
-            enabled: true
-            ip_address_virtual: 10.10.11.1/24 # (10)!
-          - id: 12
-            name: VRF10_VLAN12
-            enabled: true
-            ip_address_virtual: 10.10.12.1/24
-      - name: VRF11
-        vrf_vni: 11
-        vtep_diagnostic:
-          loopback: 11
-          loopback_ip_range: 10.255.11.0/27
-        svis:
-          - id: 21
-            name: VRF11_VLAN21
-            enabled: true
-            ip_address_virtual: 10.10.21.1/24
-          - name: 22
-            name: VRF11_VLAN22
-            enabled: true
-            ip_address_virtual: 10.10.22.1/24
-
-    l2vlans: # (11)!
-      - id: 3401
-        name: L2_VLAN3401
-      - id: 3402
-        name: L2_VLAN3402
+--8<--
+examples/single-dc-l3ls/group_vars/NETWORK_SERVICES.yml
+--8<--
 ```
-
-1. Definition of tenants. Additional level of abstraction in addition to VRFs. In this example just one tenant named `TENANT1` is specified.
-2. The base number (`10000`) used to generate the L2VNI numbers automatically, `L2VNI = base number + VLAN-id`. For example, L2VNI for VLAN11 = 10000 + 11 = 10011.
-3. VRF definitions inside the tenant.
-4. VRF VNI definition.
-5. Enable VTEP Network diagnostics. This will create a loopback with virtual source-nat enable to perform diagnostics from the switch:
-
-   ```eos
-   interface Loopback10
-     description VRF10_VTEP_DIAGNOSTICS
-     no shutdown
-     vrf VRF10
-     ip address 10.255.10.3/32
-   !
-   ip address virtual source-nat vrf VRF10 address 10.255.10.3
-   ```
-
-6. Loopback interface number.
-7. Loopback IP range, a unique IP is derived from this range and assigned to each l3 leaf based on its unique id.
-8. SVI Definitions for all SVIs within this tenant.
-9. SVI Description.
-10. IP anycast gateway to be used in the SVI in every leaf across the fabric.
-11. These are pure L2 VLANs. They do not have an SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric.
 
 AVD offers granular control of where Tenants and VLANs are configured using `tags` and `filter`. Those areas are not covered in this basic example.
 

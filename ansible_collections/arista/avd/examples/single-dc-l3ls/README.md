@@ -1,6 +1,6 @@
 ---
 # This title is used for search results
-title: Single Data Center using L3LS
+title: Single Data Center - L3LS
 ---
 <!--
   ~ Copyright (c) 2023-2025 Arista Networks, Inc.
@@ -8,7 +8,7 @@ title: Single Data Center using L3LS
   ~ that can be found in the LICENSE file.
   -->
 
-# Single Data Center using L3LS
+# Single Data Center - L3LS
 
 ## Introduction
 
@@ -366,25 +366,6 @@ servers:
       - endpoint_ports: [ iLO ]
         switch_ports: [ Ethernet5 ]
         switches: [ dc1-leaf1c ]
-        vlans: 11
-        mode: access
-        spanning_tree_portfast: edge
-  - name: dc1-leaf2-server1
-    adapters:
-      - endpoint_ports: [ PCI1, PCI2 ]
-        switch_ports: [ Ethernet5, Ethernet5 ]
-        switches: [ dc1-leaf2a, dc1-leaf2b ]
-        vlans: 11-12,21-22
-        native_vlan: 4092
-        mode: trunk
-        spanning_tree_portfast: edge
-        port_channel:
-          endpoint_port_channel: Bond1 #this is not in the group vars
-          mode: active
-
-      - endpoint_ports: [ iLO ]
-        switch_ports: [ Ethernet5 ]
-        switches: [ dc1-leaf2c ]
         vlans: 11
         mode: access
         spanning_tree_portfast: edge

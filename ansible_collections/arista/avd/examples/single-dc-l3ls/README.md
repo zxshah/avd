@@ -305,41 +305,6 @@ examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/CONNECTED_ENDPOINTS.yml
 
 This defines the settings for the relevant switch ports to which the endpoints connect, in this case the two servers `dc1-leaf1-server1` and `dc1-leaf2-server1`.
 
-As an example, here is the configuration for `dc1-leaf1-server1`:
-
-```yaml title="CONNECTED_ENDPOINTS.yml"
-servers:
-  - name: dc1-leaf1-server1
-    adapters: # (1)!
-      - endpoint_ports: [ PCI1, PCI2 ] # (2)!
-        switch_ports: [ Ethernet5, Ethernet5 ] # (3)!
-        switches: [ dc1-leaf1a, dc1-leaf1b ] # (4)!
-        vlans: 11-12,21-22 # (5)!
-        native_vlan: 4092 # (6)!
-        mode: trunk # (7)!
-        spanning_tree_portfast: edge # (8)!
-        port_channel: # (9)!
-          endpoint_port_channel: Bond1
-          mode: active
-
-      - endpoint_ports: [ iLO ]
-        switch_ports: [ Ethernet5 ]
-        switches: [ dc1-leaf1c ]
-        vlans: 11
-        mode: access
-        spanning_tree_portfast: edge
-```
-
-1. The relevant `adapters` are defined. For example, the `type` set to `server` and `ilo` is purely for documentation and readability. It has no operational significance.
-2. `endpoint_ports` are defined for use in the interface descriptions on the switch. This does not configure anything on the server.
-3. `switch_ports` defines the interfaces used in the switches. In this example the server is dual-connected to Ethernet5 and Ethernet5. These two ports exist on switch dc1-leaf1a and dc1-leaf1b defined in the following line.
-4. `switches` defines the switches used, in this case dc1-leaf1a and dc1-leaf1b. Note that the `endpoint_ports`, `switch_ports` and `switches` definitions are paired vertically.
-5. `vlans` defines which VLANs are allowed on the switch_ports, in this case it is two ranges, VLAN11-12 and VLAN21-22 for the dual-attached server ports and VLAN11 for the iLO port.
-6. `native_vlan` specifies the native VLAN when the switch port mode is set to trunk.
-7. `mode` is set to trunk for the dual-attached server ports and access for the iLO port.
-8. `spanning_tree_portfast` defines whether the switch port should be a spanning tree edge or network port.
-9. `port_channel` defines the port-channel name on the endpoint that will be used in the port-channel description and mode for the port-channel.
-
 ## The playbooks
 
 In this example, three playbooks are included, of which two must be used:

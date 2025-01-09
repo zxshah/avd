@@ -199,27 +199,27 @@ examples/single-dc-l3ls/inventory_without_ip.yml
 
 Since this example covers building an L3LS network, AVD must know about the device types, for example, spines, L3 leaves, L2 leaves, etc. The devices are already grouped in the inventory, so the device types are specified in the group variable files with the following names and content:
 
-=== "DC1_SPINES.yml"
+=== "dc1_spines.yml"
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_SPINES.yml
+    examples/single-dc-l3ls/group_vars/DC1_SPINES/dc1_spines.yml
     --8<--
     ```
 
-=== "DC1_L3_LEAVES.yml"
+=== "dc1_l3_leaves.yml"
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES.yml
+    examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/dc1_l3_leaves.yml
     --8<--
     ```
 
-=== "DC1_L2_LEAVES.yml"
+=== "dc1_l2_leaves.yml"
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES.yml
+    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/dc1_l2_leaves.yml
     --8<--
     ```
 
@@ -227,55 +227,55 @@ For example, all switches that are children of the DC1_SPINES group defined in t
 
 ## Setting fabric-wide configuration parameters
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/FABRIC.yml` file defines generic settings that apply to all children of the `FABRIC` group as specified in the inventory described earlier.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/FABRIC` folder contain files that defines generic settings that apply to all children of the `FABRIC` group as specified in the inventory described earlier.
 
-The first section defines how the Ansible host connects to the devices:
+The first file defines how the Ansible host connects to the devices:
 
-```yaml title="FABRIC.yml"
+```yaml title="fabric_ansible_connectivity.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC/FABRIC_ANSIBLE_CONNECTIVITY.yml
+examples/single-dc-l3ls/group_vars/FABRIC/fabric_ansible_connectivity.yml
 --8<--
 ```
 
 The following section specifies variables that generate configuration to be applied to all devices in the fabric:
 
-```yaml title="FABRIC.yml"
+```yaml title="fabric_variables.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC/FABRIC_VARIABLES.yml
+examples/single-dc-l3ls/group_vars/FABRIC/fabric_variables.yml
 --8<--
 ```
 
 ## Setting device specific configuration parameters
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1.yml` file defines settings that apply to all children of the `DC1` group as specified in the inventory described earlier. However, this time the settings defined are no longer fabric-wide but are limited to DC1. This example is of limited benefit with only a single data center. Still, it allows us to scale the configuration to a scenario with multiple data centers in the future.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DCI/dc1.yml` file defines settings that apply to all children of the `DC1` group as specified in the inventory described earlier. However, this time the settings defined are no longer fabric-wide but are limited to DC1. This example is of limited benefit with only a single data center. Still, it allows us to scale the configuration to a scenario with multiple data centers in the future.
 
-```yaml title="DC1.yml"
+```yaml title="dc1.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1/DC1.yml
---8<--
-```
-
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/DC1_SPINES.yml` covers the spine switches.
-
-```yaml title="DC1_SPINES.yml"
---8<--
-examples/single-dc-l3ls/group_vars/DC1/DC1_SPINES.yml
+examples/single-dc-l3ls/group_vars/DC1/dc1.yml
 --8<--
 ```
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/DC1_L3_LEAVES.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/dc1_spines.yml` covers the spine switches.
 
-```yaml title="DC1_L3_LEAVES.yml"
+```yaml title="dc1_spines.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES.yml
+examples/single-dc-l3ls/group_vars/DC1/dc1_spines.yml
+--8<--
+```
+
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/dc1_l3_leaves.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
+
+```yaml title="dc1_l3_leaves.yml"
+--8<--
+examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/dc1_l3_leaves.yml
 --8<--
 ```
 
 Finally, more of the same, but this time for the L2 leaf switches:
 
-```yaml title="DC1_L2_LEAVES.yml"
+```yaml title="dc1_l2_leaves.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES.yml
+examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/dc1_l2_leaves.yml
 --8<--
 ```
 
@@ -283,11 +283,11 @@ An L2 leaf switch is simpler than an L3 switch. Hence there are fewer settings t
 
 ## Specifying network services (VRFs and VLANs) in the EVPN/VXLAN fabric
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/NETWORK_SERVICES.yml` file defines All VRF and VLANs. This means that regardless of where a given VRF or VLAN must exist, its existence is defined in this file, but it does not indicate ***where*** in the fabric it exists. That was done at the bottom of the inventory file previously described in the [Inventory](#content-of-the-inventoryyml-file) section.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/network_services.yml` file defines All VRF and VLANs. This means that regardless of where a given VRF or VLAN must exist, its existence is defined in this file, but it does not indicate ***where*** in the fabric it exists. That was done at the bottom of the inventory file previously described in the [Inventory](#content-of-the-inventoryyml-file) section.
 
-```yaml title="NETWORK_SERVICES.yml"
+```yaml title="network_services.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/NETWORK_SERVICES.yml
+examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/network_services.yml
 --8<--
 ```
 
@@ -295,11 +295,11 @@ AVD offers granular control of where Tenants and VLANs are configured using `tag
 
 ## Specifying endpoint connectivity in the EVPN/VXLAN fabric
 
-After the previous section, all VRFs and VLANs across the fabric are now defined. The `ansible-avd-examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/CONNECTED_ENDPOINTS.yml` file specifies the connectivity for all endpoints in the fabric (typically servers):
+After the previous section, all VRFs and VLANs across the fabric are now defined. The `ansible-avd-examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/connected_endpoints.yml` file specifies the connectivity for all endpoints in the fabric (typically servers):
 
-```yaml title="CONNECTED_ENDPOINTS.yml"
+```yaml title="connected_endpoints.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/CONNECTED_ENDPOINTS.yml
+examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/connected_endpoints.yml
 --8<--
 ```
 

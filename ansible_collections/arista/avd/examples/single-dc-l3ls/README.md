@@ -203,7 +203,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_SPINES/dc1_spines.yml
+    examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml
     --8<--
     ```
 
@@ -211,7 +211,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/dc1_l3_leaves.yml
+    examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
     --8<--
     ```
 
@@ -219,7 +219,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/dc1_l2_leaves.yml
+    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
     --8<--
     ```
 
@@ -255,27 +255,27 @@ examples/single-dc-l3ls/group_vars/DC1/dc1.yml
 --8<--
 ```
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/dc1_spines.yml` covers the spine switches.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/spines.yml` covers the spine switches.
 
 ```yaml title="dc1_spines.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1/dc1_spines.yml
+examples/single-dc-l3ls/group_vars/DC1/spines.yml
 --8<--
 ```
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/dc1_l3_leaves.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/l3_leaves.yml` covers the L3 leaf switches. Significantly more settings need to be set compared to the spine switches.
 
-```yaml title="dc1_l3_leaves.yml"
+```yaml title="l3_leaves.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/dc1_l3_leaves.yml
+examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
 --8<--
 ```
 
 Finally, more of the same, but this time for the L2 leaf switches:
 
-```yaml title="dc1_l2_leaves.yml"
+```yaml title="l2_leaves.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/dc1_l2_leaves.yml
+examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
 --8<--
 ```
 

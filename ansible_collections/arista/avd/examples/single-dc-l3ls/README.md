@@ -199,7 +199,7 @@ examples/single-dc-l3ls/inventory_without_ip.yml
 
 Since this example covers building an L3LS network, AVD must know about the device types, for example, spines, L3 leaves, L2 leaves, etc. The devices are already grouped in the inventory, so the device types are specified in the group variable files with the following names and content:
 
-=== "dc1_spines.yml"
+=== "spines.yml"
 
     ```yaml
     --8<--
@@ -207,7 +207,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
     --8<--
     ```
 
-=== "dc1_l3_leaves.yml"
+=== "l3_leaves.yml"
 
     ```yaml
     --8<--
@@ -215,7 +215,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
     --8<--
     ```
 
-=== "dc1_l2_leaves.yml"
+=== "l2_leaves.yml"
 
     ```yaml
     --8<--

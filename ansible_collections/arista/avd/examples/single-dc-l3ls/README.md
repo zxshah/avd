@@ -219,7 +219,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
+    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml:node_groups
     --8<--
     ```
 

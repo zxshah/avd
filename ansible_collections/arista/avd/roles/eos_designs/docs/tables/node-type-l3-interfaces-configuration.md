@@ -39,10 +39,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;policies</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].cv_pathfinder_internet_exit.policies") | List, items: Dictionary |  |  |  | List of Internet-exit policies using this interface as exit. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].name") | String | Required, Unique |  |  | Internet-exit policy name. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tunnel_interface_numbers</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].tunnel_interface_numbers") | String |  |  |  | Number range to use for Tunnel interfaces to an internet-exit service provider using this local interface.<br>Examples: '1-3' or '100,200,300' |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for Receive Side Scaling (RSS) profile for this interface. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is platform dependent. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.worker") | String |  |  |  | Worker ids specified as combination of range and/or comma separated values<br>such as 0-4,7. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.mode") | String |  |  | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. Default mode is 'shared'. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for platform SFE interface profile.<br>This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.worker") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.worker.[]") | String |  |  |  | Worker ids specified as values or range of values such as 0-4 or 7.<br>Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].rx_queue.mode") | String |  | `shared` | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the interface in the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].flow_tracking") | Dictionary |  |  |  | Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_interfaces` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "<node_type_keys.key>.defaults.l3_interfaces.[].flow_tracking.enabled") | Boolean |  |  |  |  |
@@ -82,10 +83,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;policies</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies") | List, items: Dictionary |  |  |  | List of Internet-exit policies using this interface as exit. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].name") | String | Required, Unique |  |  | Internet-exit policy name. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tunnel_interface_numbers</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].tunnel_interface_numbers") | String |  |  |  | Number range to use for Tunnel interfaces to an internet-exit service provider using this local interface.<br>Examples: '1-3' or '100,200,300' |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for Receive Side Scaling (RSS) profile for this interface. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is platform dependent. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.worker") | String |  |  |  | Worker ids specified as combination of range and/or comma separated values<br>such as 0-4,7. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.mode") | String |  |  | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. Default mode is 'shared'. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for platform SFE interface profile.<br>This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.worker") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.worker.[]") | String |  |  |  | Worker ids specified as values or range of values such as 0-4 or 7.<br>Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].rx_queue.mode") | String |  | `shared` | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the interface in the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].flow_tracking") | Dictionary |  |  |  | Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_interfaces` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].l3_interfaces.[].flow_tracking.enabled") | Boolean |  |  |  |  |
@@ -121,10 +123,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;policies</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies") | List, items: Dictionary |  |  |  | List of Internet-exit policies using this interface as exit. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].name") | String | Required, Unique |  |  | Internet-exit policy name. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tunnel_interface_numbers</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].tunnel_interface_numbers") | String |  |  |  | Number range to use for Tunnel interfaces to an internet-exit service provider using this local interface.<br>Examples: '1-3' or '100,200,300' |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for Receive Side Scaling (RSS) profile for this interface. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is platform dependent. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.worker") | String |  |  |  | Worker ids specified as combination of range and/or comma separated values<br>such as 0-4,7. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.mode") | String |  |  | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. Default mode is 'shared'. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for platform SFE interface profile.<br>This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.worker") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.worker.[]") | String |  |  |  | Worker ids specified as values or range of values such as 0-4 or 7.<br>Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].rx_queue.mode") | String |  | `shared` | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the interface in the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].flow_tracking") | Dictionary |  |  |  | Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_interfaces` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "<node_type_keys.key>.node_groups.[].l3_interfaces.[].flow_tracking.enabled") | Boolean |  |  |  |  |
@@ -162,10 +165,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;policies</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies") | List, items: Dictionary |  |  |  | List of Internet-exit policies using this interface as exit. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].name") | String | Required, Unique |  |  | Internet-exit policy name. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tunnel_interface_numbers</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].cv_pathfinder_internet_exit.policies.[].tunnel_interface_numbers") | String |  |  |  | Number range to use for Tunnel interfaces to an internet-exit service provider using this local interface.<br>Examples: '1-3' or '100,200,300' |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for Receive Side Scaling (RSS) profile for this interface. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is platform dependent. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.worker") | String |  |  |  | Worker ids specified as combination of range and/or comma separated values<br>such as 0-4,7. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.mode") | String |  |  | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. Default mode is 'shared'. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for platform SFE interface profile.<br>This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.worker") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.worker.[]") | String |  |  |  | Worker ids specified as values or range of values such as 0-4 or 7.<br>Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].rx_queue.mode") | String |  | `shared` | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the interface in the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].flow_tracking") | Dictionary |  |  |  | Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_interfaces` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "<node_type_keys.key>.nodes.[].l3_interfaces.[].flow_tracking.enabled") | Boolean |  |  |  |  |
@@ -201,10 +205,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;policies</samp>](## "l3_interface_profiles.[].cv_pathfinder_internet_exit.policies") | List, items: Dictionary |  |  |  | List of Internet-exit policies using this interface as exit. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "l3_interface_profiles.[].cv_pathfinder_internet_exit.policies.[].name") | String | Required, Unique |  |  | Internet-exit policy name. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tunnel_interface_numbers</samp>](## "l3_interface_profiles.[].cv_pathfinder_internet_exit.policies.[].tunnel_interface_numbers") | String |  |  |  | Number range to use for Tunnel interfaces to an internet-exit service provider using this local interface.<br>Examples: '1-3' or '100,200,300' |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "l3_interface_profiles.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for Receive Side Scaling (RSS) profile for this interface. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "l3_interface_profiles.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is platform dependent. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "l3_interface_profiles.[].rx_queue.worker") | String |  |  |  | Worker ids specified as combination of range and/or comma separated values<br>such as 0-4,7. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "l3_interface_profiles.[].rx_queue.mode") | String |  |  | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. Default mode is 'shared'. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;rx_queue</samp>](## "l3_interface_profiles.[].rx_queue") | Dictionary |  |  |  | Receive queue parameters for platform SFE interface profile.<br>This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count</samp>](## "l3_interface_profiles.[].rx_queue.count") | Integer |  |  | Min: 1 | Number of receive queues.<br>The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;worker</samp>](## "l3_interface_profiles.[].rx_queue.worker") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "l3_interface_profiles.[].rx_queue.worker.[]") | String |  |  |  | Worker ids specified as values or range of values such as 0-4 or 7.<br>Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mode</samp>](## "l3_interface_profiles.[].rx_queue.mode") | String |  | `shared` | Valid Values:<br>- <code>shared</code><br>- <code>exclusive</code> | Mode applicable to the workers. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "l3_interface_profiles.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the interface in the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "l3_interface_profiles.[].flow_tracking") | Dictionary |  |  |  | Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_interfaces` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "l3_interface_profiles.[].flow_tracking.enabled") | Boolean |  |  |  |  |
@@ -333,19 +338,21 @@
                   # Examples: '1-3' or '100,200,300'
                   tunnel_interface_numbers: <str>
 
-            # Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
+            # Receive queue parameters for platform SFE interface profile.
+            # This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device.
             rx_queue:
 
               # Number of receive queues.
-              # The maximum value is platform dependent.
+              # The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
               count: <int; >=1>
+              worker:
 
-              # Worker ids specified as combination of range and/or comma separated values
-              # such as 0-4,7.
-              worker: <str>
+                  # Worker ids specified as values or range of values such as 0-4 or 7.
+                  # Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
+                - <str>
 
-              # Mode applicable to the workers. Default mode is 'shared'.
-              mode: <str; "shared" | "exclusive">
+              # Mode applicable to the workers.
+              mode: <str; "shared" | "exclusive"; default="shared">
 
             # EOS CLI rendered directly on the interface in the final EOS configuration.
             raw_eos_cli: <str>
@@ -487,19 +494,21 @@
                         # Examples: '1-3' or '100,200,300'
                         tunnel_interface_numbers: <str>
 
-                  # Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
+                  # Receive queue parameters for platform SFE interface profile.
+                  # This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device.
                   rx_queue:
 
                     # Number of receive queues.
-                    # The maximum value is platform dependent.
+                    # The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
                     count: <int; >=1>
+                    worker:
 
-                    # Worker ids specified as combination of range and/or comma separated values
-                    # such as 0-4,7.
-                    worker: <str>
+                        # Worker ids specified as values or range of values such as 0-4 or 7.
+                        # Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
+                      - <str>
 
-                    # Mode applicable to the workers. Default mode is 'shared'.
-                    mode: <str; "shared" | "exclusive">
+                    # Mode applicable to the workers.
+                    mode: <str; "shared" | "exclusive"; default="shared">
 
                   # EOS CLI rendered directly on the interface in the final EOS configuration.
                   raw_eos_cli: <str>
@@ -628,19 +637,21 @@
                     # Examples: '1-3' or '100,200,300'
                     tunnel_interface_numbers: <str>
 
-              # Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
+              # Receive queue parameters for platform SFE interface profile.
+              # This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device.
               rx_queue:
 
                 # Number of receive queues.
-                # The maximum value is platform dependent.
+                # The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
                 count: <int; >=1>
+                worker:
 
-                # Worker ids specified as combination of range and/or comma separated values
-                # such as 0-4,7.
-                worker: <str>
+                    # Worker ids specified as values or range of values such as 0-4 or 7.
+                    # Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
+                  - <str>
 
-                # Mode applicable to the workers. Default mode is 'shared'.
-                mode: <str; "shared" | "exclusive">
+                # Mode applicable to the workers.
+                mode: <str; "shared" | "exclusive"; default="shared">
 
               # EOS CLI rendered directly on the interface in the final EOS configuration.
               raw_eos_cli: <str>
@@ -775,19 +786,21 @@
                     # Examples: '1-3' or '100,200,300'
                     tunnel_interface_numbers: <str>
 
-              # Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
+              # Receive queue parameters for platform SFE interface profile.
+              # This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device.
               rx_queue:
 
                 # Number of receive queues.
-                # The maximum value is platform dependent.
+                # The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
                 count: <int; >=1>
+                worker:
 
-                # Worker ids specified as combination of range and/or comma separated values
-                # such as 0-4,7.
-                worker: <str>
+                    # Worker ids specified as values or range of values such as 0-4 or 7.
+                    # Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
+                  - <str>
 
-                # Mode applicable to the workers. Default mode is 'shared'.
-                mode: <str; "shared" | "exclusive">
+                # Mode applicable to the workers.
+                mode: <str; "shared" | "exclusive"; default="shared">
 
               # EOS CLI rendered directly on the interface in the final EOS configuration.
               raw_eos_cli: <str>
@@ -917,19 +930,21 @@
               # Examples: '1-3' or '100,200,300'
               tunnel_interface_numbers: <str>
 
-        # Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
+        # Receive queue parameters for platform SFE interface profile.
+        # This setting is ignored unless the `platform_sfe_interface_profile.supported` is set as `true` under `platform_settings.feature_support` for the `platform` set on this device.
         rx_queue:
 
           # Number of receive queues.
-          # The maximum value is platform dependent.
+          # The maximum value is determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
           count: <int; >=1>
+          worker:
 
-          # Worker ids specified as combination of range and/or comma separated values
-          # such as 0-4,7.
-          worker: <str>
+              # Worker ids specified as values or range of values such as 0-4 or 7.
+              # Valid values are between 0 and one less than maximum value determined by `platform_sfe_interface_profile.max_rx_queues` under `platform_settings.feature_support` for the `platform` set on this device.
+            - <str>
 
-          # Mode applicable to the workers. Default mode is 'shared'.
-          mode: <str; "shared" | "exclusive">
+          # Mode applicable to the workers.
+          mode: <str; "shared" | "exclusive"; default="shared">
 
         # EOS CLI rendered directly on the interface in the final EOS configuration.
         raw_eos_cli: <str>

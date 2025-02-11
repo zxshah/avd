@@ -171,28 +171,7 @@ $defs:
                       Examples: '1-3' or '100,200,300'
         rx_queue:
           type: dict
-          description: |-
-            Receive queue parameters for Receive Side Scaling (RSS) profile for this interface.
-          keys:
-            count:
-              type: int
-              min: 1
-              convert_types:
-                - str
-              description: |-
-                Number of receive queues.
-                The maximum value is platform dependent.
-            worker:
-              type: str
-              description: |-
-                Worker ids specified as combination of range and/or comma separated values
-                such as 0-4,7.
-            mode:
-              type: str
-              description: Mode applicable to the workers. Default mode is 'shared'.
-              valid_values:
-                - shared
-                - exclusive
+          $ref: "eos_designs#/$defs/rx_queue_settings"
         raw_eos_cli:
           type: str
           description: EOS CLI rendered directly on the interface in the final EOS configuration.

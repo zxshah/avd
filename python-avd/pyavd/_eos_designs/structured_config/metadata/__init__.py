@@ -30,10 +30,8 @@ class AvdStructuredConfigMetadataProtocol(CvTagsMixin, CvPathfinderMixin, Struct
             dc_name=self.inputs.dc_name,
             fabric_name=self.shared_utils.fabric_name,
         )
-        if self.inputs.generate_cv_tags or self.shared_utils.is_cv_pathfinder_router:
-            self._cv_tags()
-        if self.shared_utils.is_cv_pathfinder_router:
-            self._cv_pathfinder()
+        self._set_cv_tags()
+        self._set_cv_pathfinder()
 
 
 class AvdStructuredConfigMetadata(StructuredConfigGenerator, AvdStructuredConfigMetadataProtocol):

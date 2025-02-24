@@ -48,17 +48,14 @@ class CvTagsMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    def _cv_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
-        """Generate the data structure `metadata.cv_tags`."""
-        if self.inputs.generate_cv_tags.topology_hints:
-            self._get_topology_hints()
-        if self.shared_utils.is_cv_pathfinder_router:
-            self._get_cv_pathfinder_device_tags()
-        if self.inputs.generate_cv_tags.device_tags:
-            self._get_device_tags()
-
-        if self.inputs.generate_cv_tags.interface_tags or self.shared_utils.is_cv_pathfinder_router:
-            self._get_interface_tags()
+    def _set_cv_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
+        """Set the data structure of `metadata.cv_tags`."""
+        if not self.inputs.generate_cv_tags and not self.shared_utils.is_cv_pathfinder_router:
+            return
+        self._set_topology_hints()
+        self._set_cv_pathfinder_device_tags()
+        self._set_device_tags()
+        self._set_interface_tags()
 
     @staticmethod
     def _tag_dict(name: str, value: Any) -> dict | None:
@@ -66,8 +63,11 @@ class CvTagsMixin(Protocol):
             return None
         return {"name": name, "value": str(value)}
 
-    def _get_topology_hints(self: AvdStructuredConfigMetadataProtocol) -> None:
-        """Return list of topology_hint tags."""
+    def _set_topology_hints(self: AvdStructuredConfigMetadataProtocol) -> None:
+        """Set the data structure of topology_hint tags."""
+        if not self.inputs.generate_cv_tags.topology_hints:
+            return
+
         default_type_hint = self.shared_utils.node_type_key_data.cv_tags_topology_type
 
         for name, value in [
@@ -81,9 +81,9 @@ class CvTagsMixin(Protocol):
             if tag:
                 self.structured_config.metadata.cv_tags.device_tags.append_new(name=name, value=tag["value"])
 
-    def _get_cv_pathfinder_device_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
+    def _set_cv_pathfinder_device_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
         """
-        Return list of device_tags for cv_pathfinder solution.
+        Set the data structure of device_tags for cv_pathfinder solution.
 
         Example: [
             {"name": "Region", "value": <value copied from cv_pathfinder_region>},
@@ -93,6 +93,9 @@ class CvTagsMixin(Protocol):
             {"name": "Role", "value": <'pathfinder', 'edge', 'transit region' or 'transit zone'>}
         ].
         """
+        if not self.shared_utils.is_cv_pathfinder_router:
+            return
+
         region_name = self.shared_utils.wan_region.name if self.shared_utils.wan_region else None
         site_name = self.shared_utils.wan_site.name if self.shared_utils.wan_site else None
 
@@ -107,9 +110,11 @@ class CvTagsMixin(Protocol):
             if tag:
                 self.structured_config.metadata.cv_tags.device_tags.append_new(name=name, value=tag["value"])
 
-    def _get_device_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
-        """Return list of device_tags."""
-        tags_to_generate = self.inputs.generate_cv_tags.device_tags
+    def _set_device_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
+        """Set the data structure of device_tags."""
+        if not (tags_to_generate := self.inputs.generate_cv_tags.device_tags):
+            return
+
         for generate_tag in tags_to_generate:
             if generate_tag.name in INVALID_CUSTOM_DEVICE_TAGS:
                 msg = (
@@ -137,9 +142,10 @@ class CvTagsMixin(Protocol):
             if value:
                 self.structured_config.metadata.cv_tags.device_tags.append_new(name=generate_tag.name, value=str(value))
 
-    def _get_interface_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
-        """Return list of interface_tags."""
-        tags_to_generate = self.inputs.generate_cv_tags.interface_tags
+    def _set_interface_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
+        """Set the data structure of interface_tags."""
+        if not (tags_to_generate := self.inputs.generate_cv_tags.interface_tags) and not self.shared_utils.is_cv_pathfinder_router:
+            return
 
         for ethernet_interface in self.structured_config.ethernet_interfaces:
             tags = EosCliConfigGen.Metadata.CvTags.InterfaceTagsItem.Tags()

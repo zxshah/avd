@@ -20,41 +20,36 @@ class CvPathfinderMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    def _cv_pathfinder(self: AvdStructuredConfigMetadataProtocol) -> None:
+    def _set_cv_pathfinder(self: AvdStructuredConfigMetadataProtocol) -> None:
         """
-        Generate metadata for CV Pathfinder feature.
+        Set the metadata for CV Pathfinder feature.
 
         Only relevant for cv_pathfinder routers.
 
-        Metadata for "applications" and "internet_exit_policies" is generated in the network services module,
+        Metadata for "applications" and "internet_exit_policies" is set in the network services module,
         since all the required data was readily available in there.
         """
+        if not self.shared_utils.is_cv_pathfinder_router:
+            return
+
         region_name = self.shared_utils.wan_region.name if self.shared_utils.wan_region is not None else None
         site_name = self.shared_utils.wan_site.name if self.shared_utils.wan_site is not None else None
         # Pathfinder
+        self.structured_config.metadata.cv_pathfinder._update(
+            role=self.shared_utils.cv_pathfinder_role,
+            ssl_profile=self.shared_utils.wan_stun_dtls_profile_name,
+            vtep_ip=self.shared_utils.vtep_ip,
+            region=region_name,
+            site=site_name,
+        )
         if self.shared_utils.is_cv_pathfinder_server:
-            self.structured_config.metadata.cv_pathfinder._update(
-                role=self.shared_utils.cv_pathfinder_role,
-                ssl_profile=self.shared_utils.wan_stun_dtls_profile_name,
-                vtep_ip=self.shared_utils.vtep_ip,
-                region=region_name,
-                site=site_name,
-                address=self.shared_utils.wan_site.location if self.shared_utils.wan_site is not None else None,
-            )
+            self.structured_config.metadata.cv_pathfinder.address = self.shared_utils.wan_site.location if self.shared_utils.wan_site is not None else None
             self._metadata_interfaces()
             self._metadata_pathgroups()
             self._metadata_regions()
-            if self.structured_config.router_adaptive_virtual_topology.vrfs and self.structured_config.router_path_selection.load_balance_policies:
-                self._metadata_vrfs()
+            self._metadata_vrfs()
         else:
-            self.structured_config.metadata.cv_pathfinder._update(
-                role=self.shared_utils.cv_pathfinder_role,
-                ssl_profile=self.shared_utils.wan_stun_dtls_profile_name,
-                vtep_ip=self.shared_utils.vtep_ip,
-                region=region_name,
-                zone=self.shared_utils.wan_zone["name"] if region_name else None,
-                site=site_name,
-            )
+            self.structured_config.metadata.cv_pathfinder.zone = self.shared_utils.wan_zone["name"] if region_name else None
             self._metadata_interfaces()
             self._metadata_pathfinder_vtep_ips()
 
@@ -86,6 +81,7 @@ class CvPathfinderMixin(Protocol):
         regions = self.inputs.cv_pathfinder_regions
         for region in regions:
             region_item = EosCliConfigGen.Metadata.CvPathfinder.RegionsItem(name=region.name, id=region.id)
+            # TODO: Once we give configurable zones this should be updated
             region_item.zones.append_new(name=f"{region.name}-ZONE", id=1)
             for site in region.sites:
                 site_item = region_item.zones[0].SitesItem(name=site.name, id=site.id)
@@ -98,9 +94,11 @@ class CvPathfinderMixin(Protocol):
             self.structured_config.metadata.cv_pathfinder.pathfinders.append_new(vtep_ip=wan_route_server.vtep_ip)
 
     def _metadata_vrfs(self: AvdStructuredConfigMetadataProtocol) -> None:
-        """Extracting metadata for VRFs by parsing the generated structured config and flatten it a bit (like hiding load-balance policies)."""
+        """Set the metadata for VRFs by parsing the generated structured config and flatten it a bit (like hiding load-balance policies)."""
         avt_vrfs = self.structured_config.router_adaptive_virtual_topology.vrfs
         load_balance_policies = self.structured_config.router_path_selection.load_balance_policies
+        if not avt_vrfs or not load_balance_policies:
+            return
 
         avt_policies = self.structured_config.router_adaptive_virtual_topology.policies
 

@@ -23,22 +23,23 @@ class MetadataMixin(Protocol):
     @structured_config_contributor
     def metadata(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
-        Generate metadata.cv_pathfinder for CV Pathfinder routers.
+        Set the metadata.cv_pathfinder for CV Pathfinder routers.
 
         Pathfinders will always have applications since we have the default control plane apps.
         Edge routers may have internet_exit_policies but not applications.
         """
         if not self.shared_utils.is_cv_pathfinder_router:
             return
-        if self._filtered_internet_exit_policies_and_connections:
-            self.get_cv_pathfinder_metadata_internet_exit_policies()
-        if self.shared_utils.is_cv_pathfinder_server and self.application_traffic_recognition is not None:
-            self.get_cv_pathfinder_metadata_applications()
+        self.set_cv_pathfinder_metadata_internet_exit_policies()
+        self.set_cv_pathfinder_metadata_applications()
 
-    def get_cv_pathfinder_metadata_internet_exit_policies(
+    def set_cv_pathfinder_metadata_internet_exit_policies(
         self: AvdStructuredConfigNetworkServicesProtocol,
     ) -> None:
-        """Generate metadata.cv_pathfinder.internet_exit_policies if available."""
+        """Set the metadata.cv_pathfinder.internet_exit_policies if available."""
+        if not self._filtered_internet_exit_policies_and_connections:
+            return
+
         for internet_exit_policy, connections in self._filtered_internet_exit_policies_and_connections:
             # Currently only supporting zscaler
             if internet_exit_policy.type != "zscaler":
@@ -65,8 +66,11 @@ class MetadataMixin(Protocol):
                 )
             self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
 
-    def get_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Generate metadata.cv_pathfinder.applications if available."""
+    def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+        """Set the metadata.cv_pathfinder.applications if available."""
+        if not self.shared_utils.is_cv_pathfinder_server or self.application_traffic_recognition is None:
+            return
+
         applications = get(self.application_traffic_recognition, "applications", default=[])
         user_defined_app_names = set(get_all(applications, "ipv4_applications.name") + get_all(applications, "ipv6_applications.name"))
         categories = get(self.application_traffic_recognition, "categories", default=[])

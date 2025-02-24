@@ -40,8 +40,6 @@ class IpIgmpSnoopingMixin(Protocol):
             for l2vlan in tenant.l2vlans:
                 self._set_ip_igmp_snooping_vlan(l2vlan, tenant)
 
-        self.structured_config.ip_igmp_snooping.globally_enabled = igmp_snooping_enabled
-
     def _set_ip_igmp_snooping_vlan(
         self: AvdStructuredConfigNetworkServicesProtocol,
         vlan: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem
@@ -83,5 +81,5 @@ class IpIgmpSnoopingMixin(Protocol):
         )
 
         if vlan_item:
-            vlan_item._update(id=vlan.id)
+            vlan_item.id = vlan.id
             self.structured_config.ip_igmp_snooping.vlans.append(vlan_item)

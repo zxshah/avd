@@ -97,7 +97,7 @@ disable=
     anomalous-backslash-in-string,
     assert-on-string-literal,
     assert-on-tuple,
-    # bad-dunder-name, # Covered by ruff but unknown to pylint??
+    # bad-dunder-name, # Part of a PyLint extension we don't use.
     bad-format-string,
     bad-open-mode,
     bad-staticmethod-argument,
@@ -106,12 +106,12 @@ disable=
     broad-exception-caught,
     broad-exception-raised,
     cell-var-from-loop,
-    # consider-ternary-expression, # Covered by ruff but unknown to pylint??
+    # consider-ternary-expression, # Part of a PyLint extension we don't use.
     dangerous-default-value,
     duplicate-except,
     duplicate-key,
     duplicate-value,
-    # eq-without-hash, # Covered by ruff but unknown to pylint??
+    # eq-without-hash, # Part of a PyLint extension we don't use.
     eval-used,
     exec-used,
     # expression-not-assigned,
@@ -144,7 +144,7 @@ disable=
     # protected-access,
     raise-missing-from,
     # redefined-builtin,
-    # redefined-loop-name, # Covered by ruff but unknown to pylint??
+    # redefined-loop-name, # Part of a PyLint extension we don't use.
     redundant-u-string-prefix,
     reimported,
     self-assigning-variable,
@@ -166,18 +166,18 @@ disable=
     wildcard-import,
     # Convention
     bad-classmethod-argument,
-    # bad-docstring-quotes, # Covered by ruff but unknown to pylint??
+    # bad-docstring-quotes, # Part of a PyLint extension we don't use.
     compare-to-empty-string,
     consider-iterating-dictionary,
-    # consider-using-any-or-all, # Covered by ruff but unknown to pylint??
+    # consider-using-any-or-all, # Part of a PyLint extension we don't use.
     consider-using-dict-items,
-    # docstring-first-line-empty , # Covered by ruff but unknown to pylint??
+    # docstring-first-line-empty , # Part of a PyLint extension we don't use.
     empty-docstring,
     import-outside-toplevel,
-    # import-private-name, # Covered by ruff but unknown to pylint??
+    # import-private-name, # Part of a PyLint extension we don't use.
     # invalid-name,
     # line-too-long,
-    # misplaced-comparison-constant, # Covered by ruff but unknown to pylint??
+    # misplaced-comparison-constant, # Part of a PyLint extension we don't use.
     missing-class-docstring,
     missing-final-newline,
     missing-function-docstring,
@@ -207,10 +207,10 @@ disable=
     # Refactor
     comparison-of-constants,
     comparison-with-itself,
-    # consider-alternative-union-syntax, # Covered by ruff but unknown to pylint??
+    # consider-alternative-union-syntax, # Part of a PyLint extension we don't use.
     consider-merging-isinstance,
-    # consider-using-alias, # Covered by ruff but unknown to pylint??
-    # consider-using-augmented-assign, # Covered by ruff but unknown to pylint??
+    # consider-using-alias, # Part of a PyLint extension we don't use.
+    # consider-using-augmented-assign, # Part of a PyLint extension we don't use.
     consider-using-dict-comprehension,
     consider-using-from-import,
     consider-using-generator,
@@ -222,11 +222,11 @@ disable=
     consider-using-sys-exit,
     # consider-using-ternary,  # Marked as removed in ruff
     consider-using-with,
-    # else-if-used, # Covered by ruff but unknown to pylint??
-    # empty-comment, # Covered by ruff but unknown to pylint??
+    # else-if-used, # Part of a PyLint extension we don't use.
+    # empty-comment, # Part of a PyLint extension we don't use.
     # inconsistent-return-statements,
     literal-comparison,
-    # magic-value-comparison, # Covered by ruff but unknown to pylint??
+    # magic-value-comparison, # Part of a PyLint extension we don't use.
     no-classmethod-decorator,
     no-else-break,
     no-else-continue,
@@ -238,7 +238,7 @@ disable=
     simplifiable-if-expression,
     simplifiable-if-statement,
     super-with-arguments,
-    # too-complex, # Covered by ruff but unknown to pylint??
+    # too-complex, # Part of a PyLint extension we don't use.
     # too-many-arguments,
     too-many-boolean-expressions,
     # too-many-branches,
@@ -254,6 +254,6 @@ disable=
     use-a-generator,
     use-dict-literal,
     use-list-literal,
-    # use-set-for-membership, # Covered by ruff but unknown to pylint??
+    # use-set-for-membership, # Part of a PyLint extension we don't use.
     useless-object-inheritance,
     useless-return,

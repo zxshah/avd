@@ -64,7 +64,6 @@ manifest:
     - recursive-include playbooks **.yml **.yaml
     - recursive-include changelogs **.yml **.yaml
     - recursive-include plugins **.py **.yml **.yaml
-    # manifest.directives from galaxy.yml inserted here
     - recursive-exclude changelogs/fragments_backup **
     - recursive-include examples **
     - recursive-exclude molecule **
@@ -72,7 +71,6 @@ manifest:
     - include requirements.yml
     - include pylintrc
     - include pytest.ini
-    # end
     - exclude galaxy.yml galaxy.yaml MANIFEST.json FILES.json <namespace>-<name>-*.tar.gz
     - recursive-exclude tests/output **
     - global-exclude /.* /__pycache__ *.pyc *.pyo *.bak *~ *.swp

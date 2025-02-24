@@ -245,8 +245,12 @@ class PoolCollection(ABC, Generic[T_PoolKeyType, T_AssignmentKeyType, T_ValueTyp
         Note: This method is called from the parent pool manager and should _not_ be called manually.
         """
         len_before = len(self._pools)
-        [pool._remove_stale_assignments() for pool in self._pools.values()]
-        self._pools = {pool_key: pool for pool_key, pool in self._pools.items() if pool.assignments}
+        non_empty_pools = {}
+        for pool_key, pool in self._pools.items():
+            pool._remove_state_assignments()
+            if pool.assignments:
+                non_empty_pools[pool_key] = pool
+        self._pools = non_empty_pools
         self.changed = self.changed or len_before != len(self._pools)
 
     def as_list(self) -> list[dict]:

@@ -37,7 +37,7 @@ disable=
     deprecated-argument,  # results vary by Python version
     deprecated-attribute,  # results vary by Python version
     deprecated-class,  # results vary by Python version
-    deprecated-comment,  # custom plugin only used by ansible-core, not collections
+    deprecated-comment,  # custom plugin only used by ansible-core, not collections  # pylint: disable=unknown-option-value
     deprecated-decorator,  # results vary by Python version
     deprecated-method,  # results vary by Python version
     deprecated-module,  # results vary by Python version

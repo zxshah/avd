@@ -97,7 +97,7 @@ disable=
     anomalous-backslash-in-string,
     assert-on-string-literal,
     assert-on-tuple,
-    bad-dunder-name,
+    # bad-dunder-name, # Covered by ruff but unknown to pylint??
     bad-format-string,
     bad-open-mode,
     bad-staticmethod-argument,
@@ -106,12 +106,12 @@ disable=
     broad-exception-caught,
     broad-exception-raised,
     cell-var-from-loop,
-    consider-ternary-expression,
+    # consider-ternary-expression, # Covered by ruff but unknown to pylint??
     dangerous-default-value,
     duplicate-except,
     duplicate-key,
     duplicate-value,
-    eq-without-hash
+    # eq-without-hash, # Covered by ruff but unknown to pylint??
     eval-used,
     exec-used,
     # expression-not-assigned,
@@ -144,7 +144,7 @@ disable=
     # protected-access,
     raise-missing-from,
     # redefined-builtin,
-    redefined-loop-name,
+    # redefined-loop-name, # Covered by ruff but unknown to pylint??
     redundant-u-string-prefix,
     reimported,
     self-assigning-variable,
@@ -166,18 +166,18 @@ disable=
     wildcard-import,
     # Convention
     bad-classmethod-argument,
-    bad-docstring-quotes,
+    # bad-docstring-quotes, # Covered by ruff but unknown to pylint??
     compare-to-empty-string,
     consider-iterating-dictionary,
-    consider-using-any-or-all,
+    # consider-using-any-or-all, # Covered by ruff but unknown to pylint??
     consider-using-dict-items,
-    docstring-first-line-empty ,
+    # docstring-first-line-empty , # Covered by ruff but unknown to pylint??
     empty-docstring,
     import-outside-toplevel,
-    import-private-name,
+    # import-private-name, # Covered by ruff but unknown to pylint??
     # invalid-name,
     # line-too-long,
-    misplaced-comparison-constant,
+    # misplaced-comparison-constant, # Covered by ruff but unknown to pylint??
     missing-class-docstring,
     missing-final-newline,
     missing-function-docstring,
@@ -207,10 +207,10 @@ disable=
     # Refactor
     comparison-of-constants,
     comparison-with-itself,
-    consider-alternative-union-syntax,
+    # consider-alternative-union-syntax, # Covered by ruff but unknown to pylint??
     consider-merging-isinstance,
-    consider-using-alias,
-    consider-using-augmented-assign,
+    # consider-using-alias, # Covered by ruff but unknown to pylint??
+    # consider-using-augmented-assign, # Covered by ruff but unknown to pylint??
     consider-using-dict-comprehension,
     consider-using-from-import,
     consider-using-generator,
@@ -222,11 +222,11 @@ disable=
     consider-using-sys-exit,
     # consider-using-ternary,  # Marked as removed in ruff
     consider-using-with,
-    else-if-used,
-    empty-comment,
+    # else-if-used, # Covered by ruff but unknown to pylint??
+    # empty-comment, # Covered by ruff but unknown to pylint??
     # inconsistent-return-statements,
     literal-comparison,
-    magic-value-comparison,
+    # magic-value-comparison, # Covered by ruff but unknown to pylint??
     no-classmethod-decorator,
     no-else-break,
     no-else-continue,
@@ -238,7 +238,7 @@ disable=
     simplifiable-if-expression,
     simplifiable-if-statement,
     super-with-arguments,
-    too-complex,
+    # too-complex, # Covered by ruff but unknown to pylint??
     # too-many-arguments,
     too-many-boolean-expressions,
     # too-many-branches,
@@ -254,6 +254,6 @@ disable=
     use-a-generator,
     use-dict-literal,
     use-list-literal,
-    use-set-for-membership,
+    # use-set-for-membership, # Covered by ruff but unknown to pylint??
     useless-object-inheritance,
     useless-return,

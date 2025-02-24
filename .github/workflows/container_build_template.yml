@@ -60,6 +60,10 @@ jobs:
     # if: ( github.repository == 'aristanetworks/avd' && github.ref == 'refs/heads/devel' ) || ${{ vars.DEBUG_CONTAINER_ACTIONS }} == "true"
     runs-on: ubuntu-22.04
     steps:
+      - name: test-gh-ref
+        run: |
+          echo "${{ github.ref }}"
+          echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
       - name: Starting container build
         run: echo "Starting container build. Be patient. 🐢"
       - name: Checkout code ✅

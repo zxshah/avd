@@ -219,7 +219,7 @@ def run_anta(devices: list[str]) -> ResultManager:
 
 
 def build_reports(batch_results: list[ResultManager], report_settings: dict) -> None:
-    """Build the ANTA reports from the results iterator."""
+    """Build the ANTA reports from the batch results."""
     hide_statuses = get(report_settings, "filters.hide_statuses")
     csv_output_path = get(report_settings, "csv_output")
     md_output_path = get(report_settings, "md_output")
@@ -268,7 +268,7 @@ def extract_hostvars(device_list: list[str], hostvars: Mapping) -> dict:
 
         host_hostvars = hostvars[device]
 
-        # Since we can run ANTA without any structured configs, i.e., only using custom catalogs,
+        # Since we can run ANTA without any structured configs, i.e., only using user-defined catalogs,
         # we honor the `is_deployed` flag in the hostvars to skip devices that are not deployed.
         if get(host_hostvars, "is_deployed", default=True) is False:
             LOGGER.info("skipping %s - device marked as not deployed", device)

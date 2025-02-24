@@ -19,7 +19,7 @@ class VerifyInterfacesStatusInputFactory(AntaTestInputFactory):
 
     This factory generates test inputs for verifying the status of interfaces.
 
-    The following interfaces are considered:
+    The following interfaces are checked:
     - Ethernet interfaces - `ethernet_interfaces`
     - Port-Channel interfaces - `port_channel_interfaces`
     - VLAN interfaces - `vlan_interfaces`
@@ -29,7 +29,7 @@ class VerifyInterfacesStatusInputFactory(AntaTestInputFactory):
 
     The expected status is 'adminDown' when the interface is shutdown, 'up' otherwise.
 
-    For Ethernet and Port-Channel interfaces, state validation depends on the `validate_state` knob (default: True).
+    For Ethernet and Port-Channel interfaces, `validate_state` knob (default: True) is considered.
 
     For Ethernet interfaces, `interface_defaults.ethernet.shutdown` is considered when `shutdown` is not set
     """

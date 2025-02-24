@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 LOGGER = getLogger(__name__)
 
 
+# TODO: Update docstring
 def get_device_anta_catalog(
     hostname: str,
     structured_config: dict,

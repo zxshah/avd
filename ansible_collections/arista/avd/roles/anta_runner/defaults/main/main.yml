@@ -6,7 +6,7 @@
 # This means the role must be imported/included in a play targeting only the relevant EOS devices - *not* CloudVision.
 anta_devices: "{{ ansible_play_hosts }}"
 
-# Enable AVD catalog generation.
+# Enable AVD catalogs generation.
 avd_catalogs_enabled: true
 
 # Generate tests for BGP peers in VRFs.

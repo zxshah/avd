@@ -143,7 +143,7 @@
   delegate_to: localhost
   run_once: true
 
-- name: "Create folder {{ anta_catalogs_dir_name }} for ANTA AVD generated catalogs"
+- name: "Create folder {{ avd_catalogs_dir_name }} for ANTA AVD generated catalogs"
   ansible.builtin.file:
     path: "{{ avd_catalogs_dir }}"
     state: directory

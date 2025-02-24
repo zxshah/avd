@@ -23,22 +23,9 @@ PYAVD_TEST_INDEX: list[TestSpec] = [
         input_factory=VerifyAVTRoleInputFactory,
     ),
     TestSpec(
-        test_class=VerifyBGPPeerMPCaps,
-        conditional_keys=[StructuredConfigKey.ROUTER_BGP],
-        input_factory=VerifyBGPPeerMPCapsInputFactory,
-    ),
-    TestSpec(
         test_class=VerifyBGPPeerSession,
         conditional_keys=[StructuredConfigKey.ROUTER_BGP],
         input_factory=VerifyBGPPeerSessionInputFactory,
-    ),
-    TestSpec(
-        test_class=VerifyEnvironmentCooling,
-        input_factory=VerifyEnvironmentCoolingInputFactory,
-    ),
-    TestSpec(
-        test_class=VerifyEnvironmentPower,
-        input_factory=VerifyEnvironmentPowerInputFactory,
     ),
     TestSpec(
         test_class=VerifyEnvironmentSystemCooling,
@@ -83,10 +70,6 @@ PYAVD_TEST_INDEX: list[TestSpec] = [
     ),
     TestSpec(
         test_class=VerifyTemperature,
-    ),
-    TestSpec(
-        test_class=VerifyTransceiversManufacturers,
-        input_factory=VerifyTransceiversManufacturersInputFactory,
     ),
     TestSpec(
         test_class=VerifyTransceiversTemperature,

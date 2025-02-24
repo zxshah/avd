@@ -201,16 +201,16 @@
 | 117 | dc1-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 118 | dc1-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 119 | dc1-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 120 | dc1-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 121 | dc1-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 120 | dc1-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 121 | dc1-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 122 | dc1-leaf1a | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 123 | dc1-leaf1a | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 124 | dc1-leaf1a | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 125 | dc1-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 125 | dc1-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 126 | dc1-leaf1a | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 127 | dc1-leaf1a | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 128 | dc1-leaf1a | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 129 | dc1-leaf1a | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 129 | dc1-leaf1a | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 130 | dc1-leaf1a | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 131 | dc1-leaf1a | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 132 | dc1-leaf1a | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -218,7 +218,7 @@
 | 134 | dc1-leaf1a | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 135 | dc1-leaf1a | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 136 | dc1-leaf1a | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 137 | dc1-leaf1a | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 137 | dc1-leaf1a | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 138 | dc1-leaf1a | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 139 | dc1-leaf1a | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 140 | dc1-leaf1a | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -239,7 +239,7 @@
 | 155 | dc1-leaf1a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
 | 156 | dc1-leaf1a | VLAN | VerifyVlanInternalPolicy | Verifies the VLAN internal allocation policy and the range of VLANs. | - | NOT RUN | - |
 | 157 | dc1-leaf1a | VXLAN | VerifyVxlan1ConnSettings | Verifies the interface vxlan1 source interface and UDP port. | - | NOT RUN | - |
-| 158 | dc1-leaf1a | VXLAN | VerifyVxlan1Interface | Verifies the Vxlan1 interface status. | - | NOT RUN | - |
+| 158 | dc1-leaf1a | VXLAN | VerifyVxlan1Interface | Verifies if the Vxlan1 interface is configured and 'up/up'. | - | NOT RUN | - |
 | 159 | dc1-leaf1a | VXLAN | VerifyVxlanConfigSanity | Verifies there are no VXLAN config-sanity inconsistencies. | - | NOT RUN | - |
 | 160 | dc1-leaf1a | VXLAN | VerifyVxlanVniBinding | Verifies the VNI-VLAN bindings of the Vxlan1 interface. | - | NOT RUN | - |
 | 161 | dc1-leaf1a | VXLAN | VerifyVxlanVtep | Verifies the VTEP peers of the Vxlan1 interface. | - | NOT RUN | - |
@@ -358,16 +358,16 @@
 | 274 | dc1-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 275 | dc1-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 276 | dc1-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 277 | dc1-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 278 | dc1-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 277 | dc1-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 278 | dc1-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 279 | dc1-leaf1b | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 280 | dc1-leaf1b | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 281 | dc1-leaf1b | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 282 | dc1-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 282 | dc1-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 283 | dc1-leaf1b | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 284 | dc1-leaf1b | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 285 | dc1-leaf1b | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 286 | dc1-leaf1b | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 286 | dc1-leaf1b | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 287 | dc1-leaf1b | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 288 | dc1-leaf1b | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 289 | dc1-leaf1b | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -375,7 +375,7 @@
 | 291 | dc1-leaf1b | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 292 | dc1-leaf1b | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 293 | dc1-leaf1b | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 294 | dc1-leaf1b | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 294 | dc1-leaf1b | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 295 | dc1-leaf1b | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 296 | dc1-leaf1b | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 297 | dc1-leaf1b | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -448,16 +448,16 @@
 | 364 | dc1-leaf1c | PTP | VerifyPtpModeStatus | Verifies that the device is configured as a PTP Boundary Clock. | - | NOT RUN | - |
 | 365 | dc1-leaf1c | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 366 | dc1-leaf1c | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
-| 367 | dc1-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 368 | dc1-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 367 | dc1-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 368 | dc1-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 369 | dc1-leaf1c | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 370 | dc1-leaf1c | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 371 | dc1-leaf1c | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 372 | dc1-leaf1c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 372 | dc1-leaf1c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 373 | dc1-leaf1c | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 374 | dc1-leaf1c | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 375 | dc1-leaf1c | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 376 | dc1-leaf1c | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 376 | dc1-leaf1c | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 377 | dc1-leaf1c | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 378 | dc1-leaf1c | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 379 | dc1-leaf1c | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -465,7 +465,7 @@
 | 381 | dc1-leaf1c | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 382 | dc1-leaf1c | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 383 | dc1-leaf1c | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 384 | dc1-leaf1c | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 384 | dc1-leaf1c | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 385 | dc1-leaf1c | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 386 | dc1-leaf1c | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 387 | dc1-leaf1c | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -595,16 +595,16 @@
 | 511 | dc1-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 512 | dc1-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 513 | dc1-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 514 | dc1-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 515 | dc1-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 514 | dc1-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 515 | dc1-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 516 | dc1-leaf2a | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 517 | dc1-leaf2a | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 518 | dc1-leaf2a | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 519 | dc1-leaf2a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 519 | dc1-leaf2a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 520 | dc1-leaf2a | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 521 | dc1-leaf2a | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 522 | dc1-leaf2a | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 523 | dc1-leaf2a | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 523 | dc1-leaf2a | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 524 | dc1-leaf2a | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 525 | dc1-leaf2a | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 526 | dc1-leaf2a | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -612,7 +612,7 @@
 | 528 | dc1-leaf2a | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 529 | dc1-leaf2a | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 530 | dc1-leaf2a | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 531 | dc1-leaf2a | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 531 | dc1-leaf2a | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 532 | dc1-leaf2a | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 533 | dc1-leaf2a | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 534 | dc1-leaf2a | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -709,16 +709,16 @@
 | 625 | dc1-leaf2c | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 626 | dc1-leaf2c | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 627 | dc1-leaf2c | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 628 | dc1-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 629 | dc1-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 628 | dc1-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 629 | dc1-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 630 | dc1-leaf2c | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 631 | dc1-leaf2c | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 632 | dc1-leaf2c | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 633 | dc1-leaf2c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 633 | dc1-leaf2c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 634 | dc1-leaf2c | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 635 | dc1-leaf2c | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 636 | dc1-leaf2c | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 637 | dc1-leaf2c | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 637 | dc1-leaf2c | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 638 | dc1-leaf2c | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 639 | dc1-leaf2c | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 640 | dc1-leaf2c | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -726,7 +726,7 @@
 | 642 | dc1-leaf2c | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 643 | dc1-leaf2c | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 644 | dc1-leaf2c | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 645 | dc1-leaf2c | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 645 | dc1-leaf2c | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 646 | dc1-leaf2c | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 647 | dc1-leaf2c | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 648 | dc1-leaf2c | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -825,16 +825,16 @@
 | 741 | dc1-spine1 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | - | NOT RUN | - |
 | 742 | dc1-spine1 | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | - | NOT RUN | - |
 | 743 | dc1-spine1 | Routing | VerifyRoutingTableSize | Verifies the size of the IP routing table of the default VRF. | - | NOT RUN | - |
-| 744 | dc1-spine1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 745 | dc1-spine1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 744 | dc1-spine1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 745 | dc1-spine1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 746 | dc1-spine1 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 747 | dc1-spine1 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 748 | dc1-spine1 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 749 | dc1-spine1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 749 | dc1-spine1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 750 | dc1-spine1 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 751 | dc1-spine1 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 752 | dc1-spine1 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 753 | dc1-spine1 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 753 | dc1-spine1 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 754 | dc1-spine1 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 755 | dc1-spine1 | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 756 | dc1-spine1 | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -842,7 +842,7 @@
 | 758 | dc1-spine1 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 759 | dc1-spine1 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 760 | dc1-spine1 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 761 | dc1-spine1 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 761 | dc1-spine1 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 762 | dc1-spine1 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 763 | dc1-spine1 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 764 | dc1-spine1 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -941,16 +941,16 @@
 | 857 | dc1-spine2 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | - | NOT RUN | - |
 | 858 | dc1-spine2 | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | - | NOT RUN | - |
 | 859 | dc1-spine2 | Routing | VerifyRoutingTableSize | Verifies the size of the IP routing table of the default VRF. | - | NOT RUN | - |
-| 860 | dc1-spine2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 861 | dc1-spine2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 860 | dc1-spine2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 861 | dc1-spine2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 862 | dc1-spine2 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 863 | dc1-spine2 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 864 | dc1-spine2 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 865 | dc1-spine2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 865 | dc1-spine2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 866 | dc1-spine2 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 867 | dc1-spine2 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 868 | dc1-spine2 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 869 | dc1-spine2 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 869 | dc1-spine2 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 870 | dc1-spine2 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 871 | dc1-spine2 | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 872 | dc1-spine2 | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -958,7 +958,7 @@
 | 874 | dc1-spine2 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 875 | dc1-spine2 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 876 | dc1-spine2 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 877 | dc1-spine2 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 877 | dc1-spine2 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 878 | dc1-spine2 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 879 | dc1-spine2 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 880 | dc1-spine2 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1070,16 +1070,16 @@
 | 986 | dc1-svc-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 987 | dc1-svc-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 988 | dc1-svc-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 989 | dc1-svc-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 990 | dc1-svc-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 989 | dc1-svc-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 990 | dc1-svc-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 991 | dc1-svc-leaf1a | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 992 | dc1-svc-leaf1a | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 993 | dc1-svc-leaf1a | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 994 | dc1-svc-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 994 | dc1-svc-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 995 | dc1-svc-leaf1a | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 996 | dc1-svc-leaf1a | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 997 | dc1-svc-leaf1a | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 998 | dc1-svc-leaf1a | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 998 | dc1-svc-leaf1a | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 999 | dc1-svc-leaf1a | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1000 | dc1-svc-leaf1a | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1001 | dc1-svc-leaf1a | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1087,7 +1087,7 @@
 | 1003 | dc1-svc-leaf1a | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1004 | dc1-svc-leaf1a | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1005 | dc1-svc-leaf1a | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1006 | dc1-svc-leaf1a | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1006 | dc1-svc-leaf1a | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1007 | dc1-svc-leaf1a | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1008 | dc1-svc-leaf1a | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1009 | dc1-svc-leaf1a | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1199,16 +1199,16 @@
 | 1115 | dc1-svc-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 1116 | dc1-svc-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 1117 | dc1-svc-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 1118 | dc1-svc-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1119 | dc1-svc-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1118 | dc1-svc-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1119 | dc1-svc-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1120 | dc1-svc-leaf1b | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1121 | dc1-svc-leaf1b | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1122 | dc1-svc-leaf1b | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1123 | dc1-svc-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1123 | dc1-svc-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1124 | dc1-svc-leaf1b | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1125 | dc1-svc-leaf1b | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1126 | dc1-svc-leaf1b | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1127 | dc1-svc-leaf1b | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1127 | dc1-svc-leaf1b | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1128 | dc1-svc-leaf1b | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1129 | dc1-svc-leaf1b | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1130 | dc1-svc-leaf1b | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1216,7 +1216,7 @@
 | 1132 | dc1-svc-leaf1b | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1133 | dc1-svc-leaf1b | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1134 | dc1-svc-leaf1b | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1135 | dc1-svc-leaf1b | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1135 | dc1-svc-leaf1b | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1136 | dc1-svc-leaf1b | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1137 | dc1-svc-leaf1b | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1138 | dc1-svc-leaf1b | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1297,16 +1297,16 @@
 | 1213 | dc1-wan1 | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 1214 | dc1-wan1 | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
 | 1215 | dc1-wan1 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | Routing protocol model: multi-agent | NOT RUN | - |
-| 1216 | dc1-wan1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1217 | dc1-wan1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1216 | dc1-wan1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1217 | dc1-wan1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1218 | dc1-wan1 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1219 | dc1-wan1 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1220 | dc1-wan1 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1221 | dc1-wan1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1221 | dc1-wan1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1222 | dc1-wan1 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1223 | dc1-wan1 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1224 | dc1-wan1 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1225 | dc1-wan1 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1225 | dc1-wan1 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1226 | dc1-wan1 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1227 | dc1-wan1 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | IPv4 Peer: 10.255.1.2 VRF: default | NOT RUN | - |
 | 1228 | dc1-wan1 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | IPv4 Peer: 10.255.255.10 VRF: default | NOT RUN | - |
@@ -1317,7 +1317,7 @@
 | 1233 | dc1-wan1 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1234 | dc1-wan1 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1235 | dc1-wan1 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1236 | dc1-wan1 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1236 | dc1-wan1 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1237 | dc1-wan1 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1238 | dc1-wan1 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1239 | dc1-wan1 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1400,16 +1400,16 @@
 | 1316 | dc1-wan2 | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 1317 | dc1-wan2 | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
 | 1318 | dc1-wan2 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | Routing protocol model: multi-agent | NOT RUN | - |
-| 1319 | dc1-wan2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1320 | dc1-wan2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1319 | dc1-wan2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1320 | dc1-wan2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1321 | dc1-wan2 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1322 | dc1-wan2 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1323 | dc1-wan2 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1324 | dc1-wan2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1324 | dc1-wan2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1325 | dc1-wan2 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1326 | dc1-wan2 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1327 | dc1-wan2 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1328 | dc1-wan2 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1328 | dc1-wan2 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1329 | dc1-wan2 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1330 | dc1-wan2 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | IPv4 Peer: 10.255.1.1 VRF: default | NOT RUN | - |
 | 1331 | dc1-wan2 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | IPv4 Peer: 10.255.255.10 VRF: default | NOT RUN | - |
@@ -1420,7 +1420,7 @@
 | 1336 | dc1-wan2 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1337 | dc1-wan2 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1338 | dc1-wan2 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1339 | dc1-wan2 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1339 | dc1-wan2 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1340 | dc1-wan2 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1341 | dc1-wan2 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1342 | dc1-wan2 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1561,16 +1561,16 @@
 | 1477 | dc2-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 1478 | dc2-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 1479 | dc2-leaf1a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 1480 | dc2-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1481 | dc2-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1480 | dc2-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1481 | dc2-leaf1a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1482 | dc2-leaf1a | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1483 | dc2-leaf1a | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1484 | dc2-leaf1a | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1485 | dc2-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1485 | dc2-leaf1a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1486 | dc2-leaf1a | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1487 | dc2-leaf1a | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1488 | dc2-leaf1a | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1489 | dc2-leaf1a | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1489 | dc2-leaf1a | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1490 | dc2-leaf1a | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1491 | dc2-leaf1a | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1492 | dc2-leaf1a | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1578,7 +1578,7 @@
 | 1494 | dc2-leaf1a | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1495 | dc2-leaf1a | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1496 | dc2-leaf1a | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1497 | dc2-leaf1a | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1497 | dc2-leaf1a | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1498 | dc2-leaf1a | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1499 | dc2-leaf1a | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1500 | dc2-leaf1a | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1723,16 +1723,16 @@
 | 1639 | dc2-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 1640 | dc2-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 1641 | dc2-leaf1b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 1642 | dc2-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1643 | dc2-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1642 | dc2-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1643 | dc2-leaf1b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1644 | dc2-leaf1b | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1645 | dc2-leaf1b | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1646 | dc2-leaf1b | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1647 | dc2-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1647 | dc2-leaf1b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1648 | dc2-leaf1b | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1649 | dc2-leaf1b | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1650 | dc2-leaf1b | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1651 | dc2-leaf1b | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1651 | dc2-leaf1b | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1652 | dc2-leaf1b | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1653 | dc2-leaf1b | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1654 | dc2-leaf1b | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1740,7 +1740,7 @@
 | 1656 | dc2-leaf1b | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1657 | dc2-leaf1b | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1658 | dc2-leaf1b | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1659 | dc2-leaf1b | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1659 | dc2-leaf1b | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1660 | dc2-leaf1b | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1661 | dc2-leaf1b | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1662 | dc2-leaf1b | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1800,16 +1800,16 @@
 | 1716 | dc2-leaf1c | PTP | VerifyPtpModeStatus | Verifies that the device is configured as a PTP Boundary Clock. | - | NOT RUN | - |
 | 1717 | dc2-leaf1c | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 1718 | dc2-leaf1c | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
-| 1719 | dc2-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1720 | dc2-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1719 | dc2-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1720 | dc2-leaf1c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1721 | dc2-leaf1c | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1722 | dc2-leaf1c | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1723 | dc2-leaf1c | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1724 | dc2-leaf1c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1724 | dc2-leaf1c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1725 | dc2-leaf1c | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1726 | dc2-leaf1c | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1727 | dc2-leaf1c | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1728 | dc2-leaf1c | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1728 | dc2-leaf1c | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1729 | dc2-leaf1c | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1730 | dc2-leaf1c | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1731 | dc2-leaf1c | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1817,7 +1817,7 @@
 | 1733 | dc2-leaf1c | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1734 | dc2-leaf1c | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1735 | dc2-leaf1c | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1736 | dc2-leaf1c | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1736 | dc2-leaf1c | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1737 | dc2-leaf1c | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1738 | dc2-leaf1c | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1739 | dc2-leaf1c | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1962,16 +1962,16 @@
 | 1878 | dc2-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 1879 | dc2-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 1880 | dc2-leaf2a | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 1881 | dc2-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 1882 | dc2-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 1881 | dc2-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 1882 | dc2-leaf2a | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 1883 | dc2-leaf2a | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 1884 | dc2-leaf2a | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 1885 | dc2-leaf2a | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 1886 | dc2-leaf2a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 1886 | dc2-leaf2a | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 1887 | dc2-leaf2a | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 1888 | dc2-leaf2a | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 1889 | dc2-leaf2a | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 1890 | dc2-leaf2a | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 1890 | dc2-leaf2a | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 1891 | dc2-leaf2a | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 1892 | dc2-leaf2a | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1893 | dc2-leaf2a | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -1979,7 +1979,7 @@
 | 1895 | dc2-leaf2a | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 1896 | dc2-leaf2a | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 1897 | dc2-leaf2a | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 1898 | dc2-leaf2a | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 1898 | dc2-leaf2a | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 1899 | dc2-leaf2a | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 1900 | dc2-leaf2a | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 1901 | dc2-leaf2a | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2125,16 +2125,16 @@
 | 2041 | dc2-leaf2b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 2042 | dc2-leaf2b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 2043 | dc2-leaf2b | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 2044 | dc2-leaf2b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2045 | dc2-leaf2b | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2044 | dc2-leaf2b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2045 | dc2-leaf2b | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2046 | dc2-leaf2b | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2047 | dc2-leaf2b | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2048 | dc2-leaf2b | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2049 | dc2-leaf2b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2049 | dc2-leaf2b | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2050 | dc2-leaf2b | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2051 | dc2-leaf2b | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2052 | dc2-leaf2b | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2053 | dc2-leaf2b | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2053 | dc2-leaf2b | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2054 | dc2-leaf2b | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2055 | dc2-leaf2b | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2056 | dc2-leaf2b | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2142,7 +2142,7 @@
 | 2058 | dc2-leaf2b | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2059 | dc2-leaf2b | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2060 | dc2-leaf2b | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2061 | dc2-leaf2b | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2061 | dc2-leaf2b | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2062 | dc2-leaf2b | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2063 | dc2-leaf2b | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2064 | dc2-leaf2b | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2202,16 +2202,16 @@
 | 2118 | dc2-leaf2c | PTP | VerifyPtpModeStatus | Verifies that the device is configured as a PTP Boundary Clock. | - | NOT RUN | - |
 | 2119 | dc2-leaf2c | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 2120 | dc2-leaf2c | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
-| 2121 | dc2-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2122 | dc2-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2121 | dc2-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2122 | dc2-leaf2c | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2123 | dc2-leaf2c | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2124 | dc2-leaf2c | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2125 | dc2-leaf2c | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2126 | dc2-leaf2c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2126 | dc2-leaf2c | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2127 | dc2-leaf2c | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2128 | dc2-leaf2c | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2129 | dc2-leaf2c | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2130 | dc2-leaf2c | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2130 | dc2-leaf2c | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2131 | dc2-leaf2c | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2132 | dc2-leaf2c | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2133 | dc2-leaf2c | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2219,7 +2219,7 @@
 | 2135 | dc2-leaf2c | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2136 | dc2-leaf2c | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2137 | dc2-leaf2c | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2138 | dc2-leaf2c | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2138 | dc2-leaf2c | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2139 | dc2-leaf2c | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2140 | dc2-leaf2c | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2141 | dc2-leaf2c | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2365,16 +2365,16 @@
 | 2281 | dc2-leaf3a.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 2282 | dc2-leaf3a.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 2283 | dc2-leaf3a.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 2284 | dc2-leaf3a.arista.com | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2285 | dc2-leaf3a.arista.com | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2284 | dc2-leaf3a.arista.com | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2285 | dc2-leaf3a.arista.com | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2286 | dc2-leaf3a.arista.com | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2287 | dc2-leaf3a.arista.com | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2288 | dc2-leaf3a.arista.com | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2289 | dc2-leaf3a.arista.com | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2289 | dc2-leaf3a.arista.com | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2290 | dc2-leaf3a.arista.com | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2291 | dc2-leaf3a.arista.com | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2292 | dc2-leaf3a.arista.com | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2293 | dc2-leaf3a.arista.com | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2293 | dc2-leaf3a.arista.com | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2294 | dc2-leaf3a.arista.com | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2295 | dc2-leaf3a.arista.com | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2296 | dc2-leaf3a.arista.com | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2382,7 +2382,7 @@
 | 2298 | dc2-leaf3a.arista.com | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2299 | dc2-leaf3a.arista.com | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2300 | dc2-leaf3a.arista.com | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2301 | dc2-leaf3a.arista.com | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2301 | dc2-leaf3a.arista.com | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2302 | dc2-leaf3a.arista.com | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2303 | dc2-leaf3a.arista.com | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2304 | dc2-leaf3a.arista.com | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2525,16 +2525,16 @@
 | 2441 | dc2-leaf3b.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
 | 2442 | dc2-leaf3b.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.0.6 - Peer: dc1-svc-leaf1b | NOT RUN | - |
 | 2443 | dc2-leaf3b.arista.com | Routing | VerifyRoutingTableEntry | Verifies that the provided routes are present in the routing table of a specified VRF. | Route: 10.33.1.5 - Peer: dc1-svc-leaf1a | NOT RUN | - |
-| 2444 | dc2-leaf3b.arista.com | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2445 | dc2-leaf3b.arista.com | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2444 | dc2-leaf3b.arista.com | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2445 | dc2-leaf3b.arista.com | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2446 | dc2-leaf3b.arista.com | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2447 | dc2-leaf3b.arista.com | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2448 | dc2-leaf3b.arista.com | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2449 | dc2-leaf3b.arista.com | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2449 | dc2-leaf3b.arista.com | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2450 | dc2-leaf3b.arista.com | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2451 | dc2-leaf3b.arista.com | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2452 | dc2-leaf3b.arista.com | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2453 | dc2-leaf3b.arista.com | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2453 | dc2-leaf3b.arista.com | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2454 | dc2-leaf3b.arista.com | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2455 | dc2-leaf3b.arista.com | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2456 | dc2-leaf3b.arista.com | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2542,7 +2542,7 @@
 | 2458 | dc2-leaf3b.arista.com | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2459 | dc2-leaf3b.arista.com | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2460 | dc2-leaf3b.arista.com | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2461 | dc2-leaf3b.arista.com | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2461 | dc2-leaf3b.arista.com | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2462 | dc2-leaf3b.arista.com | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2463 | dc2-leaf3b.arista.com | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2464 | dc2-leaf3b.arista.com | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2628,16 +2628,16 @@
 | 2544 | dc2-spine1 | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 2545 | dc2-spine1 | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
 | 2546 | dc2-spine1 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | Routing protocol model: multi-agent | NOT RUN | - |
-| 2547 | dc2-spine1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2548 | dc2-spine1 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2547 | dc2-spine1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2548 | dc2-spine1 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2549 | dc2-spine1 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2550 | dc2-spine1 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2551 | dc2-spine1 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2552 | dc2-spine1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2552 | dc2-spine1 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2553 | dc2-spine1 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2554 | dc2-spine1 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2555 | dc2-spine1 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2556 | dc2-spine1 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2556 | dc2-spine1 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2557 | dc2-spine1 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2558 | dc2-spine1 | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2559 | dc2-spine1 | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2645,7 +2645,7 @@
 | 2561 | dc2-spine1 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2562 | dc2-spine1 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2563 | dc2-spine1 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2564 | dc2-spine1 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2564 | dc2-spine1 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2565 | dc2-spine1 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2566 | dc2-spine1 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2567 | dc2-spine1 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2726,16 +2726,16 @@
 | 2642 | dc2-spine2 | PTP | VerifyPtpOffset | Verifies that the PTP timing offset is within +/- 1000ns from the master clock. | - | NOT RUN | - |
 | 2643 | dc2-spine2 | PTP | VerifyPtpPortModeStatus | Verifies the PTP interfaces state. | - | NOT RUN | - |
 | 2644 | dc2-spine2 | Routing | VerifyRoutingProtocolModel | Verifies the configured routing protocol model. | Routing protocol model: multi-agent | NOT RUN | - |
-| 2645 | dc2-spine2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | - | NOT RUN | - |
-| 2646 | dc2-spine2 | Security | VerifyAPIHttpsSSL | Verifies if the eAPI has a valid SSL profile. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
+| 2645 | dc2-spine2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | - | NOT RUN | - |
+| 2646 | dc2-spine2 | Security | VerifyAPIHttpsSSL | Verifies if eAPI HTTPS server SSL profile is configured and valid. | eAPI HTTPS SSL Profile: eAPI_SSL_Profile | NOT RUN | - |
 | 2647 | dc2-spine2 | Security | VerifyAPIHttpStatus | Verifies if eAPI HTTP server is disabled globally. | - | NOT RUN | - |
 | 2648 | dc2-spine2 | Security | VerifyAPIIPv4Acl | Verifies if eAPI has the right number IPv4 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
 | 2649 | dc2-spine2 | Security | VerifyAPIIPv6Acl | Verifies if eAPI has the right number IPv6 ACL(s) configured for a specified VRF. | - | NOT RUN | - |
-| 2650 | dc2-spine2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate expiry, common subject name, encryption algorithm and key size. | - | NOT RUN | - |
+| 2650 | dc2-spine2 | Security | VerifyAPISSLCertificate | Verifies the eAPI SSL certificate. | - | NOT RUN | - |
 | 2651 | dc2-spine2 | Security | VerifyBannerLogin | Verifies the login banner of a device. | - | NOT RUN | - |
 | 2652 | dc2-spine2 | Security | VerifyBannerMotd | Verifies the motd banner of a device. | - | NOT RUN | - |
 | 2653 | dc2-spine2 | Security | VerifyIPSecConnHealth | Verifies all IPv4 security connections. | - | NOT RUN | - |
-| 2654 | dc2-spine2 | Security | VerifyIPv4ACL | Verifies the configuration of IPv4 ACLs. | - | NOT RUN | - |
+| 2654 | dc2-spine2 | Security | VerifyIPv4ACL | Verifies the IPv4 ACLs. | - | NOT RUN | - |
 | 2655 | dc2-spine2 | Security | VerifySpecificIPSecConn | Verifies the IPv4 security connections. | - | NOT RUN | - |
 | 2656 | dc2-spine2 | Security | VerifySSHIPv4Acl | Verifies if the SSHD agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2657 | dc2-spine2 | Security | VerifySSHIPv6Acl | Verifies if the SSHD agent has IPv6 ACL(s) configured. | - | NOT RUN | - |
@@ -2743,7 +2743,7 @@
 | 2659 | dc2-spine2 | Security | VerifyTelnetStatus | Verifies if Telnet is disabled in the default VRF. | - | NOT RUN | - |
 | 2660 | dc2-spine2 | Services | VerifyDNSLookup | Verifies the DNS name to IP address resolution. | - | NOT RUN | - |
 | 2661 | dc2-spine2 | Services | VerifyDNSServers | Verifies if the DNS (Domain Name Service) servers are correctly configured. | - | NOT RUN | - |
-| 2662 | dc2-spine2 | Services | VerifyErrdisableRecovery | Verifies the errdisable recovery reason, status, and interval. | - | NOT RUN | - |
+| 2662 | dc2-spine2 | Services | VerifyErrdisableRecovery | Verifies the error disable recovery functionality. | - | NOT RUN | - |
 | 2663 | dc2-spine2 | Services | VerifyHostname | Verifies the hostname of a device. | - | NOT RUN | - |
 | 2664 | dc2-spine2 | SNMP | VerifySnmpIPv4Acl | Verifies if the SNMP agent has IPv4 ACL(s) configured. | - | NOT RUN | - |
 | 2665 | dc2-spine2 | SNMP | VerifySnmpIPv6Acl | Verifies if the SNMP agent has IPv6 ACL(s) configured. | - | NOT RUN | - |

@@ -7,22 +7,17 @@ from __future__ import annotations
 
 from .avt import VerifyAVTRoleInputFactory
 from .connectivity import VerifyLLDPNeighborsInputFactory, VerifyReachabilityInputFactory
-from .hardware import VerifyEnvironmentCoolingInputFactory, VerifyEnvironmentPowerInputFactory, VerifyTransceiversManufacturersInputFactory
 from .interfaces import VerifyInterfacesStatusInputFactory
-from .routing_bgp import VerifyBGPPeerMPCapsInputFactory, VerifyBGPPeerSessionInputFactory
+from .routing_bgp import VerifyBGPPeerSessionInputFactory
 from .security import VerifySpecificIPSecConnInputFactory
 from .stun import VerifyStunClientTranslationInputFactory
 
 __all__ = [
     "VerifyAVTRoleInputFactory",
-    "VerifyBGPPeerMPCapsInputFactory",
     "VerifyBGPPeerSessionInputFactory",
-    "VerifyEnvironmentCoolingInputFactory",
-    "VerifyEnvironmentPowerInputFactory",
     "VerifyInterfacesStatusInputFactory",
     "VerifyLLDPNeighborsInputFactory",
     "VerifyReachabilityInputFactory",
     "VerifySpecificIPSecConnInputFactory",
     "VerifyStunClientTranslationInputFactory",
-    "VerifyTransceiversManufacturersInputFactory",
 ]

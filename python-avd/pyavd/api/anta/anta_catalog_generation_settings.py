@@ -11,12 +11,14 @@ from .test_spec import TestSpec
 
 
 # TODO: Consider naming this InputFactoryGenerationSettings
+# TODO: Add attributes to docstring
 class TestGenerationSettings(BaseModel):
     """Model defining settings for test input generation."""
 
     allow_bgp_vrfs: bool = False
 
 
+# TODO: Add attributes to docstring
 class AntaCatalogGenerationSettings(BaseModel):
     """Model defining settings for ANTA catalog generation."""
 

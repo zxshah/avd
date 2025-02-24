@@ -26,6 +26,7 @@ class MinimalStructuredConfig:
     ethernet_interfaces: list[MinimalEthernetInterface]
 
 
+# TODO: Update docstring
 def get_minimal_structured_configs(structured_configs: dict[str, dict]) -> dict[str, MinimalStructuredConfig]:
     """Get a minimal version of structured configurations for all devices, loaded in dataclasses."""
     minimal_structured_configs: dict[str, MinimalStructuredConfig] = {}

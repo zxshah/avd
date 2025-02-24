@@ -57,6 +57,7 @@ env:
 
 jobs:
   build_image:
+    if: ( github.repository == 'aristanetworks/avd' && github.ref == 'refs/heads/devel' ) || ${{ vars.DEBUG_CONTAINER_ACTIONS }} == "true"
     runs-on: ubuntu-22.04
     steps:
       - name: Starting container build

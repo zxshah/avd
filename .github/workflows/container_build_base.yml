@@ -3,8 +3,8 @@ name: Build base container
 
 "on":
   push:
-    branches:
-      - devel
+    branches: [ '**' ]
+      # - devel
     paths:
       - containers/base/**
       - .github/workflows/container_build_template.yml

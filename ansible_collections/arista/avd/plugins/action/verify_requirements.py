@@ -31,25 +31,26 @@ try:
     from ansible_collections.arista.avd.plugins.plugin_utils.utils.init_logging import init_pyavd_logging
 
     HAS_INIT_PYAVD_LOGGING = True
+    init_pyavd_logging()
 except ImportError:
     HAS_INIT_PYAVD_LOGGING = False
-
-if HAS_INIT_PYAVD_LOGGING:
-    init_pyavd_logging()
 
 MIN_PYTHON_SUPPORTED_VERSION = (3, 10)
 DEPRECATE_MIN_PYTHON_SUPPORTED_VERSION = False
 
 
-def _validate_python_version(info: dict, result: dict) -> bool:
+def _validate_python_version(info: dict[str, Any], result: dict[str, Any]) -> bool:
     """
+    Validate the running Python version.
+
     TODO: - avoid hardcoding the min supported version.
 
     Args:
       info (dict): Dictionary to store information to present in ansible logs
       result (dict): Module result dictionary to store deprecation warnings
 
-    return False if the python version is not valid
+    Returns:
+        bool: False if the python version is not valid.
     """
     info["python_version_info"] = {
         "major": sys.version_info.major,
@@ -84,15 +85,18 @@ def _validate_python_version(info: dict, result: dict) -> bool:
     return True
 
 
-def _validate_python_requirements(requirements: list, info: dict) -> bool:
+def _validate_python_requirements(requirements: list[str], info: dict[str, Any]) -> bool:
     """
     Validate python lib versions.
+
+    If any extra is present and not running from source, validate the extras as well.
 
     Args:
       requirements (list): List of requirements for pythom modules
       info (dict): Dictionary to store information to present in ansible logs
 
-    return False if any python requirement is not valid
+    Returns:
+        bool: False if any python requirement is not valid.
     """
     valid = True
 
@@ -112,19 +116,19 @@ def _validate_python_requirements(requirements: list, info: dict) -> bool:
             msg = f"Wrong format for requirement {raw_req}"
             raise AnsibleActionFail(msg) from exc
 
-        if req.extras:
-            for subreq_name in metadata(req.name).get_all("Requires-Dist"):
-                subreq = Requirement(subreq_name)
-                if subreq.marker:
-                    requirements.extend(subreq_name for marker in subreq.marker._markers if str(marker[0]) == "extra" and str(marker[2]) in req.extras)
-
         if RUNNING_FROM_SOURCE and req.name == "pyavd":
-            display.vvv("AVD is running from source, *not* checking pyavd version.", "Verify Requirements")
+            display.vvv("AVD is running from source, *not* checking pyavd version nor any extra.", "Verify Requirements")
             requirements_dict["valid"][req.name] = {
                 "installed": "running from source",
                 "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
             }
             continue
+
+        if req.extras:
+            for subreq_name in metadata(req.name).get_all("Requires-Dist"):
+                subreq = Requirement(subreq_name)
+                if subreq.marker:
+                    requirements.extend(subreq_name for marker in subreq.marker._markers if str(marker[0]) == "extra" and str(marker[2]) in req.extras)
 
         try:
             installed_version = version(req.name)
@@ -194,7 +198,7 @@ def _validate_python_requirements(requirements: list, info: dict) -> bool:
     return valid
 
 
-def _validate_ansible_version(collection_name: str, running_version: str, info: dict, result: dict) -> bool:
+def _validate_ansible_version(collection_name: str, running_version: str, info: dict[str, Any], result: dict[str, Any]) -> bool:
     """
     Validate ansible version in use, running_version, based on the collection requirements.
 
@@ -204,7 +208,8 @@ def _validate_ansible_version(collection_name: str, running_version: str, info: 
       info (dict): Dictionary to store information to present in ansible logs
       result (dict): Module result dictionary to store deprecation warnings
 
-    Return False if Ansible version is not valid
+    Returns:
+        bool: False if Ansible version is not valid.
     """
     collection_meta = _get_collection_metadata(collection_name)
     specifiers_set = SpecifierSet(collection_meta.get("requires_ansible", ""))
@@ -234,7 +239,7 @@ def _validate_ansible_version(collection_name: str, running_version: str, info: 
     return True
 
 
-def _validate_ansible_collections(running_collection_name: str, info: dict) -> bool:
+def _validate_ansible_collections(running_collection_name: str, info: dict[str, Any]) -> bool:
     """
     Verify the version of required ansible collections running based on the collection requirements.
 
@@ -242,7 +247,8 @@ def _validate_ansible_collections(running_collection_name: str, info: dict) -> b
       running_collection_name (str): The collection name
       info (dict): Dictionary to store information to present in ansible logs
 
-    Return True if all collection requirements are valid, False otherwise
+    Returns:
+        bool: True if all collection requirements are valid, False otherwise.
     """
     valid = True
 
@@ -265,7 +271,7 @@ def _validate_ansible_collections(running_collection_name: str, info: dict) -> b
             display.error("key `name` required but not found in collections requirement - please raise an issue on Github", wrap_text=False)
             continue
 
-        collection_name = collection_dict["name"]
+        collection_name: str = collection_dict["name"]
         # Check if there is a version requirement
         specifiers_set = SpecifierSet(collection_dict.get("version", ""))
 
@@ -323,7 +329,7 @@ def _get_collection_version(collection_path: str) -> str:
     return metadata["version"]
 
 
-def _get_running_collection_version(running_collection_name: str, result: dict) -> None:
+def _get_running_collection_version(running_collection_name: str, result: dict[str, Any]) -> None:
     """Stores the version collection in result."""
     collection_path = _get_collection_path(running_collection_name)
     version = _get_collection_version(collection_path)
@@ -356,9 +362,7 @@ def check_running_from_source() -> bool:
     Check if running from sources, if so recompile schemas and templates as needed.
 
     Returns:
-    --------
-    bool:
-        True if schemas or templates were recompiled, False otherwise.
+        bool: True if schemas or templates were recompiled, False otherwise.
     """
     if not RUNNING_FROM_SOURCE:
         return False

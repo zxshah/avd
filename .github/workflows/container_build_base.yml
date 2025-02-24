@@ -12,6 +12,7 @@ name: Build base container
   workflow_dispatch:
     branches:
       - devel
+  workflow_call:
 
 jobs:
   build_base:

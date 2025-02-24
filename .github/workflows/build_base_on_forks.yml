@@ -8,13 +8,13 @@ name: Build base on forks
 
 "on":
   push:
-    branches: [ '**' ]
+    # branches: [ '**' ]
     paths:
       - containers/base/**
       - .github/workflows/container_build_template.yml
       - .github/workflows/build_base_on_forks.yml
-  workflow_dispatch:
-    branches: [ '**' ]
+  # workflow_dispatch:
+  #   branches: [ '**' ]
 
 jobs:
   build_base:

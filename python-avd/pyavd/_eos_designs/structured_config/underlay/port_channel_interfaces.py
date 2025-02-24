@@ -171,7 +171,11 @@ class PortChannelInterfacesMixin(Protocol):
                     wan_circuit_id=l3_port_channel.wan_circuit_id,
                 ),
             )
-        interface._update(description=interface_description, peer_type="l3_port_channel", peer_interface=l3_port_channel.peer_port_channel)
+        interface._update(
+            description=interface_description or None,
+            peer_type="l3_port_channel",
+            peer_interface=l3_port_channel.peer_port_channel,
+        )
 
         if l3_port_channel.ipv4_acl_in:
             acl = self._get_acl_for_l3_generic_interface(l3_port_channel.ipv4_acl_in, l3_port_channel)
@@ -228,7 +232,7 @@ class PortChannelInterfacesMixin(Protocol):
             peer_interface=port_channel_name,
             peer=self.shared_utils.wan_ha_peer,
             shutdown=False,
-            description=description,
+            description=description or None,
             ip_address=self.shared_utils.wan_ha_ip_addresses[0],
             flow_tracker=direct_wan_ha_links_flow_tracker,
             mtu=self.shared_utils.node_config.wan_ha.mtu,

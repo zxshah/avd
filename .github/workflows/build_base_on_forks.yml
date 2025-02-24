@@ -8,7 +8,6 @@ name: Build base on forks
 
 "on":
   push:
-    branches: [ '**' ]
     paths:
       - containers/base/**
       - .github/workflows/container_build_template.yml

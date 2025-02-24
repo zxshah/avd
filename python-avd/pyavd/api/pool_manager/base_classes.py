@@ -238,14 +238,10 @@ class PoolCollection(ABC, Generic[T_PoolKeyType, T_AssignmentKeyType, T_ValueTyp
 
         return self._pools[pool_key]
 
-    def _remove_stale_assignments(self) -> None:
-        """
-        Remove stale assignments from all pools in the collection and remove empty pools afterwards.
-
-        Note: This method is called from the parent pool manager and should _not_ be called manually.
-        """
+    def __remove_stale_assignments(self) -> None:
+        """Remove stale assignments from all pools in the collection and remove empty pools afterwards."""
         len_before = len(self._pools)
-        non_empty_pools = {}
+        non_empty_pools: dict[T_PoolKeyType, Pool] = {}
         for pool_key, pool in self._pools.items():
             pool._remove_stale_assignments()
             if pool.assignments:
@@ -265,7 +261,7 @@ class PoolCollection(ABC, Generic[T_PoolKeyType, T_AssignmentKeyType, T_ValueTyp
 
         Data is sorted to ensure a consistent layout.
         """
-        self._remove_stale_assignments()
+        self.__remove_stale_assignments()
         if not self.changed:
             return False
 
@@ -276,7 +272,7 @@ class PoolCollection(ABC, Generic[T_PoolKeyType, T_AssignmentKeyType, T_ValueTyp
 
         try:
             self.pools_file.write_text(FILE_HEADER + dump({self.pools_key: self.as_list()}, Dumper=dumper_cls))
-        except (PermissionError, OSError) as e:
+        except OSError as e:
             msg = f"An error occurred during writing of the AVD Pool Manager file '{self.pools_file}': {e}"
             raise type(e)(msg) from e
 

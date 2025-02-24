@@ -247,7 +247,7 @@ class PoolCollection(ABC, Generic[T_PoolKeyType, T_AssignmentKeyType, T_ValueTyp
         len_before = len(self._pools)
         non_empty_pools = {}
         for pool_key, pool in self._pools.items():
-            pool._remove_state_assignments()
+            pool._remove_stale_assignments()
             if pool.assignments:
                 non_empty_pools[pool_key] = pool
         self._pools = non_empty_pools

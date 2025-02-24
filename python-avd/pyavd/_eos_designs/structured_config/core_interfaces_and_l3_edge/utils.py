@@ -7,7 +7,7 @@ import re
 from functools import cached_property
 from ipaddress import ip_network
 from itertools import islice
-from typing import TYPE_CHECKING, Protocol, TypeVar
+from typing import TYPE_CHECKING, Literal, Protocol, TypeVar
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
@@ -273,11 +273,11 @@ class UtilsMixin(Protocol):
                     isis_network_point_to_point=p2p_link.isis_network_type == "point-to-point",
                     isis_hello_padding=p2p_link.isis_hello_padding,
                 )
-                if isis_circuit_type := default(p2p_link.isis_circuit_type, self.inputs.isis_default_circuit_type):
-                    interface.isis_circuit_type = isis_circuit_type
+                isis_circuit_type: Literal["level-1", "level-2", "level-1-2"] = default(p2p_link.isis_circuit_type, self.inputs.isis_default_circuit_type)
+                interface.isis_circuit_type = isis_circuit_type
 
-                if mode := default(p2p_link.isis_authentication_mode, self.inputs.underlay_isis_authentication_mode):
-                    interface.isis_authentication.both.mode = mode
+                mode: Literal["md5", "text"] | None = default(p2p_link.isis_authentication_mode, self.inputs.underlay_isis_authentication_mode)
+                interface.isis_authentication.both.mode = mode
 
                 if isis_authentication_key := default(p2p_link.isis_authentication_key, self.inputs.underlay_isis_authentication_key):
                     interface.isis_authentication.both._update(key=isis_authentication_key, key_type="7")
@@ -318,5 +318,4 @@ class UtilsMixin(Protocol):
         interface.peer_type = p2p_link_data["peer_type"]
         interface.shutdown = False
         interface.channel_group.id = p2p_link_data["port_channel_id"]
-        if port_channel_mode := p2p_link.port_channel.mode:
-            interface.channel_group.mode = port_channel_mode
+        interface.channel_group.mode = p2p_link.port_channel.mode

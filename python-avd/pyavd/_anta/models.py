@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-    from pyavd.api.anta import MinimalStructuredConfig, TestGenerationSettings
+    from pyavd.api.anta import InputFactorySettings, MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 
@@ -35,7 +35,7 @@ class DeviceTestContext:
     hostname: str
     structured_config: EosCliConfigGen
     structured_configs: dict[str, MinimalStructuredConfig]
-    test_generation_settings: TestGenerationSettings
+    input_factory_settings: InputFactorySettings
 
     @cached_property
     def is_vtep(self) -> bool:
@@ -81,7 +81,7 @@ class DeviceTestContext:
 
             neighbors.append(BgpNeighbor(ip_address=ip_address, vrf="default", peer_group=neighbor.peer_group, peer=neighbor.peer))
 
-        if not self.test_generation_settings.allow_bgp_vrfs:
+        if not self.input_factory_settings.allow_bgp_vrfs:
             LOGGER.debug("<%s>: skipped BGP VRF peers - VRF processing disabled", self.hostname)
             return neighbors
 

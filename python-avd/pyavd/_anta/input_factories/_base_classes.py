@@ -16,17 +16,33 @@ if TYPE_CHECKING:
 
 
 class AntaTestInputFactory(ABC):
-    """Base class for AntaTest.Input factories."""
+    """Base class for `AntaTest.Input` factories.
+
+    Implementations of this class must provide a `create` method that returns
+    a list of `AntaTest.Input` models or `None`.
+
+    Attributes:
+    ----------
+    device : DeviceTestContext
+        The device context for the test.
+    structured_config : EosCliConfigGen
+        The structured configuration model of the device.
+    structured_configs : dict[str, MinimalStructuredConfig]
+        The minimal structured configurations of all devices in the fabric.
+    logger : TestLoggerAdapter
+        Custom logger used for the input factory.
+    """
 
     def __init__(self, device_context: DeviceTestContext, logger: TestLoggerAdapter) -> None:
+        """Initialize the `AntaTestInputFactory`."""
         self.device = device_context
         self.structured_config = device_context.structured_config
         self.structured_configs = device_context.structured_configs
         self.logger = logger
 
     @abstractmethod
-    def create(self) -> AntaTest.Input | None:
-        """Create the AntaTest.Input model for the AntaTest."""
+    def create(self) -> list[AntaTest.Input] | None:
+        """Create the `AntaTest.Input` models for the `AntaTest`."""
 
     def is_peer_available(self, peer: str, caller: str) -> bool:
         """Check if a peer is part of the fabric and is deployed."""

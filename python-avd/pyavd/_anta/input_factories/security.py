@@ -15,7 +15,7 @@ from ._base_classes import AntaTestInputFactory
 
 
 class VerifySpecificIPSecConnInputFactory(AntaTestInputFactory):
-    """Input factory class for the VerifySpecificIPSecConn test.
+    """Input factory class for the `VerifySpecificIPSecConn` test.
 
     This factory generates test inputs for verifying IPsec connections.
 
@@ -25,8 +25,8 @@ class VerifySpecificIPSecConnInputFactory(AntaTestInputFactory):
     It deduplicates connections and always uses the default VRF.
     """
 
-    def create(self) -> VerifySpecificIPSecConn.Input | None:
-        """Create Input for the VerifySpecificIPSecConn test."""
+    def create(self) -> list[VerifySpecificIPSecConn.Input] | None:
+        """Create a list of inputs for the `VerifySpecificIPSecConn` test."""
         ip_security_connections = []
 
         added_peers = set()
@@ -49,5 +49,5 @@ class VerifySpecificIPSecConnInputFactory(AntaTestInputFactory):
                     added_peers.add((static_peer.router_ip, "default"))
 
         return (
-            VerifySpecificIPSecConn.Input(ip_security_connections=natural_sort(ip_security_connections, sort_key="peer")) if ip_security_connections else None
+            [VerifySpecificIPSecConn.Input(ip_security_connections=natural_sort(ip_security_connections, sort_key="peer"))] if ip_security_connections else None
         )

@@ -29,7 +29,7 @@ PLUGIN_NAME = "arista.avd.anta_workflow"
 try:
     from pyavd._anta.lib import AntaCatalog, AntaInventory, AsyncEOSDevice, MDReportGenerator, ReportCsv, ResultManager, anta_runner
     from pyavd._utils import default, get, strip_empties_from_dict
-    from pyavd.api.anta import AntaCatalogGenerationSettings, TestGenerationSettings, get_minimal_structured_configs
+    from pyavd.api.anta import AntaCatalogGenerationSettings, InputFactorySettings, get_minimal_structured_configs
     from pyavd.get_device_anta_catalog import get_device_anta_catalog
 
     HAS_PYAVD = True
@@ -180,12 +180,12 @@ class ActionModule(ActionBase):
             if user_catalog_dir is not None:
                 USER_CATALOG = load_user_catalogs(user_catalog_dir)
 
-            # Load the structured configs and build FabricData if structured_config_dir is provided
+            # Load the structured configs and build the minimal structured configs if needed
             if generate_avd_catalog:
                 STRUCTURED_CONFIGS = load_structured_configs(deployed_devices, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
                 MINIMAL_STRUCTURED_CONFIGS = get_minimal_structured_configs(STRUCTURED_CONFIGS)
 
-            with ProcessPoolExecutor(max_workers=min((ansible_forks - 1), 1), mp_context=get_context("fork")) as executor:
+            with ProcessPoolExecutor(max_workers=max((ansible_forks - 1), 1), mp_context=get_context("fork")) as executor:
                 batch_size = get(PLUGIN_ARGS, "runner.batch_size")
                 batches = [deployed_devices[i : i + batch_size] for i in range(0, len(deployed_devices), batch_size)]
                 batch_results = executor.map(run_anta, batches)
@@ -296,10 +296,10 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
     for device in devices:
         anta_device = build_anta_device(device)
         inventory.add_device(anta_device)
-        # We generate the device's AVD catalog only if structured configs are provided
+        # We generate the device's AVD catalog only if structured configs are loaded
         if STRUCTURED_CONFIGS is not None and MINIMAL_STRUCTURED_CONFIGS is not None:
             settings = AntaCatalogGenerationSettings(
-                test_generation_settings=TestGenerationSettings(allow_bgp_vrfs=get(PLUGIN_ARGS, "avd_catalogs.allow_bgp_vrfs")),
+                input_factory_settings=InputFactorySettings(allow_bgp_vrfs=get(PLUGIN_ARGS, "avd_catalogs.allow_bgp_vrfs")),
                 output_dir=get(PLUGIN_ARGS, "avd_catalogs.output_dir"),
                 **get_anta_catalog_filters(device, get(PLUGIN_ARGS, "avd_catalogs.filters", default=[])),
             )
@@ -431,10 +431,9 @@ def load_one_structured_config(device: str, structured_config_dir: str, structur
 def setup_queue_listener(result: dict, queue: Queue) -> QueueListener:
     """Setup and start the queue listener for centralized log handling.
 
-    This function establishes the logging pipeline by:
-    1. Creating a handler to convert Python logs to Ansible display format
-    2. Setting up a formatter for console output
-    3. Starting a queue listener thread to process logs from all processes, including the main process
+    1. Creates a handler to convert Python logs to Ansible display format
+    2. Sets up a formatter for console output
+    3. Starts a queue listener thread to process logs from all processes, including the main process
 
     The queue listener processes logs from the central queue configured in `setup_module_logging`
     and displays them in the Ansible console.
@@ -452,7 +451,6 @@ def setup_queue_listener(result: dict, queue: Queue) -> QueueListener:
 def setup_module_logging(queue: Queue) -> None:
     """Setup logging configuration for the module to handle logs across multiple processes.
 
-    This function configures logging for the module in the following way:
     1. Clears existing handlers for the 'pyavd' logger and enables propagation to use root queue handler
     2. Sets up a queue-based logging system where all logs are sent to a central queue
     3. Implements filtering for ANTA and its dependencies (anta, aiocache, asyncio, asyncssh, httpcore, httpx)
@@ -512,7 +510,7 @@ def setup_process_logging() -> None:
     handler when the logging level is DEBUG `-vvv`. All logs including ANTA and its
     underlying libraries will be written to a file per process for debugging purposes.
     """
-    # TODO: Add process prefix to console logs
+    # TODO: Consider adding process prefix to console logs
     anta_logs_dir = get(PLUGIN_ARGS, "runner.logs_dir")
     root_logger = logging.getLogger()
 

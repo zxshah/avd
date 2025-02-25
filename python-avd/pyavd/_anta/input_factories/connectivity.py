@@ -15,7 +15,7 @@ from ._base_classes import AntaTestInputFactory
 
 
 class VerifyLLDPNeighborsInputFactory(AntaTestInputFactory):
-    """Input factory class for the VerifyLLDPNeighbors test.
+    """Input factory class for the `VerifyLLDPNeighbors` test.
 
     This factory collects LLDP neighbors for Ethernet interfaces that have
     `peer` and `peer_interface` fields defined in their configuration.
@@ -28,8 +28,8 @@ class VerifyLLDPNeighborsInputFactory(AntaTestInputFactory):
     LLDP format.
     """
 
-    def create(self) -> VerifyLLDPNeighbors.Input | None:
-        """Create Input for the VerifyLLDPNeighbors test."""
+    def create(self) -> list[VerifyLLDPNeighbors.Input] | None:
+        """Create a list of inputs for the `VerifyLLDPNeighbors` test."""
         neighbors = []
         for intf in self.structured_config.ethernet_interfaces:
             if intf.validate_state is False or intf.validate_lldp is False:
@@ -62,11 +62,11 @@ class VerifyLLDPNeighborsInputFactory(AntaTestInputFactory):
                 )
             )
 
-        return VerifyLLDPNeighbors.Input(neighbors=natural_sort(neighbors, sort_key="port")) if neighbors else None
+        return [VerifyLLDPNeighbors.Input(neighbors=natural_sort(neighbors, sort_key="port"))] if neighbors else None
 
 
 class VerifyReachabilityInputFactory(AntaTestInputFactory):
-    """Input factory class for the VerifyReachability test.
+    """Input factory class for the `VerifyReachability` test.
 
     This factory generates test inputs for verifying various reachability checks.
 
@@ -77,8 +77,8 @@ class VerifyReachabilityInputFactory(AntaTestInputFactory):
     fabric peers exist and are deployed (`is_deployed: true`) and peer interfaces have IP addresses.
     """
 
-    def create(self) -> VerifyReachability.Input | None:
-        """Create Input for the VerifyReachability test."""
+    def create(self) -> list[VerifyReachability.Input] | None:
+        """Create a list of inputs for the `VerifyReachability` test."""
         hosts = []
 
         # Add the P2P reachability
@@ -108,4 +108,4 @@ class VerifyReachabilityInputFactory(AntaTestInputFactory):
                     )
                 )
 
-        return VerifyReachability.Input(hosts=natural_sort(hosts, sort_key="destination")) if hosts else None
+        return [VerifyReachability.Input(hosts=natural_sort(hosts, sort_key="destination"))] if hosts else None

@@ -15,7 +15,7 @@ from ._base_classes import AntaTestInputFactory
 
 
 class VerifyStunClientTranslationInputFactory(AntaTestInputFactory):
-    """Input factory class for the VerifyStunClientTranslation test.
+    """Input factory class for the `VerifyStunClientTranslation` test.
 
     This factory generates test inputs for verifying STUN client translations.
 
@@ -25,8 +25,8 @@ class VerifyStunClientTranslationInputFactory(AntaTestInputFactory):
     The STUN clients use a source port of 4500 by default.
     """
 
-    def create(self) -> VerifyStunClientTranslation.Input | None:
-        """Create Input for the VerifyStunClientTranslation test."""
+    def create(self) -> list[VerifyStunClientTranslation.Input] | None:
+        """Create a list of inputs for the `VerifyStunClientTranslation` test."""
         stun_clients = []
 
         for path_group in self.structured_config.router_path_selection.path_groups:
@@ -51,4 +51,4 @@ class VerifyStunClientTranslationInputFactory(AntaTestInputFactory):
                 source_address = ip_interface(ip_address).ip
                 stun_clients.append(StunClientTranslation(source_address=source_address))
 
-        return VerifyStunClientTranslation.Input(stun_clients=natural_sort(stun_clients, sort_key="source_address")) if stun_clients else None
+        return [VerifyStunClientTranslation.Input(stun_clients=natural_sort(stun_clients, sort_key="source_address"))] if stun_clients else None

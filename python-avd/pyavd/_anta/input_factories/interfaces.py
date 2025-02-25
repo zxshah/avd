@@ -15,7 +15,7 @@ from ._base_classes import AntaTestInputFactory
 
 
 class VerifyInterfacesStatusInputFactory(AntaTestInputFactory):
-    """Input factory class for the VerifyInterfacesStatus test.
+    """Input factory class for the `VerifyInterfacesStatus` test.
 
     This factory generates test inputs for verifying the status of interfaces.
 
@@ -34,8 +34,8 @@ class VerifyInterfacesStatusInputFactory(AntaTestInputFactory):
     For Ethernet interfaces, `interface_defaults.ethernet.shutdown` is considered when `shutdown` is not set
     """
 
-    def create(self) -> VerifyInterfacesStatus.Input | None:
-        """Create Input for the VerifyInterfacesStatus test."""
+    def create(self) -> list[VerifyInterfacesStatus.Input] | None:
+        """Create a list of inputs for the `VerifyInterfacesStatus` test."""
         interfaces = []
 
         # Add Ethernet interfaces, considering `validate_state` knob and interface defaults
@@ -65,4 +65,4 @@ class VerifyInterfacesStatusInputFactory(AntaTestInputFactory):
         if self.device.is_vtep:
             interfaces.append(InterfaceState(name="Vxlan1", status="up"))
 
-        return VerifyInterfacesStatus.Input(interfaces=natural_sort(interfaces, sort_key="name")) if interfaces else None
+        return [VerifyInterfacesStatus.Input(interfaces=natural_sort(interfaces, sort_key="name"))] if interfaces else None

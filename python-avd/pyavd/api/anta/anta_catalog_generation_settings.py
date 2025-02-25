@@ -10,26 +10,48 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from .test_spec import TestSpec
 
 
-# TODO: Consider naming this InputFactoryGenerationSettings
-# TODO: Add attributes to docstring
-class TestGenerationSettings(BaseModel):
-    """Model defining settings for test input generation."""
+class InputFactorySettings(BaseModel):
+    """Model defining settings for test input generation.
 
-    allow_bgp_vrfs: bool = False
+    Attributes:
+    ----------
+        allow_bgp_vrfs : bool
+            Whether to include BGP neighbors in VRFs.
+    """
+
+    allow_bgp_vrfs: bool = Field(default=False)
 
 
-# TODO: Add attributes to docstring
 class AntaCatalogGenerationSettings(BaseModel):
-    """Model defining settings for ANTA catalog generation."""
+    """Model defining settings for ANTA catalog generation.
+
+    Used in `pyavd.get_device_anta_catalog` to customize the ANTA test catalog generation.
+
+    Attributes:
+    ----------
+        input_factory_settings : InputFactorySettings
+            Settings for test input generation.
+        run_tests : list[str]
+            List of ANTA test names to run.
+        skip_tests : list[str]
+            List of ANTA test names to skip. Takes precedence over `run_tests`.
+        custom_test_specs : list[TestSpec]
+            List of custom test specs.
+        output_dir : str | Path | None, optional
+            Directory to output test catalog.
+        ignore_is_deployed : bool
+            Whether to ignore the `is_deployed` key in the structured config.
+            When set to `True`, the catalog will still be generated even if the `is_deployed` key is `False`.
+    """
 
     model_config = ConfigDict(extra="forbid", arbitrary_types_allowed=True)
 
-    test_generation_settings: TestGenerationSettings = Field(default_factory=TestGenerationSettings)
+    input_factory_settings: InputFactorySettings = Field(default_factory=InputFactorySettings)
     run_tests: list[str] = Field(default_factory=list)
     skip_tests: list[str] = Field(default_factory=list)
     custom_test_specs: list[TestSpec] = Field(default_factory=list)
-    output_dir: str | Path | None = None
-    ignore_is_deployed: bool = False
+    output_dir: str | Path | None = Field(default=None)
+    ignore_is_deployed: bool = Field(default=False)
 
     @field_validator("output_dir")
     @classmethod

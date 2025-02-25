@@ -7,14 +7,15 @@ from logging import getLogger
 from time import perf_counter
 from typing import TYPE_CHECKING
 
+from pyavd.api.anta import AntaCatalogGenerationSettings
+
 if TYPE_CHECKING:
     from ._anta.lib import AntaCatalog
-    from .api.anta import AntaCatalogGenerationSettings, MinimalStructuredConfig
+    from .api.anta import MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 
 
-# TODO: Update docstring
 def get_device_anta_catalog(
     hostname: str,
     structured_config: dict,
@@ -24,12 +25,13 @@ def get_device_anta_catalog(
     """Generate an ANTA catalog for a single device.
 
     By default, the ANTA catalog will be generated from all tests specified in the PyAVD test index.
-    The user can optionally provide a list of custom TestSpec to be added to the default PyAVD test
-    index and a set of test names to skip or run.
 
-    When creating test definitions for the catalog, PyAVD will use the FabricData instance containing
-    the required mappings and data of all devices in the fabric. Make sure to create a single FabricData
-    using the `get_fabric_data` function of PyAVD and use it for all devices in the fabric.
+    An optional instance of `pyavd.api.anta.AntaCatalogGenerationSettings` can be provided
+    to customize the catalog generation process, such as running only specific tests, or skipping certain tests.
+
+    PyAVD uses minimal structured configurations of all devices containing only the required data.
+    Make sure to create a single `minimal_structured_configs` dictionary using `pyavd.api.anta.get_minimal_structured_configs`
+    for consistent data across catalog generations.
 
     Test definitions can be omitted from the catalog if the required data is not available for a specific device.
     You can configure logging and set the log level to DEBUG to see which test definitions are skipped and the reason why.
@@ -38,19 +40,15 @@ def get_device_anta_catalog(
     ----------
     hostname : str
         The hostname of the device for which the catalog is being generated.
-    fabric_data : FabricData
-        Contains relevant devices data and mappings of all devices in the fabric to generate the catalog.
-        The instance must be created using the `get_fabric_data` function of PyAVD.
-    output_dir : str | Path
-        Optional output directory where the ANTA catalog should be saved as a JSON file.
-    custom_test_specs : list[TestSpec]
-        Optional user-defined list of TestSpec to be added to the default PyAVD test index.
-    run_tests : list[str]
-        Optional list of test names to run from the default PyAVD test index.
-    skip_tests : list[str]
-        Optional list of test names to skip from the default PyAVD test index. Takes precedence over `run_tests`.
-    ignore_is_deployed : bool
-        If set to True, the catalog will be generated even if the device is marked as not deployed (is_deployed=False).
+    structured_config : dict
+        The structured configuration of the device.
+        Variables should be converted and validated according to AVD `eos_cli_config_gen` schema first using `pyavd.validate_structured_config`.
+    minimal_structured_configs : dict[str, MinimalStructuredConfig]
+        Dictionary keyed by hostname containing minimal structured configurations for all devices.
+        Must be generated using `pyavd.api.anta.get_minimal_structured_configs`.
+    settings : AntaCatalogGenerationSettings, optional
+        The settings object to customize the catalog generation process.
+        Must be an instance of `pyavd.api.anta.AntaCatalogGenerationSettings`, by default `None`.
 
     Returns:
     -------
@@ -61,7 +59,6 @@ def get_device_anta_catalog(
     from ._anta.index import PYAVD_TEST_INDEX, PYAVD_TEST_NAMES
     from ._anta.lib import AntaCatalog
     from ._anta.utils import dump_anta_catalog
-    from .api.anta import AntaCatalogGenerationSettings
 
     settings = settings or AntaCatalogGenerationSettings()
 
@@ -104,7 +101,7 @@ def get_device_anta_catalog(
     # Add custom test specs, avoiding duplicates
     filtered_test_specs.extend([test for test in settings.custom_test_specs if test not in filtered_test_specs])
 
-    catalog = create_catalog(hostname, structured_config, minimal_structured_configs, settings.test_generation_settings, filtered_test_specs)
+    catalog = create_catalog(hostname, structured_config, minimal_structured_configs, settings.input_factory_settings, filtered_test_specs)
 
     if settings.output_dir:
         dump_anta_catalog(hostname, catalog, settings.output_dir)

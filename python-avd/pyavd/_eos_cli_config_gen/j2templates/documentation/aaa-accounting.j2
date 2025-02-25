@@ -111,7 +111,7 @@
 | Dot1x - Default | - | none | - | - |
 {%         elif aaa_accounting.dot1x.default.methods is arista.avd.defined %}
 {%             set methods_list = [] %}
-{%             set logging_namespace = namespace(method_logging = false, multicast = []) %}
+{%             set logging_namespace = namespace(method_logging = false) %}
 {%             for method in aaa_accounting.dot1x.default.methods %}
 {%                 if method.group is arista.avd.defined and method.method == "group" %}
 {%                     set method_group_cli = method.group %}

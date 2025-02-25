@@ -27,6 +27,8 @@ try:
     HAS_PACKAGING = True
 except ImportError:
     HAS_PACKAGING = False
+    # Making ansible-test sanity happy
+    Requirement = object
 
 try:
     from ansible_collections.arista.avd.plugins.plugin_utils.utils.init_logging import init_pyavd_logging

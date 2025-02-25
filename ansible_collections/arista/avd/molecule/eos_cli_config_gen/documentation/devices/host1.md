@@ -7133,6 +7133,7 @@ router service-insertion
 | 128 | test-algo | 127 | 1 | 450000 | include-all 99,100,102,105 include-any 101,103,110-115,117 exclude 45,60-70 | test,400-500,502 |
 | 129 | test-2 | 128 | min-delay | 100 | include-all 4 exclude 101 | 100,0xA |
 | 130 | test-3 | 123 | te-metric | 1234 | exclude 117 | 101 |
+| 131 | test-4 | - | - | - | - | - |
 
 #### Router Traffic Engineering Device Configuration
 
@@ -7183,18 +7184,22 @@ router traffic-engineering
          metric 1
          srlg exclude test,400-500,502
          color 450000
+      !
       flex-algo 129 test-2
          priority 128
          administrative-group include all 4 exclude 101
          metric min-delay
          srlg exclude 100,0xA
          color 100
+      !
       flex-algo 130 test-3
          priority 123
          administrative-group exclude 117
          metric te-metric
          srlg exclude 101
          color 1234
+      !
+      flex-algo 131 test-4
 ```
 
 ### Router OSPF

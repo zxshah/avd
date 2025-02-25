@@ -64,7 +64,7 @@ router traffic-engineering
 {%     if router_traffic_engineering.flex_algos is arista.avd.defined %}
    !
    flex-algo
-{%         for flex_algo in router_traffic_engineering.flex_algos %}
+{%         for flex_algo in router_traffic_engineering.flex_algos | arista.avd.natural_sort('number') %}
       flex-algo {{ flex_algo.number }} {{ flex_algo.name }}
 {%             if flex_algo.priority is arista.avd.defined %}
          priority {{ flex_algo.priority }}
@@ -90,6 +90,9 @@ router traffic-engineering
 {%             endif %}
 {%             if flex_algo.color is arista.avd.defined %}
          color {{ flex_algo.color }}
+{%             endif %}
+{%             if loop.index < (router_traffic_engineering.flex_algos | arista.avd.natural_sort('number') | length) %}
+      !
 {%             endif %}
 {%         endfor %}
 {%     endif %}

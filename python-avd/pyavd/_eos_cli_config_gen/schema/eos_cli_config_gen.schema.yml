@@ -21009,7 +21009,6 @@ keys:
           keys:
             number:
               type: int
-              required: true
               min: 128
               max: 255
               description: Flex-algo number, must be unique across all flex-algo definitions.

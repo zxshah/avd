@@ -81,3 +81,5 @@ router_traffic_engineering:
         exclude: "117"
       srlg_exclude: 101
       priority: 123
+    - number: 131
+      name: test-4

@@ -6,10 +6,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Literal, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
+from pyavd._eos_designs.schema import EosDesigns
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdError
 from pyavd._utils import get_ip_from_ip_prefix
-from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -82,17 +82,13 @@ class IpAccesslistsMixin(Protocol):
     @structured_config_contributor
     def ip_access_lists(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set the structured config for ip_access_lists."""
-        if self._svi_acls:
-            for interface_acls in self._svi_acls.values():
-                for acl in interface_acls.values():
-                    self.structured_config.ip_access_lists.append(acl)
-
-        if self._l3_interface_acls:
-            for l3_interface_acl in self._l3_interface_acls.values():
-                for acl in l3_interface_acl.values():
-                    self.structured_config.ip_access_lists.append(acl)
-
         for ie_policy_type in self._filtered_internet_exit_policy_types:
             self._acl_internet_exit(ie_policy_type)
 
-        self.structured_config.ip_access_lists = EosCliConfigGen.IpAccessLists(natural_sort(self.structured_config.ip_access_lists, sort_key="name"))
+    def _set_ipv4_acl(self: AvdStructuredConfigNetworkServicesProtocol, ipv4_acl: EosDesigns.Ipv4AclsItem) -> None:
+        """
+        Set structured config for ip_access_lists.
+
+        Called for each interface in l3_interfaces and l3_port_channels when applying ipv4_acls
+        """
+        self.structured_config.ip_access_lists.append(ipv4_acl._cast_as(EosCliConfigGen.IpAccessListsItem))

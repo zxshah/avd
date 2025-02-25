@@ -2867,8 +2867,8 @@ monitor server radius
 
 #### TWAMP-light Sender Profiles
 
-| Profile Name | Measurement Interval | Measurement Samples | Significance Value | Significance Offset |
-| ------------ | -------------------- | ------------------- | ------------------ | ------------------- |
+| Profile Name | Measurement Interval(seconds) | Measurement Samples | Significance Value(microseconds) | Significance Offset(microseconds) |
+| ------------ | ----------------------------- | ------------------- | -------------------------------- | --------------------------------- |
 | test-profile | 5 | 10 | 50 | 5 |
 | test-profile2 | - | - | - | - |
 
@@ -2891,7 +2891,6 @@ monitor twamp
          significance 50 microseconds offset 5 microseconds
       !
       sender profile test-profile2
-      !
 ```
 
 ## Monitor Connectivity
@@ -7169,7 +7168,6 @@ router traffic-engineering
    router-id ipv4 10.0.0.1
    router-id ipv6 2001:beef:cafe::1
    twamp-light sender profile test-profile
-   !
 ```
 
 ### Router OSPF

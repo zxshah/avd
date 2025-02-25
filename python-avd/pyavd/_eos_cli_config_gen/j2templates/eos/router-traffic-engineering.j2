@@ -63,6 +63,5 @@ router traffic-engineering
 {%     endif %}
 {%     if router_traffic_engineering.twamp_light_sender_profile is arista.avd.defined %}
    twamp-light sender profile {{ router_traffic_engineering.twamp_light_sender_profile }}
-   !
 {%     endif %}
 {% endif %}

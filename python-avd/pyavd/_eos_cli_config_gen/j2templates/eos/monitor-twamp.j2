@@ -36,7 +36,9 @@ monitor twamp
 {%             if sender_profile.significance is arista.avd.defined %}
          significance {{ sender_profile.significance.value }} microseconds offset {{ sender_profile.significance.offset }} microseconds
 {%             endif %}
+{%             if loop.index < (monitor_twamp.twamp_light.sender_profiles | length) %}
       !
+{%             endif %}
 {%         endfor %}
 {%     endif %}
 {% endif %}

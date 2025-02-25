@@ -15,7 +15,7 @@ monitor twamp
 {%             endif %}
       !
 {%         endif %}
-{%         if monitor_twamp.twamp_light.sender_defaults is arista.avd.defined %}
+{%         if monitor_twamp.twamp_light.sender_defaults.destination_port is arista.avd.defined or monitor_twamp.twamp_light.sender_defaults.source_port is arista.avd.defined %}
       sender defaults
 {%             if monitor_twamp.twamp_light.sender_defaults.destination_port is arista.avd.defined %}
          destination port {{ monitor_twamp.twamp_light.sender_defaults.destination_port }}

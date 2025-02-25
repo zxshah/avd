@@ -123,9 +123,6 @@
 {%                     set logging_namespace.method_logging = true %}
 {%                 endif %}
 {%             endfor %}
-{%             if logging_namespace.multicast == [] %}
-{%                 do logging_namespace.multicast.append("-") %}
-{%             endif %}
 {%             if methods_list == [] %}
 {%                 do methods_list.append("-") %}
 {%             endif %}

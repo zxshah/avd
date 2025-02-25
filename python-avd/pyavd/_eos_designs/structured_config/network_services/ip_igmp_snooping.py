@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import Undefined, default
+from pyavd._utils import default
 
 if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
@@ -67,18 +67,20 @@ class IpIgmpSnoopingMixin(Protocol):
             if self.shared_utils.network_services_l3 and self.shared_utils.uplink_type in ["p2p", "p2p-vrfs"]:
                 igmp_snooping_querier_enabled = default(vlan.igmp_snooping_querier.enabled, tenant.igmp_snooping_querier.enabled)
 
-        vlan_item = EosCliConfigGen.IpIgmpSnooping.VlansItem(
-            enabled=igmp_snooping_enabled if igmp_snooping_enabled is not None else Undefined,
-            querier=EosCliConfigGen.IpIgmpSnooping.VlansItem.Querier(
-                enabled=igmp_snooping_querier_enabled if igmp_snooping_querier_enabled is not None else Undefined,
-                address=default(vlan.igmp_snooping_querier.source_address, tenant.igmp_snooping_querier.source_address, self.shared_utils.router_id)
-                if igmp_snooping_querier_enabled
-                else Undefined,
-                version=default(vlan.igmp_snooping_querier.version, tenant.igmp_snooping_querier.version) if igmp_snooping_querier_enabled else Undefined,
-            )
-            or Undefined,
-            fast_leave=default(vlan.igmp_snooping_querier.fast_leave, tenant.evpn_l2_multicast.fast_leave) if evpn_l2_multicast_enabled else Undefined,
-        )
+        vlan_item = EosCliConfigGen.IpIgmpSnooping.VlansItem()
+        if igmp_snooping_enabled is not None:
+            vlan_item.enabled = igmp_snooping_enabled
+
+        if igmp_snooping_querier_enabled is not None:
+            vlan_item.querier.enabled = igmp_snooping_querier_enabled
+            if igmp_snooping_querier_enabled:
+                vlan_item.querier.address = default(
+                    vlan.igmp_snooping_querier.source_address, tenant.igmp_snooping_querier.source_address, self.shared_utils.router_id
+                )
+                vlan_item.querier.version = default(vlan.igmp_snooping_querier.version, tenant.igmp_snooping_querier.version)
+
+        if evpn_l2_multicast_enabled:
+            vlan_item.fast_leave = default(vlan.igmp_snooping_querier.fast_leave, tenant.evpn_l2_multicast.fast_leave)
 
         if vlan_item:
             vlan_item.id = vlan.id

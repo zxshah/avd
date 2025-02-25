@@ -25,8 +25,8 @@
 
 #### TWAMP-light Sender Profiles
 
-| Profile Name | Measurement Interval | Measurement Samples | Significance Value | Significance Offset |
-| ------------ | -------------------- | ------------------- | ------------------ | ------------------- |
+| Profile Name | Measurement Interval(seconds) | Measurement Samples | Significance Value(microseconds) | Significance Offset(microseconds) |
+| ------------ | ----------------------------- | ------------------- | -------------------------------- | --------------------------------- |
 {%         for profile in monitor_twamp.twamp_light.sender_profiles | arista.avd.natural_sort('name') %}
 {%             set profile_interval = profile.measurement_interval | arista.avd.default("-") %}
 {%             set profile_samples = profile.measurement_samples | arista.avd.default("-") %}

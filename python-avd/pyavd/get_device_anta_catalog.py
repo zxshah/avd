@@ -7,11 +7,9 @@ from logging import getLogger
 from time import perf_counter
 from typing import TYPE_CHECKING
 
-from pyavd.api.anta import AntaCatalogGenerationSettings
-
 if TYPE_CHECKING:
     from ._anta.lib import AntaCatalog
-    from .api.anta import MinimalStructuredConfig
+    from .api.anta import AntaCatalogGenerationSettings, MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 
@@ -59,6 +57,7 @@ def get_device_anta_catalog(
     from ._anta.index import PYAVD_TEST_INDEX, PYAVD_TEST_NAMES
     from ._anta.lib import AntaCatalog
     from ._anta.utils import dump_anta_catalog
+    from .api.anta import AntaCatalogGenerationSettings
 
     settings = settings or AntaCatalogGenerationSettings()
 

@@ -88,6 +88,96 @@ def _validate_python_version(info: dict[str, Any], result: dict[str, Any]) -> bo
     return True
 
 
+def _parse_requirements(req_str: str) -> tuple[Requirement, list[str]]:
+    """Parse a requirement string and return the parsed object an a list of extras requirements to parse if any."""
+    try:
+        req = Requirement(req_str)
+    except InvalidRequirement as exc:
+        msg = f"Wrong format for requirement {req_str}"
+        raise AnsibleActionFail(msg) from exc
+
+    extras = []
+    if req.extras:
+        for subreq_name in metadata(req.name).get_all("Requires-Dist"):
+            subreq = Requirement(subreq_name)
+            if subreq.marker:
+                extras = [subreq_name for marker in subreq.marker._markers if str(marker[0]) == "extra" and str(marker[2]) in req.extras]
+
+    return req, extras
+
+
+def _check_requirement(req: Requirement, requirements_dict: dict[str, Any]) -> bool:
+    """Check one requirement and in-place update requirement_dict.
+
+    Returns:
+        boolean: True if the check succeeds, False otherwise
+    """
+    try:
+        installed_version = version(req.name)
+        display.vvv(f"Found {req.name} {installed_version} installed!", "Verify Requirements")
+
+        # If some old dist-info files are leftover in Python site-packages, it is possible
+        # to find multiple Distributions for the installed version
+        potential_dists = Distribution.discover(name=req.name)
+        detected_versions = [dist.version for dist in potential_dists]
+        valid_versions = [version for version in detected_versions if req.specifier.contains(version)]
+        if len(detected_versions) > 1:
+            display.v(f"Found {req.name} {detected_versions} metadata - this could mean legacy dist-info files are present in your site-packages folder.")
+    except PackageNotFoundError:
+        requirements_dict["not_found"][req.name] = {
+            "installed": None,
+            "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
+        }
+        display.error(f"Python library '{req.name}' required but not found - requirement is {req!s}", wrap_text=False)
+        return False
+
+    if req.specifier.contains(installed_version):
+        requirements_dict["valid"][req.name] = {
+            "installed": installed_version,
+            "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
+        }
+    elif len(valid_versions) > 0:
+        # More than one dist found and at least one was matching - output a warning
+        requirements_dict["valid"][req.name] = {
+            "installed": installed_version,
+            "detected_versions": detected_versions,
+            "valid_versions": valid_versions,
+            "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
+        }
+        display.warning(
+            f"Found {req.name} valid versions {valid_versions} among {detected_versions} from metadata - assuming a valid version is running - more"
+            " information available with -v",
+        )
+        display.v(
+            "The Arista AVD collection relies on Python built-in library `importlib.metadata` to detect running versions. In some cases where legacy"
+            " dist-info folders are leftovers in the site-packages folder, there can be misdetection of the version. This module assumes that if any"
+            " version matches the required one, then the requirement is met. This could led to false positive results. Please make sure to clean the"
+            " leftovers dist-info folders.",
+        )
+    elif len(detected_versions) > 1:
+        # More than one dist found and none matching the requirements
+        display.error(
+            f"Python library '{req.name}' detected versions {detected_versions} - requirement is {req!s} - more information available with -v",
+            wrap_text=False,
+        )
+        requirements_dict["mismatched"][req.name] = {
+            "installed": installed_version,
+            "detected_versions": detected_versions,
+            "valid_versions": None,
+            "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
+        }
+        display.error(f"Python library '{req.name}' version running {installed_version} - requirement is {req!s}", wrap_text=False)
+    else:
+        display.error(f"Python library '{req.name}' version running {installed_version} - requirement is {req!s}", wrap_text=False)
+        requirements_dict["mismatched"][req.name] = {
+            "installed": installed_version,
+            "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
+        }
+        return False
+
+    return True
+
+
 def _validate_python_requirements(requirements: list[str], info: dict[str, Any]) -> bool:
     """
     Validate python lib versions.
@@ -113,12 +203,7 @@ def _validate_python_requirements(requirements: list[str], info: dict[str, Any])
     # Remove the comments including inline comments
     requirements = [req.split(" #", maxsplit=1)[0] for req in requirements if req[0] != "#"]
     for raw_req in requirements:
-        try:
-            req = Requirement(raw_req)
-        except InvalidRequirement as exc:
-            msg = f"Wrong format for requirement {raw_req}"
-            raise AnsibleActionFail(msg) from exc
-
+        req, extras = _parse_requirements(raw_req)
         if RUNNING_FROM_SOURCE and req.name == "pyavd":
             display.vvv("AVD is running from source, *not* checking pyavd version nor any extra.", "Verify Requirements")
             requirements_dict["valid"][req.name] = {
@@ -127,75 +212,9 @@ def _validate_python_requirements(requirements: list[str], info: dict[str, Any])
             }
             continue
 
-        if req.extras:
-            for subreq_name in metadata(req.name).get_all("Requires-Dist"):
-                subreq = Requirement(subreq_name)
-                if subreq.marker:
-                    requirements.extend(subreq_name for marker in subreq.marker._markers if str(marker[0]) == "extra" and str(marker[2]) in req.extras)
+        requirements.extend(extras)
 
-        try:
-            installed_version = version(req.name)
-            display.vvv(f"Found {req.name} {installed_version} installed!", "Verify Requirements")
-
-            # If some old dist-info files are leftover in Python site-packages, it is possible
-            # to find multiple Distributions for the installed version
-            potential_dists = Distribution.discover(name=req.name)
-            detected_versions = [dist.version for dist in potential_dists]
-            valid_versions = [version for version in detected_versions if req.specifier.contains(version)]
-            if len(detected_versions) > 1:
-                display.v(f"Found {req.name} {detected_versions} metadata - this could mean legacy dist-info files are present in your site-packages folder.")
-        except PackageNotFoundError:
-            requirements_dict["not_found"][req.name] = {
-                "installed": None,
-                "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
-            }
-            display.error(f"Python library '{req.name}' required but not found - requirement is {req!s}", wrap_text=False)
-            valid = False
-            continue
-
-        if req.specifier.contains(installed_version):
-            requirements_dict["valid"][req.name] = {
-                "installed": installed_version,
-                "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
-            }
-        elif len(valid_versions) > 0:
-            # More than one dist found and at least one was matching - output a warning
-            requirements_dict["valid"][req.name] = {
-                "installed": installed_version,
-                "detected_versions": detected_versions,
-                "valid_versions": valid_versions,
-                "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
-            }
-            display.warning(
-                f"Found {req.name} valid versions {valid_versions} among {detected_versions} from metadata - assuming a valid version is running - more"
-                " information available with -v",
-            )
-            display.v(
-                "The Arista AVD collection relies on Python built-in library `importlib.metadata` to detect running versions. In some cases where legacy"
-                " dist-info folders are leftovers in the site-packages folder, there can be misdetection of the version. This module assumes that if any"
-                " version matches the required one, then the requirement is met. This could led to false positive results. Please make sure to clean the"
-                " leftovers dist-info folders.",
-            )
-        elif len(detected_versions) > 1:
-            # More than one dist found and none matching the requirements
-            display.error(
-                f"Python library '{req.name}' detected versions {detected_versions} - requirement is {req!s} - more information available with -v",
-                wrap_text=False,
-            )
-            requirements_dict["mismatched"][req.name] = {
-                "installed": installed_version,
-                "detected_versions": detected_versions,
-                "valid_versions": None,
-                "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
-            }
-            display.error(f"Python library '{req.name}' version running {installed_version} - requirement is {req!s}", wrap_text=False)
-        else:
-            display.error(f"Python library '{req.name}' version running {installed_version} - requirement is {req!s}", wrap_text=False)
-            requirements_dict["mismatched"][req.name] = {
-                "installed": installed_version,
-                "required_version": str(req.specifier) if len(req.specifier) > 0 else None,
-            }
-            valid = False
+        valid = valid and _check_requirement(req, requirements_dict)
 
     info["python_requirements"] = requirements_dict
     return valid

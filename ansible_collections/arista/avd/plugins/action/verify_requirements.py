@@ -13,8 +13,9 @@ import yaml
 from ansible import constants as C  # noqa: N812
 from ansible.errors import AnsibleActionFail
 from ansible.module_utils.compat.importlib import import_module
-from ansible.plugins.action import ActionBase, display
+from ansible.plugins.action import ActionBase
 from ansible.utils.collection_loader._collection_finder import _get_collection_metadata
+from ansible.utils.display import Display
 
 from ansible_collections.arista.avd.plugins import PYTHON_AVD_PATH, RUNNING_FROM_SOURCE
 
@@ -37,6 +38,8 @@ except ImportError:
 
 MIN_PYTHON_SUPPORTED_VERSION = (3, 10)
 DEPRECATE_MIN_PYTHON_SUPPORTED_VERSION = False
+
+display = Display()
 
 
 def _validate_python_version(info: dict[str, Any], result: dict[str, Any]) -> bool:

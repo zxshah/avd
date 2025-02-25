@@ -19,6 +19,7 @@ from ansible_collections.arista.avd.plugins.action.verify_requirements import (
     _validate_python_version,
 )
 
+
 @pytest.mark.parametrize(
     ("mocked_version", "expected_return"),
     [
@@ -45,15 +46,19 @@ def test__validate_python_version(mocked_version, expected_return) -> None:
     }
     assert bool(info["python_path"])
 
+
 def test__validate_python_version_deprecation_message() -> None:
     """Test to verify the deprecation message."""
-    info: dict[str, str|int] = {}
+    info: dict[str, str | int] = {}
     result = {}  # As in ansible module result
     version_info = namedtuple("version_info", "major minor micro releaselevel serial")
-    with patch("ansible_collections.arista.avd.plugins.action.verify_requirements.DEPRECATE_MIN_PYTHON_SUPPORTED_VERSION", True), patch("ansible_collections.arista.avd.plugins.action.verify_requirements.sys") as mocked_sys:
+    with (
+        patch("ansible_collections.arista.avd.plugins.action.verify_requirements.DEPRECATE_MIN_PYTHON_SUPPORTED_VERSION", True),
+        patch("ansible_collections.arista.avd.plugins.action.verify_requirements.sys") as mocked_sys,
+    ):
         mocked_sys.version_info = version_info(*MIN_PYTHON_SUPPORTED_VERSION, 42, "final", 0)
         ret = _validate_python_version(info, result)
-    assert ret == True
+    assert ret is True
     assert info["python_version_info"] == {
         "major": MIN_PYTHON_SUPPORTED_VERSION[0],
         "minor": MIN_PYTHON_SUPPORTED_VERSION[1],
@@ -122,13 +127,14 @@ def test__validate_python_requirements(n_reqs, mocked_version, requirement_versi
         ret = _validate_python_requirements(requirements, result)
         assert ret == expected_return
 
+
 @pytest.mark.parametrize(
     ("extras", "running_from_source", "expected_return"),
     [
-        pytest.param( False, False, True, id="pyavd - no extra - not running from source"),
-        pytest.param( True, False, True, id="pyavd - extra - not running from source"),
-        pytest.param( False, True, True, id="pyavd - no extra - running from source"),
-        pytest.param( False, True, True, id="pyavd - extra - running from source"),
+        pytest.param(False, False, True, id="pyavd - no extra - not running from source"),
+        pytest.param(True, False, True, id="pyavd - extra - not running from source"),
+        pytest.param(False, True, True, id="pyavd - no extra - running from source"),
+        pytest.param(False, True, True, id="pyavd - extra - running from source"),
     ],
 )
 def test__validate_python_requirements_pyavd(extras: bool, running_from_source: bool, expected_return: bool) -> None:
@@ -140,7 +146,10 @@ def test__validate_python_requirements_pyavd(extras: bool, running_from_source: 
 
     requirements = [req]
 
-    with patch("ansible_collections.arista.avd.plugins.action.verify_requirements.version") as patched_version, patch("ansible_collections.arista.avd.plugins.action.verify_requirements.RUNNING_FROM_SOURCE", running_from_source):
+    with (
+        patch("ansible_collections.arista.avd.plugins.action.verify_requirements.version") as patched_version,
+        patch("ansible_collections.arista.avd.plugins.action.verify_requirements.RUNNING_FROM_SOURCE", running_from_source),
+    ):
         patched_version.return_value = "5.3.0"
         ret = _validate_python_requirements(requirements, result)
         assert ret == expected_return
@@ -148,9 +157,21 @@ def test__validate_python_requirements_pyavd(extras: bool, running_from_source: 
     if running_from_source:
         assert python_req_result["valid"]["pyavd"]["installed"] == "running from source"
         # only pyavd is expected for this test when running from source with or without extra
-        assert len(python_req_result["valid"]) + len(python_req_result["mismatched"]) + len(python_req_result["not_found"]) + len(python_req_result["parsing_failed"]) == 1
+        assert (
+            len(python_req_result["valid"])
+            + len(python_req_result["mismatched"])
+            + len(python_req_result["not_found"])
+            + len(python_req_result["parsing_failed"])
+            == 1
+        )
     elif extras:
-        assert len(python_req_result["valid"]) + len(python_req_result["mismatched"]) + len(python_req_result["not_found"]) + len(python_req_result["parsing_failed"]) > 1
+        assert (
+            len(python_req_result["valid"])
+            + len(python_req_result["mismatched"])
+            + len(python_req_result["not_found"])
+            + len(python_req_result["parsing_failed"])
+            > 1
+        )
 
 
 @pytest.mark.parametrize(

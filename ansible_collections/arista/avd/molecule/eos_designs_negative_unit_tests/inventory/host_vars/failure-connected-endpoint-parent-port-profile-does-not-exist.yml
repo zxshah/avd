@@ -22,4 +22,4 @@ servers:
         profile: PROFILE-1
 
 expected_error_message: >-
-  Profile 'THIS-PROFILE-DOES-NOT-EXIST' applied under port profile 'port_profiles[profile=PROFILE-1].parent_profile' does not exist in 'port_profiles'.
+  Profile 'THIS-PROFILE-DOES-NOT-EXIST' referenced in port profile 'port_profiles[profile=PROFILE-1].parent_profile' does not exist in 'port_profiles'.

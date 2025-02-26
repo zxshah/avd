@@ -23,8 +23,8 @@ servers:
         switch_ports: [Ethernet9]
         profile: THIS-PROFILE-DOES-NOT-EXIST
         # Setting VLANs to trigger merging of adapters in facts phase
-        vlans: :42,666"
+        vlans: "42,666"
 
 expected_error_message: >-
-  Profile 'THIS-PROFILE-DOES-NOT-EXIST' applied under 'servers[name=TEST-ENDPOINT].adapters[0]'
+  Profile 'THIS-PROFILE-DOES-NOT-EXIST' referenced in 'servers[name=TEST-ENDPOINT].adapters[0].profile'
   does not exist in `port_profiles` for host 'failure-connected-endpoint-port-profile-does-not-exist-in-facts'.

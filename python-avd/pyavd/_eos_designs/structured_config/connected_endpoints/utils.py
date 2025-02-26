@@ -241,7 +241,7 @@ class UtilsMixin(Protocol):
         # Apply PTP profile config
         if (ptp_profile_name := adapter.ptp.profile or self.shared_utils.ptp_profile_name) is not None:
             if ptp_profile_name not in self.inputs.ptp_profiles:
-                msg = f"PTP Profile '{ptp_profile_name}' referenced under '{adapter._source}' does not exist in 'ptp_profiles'."
+                msg = f"PTP Profile '{ptp_profile_name}' referenced in '{adapter.ptp._source}.profile' does not exist in 'ptp_profiles'."
                 raise AristaAvdInvalidInputsError(msg)
 
             # Create a copy and removes the .profile attribute since the target model has a .profile key with a different schema.

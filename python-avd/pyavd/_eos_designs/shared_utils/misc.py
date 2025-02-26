@@ -236,9 +236,9 @@ class MiscMixin(Protocol):
                 continue
 
             if not entry.source:
-                raise AristaAvdMissingVariableError(entry.get_field_source("source"))
+                raise AristaAvdMissingVariableError(entry._get_field_source("source"))
             if not entry.destination:
-                raise AristaAvdMissingVariableError(entry.get_field_source("destination"))
+                raise AristaAvdMissingVariableError(entry._get_field_source("destination"))
 
             entry.source = self._get_ipv4_acl_field_with_substitution(entry, "source", ip_replacements, interface_name)
             entry.destination = self._get_ipv4_acl_field_with_substitution(entry, "destination", ip_replacements, interface_name)
@@ -268,7 +268,7 @@ class MiscMixin(Protocol):
 
         if (replacement_value := replacements[field_value]) is None:
             msg = (
-                f"Unable to perform substitution of the value '{field_value}' defined under '{entry.get_field_source(field_name)}', "
+                f"Unable to perform substitution of the value '{field_value}' defined under '{entry._get_field_source(field_name)}', "
                 f"since no substitution value was found for interface '{interface_name}'. "
                 "Make sure to set the appropriate fields on the interface."
             )

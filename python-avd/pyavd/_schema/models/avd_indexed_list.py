@@ -63,6 +63,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
         for index, item in enumerate(data):
             # Need to retrieve the key from the data not from the model.
             item_key = cls._item_type._field_to_key_map.get(cls._primary_key, cls._primary_key)
+            # TODO: Find a better way for Dynamic
             child_data_source = (
                 InputPath(item[item_key])
                 if cls.__name__.startswith("Dynamic")
@@ -70,20 +71,21 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
             )
             cls_items.append(cast(Iterable[T_AvdModel], (coerce_type(item, cls._item_type, data_source=child_data_source))))
 
-        cls_instance = cls(cls_items)
-        cls_instance._source = data_source
-        return cls_instance
+        return cls(cls_items, source=data_source)
 
-    def __init__(self, items: Iterable[T_AvdModel] = ()) -> None:
+    def __init__(self, items: Iterable[T_AvdModel] = (), source: InputPath | None = None) -> None:
         """
         AvdIndexedList subclass.
 
         Args:
             items: Iterable holding items of the correct type to be loaded into the indexed list.
+            source: The InputPath to use as source for this list.
         """
-        self._items = {getattr(item, self._primary_key): item for item in items}
-
         super().__init__()
+
+        self._items = {getattr(item, self._primary_key): item for item in items}
+        if source:
+            self._source = source
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""

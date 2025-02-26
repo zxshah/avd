@@ -20,6 +20,9 @@ if TYPE_CHECKING:
     ADAPTER_SETTINGS = TypeVar(
         "ADAPTER_SETTINGS", EosDesigns._DynamicKeys.DynamicConnectedEndpointsItem.ConnectedEndpointsItem.AdaptersItem, EosDesigns.NetworkPortsItem
     )
+from logging import getLogger
+
+LOGGER = getLogger(__name__)
 
 
 class UtilsMixin(Protocol):
@@ -68,14 +71,14 @@ class UtilsMixin(Protocol):
                      Used for error message.
         """
         if profile_name not in self.inputs.port_profiles:
-            msg = f"Profile '{profile_name}' applied under '{context}' does not exist in `port_profiles`."
+            msg = f"Profile '{profile_name}' referenced in '{context}.profile' does not exist in `port_profiles`."
             raise AristaAvdInvalidInputsError(msg)
 
         port_profile = self.inputs.port_profiles[profile_name]
         if port_profile.parent_profile:
             if port_profile.parent_profile not in self.inputs.port_profiles:
                 msg = (
-                    f"Profile '{port_profile.parent_profile}' applied under port profile '{port_profile.get_field_source('parent_profile')}' "
+                    f"Profile '{port_profile.parent_profile}' referenced in port profile '{port_profile._get_field_source('parent_profile')}' "
                     "does not exist in 'port_profiles'."
                 )
                 raise AristaAvdInvalidInputsError(msg)
@@ -95,8 +98,10 @@ class UtilsMixin(Protocol):
         Args:
             adapter_or_network_port_settings: can either be an adapter of a connected endpoint or one item under network_ports.
         """
+        LOGGER.info("BBBB %s", str(adapter_or_network_port_settings._source))
         # Deepcopy to avoid modifying the original.
         adapter_or_network_port_settings = adapter_or_network_port_settings._deepcopy()
+        LOGGER.info("BBBB %s", str(adapter_or_network_port_settings._source))
 
         if (profile_name := adapter_or_network_port_settings.profile) is None:
             # No profile to apply

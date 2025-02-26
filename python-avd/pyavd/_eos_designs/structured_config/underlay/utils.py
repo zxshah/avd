@@ -172,7 +172,7 @@ class UtilsMixin(Protocol):
         # logic below is common to l3_interface and l3_port_channel interface types
         # TODO: catch if ip_address is not valid or not dhcp
         if not l3_generic_interface.ip_address:
-            raise AristaAvdMissingVariableError(l3_generic_interface.get_field_source("ip_address"))
+            raise AristaAvdMissingVariableError(l3_generic_interface._get_field_source("ip_address"))
 
         is_subinterface = "." in l3_generic_interface.name
         interface._update(

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from copy import deepcopy
-from logging import getLogger
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, cast
 
 from pyavd._schema.coerce_type import coerce_type
@@ -22,13 +21,11 @@ if TYPE_CHECKING:
 
     from .type_vars import T_AvdModel
 
-LOGGER = getLogger(__name__)
-
 
 class AvdModel(AvdBase):
     """Base class used for schema-based data classes holding dictionaries loaded from AVD inputs."""
 
-    __slots__ = ("_custom_data",)
+    __slots__ = ("_custom_data", "_field_source")
 
     _allow_other_keys: ClassVar[bool] = False
     """Attribute telling if this class should fail or ignore unknown keys found during loading in _from_dict()."""
@@ -41,7 +38,7 @@ class AvdModel(AvdBase):
     """Map of field name to original dict key. Used when fields have the field_ prefix to get the original key."""
     _key_to_field_map: ClassVar[dict[str, str]] = {}
     """Map of dict key to field name. Used when the key is names with a reserved keyword or mixed case. E.g. `Vxlan1` or `as`."""
-    _field_source: ClassVar[dict[str, InputPath]] = {}
+    _field_source: dict[str, InputPath]
     """Map of field name to field source."""
 
     _custom_data: dict[str, Any]
@@ -84,18 +81,15 @@ class AvdModel(AvdBase):
                 msg = f"Invalid key '{key}'. Not available on '{cls.__name__}'."
                 raise KeyError(msg)
 
-            # Handle Dynamic Keys slightly differently
+            # Handle Dynamic Keys path slightly differently
             child_data_source = data_source if cls.__name__.startswith("Dynamic") and key == "value" else data_source.create_descendant(key)
-
             cls_args[field] = coerce_type(data[key], cls._fields[field]["type"], data_source=child_data_source)
-            cls._field_source[field] = child_data_source
 
+        cls_args["_source"] = data_source
         if custom_data:
             cls_args["_custom_data"] = custom_data
 
-        cls_instance = cls(**cls_args)
-        cls_instance._source = data_source
-        return cls_instance
+        return cls(**cls_args)
 
     @classmethod
     def _get_field_name(cls, key: str) -> str | None:
@@ -103,14 +97,14 @@ class AvdModel(AvdBase):
         field_name = cls._key_to_field_map.get(key, key)
         return field_name if field_name in cls._fields else None
 
-    def get_field_source(self, key: str) -> str:
+    def _get_field_source(self, key: str) -> str:
         """Returns the field source for the given key."""
         # TODO: discuss if we should include the item path in error messages so that if the field come from a profile we
         # get both info
         field_name = self._key_to_field_map.get(key, key)
         if (source := self._field_source.get(field_name, None)) is not None:
             return str(source)
-        return self._source.create_descendant(field_name)
+        return str(self._source.create_descendant(field_name))
 
     @classmethod
     def _get_field_default_value(cls, name: str) -> Any:
@@ -148,10 +142,16 @@ class AvdModel(AvdBase):
 
         This method is typically overridden when TYPE_CHECKING is True, to provide proper suggestions and type hints for the arguments.
         """
-        self._custom_data = {}
-        [setattr(self, arg, arg_value) for arg, arg_value in kwargs.items() if arg_value is not Undefined]
-
         super().__init__()
+
+        self._custom_data = {}
+        self._field_source = {}
+        self._source: InputPath = kwargs.pop("_source", InputPath())
+        for arg, arg_value in kwargs.items():
+            if arg_value is Undefined:
+                continue
+            setattr(self, arg, arg_value)
+            self._field_source[arg] = arg._source if isinstance(arg, AvdBase) else self._source.create_descendant(arg)
 
     def __getattr__(self, name: str) -> Any:
         """

@@ -49,11 +49,11 @@ class InputPath:
             if isinstance(element, str):
                 result += "." if add_dot else ""
                 result += f"{element}"
-                add_dot = True
             elif isinstance(element, int):
                 result += f"[{element}]"
             elif isinstance(element, PathIndexedListKey):
                 result += f"{element!s}"
+            add_dot = True
 
         return result
 

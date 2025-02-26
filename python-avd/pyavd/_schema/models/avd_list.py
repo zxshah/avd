@@ -62,16 +62,19 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
         cls_instance._source = data_source
         return cls_instance
 
-    def __init__(self, items: Iterable[T_ItemType] = ()) -> None:
+    def __init__(self, items: Iterable[T_ItemType] = (), source: InputPath | None = None) -> None:
         """
         AvdList subclass.
 
         Args:
             items: Iterable holding items of the correct type to be loaded into the list.
+            source: The InputPath to use as source for this list.
         """
-        self._items = list(items)
-
         super().__init__()
+
+        self._items = list(items)
+        if source:
+            self._source = source
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""

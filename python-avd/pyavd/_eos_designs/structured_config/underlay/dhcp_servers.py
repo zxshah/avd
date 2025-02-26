@@ -59,19 +59,14 @@ class DhcpServersMixin(Protocol):
                     and get(peer_facts, "inband_ztp")
                 ):
                     dhcp_server.vrf = "default"
-                    dhcp_server.subnets.append_new(
+                    subnet_item = EosCliConfigGen.DhcpServersItem.SubnetsItem()
+                    subnet_item._update(
                         subnet=str(ip_network(f"{uplink['peer_ip_address']}/{uplink['prefix_length']}", strict=False)),
-                        ranges=EosCliConfigGen.DhcpServersItem.SubnetsItem.Ranges(
-                            [
-                                EosCliConfigGen.DhcpServersItem.SubnetsItem.RangesItem(
-                                    start=str(uplink["ip_address"]),
-                                    end=str(uplink["ip_address"]),
-                                )
-                            ]
-                        ),
                         name=f"inband ztp for {peer}-{uplink['interface']}",
                         default_gateway=f"{uplink['peer_ip_address']}",
                     )
+                    subnet_item.ranges.append_new(start=str(uplink["ip_address"]), end=str(uplink["ip_address"]))
+                    dhcp_server.subnets.append(subnet_item)
 
     def _set_ipv4_ztp_boot_file(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
         """Set the file name to allow for ZTP to CV. TODO: Add inband_ztp_bootstrap_file to schema."""
@@ -103,17 +98,12 @@ class DhcpServersMixin(Protocol):
             ntp_servers.append(str(ntp_server_ip))
 
         if ntp_servers:
+            suboptions = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions()
+            suboptions.append_new(code = 42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers))
             dhcp_server.ipv4_vendor_options.append_new(
                 vendor_id="NTP",
-                sub_options=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions(
-                    [
-                        EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem(
-                            code=42,
-                            array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers),
-                        )
-                    ]
-                ),
-            )
+                sub_options=suboptions,
+                )
 
             return
 

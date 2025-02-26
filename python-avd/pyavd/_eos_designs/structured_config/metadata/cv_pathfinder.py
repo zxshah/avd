@@ -34,7 +34,6 @@ class CvPathfinderMixin(Protocol):
 
         region_name = self.shared_utils.wan_region.name if self.shared_utils.wan_region is not None else None
         site_name = self.shared_utils.wan_site.name if self.shared_utils.wan_site is not None else None
-        # Pathfinder
         self.structured_config.metadata.cv_pathfinder._update(
             role=self.shared_utils.cv_pathfinder_role,
             ssl_profile=self.shared_utils.wan_stun_dtls_profile_name,
@@ -42,6 +41,7 @@ class CvPathfinderMixin(Protocol):
             region=region_name,
             site=site_name,
         )
+        # Pathfinder
         if self.shared_utils.is_cv_pathfinder_server:
             self.structured_config.metadata.cv_pathfinder.address = self.shared_utils.wan_site.location if self.shared_utils.wan_site is not None else None
             self._metadata_interfaces()

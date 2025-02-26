@@ -1,0 +1,39 @@
+{
+  "id": 5,
+  "type": "l2leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "SL-MLEAF1",
+  "pod": "SINGLE_LINK_TO_MLAG_PAIR",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet16",
+      "peer": "SL-LEAF1A",
+      "peer_interface": "Ethernet28",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "none",
+      "structured_config": {},
+      "peer_node_group": "SL-LEAF1",
+      "peer_mlag": false,
+      "channel_group_id": "16",
+      "peer_channel_group_id": "28"
+    }
+  ],
+  "uplink_peers": [
+    "SL-LEAF1A"
+  ],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

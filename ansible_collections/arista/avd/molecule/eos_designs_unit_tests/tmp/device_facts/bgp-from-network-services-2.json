@@ -1,0 +1,42 @@
+{
+  "id": 2,
+  "type": "l3spine",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "10.1.1.2/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.0.255.0/24",
+  "uplink_ipv4_pool": "10.255.1.0/24",
+  "downlink_pools": [],
+  "underlay_routing_protocol": "none",
+  "inband_ztp": false,
+  "group": "GROUP1",
+  "router_id": "192.0.255.2",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "bgp-from-network-services-1",
+  "mlag_port_channel_id": 10,
+  "mlag_interfaces": [
+    "Ethernet10"
+  ],
+  "mlag_ip": "10.10.10.1",
+  "mlag_l3_ip": "10.10.20.1",
+  "mlag_switch_ids": {
+    "primary": 1,
+    "secondary": 2
+  },
+  "evpn_role": "none",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "192.0.255.2",
+    "evpn_mpls": false
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

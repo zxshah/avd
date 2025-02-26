@@ -3,9 +3,11 @@
 # that can be found in the LICENSE file.
 from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import RaiseOnUse
 
+from .clean_path import clean_path
 from .compile_searchpath import compile_searchpath
 from .cprofile_decorator import cprofile
 from .get_templar import get_templar
+from .get_tmp_path import get_tmp_path
 from .get_validated_path import get_validated_path
 from .get_validated_value import get_validated_value
 from .log_message import log_message
@@ -26,11 +28,13 @@ __all__ = [
     "PythonToAnsibleHandler",
     "YamlDumper",
     "YamlLoader",
+    "clean_path",
     "compile_searchpath",
     "cprofile",
     "default",
     "get",
     "get_templar",
+    "get_tmp_path",
     "get_validated_path",
     "get_validated_value",
     "log_message",

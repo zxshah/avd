@@ -1,0 +1,327 @@
+# Copyright (c) 2025 Arista Networks, Inc.
+# Use of this source code is governed by the Apache License 2.0
+# that can be found in the LICENSE file.
+# yaml-language-server: $schema=../../../_schema/avd_meta_schema.json
+# Line above is used by RedHat's YAML Schema vscode extension
+# Use Ctrl + Space to get suggestions for every field. Autocomplete will pop up after typing 2 letters.
+$id: eos_designs_facts
+$schema: avd_meta_schema
+type: dict
+allow_other_keys: false
+documentation_options:
+  table: eos_designs_facts
+keys:
+  id:
+    type: int
+  type:
+    type: str
+    required: true
+  platform:
+    type: str
+  is_deployed:
+    type: bool
+    required: true
+  serial_number:
+    type: str
+  mgmt_interface:
+    type: str
+  mgmt_ip:
+    type: str
+  mpls_lsr:
+    type: bool
+    required: true
+  evpn_multicast:
+    type: bool
+  loopback_ipv4_pool:
+    type: str
+  uplink_ipv4_pool:
+    type: str
+  downlink_pools:
+    type: list
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/$defs/node_type/keys/nodes/items/keys/downlink_pools
+  bgp_as:
+    type: str
+  underlay_routing_protocol:
+    type: str
+    required: true
+  vtep_loopback_ipv4_pool:
+    type: str
+  inband_mgmt_subnet:
+    type: str
+  inband_mgmt_ipv6_subnet:
+    type: str
+  inband_mgmt_vlan:
+    type: int
+  inband_ztp:
+    type: bool
+  inband_ztp_vlan:
+    type: int
+  inband_ztp_lacp_fallback_delay:
+    type: int
+  dc_name:
+    type: str
+  group:
+    type: str
+  router_id:
+    type: str
+  inband_mgmt_ip:
+    type: str
+    description: Used for fabric docs.
+  inband_mgmt_interface:
+    type: str
+    description: Used for fabric docs.
+  pod:
+    type: str
+    description: Used for fabric docs.
+    required: true
+  connected_endpoints_keys:
+    type: list
+    required: true
+    description: |-
+      List of connected_endpoints_keys in use on this device.
+      Used for fabric docs.
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/keys/connected_endpoints_keys
+  port_profile_names:
+    type: list
+    description: |-
+      List of port_profiles configured - including the ones not in use.
+      Used for fabric docs.
+    items:
+      type: dict
+      keys:
+        profile:
+          type: str
+          required: true
+        parent_profile:
+          type: str
+  mlag_peer:
+    type: str
+  mlag_port_channel_id:
+    type: int
+  mlag_interfaces:
+    type: list
+    items:
+      type: str
+  mlag_ip:
+    type: str
+  mlag_l3_ip:
+    type: str
+  mlag_switch_ids:
+    type: dict
+    description: The switch ids of both primary and secondary switches for a this node group.
+    keys:
+      primary:
+        type: int
+        required: true
+      secondary:
+        type: int
+        required: true
+  evpn_role:
+    type: str
+  mpls_overlay_role:
+    type: str
+  evpn_route_servers:
+    type: list
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/$defs/node_type/keys/defaults/keys/evpn_route_servers
+    description: |-
+      For evpn clients the default value for EVPN Route Servers is the content of the uplink_switches variable set elsewhere.
+      For all other evpn roles there is no default.
+  mpls_route_reflectors:
+    type: list
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/$defs/node_type/keys/defaults/keys/mpls_route_reflectors
+  overlay:
+    type: dict
+    keys:
+      peering_address:
+        type: str
+      evpn_mpls:
+        type: bool
+        required: true
+  vtep_ip:
+    type: str
+  max_parallel_uplinks:
+    type: int
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/$defs/node_type/keys/defaults/keys/max_parallel_uplinks
+  max_uplink_switches:
+    type: int
+    required: true
+  uplinks:
+    type: list
+    description: |-
+      List of uplinks with all parameters
+      These facts are leveraged by templates for this device when rendering uplinks
+      and by templates for peer devices when rendering downlinks
+    required: true
+    items:
+      type: dict
+      keys:
+        interface:
+          type: str
+          required: true
+        peer:
+          type: str
+          required: true
+        peer_interface:
+          type: str
+          required: true
+        peer_type:
+          type: str
+          required: true
+        peer_is_deployed:
+          type: bool
+          required: true
+        peer_bgp_as:
+          type: str
+          required: true
+        type:
+          type: str
+          required: true
+          valid_values: ["underlay_p2p", "underlay_l2"]
+        speed:
+          type: str
+        bfd:
+          type: bool
+        peer_speed:
+          type: str
+        ptp:
+          type: dict
+          documentation_options:
+            table: eos_designs_facts
+          $ref: eos_designs#/$defs/node_type/keys/defaults/keys/uplink_ptp
+        mac_security:
+          type: dict
+          keys:
+            profile:
+              type: str
+              required: true
+        underlay_multicast:
+          type: bool
+        ipv6_enable:
+          type: bool
+        prefix_length:
+          type: int
+        ip_address:
+          type: str
+        peer_ip_address:
+          type: str
+        link_tracking_groups:
+          type: dict
+          keys:
+            name:
+              type: str
+              required: true
+            direction:
+              type: str
+              required: true
+              valid_values: ["upstream", "downstream"]
+        peer_node_group:
+          type: str
+        node_group:
+          type: str
+        peer_mlag:
+          type: bool
+        channel_group_id:
+          type: str # TODO consider int
+        peer_channel_group_id:
+          type: str # TODO consider int
+        trunk_groups:
+          type: list
+          items:
+            type: str
+        vlans:
+          type: str
+        native_vlan:
+          type: int
+        peer_short_esi:
+          type: str
+        peer_spanning_tree_portfast:
+          type: str
+        structured_config:
+          type: dict
+          documentation_options:
+            table: eos_designs_facts
+          $ref: eos_designs#/$defs/node_type/keys/defaults/keys/uplink_structured_config
+        subinterfaces:
+          type: list
+          items:
+            type: dict
+            keys:
+              interface:
+                type: str
+                required: true
+              peer_interfaces:
+                type: str
+                required: true
+              vrf:
+                type: str
+                required: true
+              encapsulation_dot1q_vlan:
+                type: int
+              ipv6_enable:
+                type: bool
+              prefix_length:
+                type: int
+              ip_address:
+                type: str
+              peer_ip_address:
+                type: str
+              structured_config:
+                type: dict
+                documentation_options:
+                  table: eos_designs_facts
+                $ref: eos_designs#/$defs/node_type/keys/defaults/keys/uplink_structured_config
+  uplink_peers:
+    type: list
+    items:
+      type: str
+  uplink_switch_vrfs:
+    type: list
+    items:
+      type: str
+  vlans:
+    type: str
+    required: true
+  endpoint_vlans:
+    type: str
+  local_endpoint_trunk_groups:
+    type: list
+    items:
+      type: str
+  endpoint_trunk_groups:
+    type: list
+    items:
+      type: str
+  wan_path_groups:
+    type: list
+    documentation_options:
+      table: eos_designs_facts
+    $ref: eos_designs#/keys/wan_path_groups
+    items:
+      type: dict
+      keys:
+        interfaces:
+          type: list
+          items:
+            type: dict
+            keys:
+              name:
+                type: str
+                required: true
+              public_ip:
+                type: str
+                required: true
+              connected_to_pathfinder:
+                type: bool
+                required: true
+              wan_circuit_id:
+                type: str

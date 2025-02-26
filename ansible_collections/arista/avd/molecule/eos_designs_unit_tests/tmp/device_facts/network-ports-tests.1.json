@@ -1,0 +1,55 @@
+{
+  "id": 1,
+  "type": "l2leaf",
+  "platform": "720XPM-48Y6",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "mlag",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "common",
+      "parent_profile": null
+    },
+    {
+      "profile": "ap_with_port_channel",
+      "parent_profile": "common"
+    },
+    {
+      "profile": "pc",
+      "parent_profile": "common"
+    },
+    {
+      "profile": "phone_with_pc",
+      "parent_profile": null
+    }
+  ],
+  "mlag_peer": "network-ports-tests-2",
+  "mlag_port_channel_id": 101,
+  "mlag_interfaces": [
+    "Ethernet10/1"
+  ],
+  "mlag_ip": "10.255.252.0",
+  "mlag_switch_ids": {
+    "primary": 1,
+    "secondary": 2
+  },
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "100,200,300",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

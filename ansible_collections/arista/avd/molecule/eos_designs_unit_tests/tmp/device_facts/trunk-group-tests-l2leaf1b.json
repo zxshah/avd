@@ -1,0 +1,88 @@
+{
+  "id": 2,
+  "type": "l2leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "TRUNK_GROUP_TESTS_L2LEAF1",
+  "pod": "TRUNK_GROUP_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [],
+  "mlag_peer": "trunk-group-tests-l2leaf1a",
+  "mlag_port_channel_id": 3,
+  "mlag_interfaces": [
+    "Ethernet3",
+    "Ethernet4"
+  ],
+  "mlag_ip": "10.255.248.1",
+  "mlag_switch_ids": {
+    "primary": 1,
+    "secondary": 2
+  },
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "trunk-group-tests-l3leaf1a",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "trunk_groups": [
+        "UPLINK"
+      ],
+      "peer_trunk_groups": [
+        "TRUNK_GROUP_TESTS_L2LEAF1"
+      ],
+      "vlans": "100,110,200,210,300,310,398-399",
+      "structured_config": {},
+      "peer_node_group": "TRUNK_GROUP_TESTS_L3LEAF1",
+      "node_group": "TRUNK_GROUP_TESTS_L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "1"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "trunk-group-tests-l3leaf1b",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "trunk_groups": [
+        "UPLINK"
+      ],
+      "peer_trunk_groups": [
+        "TRUNK_GROUP_TESTS_L2LEAF1"
+      ],
+      "vlans": "100,110,200,210,300,310,398-399",
+      "structured_config": {},
+      "peer_node_group": "TRUNK_GROUP_TESTS_L3LEAF1",
+      "node_group": "TRUNK_GROUP_TESTS_L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "1"
+    }
+  ],
+  "uplink_peers": [
+    "trunk-group-tests-l3leaf1a",
+    "trunk-group-tests-l3leaf1b"
+  ],
+  "vlans": "100,110,200,210,300,310,398-399",
+  "local_endpoint_trunk_groups": [
+    "TG_200",
+    "TG_300",
+    "TG_NOT_MATCHING_ANY_VLANS"
+  ],
+  "endpoint_trunk_groups": []
+}

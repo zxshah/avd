@@ -1,0 +1,91 @@
+{
+  "id": 102,
+  "type": "l2leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "1.1.1.2",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    },
+    {
+      "key": "firewalls",
+      "type": "firewall",
+      "description": "Firewall"
+    },
+    {
+      "key": "routers",
+      "type": "router",
+      "description": "Router"
+    },
+    {
+      "key": "phones",
+      "type": "phone",
+      "description": "Phone"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "TENANT_A_B",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_A",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_A_MTU",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_B",
+      "parent_profile": null
+    },
+    {
+      "profile": "PHONE_WITH_PC",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK",
+      "parent_profile": null
+    },
+    {
+      "profile": "PORT_CHANNEL_LACP_TIMER",
+      "parent_profile": null
+    },
+    {
+      "profile": "PORT_CHANNEL_LACP_TIMER_NORMAL",
+      "parent_profile": null
+    },
+    {
+      "profile": "NESTED_PORT_PROFILE",
+      "parent_profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK"
+    },
+    {
+      "profile": "DOT1X_PORT_PROFILE",
+      "parent_profile": null
+    }
+  ],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "110-113,120-122,130-132,140-141,150-151,160-166,166,210-211,250,310-311,350,410-413,450-453,1234",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

@@ -1,0 +1,53 @@
+{
+  "id": 3,
+  "type": "l2leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "inband_mgmt_ip": "192.168.103.22/24",
+  "inband_mgmt_interface": "Vlan103",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "inband-mgmt-parent",
+      "peer_interface": "Ethernet23",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "103",
+      "structured_config": {},
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "23"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "inband-mgmt-parent-vrf",
+      "peer_interface": "Ethernet23",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "103",
+      "structured_config": {},
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "23"
+    }
+  ],
+  "uplink_peers": [
+    "inband-mgmt-parent",
+    "inband-mgmt-parent-vrf"
+  ],
+  "vlans": "103",
+  "endpoint_vlans": "103",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

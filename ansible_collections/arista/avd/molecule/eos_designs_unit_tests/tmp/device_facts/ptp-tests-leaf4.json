@@ -1,0 +1,76 @@
+{
+  "id": 2,
+  "type": "l3leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.3.0/24",
+  "uplink_ipv4_pool": "192.168.1.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65010",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.2.0/24",
+  "inband_ztp": false,
+  "router_id": "192.168.3.2",
+  "pod": "PTP_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "PTP-profile-dynamic",
+      "parent_profile": null
+    }
+  ],
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "ptp-tests-spine1",
+    "ptp-tests-spine2"
+  ],
+  "overlay": {
+    "peering_address": "192.168.3.2",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.2.2",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "ptp-tests-spine1",
+      "peer_interface": "Ethernet16",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "prefix_length": 31,
+      "ip_address": "192.168.1.5",
+      "peer_ip_address": "192.168.1.4",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "ptp-tests-spine2",
+      "peer_interface": "Ethernet16",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "prefix_length": 31,
+      "ip_address": "192.168.1.7",
+      "peer_ip_address": "192.168.1.6",
+      "structured_config": {}
+    }
+  ],
+  "uplink_peers": [
+    "ptp-tests-spine1",
+    "ptp-tests-spine2"
+  ],
+  "vlans": "11",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

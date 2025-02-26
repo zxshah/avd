@@ -6,6 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
+from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._eos_designs.shared_utils import SharedUtils
 
@@ -92,6 +93,9 @@ def get_structured_config(
     # Load input vars into the EosDesigns data class.
     inputs = EosDesigns._from_dict(vars)
 
+    # Load device facts in the EosDesignsFacts data class
+    eos_designs_facts = EosDesignsFacts._from_dict(vars["switch"], keep_extra_keys=False)
+
     # Initialize SharedUtils class to be passed to each python_module below.
     shared_utils = SharedUtils(hostvars=vars, inputs=inputs, templar=templar, schema=input_schema_tools.avdschema)
 
@@ -108,7 +112,12 @@ def get_structured_config(
 
     for cls in AVD_STRUCTURED_CONFIG_CLASSES:
         eos_designs_module = cls(
-            hostvars=vars, inputs=inputs, shared_utils=shared_utils, structured_config=structured_config, custom_structured_configs=custom_structured_configs
+            hostvars=vars,
+            inputs=inputs,
+            facts=eos_designs_facts,
+            shared_utils=shared_utils,
+            structured_config=structured_config,
+            custom_structured_configs=custom_structured_configs,
         )
         eos_designs_module.render()
 

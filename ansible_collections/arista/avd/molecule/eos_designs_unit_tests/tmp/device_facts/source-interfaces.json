@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "type": "l2leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.0.2/24",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "inband_mgmt_ip": "10.20.30.40/24",
+  "inband_mgmt_interface": "Vlan4092",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

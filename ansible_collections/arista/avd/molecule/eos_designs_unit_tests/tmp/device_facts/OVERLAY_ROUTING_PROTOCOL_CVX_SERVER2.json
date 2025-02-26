@@ -1,0 +1,22 @@
+{
+  "id": 2,
+  "type": "cvxserver",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.254.255/23",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "dc_name": "OVERLAY_ROUTING_PROTOCOL_CVX_TESTS",
+  "pod": "OVERLAY_ROUTING_PROTOCOL_CVX_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

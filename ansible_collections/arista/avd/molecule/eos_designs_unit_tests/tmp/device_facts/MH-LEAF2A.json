@@ -1,0 +1,96 @@
+{
+  "id": 3,
+  "type": "l3leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.201.106/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "uplink_ipv4_pool": "10.10.101.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65153",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+  "inband_ztp": false,
+  "group": "MH_L3LEAF2",
+  "router_id": "192.168.255.35",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    },
+    {
+      "key": "routers",
+      "type": "router",
+      "description": "Router"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "Tenant_X",
+      "parent_profile": null
+    },
+    {
+      "profile": "Tenant_ESI_Auto",
+      "parent_profile": "Tenant_X"
+    },
+    {
+      "profile": "Tenant_X_LT",
+      "parent_profile": null
+    },
+    {
+      "profile": "Tenant_X_Trunk",
+      "parent_profile": null
+    },
+    {
+      "profile": "Tenant_X_Trunk_Auto",
+      "parent_profile": "Tenant_X_Trunk"
+    },
+    {
+      "profile": "Tenant_X_Trunk_Auto_Eth",
+      "parent_profile": "Tenant_X_Trunk"
+    }
+  ],
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "DC1-SPINE1"
+  ],
+  "overlay": {
+    "peering_address": "192.168.255.35",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.35",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "DC1-SPINE1",
+      "peer_interface": "Ethernet21",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 40gfull",
+      "prefix_length": 31,
+      "ip_address": "10.10.101.5",
+      "peer_ip_address": "10.10.101.4",
+      "link_tracking_groups": [
+        {
+          "name": "Eth-conn-to-router",
+          "direction": "upstream"
+        }
+      ],
+      "structured_config": {}
+    }
+  ],
+  "uplink_peers": [
+    "DC1-SPINE1"
+  ],
+  "vlans": "310-311",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

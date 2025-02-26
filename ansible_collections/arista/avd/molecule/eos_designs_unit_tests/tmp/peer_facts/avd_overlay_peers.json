@@ -1,0 +1,198 @@
+{
+  "AUTO_NODE_TYPE_SPINE01": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ],
+  "AUTO_NODE_TYPE_SPINE02": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ],
+  "CUSTOM-PYTHON_MODULES-SPINE1": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+    "CUSTOM-PYTHON_MODULES-L3LEAF1B"
+  ],
+  "CUSTOM-PYTHON_MODULES-L3LEAF1A": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF2"
+  ],
+  "CUSTOM-TEMPLATES-SPINE1": [
+    "CUSTOM-TEMPLATES-L3LEAF1A",
+    "CUSTOM-TEMPLATES-L3LEAF1B"
+  ],
+  "DC1-SPINE1": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B",
+    "MH-LEAF1A",
+    "MH-LEAF1B",
+    "MH-LEAF2A",
+    "MLAG-OSPF-L3LEAF1A",
+    "MLAG-OSPF-L3LEAF1B"
+  ],
+  "DC1-SPINE2": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "DC1-SPINE3": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "DC1-SPINE4": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "EVPN-MULTICAST-SPINE1": [
+    "EVPN-MULTICAST-DISABLED",
+    "EVPN-MULTICAST-L3LEAF1A",
+    "EVPN-MULTICAST-L3LEAF1B",
+    "EVPN-MULTICAST-L3LEAF2A",
+    "EVPN-MULTICAST-L3LEAF3A",
+    "EVPN-MULTICAST-L3LEAF3B"
+  ],
+  "MLAG-ISIS-SPINE": [
+    "MLAG-ISIS-L3LEAF1A",
+    "MLAG-ISIS-L3LEAF1B"
+  ],
+  "UNDERLAY-MULTICAST-SPINE1": [
+    "UNDERLAY-MULTICAST-L3LEAF1A",
+    "UNDERLAY-MULTICAST-L3LEAF1B",
+    "UNDERLAY-MULTICAST-L3LEAF2A",
+    "UNDERLAY-MULTICAST-L3LEAF2B"
+  ],
+  "UNDERLAY-MULTICAST-SPINE2": [
+    "UNDERLAY-MULTICAST-L3LEAF1A",
+    "UNDERLAY-MULTICAST-L3LEAF1B",
+    "UNDERLAY-MULTICAST-L3LEAF2A",
+    "UNDERLAY-MULTICAST-L3LEAF2B"
+  ],
+  "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B"
+  ],
+  "UPLINK_P2P_VRFS_TESTS_SPINE1": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ],
+  "UPLINK_P2P_VRFS_TESTS_SPINE2": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ],
+  "bgp-peer-groups-2": [
+    "bgp-peer-groups-1",
+    "bgp-peer-groups-1"
+  ],
+  "leaf-wan-use-evpn-on-lan": [
+    "cv-pathfinder-edge-wan-use-evpn-on-lan",
+    "cv-pathfinder-edge-wan-use-evpn-on-lan-no-overlay-on-lan"
+  ],
+  "downlink-pools-spine1": [
+    "downlink-pools-l3leaf1",
+    "downlink-pools-l3leaf1",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4",
+    "downlink-pools-l3leaf4"
+  ],
+  "downlink-pools-spine2": [
+    "downlink-pools-l3leaf2",
+    "downlink-pools-l3leaf2",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4",
+    "downlink-pools-l3leaf4"
+  ],
+  "flow-tracking-tests-spine1": [
+    "flow-tracking-tests-leaf1",
+    "flow-tracking-tests-leaf2",
+    "flow-tracking-tests-leaf3",
+    "flow-tracking-tests-leaf4"
+  ],
+  "flow-tracking-tests-spine2": [
+    "flow-tracking-tests-leaf1",
+    "flow-tracking-tests-leaf2",
+    "flow-tracking-tests-leaf3",
+    "flow-tracking-tests-leaf4"
+  ],
+  "inband-mgmt-spine1-ztp": [
+    "inband-mgmt-parent",
+    "inband-mgmt-parent-vrf"
+  ],
+  "ptp-tests-spine1": [
+    "ptp-tests-leaf1",
+    "ptp-tests-leaf1",
+    "ptp-tests-leaf2",
+    "ptp-tests-leaf2",
+    "ptp-tests-leaf3",
+    "ptp-tests-leaf4",
+    "ptp-tests-leaf5"
+  ],
+  "ptp-tests-spine2": [
+    "ptp-tests-leaf3",
+    "ptp-tests-leaf4",
+    "ptp-tests-leaf5"
+  ],
+  "sflow-tests-spine1": [
+    "sflow-tests-leaf1",
+    "sflow-tests-leaf1",
+    "sflow-tests-leaf2",
+    "sflow-tests-leaf2",
+    "sflow-tests-leaf3",
+    "sflow-tests-leaf3",
+    "sflow-tests-leaf4",
+    "sflow-tests-leaf4"
+  ],
+  "underlay_filter_peer_as_evpn_2": [
+    "underlay_filter_peer_as_evpn_1"
+  ],
+  "underlay_filter_peer_as_evpn_3": [
+    "underlay_filter_peer_as_evpn_1"
+  ]
+}

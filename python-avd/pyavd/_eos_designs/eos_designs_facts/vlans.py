@@ -7,7 +7,7 @@ import re
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
-from pyavd.j2filters import list_compress, range_expand
+from pyavd.j2filters import list_compress, natural_sort, range_expand
 
 if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
@@ -225,7 +225,7 @@ class VlansMixin(Protocol):
         """
         if self.shared_utils.only_local_vlan_trunk_groups:
             _, local_endpoint_trunk_groups = self._local_endpoint_vlans_and_trunk_groups
-            return list(local_endpoint_trunk_groups)
+            return natural_sort(local_endpoint_trunk_groups)
 
         return []
 
@@ -236,7 +236,7 @@ class VlansMixin(Protocol):
 
         Used for filtering which vlans we configure on the device. This is a superset of local_endpoint_trunk_groups.
         """
-        return list(self._endpoint_trunk_groups)
+        return natural_sort(self._endpoint_trunk_groups)
 
     @cached_property
     def _vlans(self: EosDesignsFactsProtocol) -> list[int]:

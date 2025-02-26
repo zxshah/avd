@@ -1,0 +1,42 @@
+{
+  "id": 2,
+  "type": "spine",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.0.21/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "10.255.0.0/27",
+  "downlink_pools": [],
+  "bgp_as": "65200",
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "router_id": "10.255.0.2",
+  "pod": "PTP_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "PTP-profile-dynamic",
+      "parent_profile": null
+    }
+  ],
+  "evpn_role": "server",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "10.255.0.2",
+    "evpn_mpls": false
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

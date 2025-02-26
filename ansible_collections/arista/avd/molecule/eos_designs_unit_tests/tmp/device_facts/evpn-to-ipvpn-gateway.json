@@ -1,0 +1,31 @@
+{
+  "id": 1,
+  "type": "l3leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "10.10.0.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65100.100",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "10.11.0.0/24",
+  "inband_ztp": false,
+  "router_id": "10.10.0.1",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "client",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "10.10.0.1",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "10.11.0.1",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "10",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

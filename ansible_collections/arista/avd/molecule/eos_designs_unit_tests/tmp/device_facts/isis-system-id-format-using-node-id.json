@@ -1,0 +1,31 @@
+{
+  "id": 99,
+  "type": "pe",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": true,
+  "loopback_ipv4_pool": "172.28.4.0/22",
+  "downlink_pools": [],
+  "bgp_as": "65000",
+  "underlay_routing_protocol": "isis-sr",
+  "inband_ztp": false,
+  "router_id": "172.28.4.99",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "client",
+  "mpls_overlay_role": "client",
+  "evpn_route_servers": [],
+  "mpls_route_reflectors": [],
+  "overlay": {
+    "peering_address": "172.28.4.99",
+    "evpn_mpls": true
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

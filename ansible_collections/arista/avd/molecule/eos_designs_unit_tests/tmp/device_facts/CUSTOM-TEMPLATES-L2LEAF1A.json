@@ -1,0 +1,74 @@
+{
+  "id": 1,
+  "type": "l2leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.200.103/24",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "CUSTOM_TEMPLATES_L2LEAF1",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [],
+  "mlag_peer": "CUSTOM-TEMPLATES-L2LEAF1B",
+  "mlag_port_channel_id": 3,
+  "mlag_interfaces": [
+    "Ethernet3",
+    "Ethernet4"
+  ],
+  "mlag_ip": "10.255.252.0",
+  "mlag_switch_ids": {
+    "primary": 1,
+    "secondary": 1
+  },
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "CUSTOM-TEMPLATES-L3LEAF1A",
+      "peer_interface": "Ethernet5",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "none",
+      "structured_config": {},
+      "peer_node_group": "CUSTOM_TEMPLATES_L3LEAF1",
+      "node_group": "CUSTOM_TEMPLATES_L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "5"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "CUSTOM-TEMPLATES-L3LEAF1B",
+      "peer_interface": "Ethernet5",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "none",
+      "structured_config": {},
+      "peer_node_group": "CUSTOM_TEMPLATES_L3LEAF1",
+      "node_group": "CUSTOM_TEMPLATES_L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "5"
+    }
+  ],
+  "uplink_peers": [
+    "CUSTOM-TEMPLATES-L3LEAF1A",
+    "CUSTOM-TEMPLATES-L3LEAF1B"
+  ],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

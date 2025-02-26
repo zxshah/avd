@@ -1,0 +1,64 @@
+{
+  "id": 1,
+  "type": "l2leaf",
+  "platform": "vEOS-lab",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.0.201/24",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_mgmt_subnet": "10.254.254.0/24",
+  "inband_mgmt_vlan": 4092,
+  "inband_ztp": false,
+  "inband_mgmt_ip": "10.254.254.4/24",
+  "inband_mgmt_interface": "Vlan4092",
+  "pod": "SFLOW_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "sflow-tests-leaf3",
+      "peer_interface": "Ethernet16",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "11,4092",
+      "structured_config": {},
+      "peer_node_group": "sflow-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "16"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "sflow-tests-leaf4",
+      "peer_interface": "Ethernet16",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "11,4092",
+      "structured_config": {},
+      "peer_node_group": "sflow-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "16"
+    }
+  ],
+  "uplink_peers": [
+    "sflow-tests-leaf3",
+    "sflow-tests-leaf4"
+  ],
+  "vlans": "11",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

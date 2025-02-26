@@ -1,0 +1,58 @@
+{
+  "id": 7,
+  "type": "l2leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_mgmt_ipv6_subnet": "2a00:107::/64",
+  "inband_mgmt_vlan": 107,
+  "inband_ztp": true,
+  "inband_ztp_vlan": 107,
+  "inband_ztp_lacp_fallback_delay": 30,
+  "inband_mgmt_interface": "Vlan107",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "inband-mgmt-parent-ipv6-1",
+      "peer_interface": "Ethernet27",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "107",
+      "structured_config": {},
+      "peer_node_group": "inband-mgmt-parents-ipv6",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "27"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "inband-mgmt-parent-ipv6-2",
+      "peer_interface": "Ethernet27",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "107",
+      "structured_config": {},
+      "peer_node_group": "inband-mgmt-parents-ipv6",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "27"
+    }
+  ],
+  "uplink_peers": [
+    "inband-mgmt-parent-ipv6-1",
+    "inband-mgmt-parent-ipv6-2"
+  ],
+  "vlans": "",
+  "endpoint_vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

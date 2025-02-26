@@ -1,0 +1,60 @@
+{
+  "id": 32,
+  "type": "overlay-controller",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "10.254.254.0/24",
+  "uplink_ipv4_pool": "10.254.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65123",
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "router_id": "10.254.254.32",
+  "pod": "FABRIC_IP_ADDRESSING",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "server",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "10.254.254.32",
+    "evpn_mpls": false
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "MLAG_ODD_ID_L3LEAF1A",
+      "peer_interface": "Ethernet10",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "923",
+      "type": "underlay_p2p",
+      "prefix_length": 30,
+      "ip_address": "10.254.255.250",
+      "peer_ip_address": "10.254.255.249",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "MLAG_ODD_ID_L3LEAF1B",
+      "peer_interface": "Ethernet10",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "923",
+      "type": "underlay_p2p",
+      "prefix_length": 30,
+      "ip_address": "10.254.255.254",
+      "peer_ip_address": "10.254.255.253",
+      "structured_config": {}
+    }
+  ],
+  "uplink_peers": [
+    "MLAG_ODD_ID_L3LEAF1A",
+    "MLAG_ODD_ID_L3LEAF1B"
+  ],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

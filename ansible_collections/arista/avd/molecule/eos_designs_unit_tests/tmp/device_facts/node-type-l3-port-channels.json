@@ -1,0 +1,66 @@
+{
+  "id": 1,
+  "type": "wan_router",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65005",
+  "underlay_routing_protocol": "none",
+  "inband_ztp": false,
+  "group": "Site511",
+  "router_id": "192.168.255.1",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "192.168.255.1",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.142.1",
+  "wan_path_groups": [
+    {
+      "name": "INET",
+      "id": 101,
+      "_interfaces": [
+        {
+          "name": "Port-Channel2",
+          "public_ip": "192.168.1.102",
+          "connected_to_pathfinder": true,
+          "wan_circuit_id": "101"
+        },
+        {
+          "name": "Port-Channel5",
+          "public_ip": "192.168.1.105",
+          "connected_to_pathfinder": true,
+          "wan_circuit_id": "102"
+        },
+        {
+          "name": "Port-Channel5.100",
+          "public_ip": "192.168.100.115",
+          "connected_to_pathfinder": true,
+          "wan_circuit_id": "105"
+        },
+        {
+          "name": "Port-Channel8",
+          "public_ip": "dhcp",
+          "connected_to_pathfinder": true
+        },
+        {
+          "name": "Port-Channel19",
+          "public_ip": "192.168.1.19",
+          "connected_to_pathfinder": true
+        }
+      ]
+    }
+  ],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

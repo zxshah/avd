@@ -82,7 +82,9 @@ class SharedUtils(SharedUtilsProtocol):
     value to be handled in calling function.
     """
 
-    def __init__(self, hostvars: dict, inputs: EosDesigns, templar: object, schema: AvdSchema, pool_manager: PoolManager | None = None) -> None:
+    def __init__(
+        self, hostvars: dict, inputs: EosDesigns, templar: object, schema: AvdSchema, pool_manager: PoolManager | None = None
+    ) -> None:
         self.hostvars = hostvars
         self.inputs = inputs
         self.templar = templar

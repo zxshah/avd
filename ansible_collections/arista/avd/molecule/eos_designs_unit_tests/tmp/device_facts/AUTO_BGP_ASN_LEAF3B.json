@@ -1,0 +1,47 @@
+{
+  "id": 6,
+  "type": "l3leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.202.110/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "uplink_ipv4_pool": "172.31.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65105",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+  "inband_ztp": false,
+  "group": "AUTO_BGP_ASN_LEAF3_MLAG",
+  "router_id": "192.168.255.8",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "AUTO_BGP_ASN_LEAF3A",
+  "mlag_port_channel_id": 3,
+  "mlag_interfaces": [
+    "Ethernet3",
+    "Ethernet4"
+  ],
+  "mlag_ip": "10.255.252.9",
+  "mlag_l3_ip": "10.255.251.9",
+  "mlag_switch_ids": {
+    "primary": 5,
+    "secondary": 6
+  },
+  "evpn_role": "client",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "192.168.255.8",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.7",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

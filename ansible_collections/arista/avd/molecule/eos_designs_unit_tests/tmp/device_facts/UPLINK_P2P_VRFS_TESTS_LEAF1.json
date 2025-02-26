@@ -1,0 +1,122 @@
+{
+  "id": 3,
+  "type": "l3leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.42.0/24",
+  "uplink_ipv4_pool": "10.42.42.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65000",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "172.16.0.0/24",
+  "inband_ztp": false,
+  "router_id": "192.168.42.3",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "UPLINK_P2P_VRFS_TESTS_SPINE1",
+    "UPLINK_P2P_VRFS_TESTS_SPINE2"
+  ],
+  "overlay": {
+    "peering_address": "192.168.42.3",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "172.16.0.3",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UPLINK_P2P_VRFS_TESTS_SPINE1",
+      "peer_interface": "Ethernet1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65000",
+      "type": "underlay_p2p",
+      "mac_security": {
+        "profile": "TEST"
+      },
+      "prefix_length": 31,
+      "ip_address": "10.42.42.9",
+      "peer_ip_address": "10.42.42.8",
+      "structured_config": {},
+      "subinterfaces": [
+        {
+          "interface": "Ethernet1.42",
+          "peer_interface": "Ethernet1.42",
+          "vrf": "PROD",
+          "encapsulation_dot1q_vlan": 42,
+          "prefix_length": 31,
+          "ip_address": "10.42.42.9",
+          "peer_ip_address": "10.42.42.8",
+          "structured_config": {}
+        },
+        {
+          "interface": "Ethernet1.66",
+          "peer_interface": "Ethernet1.66",
+          "vrf": "ONLY-ON-L2LEAF",
+          "encapsulation_dot1q_vlan": 66,
+          "prefix_length": 31,
+          "ip_address": "10.42.42.9",
+          "peer_ip_address": "10.42.42.8",
+          "structured_config": {}
+        }
+      ]
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "UPLINK_P2P_VRFS_TESTS_SPINE2",
+      "peer_interface": "Ethernet2",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65000",
+      "type": "underlay_p2p",
+      "mac_security": {
+        "profile": "TEST"
+      },
+      "prefix_length": 31,
+      "ip_address": "10.42.42.11",
+      "peer_ip_address": "10.42.42.10",
+      "structured_config": {},
+      "subinterfaces": [
+        {
+          "interface": "Ethernet2.100",
+          "peer_interface": "Ethernet2.100",
+          "vrf": "IT",
+          "encapsulation_dot1q_vlan": 100,
+          "prefix_length": 31,
+          "ip_address": "10.42.42.11",
+          "peer_ip_address": "10.42.42.10",
+          "structured_config": {}
+        },
+        {
+          "interface": "Ethernet2.42",
+          "peer_interface": "Ethernet2.42",
+          "vrf": "PROD",
+          "encapsulation_dot1q_vlan": 42,
+          "prefix_length": 31,
+          "ip_address": "10.42.42.11",
+          "peer_ip_address": "10.42.42.10",
+          "structured_config": {}
+        }
+      ]
+    }
+  ],
+  "uplink_peers": [
+    "UPLINK_P2P_VRFS_TESTS_SPINE1",
+    "UPLINK_P2P_VRFS_TESTS_SPINE2"
+  ],
+  "uplink_switch_vrfs": [
+    "default",
+    "IT",
+    "ONLY-ON-L2LEAF",
+    "PROD"
+  ],
+  "vlans": "66",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

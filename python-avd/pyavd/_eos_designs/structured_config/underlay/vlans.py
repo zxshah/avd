@@ -44,7 +44,7 @@ class VlansMixin(Protocol):
         self.structured_config.vlans.extend(vlans)
 
         # Add configuration for uplink or peer's uplink_native_vlan if it is not defined as part of network services
-        switch_vlans = range_expand(get(self._hostvars, "switch.vlans"))
+        switch_vlans = range_expand(self.facts.vlans)
         uplink_native_vlans = natural_sort(
             {link["native_vlan"] for link in self._underlay_links if "native_vlan" in link and str(link["native_vlan"]) not in switch_vlans},
         )

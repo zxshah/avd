@@ -1,0 +1,53 @@
+{
+  "id": 6,
+  "type": "l3leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "10.0.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65004",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "10.0.254.0/24",
+  "inband_ztp": false,
+  "group": "inband-mgmt-parents-ipv6",
+  "router_id": "10.0.255.6",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "inband-mgmt-parent-ipv6-1",
+  "mlag_port_channel_id": 11,
+  "mlag_interfaces": [
+    "Ethernet11",
+    "Ethernet12",
+    "Ethernet13",
+    "Ethernet14",
+    "Ethernet15",
+    "Ethernet16",
+    "Ethernet17",
+    "Ethernet18",
+    "Ethernet19",
+    "Ethernet20"
+  ],
+  "mlag_ip": "100.64.0.9",
+  "mlag_l3_ip": "100.64.1.9",
+  "mlag_switch_ids": {
+    "primary": 5,
+    "secondary": 6
+  },
+  "evpn_role": "client",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "10.0.255.6",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "10.0.254.5",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "endpoint_vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

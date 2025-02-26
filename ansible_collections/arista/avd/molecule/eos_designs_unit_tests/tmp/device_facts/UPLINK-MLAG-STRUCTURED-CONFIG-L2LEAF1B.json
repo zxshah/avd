@@ -1,0 +1,96 @@
+{
+  "id": 2,
+  "type": "l2leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.201.201/24",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1A",
+  "mlag_port_channel_id": 3,
+  "mlag_interfaces": [
+    "Ethernet3",
+    "Ethernet4"
+  ],
+  "mlag_ip": "10.255.252.1",
+  "mlag_switch_ids": {
+    "primary": 1,
+    "secondary": 2
+  },
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
+      "peer_interface": "Ethernet6",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "none",
+      "structured_config": {
+        "switchport": {
+          "trunk": {
+            "native_vlan_tag": true
+          }
+        },
+        "storm_control": {
+          "broadcast": {
+            "level": 25
+          },
+          "unknown_unicast": {
+            "level": 25
+          }
+        }
+      },
+      "peer_node_group": "DC1_LEAF1",
+      "node_group": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "5"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B",
+      "peer_interface": "Ethernet6",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "none",
+      "structured_config": {
+        "switchport": {
+          "trunk": {
+            "native_vlan_tag": true
+          }
+        },
+        "storm_control": {
+          "broadcast": {
+            "level": 25
+          },
+          "unknown_unicast": {
+            "level": 25
+          }
+        }
+      },
+      "peer_node_group": "DC1_LEAF1",
+      "node_group": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "5"
+    }
+  ],
+  "uplink_peers": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B"
+  ],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

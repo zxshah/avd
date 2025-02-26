@@ -1,0 +1,184 @@
+{
+  "id": 10,
+  "type": "l3leaf",
+  "platform": "7368X4",
+  "is_deployed": true,
+  "mgmt_interface": "Management0",
+  "mgmt_ip": "192.168.200.119/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0-192.168.255.3, 192.168.255.4/30, 192.168.255.8-192.168.255.200",
+  "uplink_ipv4_pool": "172.31.254.0/30, 172.31.254.4-172.31.254.127, 172.31.254.128/25, 172.31.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65108",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.254.0-192.168.254.127, 192.168.254.128/26, 192.168.254.192-192.168.254.200",
+  "inband_ztp": false,
+  "group": "DC1_CL1",
+  "router_id": "192.168.255.18",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    },
+    {
+      "key": "firewalls",
+      "type": "firewall",
+      "description": "Firewall"
+    },
+    {
+      "key": "routers",
+      "type": "router",
+      "description": "Router"
+    },
+    {
+      "key": "phones",
+      "type": "phone",
+      "description": "Phone"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "TENANT_A_B",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_A",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_A_MTU",
+      "parent_profile": null
+    },
+    {
+      "profile": "TENANT_B",
+      "parent_profile": null
+    },
+    {
+      "profile": "PHONE_WITH_PC",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL",
+      "parent_profile": null
+    },
+    {
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK",
+      "parent_profile": null
+    },
+    {
+      "profile": "PORT_CHANNEL_LACP_TIMER",
+      "parent_profile": null
+    },
+    {
+      "profile": "PORT_CHANNEL_LACP_TIMER_NORMAL",
+      "parent_profile": null
+    },
+    {
+      "profile": "NESTED_PORT_PROFILE",
+      "parent_profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK"
+    },
+    {
+      "profile": "DOT1X_PORT_PROFILE",
+      "parent_profile": null
+    }
+  ],
+  "mlag_peer": "DC1-CL1B",
+  "mlag_port_channel_id": 1151,
+  "mlag_interfaces": [
+    "Ethernet1/15/1",
+    "Ethernet1/16/1"
+  ],
+  "mlag_ip": "10.255.252.18",
+  "mlag_l3_ip": "10.255.251.18",
+  "mlag_switch_ids": {
+    "primary": 10,
+    "secondary": 11
+  },
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "DC1-SPINE1",
+    "DC1-SPINE2",
+    "DC1-SPINE3",
+    "DC1-SPINE4"
+  ],
+  "overlay": {
+    "peering_address": "192.168.255.18",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.18",
+  "max_parallel_uplinks": 2,
+  "max_uplink_switches": 8,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "DC1-SPINE1",
+      "peer_interface": "Ethernet26",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "prefix_length": 31,
+      "ip_address": "172.31.255.33",
+      "peer_ip_address": "172.31.255.32",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "DC1-SPINE2",
+      "peer_interface": "Ethernet26",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "prefix_length": 31,
+      "ip_address": "172.31.255.35",
+      "peer_ip_address": "172.31.255.34",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet3",
+      "peer": "DC1-SPINE3",
+      "peer_interface": "Ethernet26",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "prefix_length": 31,
+      "ip_address": "172.31.255.37",
+      "peer_ip_address": "172.31.255.36",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet4",
+      "peer": "DC1-SPINE4",
+      "peer_interface": "Ethernet26",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "prefix_length": 31,
+      "ip_address": "172.31.255.39",
+      "peer_ip_address": "172.31.255.38",
+      "structured_config": {}
+    }
+  ],
+  "uplink_peers": [
+    "DC1-SPINE1",
+    "DC1-SPINE2",
+    "DC1-SPINE3",
+    "DC1-SPINE4"
+  ],
+  "vlans": "110-112,120-121,130-131,140-141,150,160-161,210-211,250,310-311,350",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

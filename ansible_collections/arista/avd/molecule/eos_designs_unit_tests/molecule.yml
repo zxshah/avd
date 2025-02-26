@@ -27,6 +27,7 @@ provisioner:
     defaults:
       jinja2_extensions: "jinja2.ext.loopcontrols,jinja2.ext.do,jinja2.ext.i18n"
       gathering: explicit
+      callbacks_enabled: profile_tasks
   inventory:
     links:
       hosts: "inventory/hosts.yml"
@@ -36,5 +37,7 @@ provisioner:
     # Custom pythonpath to allow loading custom ip_addressing and descriptions modules.
     # See CUSTOM_PYTHON_MODULES_TESTS group vars for details.
     PYTHONPATH: ${PYTHONPATH}:${MOLECULE_SCENARIO_DIRECTORY}/custom_modules
+    # Keeping temporary files by overriding the tmp folder. This allows us to track changes here.
+    AVDTMPDIR: ${MOLECULE_SCENARIO_DIRECTORY}/tmp
 verifier:
   name: ansible

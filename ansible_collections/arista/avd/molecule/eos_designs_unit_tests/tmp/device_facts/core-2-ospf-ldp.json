@@ -1,0 +1,28 @@
+{
+  "id": 2,
+  "type": "core_router",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": true,
+  "loopback_ipv4_pool": "10.0.0.0/24",
+  "downlink_pools": [],
+  "underlay_routing_protocol": "ospf-ldp",
+  "inband_ztp": false,
+  "router_id": "10.0.0.2",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "none",
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "10.0.0.2",
+    "evpn_mpls": false
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

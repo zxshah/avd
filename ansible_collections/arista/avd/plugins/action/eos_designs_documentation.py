@@ -41,8 +41,6 @@ ARGUMENT_SPEC = {
 
 class ActionModule(ActionBase):
     def run(self, tmp: Any = None, task_vars: dict | None = None) -> None:
-        self._supports_check_mode = False
-
         if task_vars is None:
             task_vars = {}
 

@@ -1,0 +1,44 @@
+{
+  "id": 8,
+  "type": "wan_router",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.42.0/24",
+  "uplink_ipv4_pool": "172.17.0.0/16",
+  "downlink_pools": [],
+  "bgp_as": "65000",
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "group": "SITE_DIRECT_HA_PORT_CHANNEL",
+  "router_id": "192.168.42.8",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_route_servers": [],
+  "overlay": {
+    "peering_address": "192.168.42.8",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.142.8",
+  "wan_path_groups": [
+    {
+      "name": "INET",
+      "id": 101,
+      "_interfaces": [
+        {
+          "name": "Ethernet1.42",
+          "public_ip": "dhcp",
+          "connected_to_pathfinder": true
+        }
+      ]
+    }
+  ],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "100-101,666",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

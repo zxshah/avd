@@ -1,0 +1,44 @@
+{
+  "id": 104,
+  "type": "l3leaf",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65001",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+  "inband_ztp": false,
+  "group": "mlag",
+  "router_id": "192.168.255.112",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "bgp-peer-groups-1",
+  "mlag_port_channel_id": 3,
+  "mlag_interfaces": [
+    "Ethernet3"
+  ],
+  "mlag_ip": "192.168.253.205",
+  "mlag_switch_ids": {
+    "primary": 103,
+    "secondary": 104
+  },
+  "evpn_role": "server",
+  "mpls_overlay_role": "server",
+  "evpn_route_servers": [],
+  "mpls_route_reflectors": [],
+  "overlay": {
+    "peering_address": "192.168.255.112",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.111",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "uplinks": [],
+  "uplink_peers": [],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

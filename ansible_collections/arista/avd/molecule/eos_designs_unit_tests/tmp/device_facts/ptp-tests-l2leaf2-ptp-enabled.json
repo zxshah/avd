@@ -1,0 +1,70 @@
+{
+  "id": 2,
+  "type": "l2leaf",
+  "platform": "vEOS-lab",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "pod": "PTP_TESTS",
+  "connected_endpoints_keys": [
+    {
+      "key": "servers",
+      "type": "server",
+      "description": "Server"
+    }
+  ],
+  "port_profile_names": [
+    {
+      "profile": "PTP-profile-dynamic",
+      "parent_profile": null
+    }
+  ],
+  "evpn_route_servers": [],
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "ptp-tests-leaf1",
+      "peer_interface": "Ethernet12",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "ptp": {
+        "enable": true
+      },
+      "vlans": "11",
+      "structured_config": {},
+      "peer_node_group": "ptp-test-leaf",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "12"
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "ptp-tests-leaf2",
+      "peer_interface": "Ethernet12",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "ptp": {
+        "enable": true
+      },
+      "vlans": "11",
+      "structured_config": {},
+      "peer_node_group": "ptp-test-leaf",
+      "peer_mlag": true,
+      "channel_group_id": "1",
+      "peer_channel_group_id": "12"
+    }
+  ],
+  "uplink_peers": [
+    "ptp-tests-leaf1",
+    "ptp-tests-leaf2"
+  ],
+  "vlans": "11",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

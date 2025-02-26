@@ -1,0 +1,64 @@
+{
+  "id": 5,
+  "type": "l3leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.201.117/24",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "uplink_ipv4_pool": "10.10.101.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65161",
+  "underlay_routing_protocol": "isis",
+  "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+  "inband_ztp": false,
+  "group": "MLAG_ISIS_L3LEAF1",
+  "router_id": "192.168.255.37",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "mlag_peer": "MLAG-ISIS-L3LEAF1A",
+  "mlag_port_channel_id": 5,
+  "mlag_interfaces": [
+    "Ethernet5",
+    "Ethernet6"
+  ],
+  "mlag_ip": "10.10.255.7",
+  "mlag_switch_ids": {
+    "primary": 4,
+    "secondary": 5
+  },
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "MLAG-ISIS-SPINE"
+  ],
+  "overlay": {
+    "peering_address": "192.168.255.37",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.36",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "MLAG-ISIS-SPINE",
+      "peer_interface": "Ethernet31",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65000",
+      "type": "underlay_p2p",
+      "prefix_length": 31,
+      "ip_address": "10.10.101.9",
+      "peer_ip_address": "10.10.101.8",
+      "structured_config": {}
+    }
+  ],
+  "uplink_peers": [
+    "MLAG-ISIS-SPINE"
+  ],
+  "vlans": "",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

@@ -1,0 +1,356 @@
+{
+  "AUTO_NODE_TYPE_SPINE01": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ],
+  "AUTO_NODE_TYPE_SPINE02": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ],
+  "CUSTOM-PYTHON_MODULES-SPINE1": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+    "CUSTOM-PYTHON_MODULES-L3LEAF1B"
+  ],
+  "CUSTOM-PYTHON_MODULES-L3LEAF1A": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF2"
+  ],
+  "CUSTOM-TEMPLATES-L3LEAF1A": [
+    "CUSTOM-TEMPLATES-L2LEAF1A",
+    "CUSTOM-TEMPLATES-L2LEAF1B"
+  ],
+  "CUSTOM-TEMPLATES-L3LEAF1B": [
+    "CUSTOM-TEMPLATES-L2LEAF1A",
+    "CUSTOM-TEMPLATES-L2LEAF1B"
+  ],
+  "CUSTOM-TEMPLATES-SPINE1": [
+    "CUSTOM-TEMPLATES-L3LEAF1A",
+    "CUSTOM-TEMPLATES-L3LEAF1B"
+  ],
+  "DC1-SPINE1": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B",
+    "MH-LEAF1A",
+    "MH-LEAF1B",
+    "MH-LEAF2A",
+    "MLAG-OSPF-L3LEAF1A",
+    "MLAG-OSPF-L3LEAF1B"
+  ],
+  "DC1-SPINE2": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "DC1-SPINE3": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "DC1-SPINE4": [
+    "DC1-BL1A",
+    "DC1-BL1B",
+    "DC1-BL2A",
+    "DC1-BL2B",
+    "DC1-CL1A",
+    "DC1-CL1B",
+    "DC1-LEAF1A",
+    "DC1-LEAF2A",
+    "DC1-LEAF2B",
+    "DC1-SVC3A",
+    "DC1-SVC3B",
+    "DC1_UNDEPLOYED_LEAF1A",
+    "DC1_UNDEPLOYED_LEAF1B"
+  ],
+  "DC1-LEAF2A": [
+    "DC1-L2LEAF1A",
+    "DC1-L2LEAF1B",
+    "DC1-L2LEAF3A",
+    "DC1-L2LEAF4A",
+    "DC1.L2LEAF5A",
+    "DC1.L2LEAF5B",
+    "DC1.L2LEAF6A"
+  ],
+  "DC1-LEAF2B": [
+    "DC1-L2LEAF1A",
+    "DC1-L2LEAF1B",
+    "DC1-L2LEAF3A",
+    "DC1-L2LEAF4A",
+    "DC1.L2LEAF5A",
+    "DC1.L2LEAF5B",
+    "DC1.L2LEAF6B"
+  ],
+  "DC1-SVC3A": [
+    "DC1-L2LEAF2A",
+    "DC1-L2LEAF2B"
+  ],
+  "DC1-SVC3B": [
+    "DC1-L2LEAF2A",
+    "DC1-L2LEAF2B"
+  ],
+  "EVPN-MULTICAST-SPINE1": [
+    "EVPN-MULTICAST-DISABLED",
+    "EVPN-MULTICAST-L3LEAF1A",
+    "EVPN-MULTICAST-L3LEAF1B",
+    "EVPN-MULTICAST-L3LEAF2A",
+    "EVPN-MULTICAST-L3LEAF3A",
+    "EVPN-MULTICAST-L3LEAF3B"
+  ],
+  "EVPN-MULTICAST-L3LEAF1A": [
+    "EVPN-MULTICAST-L2LEAF1A"
+  ],
+  "EVPN-MULTICAST-L3LEAF1B": [
+    "EVPN-MULTICAST-L2LEAF1A"
+  ],
+  "IGMP-QUERIER-L3LEAF1A": [
+    "IGMP-QUERIER-L2LEAF1A"
+  ],
+  "MH-LEAF2A": [
+    "MH-L2LEAF1A"
+  ],
+  "MLAG-ISIS-SPINE": [
+    "MLAG-ISIS-L3LEAF1A",
+    "MLAG-ISIS-L3LEAF1B"
+  ],
+  "MLAG_ODD_ID_L3LEAF1A": [
+    "P2P-UPLINKS-IPV4-PREFIX-LENGTH"
+  ],
+  "MLAG_ODD_ID_L3LEAF1B": [
+    "P2P-UPLINKS-IPV4-PREFIX-LENGTH"
+  ],
+  "SL-LEAF0B": [
+    "SL-LEAF1A",
+    "SL-LEAF1B",
+    "SL-LEAF2A",
+    "SL-LEAF2B"
+  ],
+  "SL-LEAF1A": [
+    "SL-MLEAF1"
+  ],
+  "UNDERLAY-MULTICAST-L3LEAF1A": [
+    "UNDERLAY-MULTICAST-L2LEAF1A"
+  ],
+  "UNDERLAY-MULTICAST-SPINE1": [
+    "UNDERLAY-MULTICAST-L3LEAF1A",
+    "UNDERLAY-MULTICAST-L3LEAF1B",
+    "UNDERLAY-MULTICAST-L3LEAF2A",
+    "UNDERLAY-MULTICAST-L3LEAF2B"
+  ],
+  "UNDERLAY-MULTICAST-SPINE2": [
+    "UNDERLAY-MULTICAST-L3LEAF1A",
+    "UNDERLAY-MULTICAST-L3LEAF1B",
+    "UNDERLAY-MULTICAST-L3LEAF2A",
+    "UNDERLAY-MULTICAST-L3LEAF2B"
+  ],
+  "UNDERLAY_FILTER_PEER_AS_SPINE1": [
+    "UNDERLAY_FILTER_PEER_AS_L3LEAF1"
+  ],
+  "UNDERLAY_FILTER_PEER_AS_SPINE2": [
+    "UNDERLAY_FILTER_PEER_AS_L3LEAF1"
+  ],
+  "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1A",
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1B"
+  ],
+  "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1A",
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1B"
+  ],
+  "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
+    "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B"
+  ],
+  "UPLINK_P2P_VRFS_TESTS_LEAF1": [
+    "UPLINK_P2P_VRFS_TESTS_L2LEAF1"
+  ],
+  "UPLINK_P2P_VRFS_TESTS_SPINE1": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ],
+  "UPLINK_P2P_VRFS_TESTS_SPINE2": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ],
+  "site-ha-disabled-leaf": [
+    "cv-pathfinder-edge",
+    "cv-pathfinder-edge1"
+  ],
+  "leaf-wan-use-evpn-on-lan": [
+    "cv-pathfinder-edge-wan-use-evpn-on-lan",
+    "cv-pathfinder-edge-wan-use-evpn-on-lan-no-overlay-on-lan"
+  ],
+  "site-ha-enabled-leaf2A": [
+    "cv-pathfinder-edge2A",
+    "cv-pathfinder-edge2B"
+  ],
+  "site-ha-enabled-leaf2B": [
+    "cv-pathfinder-edge2A",
+    "cv-pathfinder-edge2B"
+  ],
+  "site-ha-enabled-leaf1": [
+    "cv-pathfinder-transit1A",
+    "cv-pathfinder-transit1B"
+  ],
+  "downlink-pools-spine1": [
+    "downlink-pools-l3leaf1",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4"
+  ],
+  "downlink-pools-spine2": [
+    "downlink-pools-l3leaf2",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4"
+  ],
+  "flow-tracking-tests-leaf3": [
+    "flow-tracking-tests-l2-leaf1",
+    "flow-tracking-tests-l2-leaf2"
+  ],
+  "flow-tracking-tests-leaf4": [
+    "flow-tracking-tests-l2-leaf1",
+    "flow-tracking-tests-l2-leaf2"
+  ],
+  "flow-tracking-tests-spine1": [
+    "flow-tracking-tests-leaf1",
+    "flow-tracking-tests-leaf2",
+    "flow-tracking-tests-leaf3",
+    "flow-tracking-tests-leaf4"
+  ],
+  "flow-tracking-tests-spine2": [
+    "flow-tracking-tests-leaf1",
+    "flow-tracking-tests-leaf2",
+    "flow-tracking-tests-leaf3",
+    "flow-tracking-tests-leaf4"
+  ],
+  "inband-mgmt-parent-dualstack1": [
+    "inband-mgmt-dualstack-ips",
+    "inband-mgmt-dualstack-subnets"
+  ],
+  "inband-mgmt-parent-dualstack2": [
+    "inband-mgmt-dualstack-ips",
+    "inband-mgmt-dualstack-subnets"
+  ],
+  "inband-mgmt-parent": [
+    "inband-mgmt-ip",
+    "inband-mgmt-mlag-a",
+    "inband-mgmt-mlag-b",
+    "inband-mgmt-subnet",
+    "inband-mgmt-subnet-vrf"
+  ],
+  "inband-mgmt-parent-vrf": [
+    "inband-mgmt-ip",
+    "inband-mgmt-mlag-a",
+    "inband-mgmt-mlag-b",
+    "inband-mgmt-subnet",
+    "inband-mgmt-subnet-vrf"
+  ],
+  "inband-mgmt-parent-ipv6-1": [
+    "inband-mgmt-ipv6-only",
+    "inband-mgmt-ipv6-only-vrf"
+  ],
+  "inband-mgmt-parent-ipv6-2": [
+    "inband-mgmt-ipv6-only",
+    "inband-mgmt-ipv6-only-vrf"
+  ],
+  "inband-mgmt-spine1-ztp": [
+    "inband-mgmt-parent",
+    "inband-mgmt-parent-vrf"
+  ],
+  "override_uplink_type-u": [
+    "override_uplink_type-d"
+  ],
+  "ptp-tests-leaf1": [
+    "ptp-tests-l2leaf1-ptp-disabled",
+    "ptp-tests-l2leaf2-ptp-enabled",
+    "ptp-tests-l2leaf2-ptp-enabled-uplink-disabled"
+  ],
+  "ptp-tests-leaf2": [
+    "ptp-tests-l2leaf1-ptp-disabled",
+    "ptp-tests-l2leaf2-ptp-enabled",
+    "ptp-tests-l2leaf2-ptp-enabled-uplink-disabled"
+  ],
+  "ptp-tests-spine1": [
+    "ptp-tests-leaf1",
+    "ptp-tests-leaf2",
+    "ptp-tests-leaf3",
+    "ptp-tests-leaf4",
+    "ptp-tests-leaf5"
+  ],
+  "ptp-tests-spine2": [
+    "ptp-tests-leaf3",
+    "ptp-tests-leaf4",
+    "ptp-tests-leaf5"
+  ],
+  "sflow-tests-leaf3": [
+    "sflow-tests-l2-leaf1",
+    "sflow-tests-l2-leaf2"
+  ],
+  "sflow-tests-leaf4": [
+    "sflow-tests-l2-leaf1",
+    "sflow-tests-l2-leaf2"
+  ],
+  "sflow-tests-spine1": [
+    "sflow-tests-leaf1",
+    "sflow-tests-leaf2",
+    "sflow-tests-leaf3",
+    "sflow-tests-leaf4"
+  ],
+  "trunk-group-tests-l3leaf1a": [
+    "trunk-group-tests-l2leaf1a",
+    "trunk-group-tests-l2leaf1b",
+    "trunk-group-tests-l2leaf3"
+  ],
+  "trunk-group-tests-l3leaf1b": [
+    "trunk-group-tests-l2leaf1a",
+    "trunk-group-tests-l2leaf1b",
+    "trunk-group-tests-l2leaf3"
+  ],
+  "trunk-group-tests-l3leaf2a": [
+    "trunk-group-tests-l2leaf4"
+  ],
+  "trunk-group-tests-l3leaf2b": [
+    "trunk-group-tests-l2leaf4"
+  ],
+  "underlay_filter_peer_as_evpn_2": [
+    "underlay_filter_peer_as_evpn_1"
+  ],
+  "underlay_filter_peer_as_evpn_3": [
+    "underlay_filter_peer_as_evpn_1"
+  ],
+  "uplink-native-vlan-parent": [
+    "uplink-native-vlan-child"
+  ],
+  "uplink-native-vlan-grandparent": [
+    "uplink-native-vlan-parent"
+  ],
+  "uplink_lan_l2leaf": [
+    "uplink_lan_wan_router1",
+    "uplink_lan_wan_router2"
+  ]
+}

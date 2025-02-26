@@ -4,6 +4,8 @@
 
 
 import cProfile
+import json
+import logging
 import pstats
 from pathlib import Path
 from typing import Any
@@ -14,7 +16,7 @@ from ansible.plugins.action import ActionBase, display
 
 from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import RaiseOnUse
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschematools import AvdSchemaTools
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import get_templar
+from ansible_collections.arista.avd.plugins.plugin_utils.utils import get_templar, get_tmp_path, write_file
 
 PLUGIN_NAME = "arista.avd.eos_designs_facts"
 
@@ -32,6 +34,8 @@ except ImportError as e:
         ),
     )
 
+LOGGER = logging.getLogger("ansible_collections.arista.avd")
+
 
 class ActionModule(ActionBase):
     def run(self, tmp: Any = None, task_vars: dict | None = None) -> dict:
@@ -40,6 +44,10 @@ class ActionModule(ActionBase):
 
         result = super().run(tmp, task_vars)
         del tmp  # tmp no longer has any effect
+
+        changed = False
+        tmp_path = get_tmp_path()
+        LOGGER.info("eos_designs_facts: Using %s for temporary files.", tmp_path)
 
         cprofile_file = self._task.args.get("cprofile_file")
         if cprofile_file:
@@ -82,7 +90,7 @@ class ActionModule(ActionBase):
 
         avd_overlay_peers = {}
         avd_topology_peers = {}
-        for host in fabric_hosts:
+        for host in sorted(fabric_hosts):
             host_evpn_route_servers = avd_switch_facts[host]["switch"].get("evpn_route_servers", [])
             for peer in host_evpn_route_servers:
                 avd_overlay_peers.setdefault(peer, []).append(host)
@@ -96,14 +104,44 @@ class ActionModule(ActionBase):
             for peer in host_topology_peers:
                 avd_topology_peers.setdefault(peer, []).append(host)
 
-        # Save any updated pools.
-        result["changed"] = pool_manager.save_updated_pools(dumper_cls=AnsibleDumper)
+            changed = (
+                write_file(
+                    content=json.dumps(avd_switch_facts[host]["switch"], indent=2),
+                    filename=str(tmp_path / "device_facts" / f"{host}.json"),
+                    file_mode="0o600",
+                    dir_mode="0o700",
+                )
+                or changed
+            )
 
-        result["ansible_facts"] = {
-            "avd_switch_facts": avd_switch_facts,
-            "avd_overlay_peers": avd_overlay_peers,
-            "avd_topology_peers": avd_topology_peers,
-        }
+        changed = (
+            write_file(
+                content=json.dumps(avd_overlay_peers, indent=2),
+                filename=str(tmp_path / "peer_facts" / "avd_overlay_peers.json"),
+                file_mode="0o600",
+                dir_mode="0o700",
+            )
+            or changed
+        )
+        changed = (
+            write_file(
+                content=json.dumps(avd_topology_peers, indent=2),
+                filename=str(tmp_path / "peer_facts" / "avd_topology_peers.json"),
+                file_mode="0o600",
+                dir_mode="0o700",
+            )
+            or changed
+        )
+
+        # Save any updated pools.
+        changed = pool_manager.save_updated_pools(dumper_cls=AnsibleDumper) or changed
+
+        result["changed"] = changed
+        # result["ansible_facts"] = {
+        #     "avd_switch_facts": avd_switch_facts,
+        #     "avd_overlay_peers": avd_overlay_peers,
+        #     "avd_topology_peers": avd_topology_peers,
+        # }
 
         if cprofile_file:
             profiler.disable()

@@ -1,0 +1,66 @@
+{
+  "id": 3,
+  "type": "l3leaf",
+  "platform": "vEOS-LAB",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "192.168.255.0/24",
+  "uplink_ipv4_pool": "172.31.255.0/24",
+  "downlink_pools": [],
+  "bgp_as": "65103",
+  "underlay_routing_protocol": "ebgp",
+  "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+  "inband_ztp": false,
+  "router_id": "192.168.255.23",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "connected_endpoints_keys": [],
+  "port_profile_names": [],
+  "evpn_role": "client",
+  "evpn_route_servers": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A"
+  ],
+  "overlay": {
+    "peering_address": "192.168.255.23",
+    "evpn_mpls": false
+  },
+  "vtep_ip": "192.168.254.23",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+      "peer_interface": "Ethernet3",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65101",
+      "type": "underlay_p2p",
+      "prefix_length": 31,
+      "ip_address": "172.31.255.25",
+      "peer_ip_address": "172.31.255.24",
+      "structured_config": {},
+      "subinterfaces": [
+        {
+          "interface": "Ethernet1.1",
+          "peer_interface": "Ethernet3.1",
+          "vrf": "TEST_VRF",
+          "encapsulation_dot1q_vlan": 1,
+          "prefix_length": 31,
+          "ip_address": "172.16.0.25",
+          "peer_ip_address": "172.16.0.24",
+          "structured_config": {}
+        }
+      ]
+    }
+  ],
+  "uplink_peers": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A"
+  ],
+  "uplink_switch_vrfs": [
+    "TEST_VRF"
+  ],
+  "vlans": "110",
+  "local_endpoint_trunk_groups": [],
+  "endpoint_trunk_groups": []
+}

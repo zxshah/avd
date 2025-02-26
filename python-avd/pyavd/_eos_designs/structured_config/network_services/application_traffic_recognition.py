@@ -114,7 +114,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             if get_item(ipv4_prefixes_field_sets._as_list(), "name", self._wan_cp_app_dst_prefix) is not None:
                 return
             pathfinder_vtep_ips = [f"{wan_rs.vtep_ip}/32" for wan_rs in self.shared_utils.filtered_wan_route_servers]
- 
+
             self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.append_new(
                 name=self._wan_cp_app_dst_prefix,
                 prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues(
@@ -122,7 +122,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 ),
             )
         elif self.shared_utils.is_wan_server:
-
             self.structured_config.application_traffic_recognition.applications.ipv4_applications.append_new(
                 name=self._wan_control_plane_application,
                 src_prefix_set_name=self._wan_cp_app_src_prefix,

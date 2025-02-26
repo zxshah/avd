@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import pytest
 
+from pyavd._errors import AristaAvdError
 from pyavd._schema.models.input_path import InputPath, PathIndexedListKey
 
 PATH_INDEXED_LIST_KEY_TESTS = [pytest.param((1, "name", "Ethernet1"), "[name=Ethernet1]", id="Valid Key")]
@@ -66,6 +67,16 @@ class TestInputPath:
     @pytest.mark.parametrize(("test_value", "expected_output"), INPUT_PATH_TESTS)
     def test__str__(self, test_value: list[int | str | PathIndexedListKey], expected_output: str) -> None:
         assert str(InputPath(*test_value)) == expected_output
+
+    def test__str___wrong_type(self) -> None:
+        path = InputPath("blah")
+        path.path_elements.append(True)
+        with pytest.raises(AristaAvdError, match="Wrong element type '<class 'bool'>' in InputPath."):
+            _ = str(path)
+        path = InputPath("blah")
+        path.path_elements.append([])
+        with pytest.raises(AristaAvdError, match="Wrong element type '<class 'list'>' in InputPath."):
+            _ = str(path)
 
     @pytest.mark.parametrize(("test_value", "expected_output"), INPUT_PATH_PARENT_TESTS)
     def test_parent(self, test_value: list[int | str | InputPath], expected_output: str) -> None:

@@ -3,6 +3,8 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
+from pyavd._errors import AristaAvdError
+
 
 class PathIndexedListKey:
     """Models an AvdIndexList Key."""
@@ -46,13 +48,18 @@ class InputPath:
         result = ""
         add_dot = False
         for element in self.path_elements:
+            print(element, type(element))
             if isinstance(element, str):
                 result += "." if add_dot else ""
                 result += f"{element}"
+            elif isinstance(element, bool):
+                raise AristaAvdError(f"Wrong element type '{type(element)}' in InputPath.")
             elif isinstance(element, int):
                 result += f"[{element}]"
             elif isinstance(element, PathIndexedListKey):
                 result += f"{element!s}"
+            else:
+                raise AristaAvdError(f"Wrong element type '{type(element)}' in InputPath.")
             add_dot = True
 
         return result

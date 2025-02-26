@@ -41,12 +41,12 @@ class VlansMixin(Protocol):
         for vlan in vlans:
             vlan.trunk_groups = EosCliConfigGen.VlansItem.TrunkGroups(natural_sort(set(vlan.trunk_groups)))
 
+        self.structured_config.vlans.extend(vlans)
+
         # Add configuration for uplink or peer's uplink_native_vlan if it is not defined as part of network services
         switch_vlans = range_expand(get(self._hostvars, "switch.vlans"))
         uplink_native_vlans = natural_sort(
             {link["native_vlan"] for link in self._underlay_links if "native_vlan" in link and str(link["native_vlan"]) not in switch_vlans},
         )
         for peer_uplink_native_vlan in uplink_native_vlans:
-            vlans.append_new(id=int(peer_uplink_native_vlan), name="NATIVE", state="suspend")
-
-        self.structured_config.vlans.extend(vlans)
+            self.structured_config.vlans.append_new(id=int(peer_uplink_native_vlan), name="NATIVE", state="suspend")

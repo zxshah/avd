@@ -22,10 +22,7 @@ class CvxMixin(Protocol):
     @structured_config_contributor
     def cvx(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Detect if this is a CVX server for overlay and configure service & peer hosts accordingly."""
-        if not self.shared_utils.overlay_cvx:
-            return
-
-        if self.shared_utils.hostname not in self.inputs.overlay_cvx_servers:
+        if not self.shared_utils.overlay_cvx or self.shared_utils.hostname not in self.inputs.overlay_cvx_servers:
             return
 
         for overlay_cvx_server in self.inputs.overlay_cvx_servers:
@@ -34,7 +31,6 @@ class CvxMixin(Protocol):
 
             peer_switch_facts = self.shared_utils.get_peer_facts(overlay_cvx_server, required=True)
             cvx_server_ip = get(peer_switch_facts, "mgmt_ip", required=True, custom_error_msg=f"'mgmt_ip' for CVX Server {overlay_cvx_server} is required.")
-
             self.structured_config.cvx.shutdown = False
             self.structured_config.cvx.peer_hosts.append(get_ip_from_ip_prefix(cvx_server_ip))
-            self.structured_config.cvx.services.vxlan._update(shutdown=False)
+            self.structured_config.cvx.services.vxlan.shutdown = False

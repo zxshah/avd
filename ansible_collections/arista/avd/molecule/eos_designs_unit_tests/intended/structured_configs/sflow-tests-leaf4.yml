@@ -46,24 +46,6 @@ ethernet_interfaces:
     enable: true
   switchport:
     enabled: false
-- name: Ethernet16
-  description: L2_sflow-tests-l2-leaf1_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 16
-    mode: active
-  peer: sflow-tests-l2-leaf1
-  peer_interface: Ethernet2
-  peer_type: l2leaf
-- name: Ethernet17
-  description: L2_sflow-tests-l2-leaf2_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 17
-    mode: active
-  peer: sflow-tests-l2-leaf2
-  peer_interface: Ethernet2
-  peer_type: l2leaf
 - name: Ethernet13
   description: SERVER_port-channel-interface-false_PCI12
   shutdown: false
@@ -134,28 +116,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel16
-  description: L2_sflow-tests-l2-leaf1_Port-Channel1
-  shutdown: false
-  mlag: 16
-  sflow:
-    enable: true
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 11,4092
-- name: Port-Channel17
-  description: L2_sflow-tests-l2-leaf2_Port-Channel1
-  shutdown: false
-  mlag: 17
-  sflow:
-    enable: true
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 11,4092
 - name: Port-Channel13
   description: SERVER_port-channel-interface-false
   shutdown: false
@@ -189,10 +149,6 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 10.254.1.104/31
-- name: PL-L2LEAF-INBAND-MGMT
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.254.254.0/24
 route_maps:
 - name: RM-MLAG-PEER-IN
   sequence_numbers:
@@ -207,10 +163,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-  - sequence: 20
-    type: permit
-    match:
-    - ip address prefix-list PL-L2LEAF-INBAND-MGMT
 - name: RM-CONN-2-BGP-VRFS
   sequence_numbers:
   - sequence: 10
@@ -274,8 +226,6 @@ router_bgp:
     peer: sflow-tests-spine1
     description: sflow-tests-spine1_Loopback0
   redistribute:
-    attached_host:
-      enabled: true
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
@@ -371,16 +321,6 @@ vlan_interfaces:
   mtu: 9214
   tenant: SFLOW
   type: underlay_peering
-- name: Vlan4092
-  description: Inband Management
-  shutdown: false
-  ip_address: 10.254.254.3/24
-  ip_virtual_router_addresses:
-  - 10.254.254.1
-  mtu: 1500
-  ip_attached_host_route_export:
-    enabled: true
-    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -405,9 +345,6 @@ vlans:
   trunk_groups:
   - MLAG
   tenant: SFLOW
-- id: 4092
-  name: INBAND_MGMT
-  tenant: system
 vrfs:
 - name: MGMT
   ip_routing: false

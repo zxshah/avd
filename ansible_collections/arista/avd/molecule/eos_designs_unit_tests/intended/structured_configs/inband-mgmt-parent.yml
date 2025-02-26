@@ -126,45 +126,6 @@ ntp:
   - name: 2.2.2.55
     preferred: true
   - name: pool.ntp.org
-port_channel_interfaces:
-- name: Port-Channel21
-  description: INBAND-MGMT-SUBNET_Po1
-  shutdown: false
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '101'
-- name: Port-Channel22
-  description: INBAND-MGMT-SUBNET-VRF_Po1
-  shutdown: false
-  lacp_fallback_timeout: 90
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '102'
-- name: Port-Channel23
-  description: INBAND-MGMT-IP_Po1
-  shutdown: false
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '103'
-- name: Port-Channel101
-  description: inband-mgmt-mlag-test_Po1
-  shutdown: false
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '101'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -172,12 +133,6 @@ prefix_lists:
     action: permit 10.0.255.0/24 eq 32
   - sequence: 20
     action: permit 10.0.254.0/24 eq 32
-- name: PL-L2LEAF-INBAND-MGMT
-  sequence_numbers:
-  - sequence: 10
-    action: permit 192.168.101.0/24
-  - sequence: 20
-    action: permit 192.168.102.0/24
 route_maps:
 - name: RM-CONN-2-BGP
   sequence_numbers:
@@ -185,10 +140,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-  - sequence: 20
-    type: permit
-    match:
-    - ip address prefix-list PL-L2LEAF-INBAND-MGMT
 router_bfd:
   multihop:
     interval: 300
@@ -239,8 +190,6 @@ router_bgp:
     peer: inband-mgmt-spine2-ztp
     description: inband-mgmt-spine2-ztp_Loopback0
   redistribute:
-    attached_host:
-      enabled: true
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
@@ -279,26 +228,6 @@ vlan_interfaces:
   vrf: INBANDMGMT
   ip_address: 192.168.103.1/24
   tenant: INBAND_MGMT_TESTS
-- name: Vlan101
-  description: Inband Management
-  shutdown: false
-  ip_address: 192.168.101.2/24
-  ip_virtual_router_addresses:
-  - 192.168.101.1
-  mtu: 1500
-  ip_attached_host_route_export:
-    enabled: true
-    distance: 19
-- name: Vlan102
-  description: Inband Management
-  shutdown: false
-  ip_address: 192.168.102.2/24
-  ip_virtual_router_addresses:
-  - 192.168.102.1
-  mtu: 1500
-  ip_attached_host_route_export:
-    enabled: true
-    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -308,12 +237,6 @@ vlans:
 - id: 103
   name: Inband management vlan
   tenant: INBAND_MGMT_TESTS
-- id: 101
-  name: INBAND_MGMT
-  tenant: system
-- id: 102
-  name: INBAND_MGMT
-  tenant: system
 vrfs:
 - name: MGMT
   ip_routing: false

@@ -5,18 +5,14 @@ enable_password:
   disabled: true
 ethernet_interfaces:
 - name: Ethernet3
-  description: TEST_CUSTOM_PREFIX_P2P_LINK_TO_CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1
+  description: TEST_CUSTOM_PREFIX_MLAG_PEER_CUSTOM-PYTHON_MODULES-L3LEAF1B_Ethernet3
   shutdown: false
-  mtu: 9214
-  ip_address: 172.31.255.24/31
   channel_group:
     id: 3
     mode: active
-  peer: CUSTOM-PYTHON_MODULES-L3LEAF2
-  peer_interface: Ethernet1
-  peer_type: l3leaf
-  switchport:
-    enabled: false
+  peer: CUSTOM-PYTHON_MODULES-L3LEAF1B
+  peer_interface: Ethernet3
+  peer_type: mlag_peer
 - name: Ethernet4
   description: TEST_CUSTOM_PREFIX_MLAG_PEER_CUSTOM-PYTHON_MODULES-L3LEAF1B_Ethernet4
   shutdown: false
@@ -36,17 +32,6 @@ ethernet_interfaces:
   peer_type: custom_spine
   switchport:
     enabled: false
-- name: Ethernet3.1
-  description: TEST_CUSTOM_PREFIX_P2P_LINK_TO_CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1.1 VRF TEST_VRF
-  shutdown: false
-  mtu: 9214
-  vrf: TEST_VRF
-  encapsulation_dot1q:
-    vlan: 1
-  ip_address: 172.16.0.24/31
-  peer: CUSTOM-PYTHON_MODULES-L3LEAF2
-  peer_interface: Ethernet1.1
-  peer_type: l3leaf
 hostname: CUSTOM-PYTHON_MODULES-L3LEAF1A
 ip_igmp_snooping:
   globally_enabled: true
@@ -173,11 +158,6 @@ router_bgp:
     remote_as: '65001'
     peer: CUSTOM-PYTHON_MODULES-SPINE1
     description: CUSTOM-PYTHON_MODULES-SPINE1_Ethernet1
-  - ip_address: 172.31.255.25
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65103'
-    peer: CUSTOM-PYTHON_MODULES-L3LEAF2
-    description: CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1
   - ip_address: 192.168.255.1
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65001'
@@ -224,10 +204,6 @@ router_bgp:
     updates:
       wait_install: true
     neighbors:
-    - ip_address: 172.16.0.25
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65103'
-      description: CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1.1_vrf_TEST_VRF
     - ip_address: 10.255.240.11
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: CUSTOM-PYTHON_MODULES-L3LEAF1B_Vlan3000

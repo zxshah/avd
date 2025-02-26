@@ -104,32 +104,6 @@ ethernet_interfaces:
   peer: inband-mgmt-parent-dualstack1
   peer_interface: Ethernet20
   peer_type: mlag_peer
-- name: Ethernet24
-  description: INBAND-MGMT-DUALSTACK-SUBNETS_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 24
-    mode: active
-  peer: inband-mgmt-dualstack-subnets
-  peer_interface: Ethernet2
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 104
-- name: Ethernet25
-  description: INBAND-MGMT-DUALSTACK-IPS_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 25
-    mode: active
-  peer: inband-mgmt-dualstack-ips
-  peer_interface: Ethernet2
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 105
 hostname: inband-mgmt-parent-dualstack2
 ip_igmp_snooping:
   globally_enabled: true
@@ -140,11 +114,6 @@ ip_name_servers:
   vrf: MGMT
 ip_routing: true
 ip_virtual_router_mac_address: 00:1c:73:00:dc:01
-ipv6_prefix_lists:
-- name: IPv6-PL-L2LEAF-INBAND-MGMT
-  sequence_numbers:
-  - sequence: 10
-    action: permit 2a00:104::/64
 is_deployed: true
 loopback_interfaces:
 - name: Loopback0
@@ -183,28 +152,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel24
-  description: INBAND-MGMT-DUALSTACK-SUBNETS_Po1
-  shutdown: false
-  mlag: 24
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '104'
-- name: Port-Channel25
-  description: INBAND-MGMT-DUALSTACK-IPS_Po1
-  shutdown: false
-  mlag: 25
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '105'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -216,10 +163,6 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 100.64.1.4/31
-- name: PL-L2LEAF-INBAND-MGMT
-  sequence_numbers:
-  - sequence: 10
-    action: permit 192.168.104.0/24
 route_maps:
 - name: RM-MLAG-PEER-IN
   sequence_numbers:
@@ -234,14 +177,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-  - sequence: 20
-    type: permit
-    match:
-    - ip address prefix-list PL-L2LEAF-INBAND-MGMT
-  - sequence: 60
-    type: permit
-    match:
-    - ipv6 address prefix-list IPv6-PL-L2LEAF-INBAND-MGMT
 - name: RM-CONN-2-BGP-VRFS
   sequence_numbers:
   - sequence: 10
@@ -292,8 +227,6 @@ router_bgp:
     peer: inband-mgmt-parent-dualstack1
     description: inband-mgmt-parent-dualstack1_Vlan4093
   redistribute:
-    attached_host:
-      enabled: true
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
@@ -368,23 +301,6 @@ vlan_interfaces:
   mtu: 9214
   tenant: INBAND_MGMT_TESTS
   type: underlay_peering
-- name: Vlan104
-  description: Inband Management
-  shutdown: false
-  ip_address: 192.168.104.3/24
-  ip_virtual_router_addresses:
-  - 192.168.104.1
-  ipv6_enable: true
-  ipv6_address: 2a00:104::3/64
-  ipv6_virtual_router_addresses:
-  - 2a00:104::1
-  mtu: 1500
-  ip_attached_host_route_export:
-    enabled: true
-    distance: 19
-  ipv6_attached_host_route_export:
-    enabled: true
-    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -409,9 +325,6 @@ vlans:
   trunk_groups:
   - MLAG
   tenant: INBAND_MGMT_TESTS
-- id: 104
-  name: INBAND_MGMT
-  tenant: system
 vrfs:
 - name: MGMT
   ip_routing: false

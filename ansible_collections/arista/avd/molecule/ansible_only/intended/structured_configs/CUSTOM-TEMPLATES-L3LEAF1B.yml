@@ -32,24 +32,6 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
-- name: Ethernet5
-  description: TEST_CUSTOM_PREFIX_CUSTOM-TEMPLATES-L2LEAF1A_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 5
-    mode: active
-  peer: CUSTOM-TEMPLATES-L2LEAF1A
-  peer_interface: Ethernet2
-  peer_type: l2leaf
-- name: Ethernet6
-  description: TEST_CUSTOM_PREFIX_CUSTOM-TEMPLATES-L2LEAF1B_Ethernet2
-  shutdown: false
-  channel_group:
-    id: 5
-    mode: active
-  peer: CUSTOM-TEMPLATES-L2LEAF1B
-  peer_interface: Ethernet2
-  peer_type: l2leaf
 - name: Ethernet12
   description: TEST_CUSTOM_PREFIX_SERVER-2_Nic1_data
   shutdown: false
@@ -115,15 +97,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel5
-  description: TEST_CUSTOM_PREFIX_CUSTOM-TEMPLATES-L2LEAF1A_Po5_To_Po1_
-  shutdown: false
-  mlag: 5
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
 - name: Port-Channel12
   description: TEST_CUSTOM_PREFIX_SERVER-2_data_portchannel_12
   shutdown: false

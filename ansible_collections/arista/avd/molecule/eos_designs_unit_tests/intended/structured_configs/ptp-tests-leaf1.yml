@@ -60,33 +60,6 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
-- name: Ethernet11
-  description: L2_ptp-tests-l2leaf1-ptp-disabled_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 11
-    mode: active
-  peer: ptp-tests-l2leaf1-ptp-disabled
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet12
-  description: L2_ptp-tests-l2leaf2-ptp-enabled_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 12
-    mode: active
-  peer: ptp-tests-l2leaf2-ptp-enabled
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet14
-  description: L2_ptp-tests-l2leaf2-ptp-enabled-uplink-disabled_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 14
-    mode: active
-  peer: ptp-tests-l2leaf2-ptp-enabled-uplink-disabled
-  peer_interface: Ethernet1
-  peer_type: l2leaf
 - name: Ethernet13
   description: SERVER_dynamic-endpoint_eth1
   shutdown: false
@@ -212,42 +185,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel11
-  description: L2_ptp-tests-l2leaf1-ptp-disabled_Port-Channel1
-  shutdown: false
-  mlag: 11
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '11'
-- name: Port-Channel12
-  description: L2_ptp-tests-l2leaf2-ptp-enabled_Port-Channel1
-  shutdown: false
-  mlag: 12
-  ptp:
-    enable: true
-    announce:
-      interval: 0
-      timeout: 3
-    delay_req: -3
-    sync_message:
-      interval: -3
-    transport: ipv4
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '11'
-- name: Port-Channel14
-  description: L2_ptp-tests-l2leaf2-ptp-enabled-uplink-disabled_Port-Channel1
-  shutdown: false
-  mlag: 14
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '11'
 - name: Port-Channel6
   description: SERVER_Endpoint-with-mpass
   shutdown: false

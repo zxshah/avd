@@ -227,6 +227,19 @@ class AvdSwitchFactsDefaultDict(defaultdict):
     def __init__(self, tmp_path: Path) -> None:
         self.tmp_path = tmp_path
 
+    def __contains__(self, key: object) -> bool:
+        try:
+            _ = self[key]
+        except (OSError, json.JSONDecodeError):
+            return False
+        return True
+
+    def get(self, key: str, default: Any = None) -> dict:
+        try:
+            return self[key]
+        except (OSError, json.JSONDecodeError):
+            return default
+
     def __missing__(self, key: str) -> dict:
         LOGGER.warning("Loading facts for %s", key)
         self[key] = {"switch": read_json_file(self.tmp_path / "device_facts" / f"{key}.json", f"AVD device facts for {key}")}

@@ -41,7 +41,6 @@ class UtilsMixin(Protocol):
         by default required is True and so the function will raise is peer_facts cannot be found
         using the separator `..` to be able to handle hostnames with `.` inside
         """
-        raise Exception(self.hostvars["avd_switch_facts"], self.hostvars["avd_switch_facts"][peer_name]["switch"])
         return get(
             self.hostvars,
             f"avd_switch_facts..{peer_name}..switch",

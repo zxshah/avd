@@ -11,57 +11,8 @@ daemon_terminattr:
   disable_aaa: false
   ingestexclude: /Sysdb/cell/1/agent,/Sysdb/cell/2/agent
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
-dhcp_servers:
-- vrf: default
-  dns_servers_ipv4:
-  - 1.1.1.1
-  - 8.8.8.8
-  tftp_server:
-    file_ipv4: https://www.arista.io/ztp/bootstrap
-  ipv4_vendor_options:
-  - vendor_id: NTP
-    sub_options:
-    - code: 42
-      array_ipv4_address:
-      - 2.2.2.55
-  subnets:
-  - subnet: 172.16.255.0/31
-    name: inband ztp for inband-mgmt-parent-Ethernet1
-    default_gateway: 172.16.255.0
-    ranges:
-    - start: 172.16.255.1
-      end: 172.16.255.1
-  - subnet: 172.16.255.2/31
-    name: inband ztp for inband-mgmt-parent-vrf-Ethernet1
-    default_gateway: 172.16.255.2
-    ranges:
-    - start: 172.16.255.3
-      end: 172.16.255.3
 enable_password:
   disabled: true
-ethernet_interfaces:
-- name: Ethernet1
-  description: P2P_inband-mgmt-parent_Ethernet1
-  shutdown: false
-  mtu: 9214
-  ip_address: 172.16.255.0/31
-  dhcp_server_ipv4: true
-  peer: inband-mgmt-parent
-  peer_interface: Ethernet1
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet2
-  description: P2P_inband-mgmt-parent-vrf_Ethernet1
-  shutdown: false
-  mtu: 9214
-  ip_address: 172.16.255.2/31
-  dhcp_server_ipv4: true
-  peer: inband-mgmt-parent-vrf
-  peer_interface: Ethernet1
-  peer_type: l3leaf
-  switchport:
-    enabled: false
 hostname: inband-mgmt-spine1-ztp
 ip_name_servers:
 - ip_address: 1.1.1.1
@@ -91,12 +42,6 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 10.0.254.0/24 eq 32
-- name: PL-P2P-LINKS
-  sequence_numbers:
-  - sequence: 10
-    action: permit 172.16.255.0/31
-  - sequence: 20
-    action: permit 172.16.255.2/31
 route_maps:
 - name: RM-CONN-2-BGP
   sequence_numbers:
@@ -104,10 +49,6 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-  - sequence: 70
-    type: permit
-    match:
-    - ip address prefix-list PL-P2P-LINKS
 router_bfd:
   multihop:
     interval: 300
@@ -138,16 +79,6 @@ router_bgp:
     send_community: all
     maximum_routes: 0
   neighbors:
-  - ip_address: 172.16.255.1
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65000'
-    peer: inband-mgmt-parent
-    description: inband-mgmt-parent_Ethernet1
-  - ip_address: 172.16.255.3
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65001'
-    peer: inband-mgmt-parent-vrf
-    description: inband-mgmt-parent-vrf_Ethernet1
   - ip_address: 10.0.255.1
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65000'

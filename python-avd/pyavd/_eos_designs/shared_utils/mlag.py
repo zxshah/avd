@@ -113,7 +113,12 @@ class MlagMixin(Protocol):
 
     @cached_property
     def mlag_peer_facts(self: SharedUtilsProtocol) -> EosDesignsFacts | dict:
-        return self.get_peer_facts(self.mlag_peer, required=True)
+        try:
+            return self.get_peer_facts(self.mlag_peer, required=True)
+        except Exception:
+            raise Exception(self.hostvars["avd_switch_facts"].get(self.mlag_peer)["switch"])
+
+
 
     @cached_property
     def mlag_peer_mgmt_ip(self: SharedUtilsProtocol) -> str | None:

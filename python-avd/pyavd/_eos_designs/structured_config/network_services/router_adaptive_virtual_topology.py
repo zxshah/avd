@@ -26,11 +26,11 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
         if not self.shared_utils.is_cv_pathfinder_router:
             return
 
-        self._cv_pathfinder_profiles()
-        self._cv_pathfinder_wan_vrfs()
-        self._cv_pathfinder_policies()
+        self._set_cv_pathfinder_profiles()
+        self._set_cv_pathfinder_wan_vrfs()
+        self._set_cv_pathfinder_policies()
 
-    def _cv_pathfinder_wan_vrfs(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_cv_pathfinder_wan_vrfs(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set the WAN VRFs based on filtered tenants and the AVT."""
         # For CV Pathfinder, it is required to go through all the AVT profiles in the policy to assign an ID.
 
@@ -60,7 +60,7 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
                 )
             self.structured_config.router_adaptive_virtual_topology.vrfs.append(wan_vrf)
 
-    def _cv_pathfinder_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_cv_pathfinder_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
         Set the CV Pathfinder policies based on the computed _filtered_wan_policies.
 
@@ -88,7 +88,7 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
 
             self.structured_config.router_adaptive_virtual_topology.policies.append(pathfinder_policy)
 
-    def _cv_pathfinder_profiles(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_cv_pathfinder_profiles(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set the router adaptive-virtual-topology profiles for this router."""
         for policy in self._filtered_wan_policies:
             for match in policy.get("matches", []):

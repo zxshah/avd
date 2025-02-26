@@ -13,7 +13,7 @@ from pyavd._eos_designs.structured_config.structured_config_generator import (
     structured_config_contributor,
 )
 from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import default, get, strip_empties_from_dict, strip_null_from_data
+from pyavd._utils import Undefined, default, get, strip_empties_from_dict, strip_null_from_data
 from pyavd.j2filters import natural_sort
 
 from .ntp import NtpMixin
@@ -530,8 +530,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         return strip_empties_from_dict(
             {
                 "enable_vrfs": [{"name": self.inputs.mgmt_interface_vrf}],
-                "enable_http": self.inputs.management_eapi.enable_http or None,
-                "enable_https": self.inputs.management_eapi.enable_https or None,
+                # Hack to respect the legacy behavior but this is wrong according to schema
+                "enable_http": defined_value if (defined_value := self.inputs.management_eapi._get_defined_attr("enable_http")) is not Undefined else None,
+                "enable_https": self.inputs.management_eapi.enable_https,
                 "default_services": self.inputs.management_eapi.default_services,
             }
         )

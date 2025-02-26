@@ -33,11 +33,12 @@ class VlansMixin(Protocol):
         The function also creates uplink_native_vlan for this switch or downstream switches.
         """
         # TODO: - can probably do this with sets but need list in the end so not sure it is worth it
+        vlans = EosCliConfigGen.Vlans()
         for vlan_trunk_group in self._underlay_vlan_trunk_groups:
             for vlan in range_expand(vlan_trunk_group["vlan_list"]):
-                self.structured_config.vlans.obtain(int(vlan)).trunk_groups.extend(vlan_trunk_group["trunk_groups"])
+                vlans.obtain(int(vlan)).trunk_groups.extend(vlan_trunk_group["trunk_groups"])
 
-        for vlan in self.structured_config.vlans:
+        for vlan in vlans:
             vlan.trunk_groups = EosCliConfigGen.VlansItem.TrunkGroups(natural_sort(set(vlan.trunk_groups)))
 
         # Add configuration for uplink or peer's uplink_native_vlan if it is not defined as part of network services
@@ -46,4 +47,6 @@ class VlansMixin(Protocol):
             {link["native_vlan"] for link in self._underlay_links if "native_vlan" in link and str(link["native_vlan"]) not in switch_vlans},
         )
         for peer_uplink_native_vlan in uplink_native_vlans:
-            self.structured_config.vlans.append_new(id=int(peer_uplink_native_vlan), name="NATIVE", state="suspend")
+            vlans.append_new(id=int(peer_uplink_native_vlan), name="NATIVE", state="suspend")
+
+        self.structured_config.vlans.extend(vlans)

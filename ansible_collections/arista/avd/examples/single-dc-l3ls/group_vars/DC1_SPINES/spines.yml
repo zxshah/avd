@@ -13,7 +13,7 @@ spine:
     bgp_as: 65100
   # Define variables per node
   nodes:
-    # The Node Name is used as “hostname”
+    # The Node Name is used as "hostname"
     - name: dc1-spine1
       # Unique identifier used for IP addressing and other algorithms
       id: 1

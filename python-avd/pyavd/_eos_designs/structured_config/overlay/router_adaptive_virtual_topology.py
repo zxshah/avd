@@ -3,9 +3,9 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
+from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
 
 if TYPE_CHECKING:
@@ -19,15 +19,16 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    @cached_property
-    def router_adaptive_virtual_topology(self: AvdStructuredConfigOverlayProtocol) -> dict | None:
-        """Return structured config for router adaptive-virtual-topology (AVT)."""
+    @structured_config_contributor
+    def router_adaptive_virtual_topology(self: AvdStructuredConfigOverlayProtocol) -> None:
+        """Set the structured config for router adaptive-virtual-topology (AVT)."""
         if not self.shared_utils.is_cv_pathfinder_router:
-            return None
+            return
 
         # A Pathfinder has no region, zone, site info.
         if self.shared_utils.is_cv_pathfinder_server:
-            return {"topology_role": "pathfinder"}
+            self.structured_config.router_adaptive_virtual_topology.topology_role = "pathfinder"
+            return
 
         if self.shared_utils.wan_region is None:
             # Should never happen but just in case.
@@ -40,15 +41,7 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
             raise AristaAvdInvalidInputsError(msg)
 
         # Edge or Transit
-        return {
-            "topology_role": self.shared_utils.cv_pathfinder_role,
-            "region": {
-                "name": self.shared_utils.wan_region.name,
-                "id": self.shared_utils.wan_region.id,
-            },
-            "zone": self.shared_utils.wan_zone,
-            "site": {
-                "name": self.shared_utils.wan_site.name,
-                "id": self.shared_utils.wan_site.id,
-            },
-        }
+        self.structured_config.router_adaptive_virtual_topology.topology_role = self.shared_utils.cv_pathfinder_role
+        self.structured_config.router_adaptive_virtual_topology.zone._update(name=self.shared_utils.wan_zone["name"], id=self.shared_utils.wan_zone["id"])
+        self.structured_config.router_adaptive_virtual_topology.region._update(name=self.shared_utils.wan_region.name, id=self.shared_utils.wan_region.id)
+        self.structured_config.router_adaptive_virtual_topology.site._update(name=self.shared_utils.wan_site.name, id=self.shared_utils.wan_site.id)

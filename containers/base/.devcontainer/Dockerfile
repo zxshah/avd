@@ -7,7 +7,7 @@ ARG RFC3339_TIMESTAMP
 # Image version will be set by the build workflow
 ARG IMAGE_VERSION
 # set labels
-LABEL org.opencontainers.image.description="AVD base image. This image MUST NOT be used directly and only required to optimize build process for other images."
+LABEL org.opencontainers.image.description="AVD base image. This image MUST NOT be used directly and is only required to optimize build process for other images."
 LABEL com.arista.license_terms="https://github.com/aristanetworks/avd/blob/devel/LICENSE"
 LABEL org.opencontainers.image.licenses="Apache-2.0"
 LABEL org.opencontainers.image.authors="Arista AVD Team <ansible@arista.com>"

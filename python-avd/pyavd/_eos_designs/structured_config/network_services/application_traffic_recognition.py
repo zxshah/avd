@@ -44,9 +44,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     def _wan_cp_app_src_prefix(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
         return "PFX-LOCAL-VTEP-IP"
 
-    def _generate_control_plane_application_profile(
-        self: AvdStructuredConfigNetworkServicesProtocol
-    ) -> None:
+    def _generate_control_plane_application_profile(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
         Generate an application profile using a single application matching.
 

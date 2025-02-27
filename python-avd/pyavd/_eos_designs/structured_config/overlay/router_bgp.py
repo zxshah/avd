@@ -4,7 +4,8 @@
 from __future__ import annotations
 
 import ipaddress
-from functools import cached_property
+from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
+from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._errors import AristaAvdError
@@ -24,52 +25,42 @@ class RouterBgpMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    @cached_property
-    def router_bgp(self: AvdStructuredConfigOverlayProtocol) -> dict | None:
+    @structured_config_contributor
+    def router_bgp(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Return the structured config for router_bgp."""
         if self.shared_utils.overlay_cvx:
-            return None
+            return
 
-        router_bgp = {
-            "bgp_cluster_id": self._bgp_cluster_id(),
-            "listen_ranges": self._bgp_listen_ranges(),
-            "peer_groups": self._peer_groups(),
-            "address_family_evpn": self._address_family_evpn(),
-            "address_family_ipv4": self._address_family_ipv4(),
-            "address_family_ipv4_sr_te": self._address_family_ipv4_sr_te(),
-            "address_family_link_state": self._address_family_link_state(),
-            "address_family_path_selection": self._address_family_path_selection(),
-            "address_family_rtc": self._address_family_rtc(),
-            "bgp": self._bgp_overlay_dpath(),
-            "address_family_vpn_ipv4": self._address_family_vpn_ipvx(4),
-            "address_family_vpn_ipv6": self._address_family_vpn_ipvx(6),
-            "neighbors": self._neighbors(),
-        }
+        self.structured_config.router_bgp._update(
+            address_family_evpn=self._address_family_evpn(),
+            address_family_ipv4=self._address_family_ipv4(),
+            address_family_ipv4_sr_te=self._address_family_ipv4_sr_te(),
+            address_family_link_state=self._address_family_link_state(),
+            address_family_path_selection=self._address_family_path_selection(),
+            address_family_rtc=self._address_family_rtc(),
+            bgp=self._bgp_overlay_dpath(),
+            address_family_vpn_ipv4=self._address_family_vpn_ipvx(4),
+            address_family_vpn_ipv6=self._address_family_vpn_ipvx(6),
+            neighbors=self._neighbors(),
+        )
+        self._set_bgp_listen_ranges()
+        self._set_peer_groups()
+        self._set_address_family_evpn()
 
-        # Need to keep potentially empty dict for redistribute_routes
-        return strip_empties_from_dict(router_bgp, strip_values_tuple=(None, ""))
-
-    def _bgp_cluster_id(self: AvdStructuredConfigOverlayProtocol) -> str | None:
+    def _set_bgp_cluster_id(self: AvdStructuredConfigOverlayProtocol) -> None:
         if (
             self.shared_utils.overlay_routing_protocol == "ibgp"
             and (self.shared_utils.evpn_role == "server" or self.shared_utils.mpls_overlay_role == "server")
         ) or self.shared_utils.is_wan_server:
-            return default(self.shared_utils.node_config.bgp_cluster_id, self.shared_utils.router_id)
-        return None
+            self.structured_config.router_bgp.bgp_cluster_id = default(self.shared_utils.node_config.bgp_cluster_id, self.shared_utils.router_id)
 
-    def _bgp_listen_ranges(self: AvdStructuredConfigOverlayProtocol) -> list | None:
+    def _set_bgp_listen_ranges(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Generate listen-ranges. Currently only supported for WAN RR."""
         if not self.shared_utils.is_wan_server:
-            return None
+            return
 
-        return [
-            {
-                "prefix": prefix,
-                "peer_group": self.inputs.bgp_peer_groups.wan_overlay_peers.name,
-                "remote_as": self.shared_utils.bgp_as,
-            }
-            for prefix in self.shared_utils.wan_listen_ranges
-        ] or None
+        for prefix in self.shared_utils.wan_listen_ranges:
+            self.structured_config.router_bgp.listen_ranges.append_new(prefix=prefix,peer_group=self.inputs.bgp_peer_groups.wan_overlay_peers.name,remote_as=self.shared_utils.bgp_as)
 
     def _generate_base_peer_group(
         self: AvdStructuredConfigOverlayProtocol,
@@ -95,7 +86,7 @@ class RouterBgpMixin(Protocol):
             "maximum_routes": maximum_routes,
         }
 
-    def _peer_groups(self: AvdStructuredConfigOverlayProtocol) -> list | None:
+    def _set_peer_groups(self: AvdStructuredConfigOverlayProtocol) -> None:
         peer_groups = []
 
         if self.shared_utils.overlay_routing_protocol == "ebgp":
@@ -217,7 +208,7 @@ class RouterBgpMixin(Protocol):
 
         return {"peer_groups": peer_groups}
 
-    def _address_family_evpn(self: AvdStructuredConfigOverlayProtocol) -> dict | None:
+    def _set_address_family_evpn(self: AvdStructuredConfigOverlayProtocol) -> None:
         address_family_evpn = {}
 
         peer_groups = []
@@ -252,20 +243,16 @@ class RouterBgpMixin(Protocol):
                 )
 
             if self.shared_utils.node_config.evpn_gateway.evpn_l3.enabled:
-                address_family_evpn["neighbor_default"] = {
-                    "next_hop_self_received_evpn_routes": {
-                        "enable": True,
-                        "inter_domain": self.shared_utils.node_config.evpn_gateway.evpn_l3.inter_domain,
-                    },
-                }
+                self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes._update(enable=True,
+                        inter_domain=self.shared_utils.node_config.evpn_gateway.evpn_l3.inter_domain)
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
             # TODO: - assess this condition - both can't be true at the same time.
             if self.shared_utils.overlay_evpn_mpls is True and self.shared_utils.overlay_evpn_vxlan is not True:
                 overlay_peer_group = {"name": self.inputs.bgp_peer_groups.mpls_overlay_peers.name, "activate": True}
-                address_family_evpn["neighbor_default"] = {"encapsulation": "mpls"}
+                self.structured_config.router_bgp.address_family_evpn.neighbor_default.encapsulation="mpls"
                 if self.shared_utils.overlay_ler is True:
-                    address_family_evpn["neighbor_default"]["next_hop_self_source_interface"] = "Loopback0"
+                    self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_source_interface = "Loopback0"
 
                 if self._is_mpls_server is True:
                     peer_groups.append({"name": self.inputs.bgp_peer_groups.rr_overlay_peers.name, "activate": True})
@@ -287,22 +274,20 @@ class RouterBgpMixin(Protocol):
         # host flap detection & route pruning
         if self.shared_utils.overlay_vtep is True:
             if self.inputs.evpn_hostflap_detection:
-                address_family_evpn["evpn_hostflap_detection"] = {
-                    "window": self.inputs.evpn_hostflap_detection.window,
-                    "threshold": self.inputs.evpn_hostflap_detection.threshold,
-                    "enabled": self.inputs.evpn_hostflap_detection.enabled,
-                    "expiry_timeout": self.inputs.evpn_hostflap_detection.expiry_timeout,
-                }
+                self.structured_config.router_bgp.address_family_evpn.evpn_hostflap_detection._update(
+                    window=self.inputs.evpn_hostflap_detection.window,
+                    threshold=self.inputs.evpn_hostflap_detection.threshold,
+                    enabled=self.inputs.evpn_hostflap_detection.enabled,
+                    expiry_timeout=self.inputs.evpn_hostflap_detection.expiry_timeout,
+                )
             if self.inputs.evpn_import_pruning:
-                address_family_evpn["route"] = {
-                    "import_match_failure_action": "discard",
-                }
+                self.structured_config.router_bgp.address_family_evpn.route.import_match_failure_action= "discard"
 
         if self.shared_utils.overlay_dpath is True:
-            address_family_evpn["domain_identifier"] = self.shared_utils.node_config.ipvpn_gateway.evpn_domain_id
+            self.structured_config.router_bgp.address_family_evpn.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.evpn_domain_id
 
         if self.shared_utils.is_wan_server:
-            address_family_evpn["next_hop"] = {"resolution_disabled": True}
+            self.structured_config.router_bgp.address_family_evpn.next_hop.resolution_disabled= True
 
             if self._is_wan_server_with_peers:
                 peer_groups.append(
@@ -315,11 +300,7 @@ class RouterBgpMixin(Protocol):
 
         # Activitating HA iBGP session for WAN HA
         if self.shared_utils.wan_ha:
-            address_family_evpn["neighbor_default"] = {
-                "next_hop_self_received_evpn_routes": {
-                    "enable": True,
-                },
-            }
+            self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes.enable=True
             address_family_evpn["neighbors"] = [
                 {
                     "ip_address": self._wan_ha_peer_vtep_ip(),
@@ -327,8 +308,6 @@ class RouterBgpMixin(Protocol):
                     "encapsulation": self.inputs.wan_encapsulation,
                 }
             ]
-
-        return address_family_evpn or None
 
     def _address_family_ipv4_sr_te(self: AvdStructuredConfigOverlayProtocol) -> dict | None:
         """Generate structured config for IPv4 SR-TE address family."""

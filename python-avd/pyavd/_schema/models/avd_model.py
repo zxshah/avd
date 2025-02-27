@@ -316,6 +316,8 @@ class AvdModel(AvdBase):
             if not isinstance(old_value, type(new_value)):
                 # Different types so we can just replace with the new value.
                 setattr(self, field, new_value)
+                # Keep the source of the merged value field
+                self._field_source[field] = other._field_source[field]
                 continue
 
             # Merge new value
@@ -371,6 +373,8 @@ class AvdModel(AvdBase):
             # Inherit the field only if the old value is Undefined.
             if old_value is Undefined:
                 setattr(self, field, new_value)
+                # Keep the source of the inherited field
+                self._field_source[field] = other._field_source[field]
                 continue
 
             # Merge new value if it is a class with inheritance support.
@@ -389,6 +393,7 @@ class AvdModel(AvdBase):
                 continue
 
             if field_type is dict:
+                # TODO: This cannot keep the _source
                 # In-place deepmerge in to the existing dict without schema.
                 merge(old_value, deepcopy(new_value), same_key_strategy="use_existing", list_merge="keep")
 
@@ -437,13 +442,13 @@ class AvdModel(AvdBase):
 
             new_args[field] = value
 
+        # Copy the source
+        new_args["_source"] = self._source
         new_instance = new_type(**new_args)
 
         # Pass along the internal flags
         new_instance._created_from_null = self._created_from_null
         new_instance._block_inheritance = self._block_inheritance
-        # Copy the source
-        new_instance._source = self._source
 
         if self._custom_data:
             new_instance._custom_data = self._custom_data

@@ -28,7 +28,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     Other lists are *not* using this model.
     """
 
-    __slots__ = ("_items",)
+    __slots__ = ("_items", "_items_source")
 
     _item_type: ClassVar[type]  # pylint: disable=declare-non-slot # pylint bug #9950
     """Type of items. This is used instead of inspecting the type-hints to improve performance significantly."""
@@ -37,6 +37,8 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     Internal attribute holding the actual data. Using a dict keyed by the primary key value of each item to improve performance
     significantly when searching for a specific item.
     """
+    _items_source: list[InputPath]
+    """Source based on index."""
 
     @classmethod
     def _load(cls, data: Sequence, data_source: InputPath | None = None) -> Self:
@@ -58,9 +60,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
 
         cls_items: Iterable[T_ItemType] = [coerce_type(item, item_type, data_source=data_source.create_descendant(index)) for index, item in enumerate(data)]
 
-        cls_instance = cls(cls_items)
-        cls_instance._source = data_source
-        return cls_instance
+        return cls(cls_items, source=data_source)
 
     def __init__(self, items: Iterable[T_ItemType] = (), source: InputPath | None = None) -> None:
         """
@@ -75,6 +75,8 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
         self._items = list(items)
         if source:
             self._source = source
+        for index, _ in enumerate(self._items):
+            self._items_source[index] = self._source.create_descendant(index)
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""
@@ -94,6 +96,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     def __getitem__(self, index: int) -> T_ItemType:
         return self._items[index]
 
+    # TODO: If need source to be changed for item then need a wrapper
     def __setitem__(self, index: int, value: T_ItemType) -> None:
         self._items[index] = value
 

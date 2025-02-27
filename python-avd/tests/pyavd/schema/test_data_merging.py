@@ -87,3 +87,37 @@ def test_data_merging(
     a = data_merging_schema_class._from_dict(a_data)
     b = data_merging_schema_class._from_dict(b_data)
     assert a._deepmerged(b, list_merge=list_merge)._as_dict() == expected
+
+
+@pytest.mark.parametrize(
+    ("a_data", "b_data", "list_merge", "expected"),
+    [
+        pytest.param({}, {}, "append_unique", {}, id="empty_data"),
+        # Testing AvdList
+        pytest.param(A_LIST, B_LIST, "append_unique", UNIQUE_A_AND_B_LISTS, id="list_append_unique"),
+        pytest.param(A_LIST, B_LIST, "append", ALL_A_AND_B_LISTS, id="list_append"),
+        pytest.param(A_LIST, B_LIST, "replace", B_LIST, id="list_replace"),
+        pytest.param(A_LIST, B_LIST, "keep", A_LIST, id="list_keep"),
+        pytest.param(A_LIST, B_LIST, "prepend", ALL_B_AND_A_LISTS, id="list_prepend"),
+        pytest.param(A_LIST, B_LIST, "prepend_unique", UNIQUE_B_AND_A_LISTS, id="list_prepend_unique"),
+        # Testing AvdIndexedList
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "append_unique", UNIQUE_A_AND_B_INDEXED_LISTS, id="indexed_list_append_unique"),
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "append", UNIQUE_A_AND_B_INDEXED_LISTS, id="indexed_list_append"),
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "replace", B_INDEXED_LIST, id="indexed_list_replace"),
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "keep", A_INDEXED_LIST, id="indexed_list_keep"),
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "prepend", UNIQUE_B_AND_A_INDEXED_LISTS, id="indexed_list_prepend"),
+        pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, "prepend_unique", UNIQUE_B_AND_A_INDEXED_LISTS, id="indexed_list_prepend_unique"),
+    ],
+)
+def test_data_merging_source_avd_list(
+    a_data: dict,
+    b_data: dict,
+    list_merge: Literal["append_unique", "append", "replace", "keep", "prepend", "prepend_unique"],
+    expected: dict,
+    data_merging_schema_class: DataMergingTestSchema,
+) -> None:
+    a = data_merging_schema_class._from_dict(a_data)
+    b = data_merging_schema_class._from_dict(b_data)
+    merged = a._deepmerged(b, list_merge=list_merge)
+    for field in merged._fields:
+        assert merged, _get_field_source(field) == a._get_field_source(field) if field in a else b._get_field_source(b)

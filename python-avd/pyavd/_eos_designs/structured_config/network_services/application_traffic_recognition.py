@@ -195,7 +195,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                         ignore_extra_keys=True,
                     )
                     self.structured_config.application_traffic_recognition.categories.append(category_item)
-                # append_dict_to_list_of_dicts(new_dict=self.inputs.application_classification.categories[category["name"]]._as_dict(), list_of_dicts=categories)
             # Applications in application profiles
             for application in application_profile.applications:
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:

@@ -267,28 +267,28 @@ ip_access_lists:
     destination: any
 - name: ACL-NAT-IE-DIRECT
   entries:
-  - source: any
-    destination: 5.0.0.0/24
-    sequence: 10
+  - sequence: 10
     action: deny
     protocol: ip
-  - source: any
-    destination: any
-    sequence: 20
+    source: any
+    destination: 5.0.0.0/24
+  - sequence: 20
     action: permit
     protocol: ip
+    source: any
+    destination: any
 - name: ACL-NAT-IE-ZSCALER
   entries:
-  - source: any
-    destination: 10.0.0.0/24
-    sequence: 10
+  - sequence: 10
     action: permit
     protocol: ip
-  - source: any
-    destination: any
-    sequence: 20
+    source: any
+    destination: 10.0.0.0/24
+  - sequence: 20
     action: deny
     protocol: ip
+    source: any
+    destination: any
 ip_extcommunity_lists:
 - name: ECL-EVPN-SOO
   entries:

@@ -23,6 +23,20 @@ class IpAccesslistsMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
+    @structured_config_contributor
+    def ip_access_lists(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+        """Set the structured config for ip_access_lists."""
+        for ie_policy_type in self._filtered_internet_exit_policy_types:
+            self._acl_internet_exit(ie_policy_type)
+
+    def _set_ipv4_acl(self: AvdStructuredConfigNetworkServicesProtocol, ipv4_acl: EosDesigns.Ipv4AclsItem) -> None:
+        """
+        Set structured config for ip_access_lists.
+
+        Called for each interface in l3_interfaces and l3_port_channels when applying ipv4_acls
+        """
+        self.structured_config.ip_access_lists.append(ipv4_acl._cast_as(EosCliConfigGen.IpAccessListsItem))
+
     def _acl_internet_exit_zscaler(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         ip_access_list = EosCliConfigGen.IpAccessListsItem(name=self.get_internet_exit_nat_acl_name("zscaler"))
         ip_access_list.entries.append_new(sequence=10, action="permit", protocol="ip", source="any", destination="any")
@@ -53,7 +67,7 @@ class IpAccesslistsMixin(Protocol):
 
     def _acl_internet_exit_user_defined(
         self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]
-    ) -> list[dict] | None:
+    ) -> EosDesigns.Ipv4AclsItem | None:
         acl_name = self.get_internet_exit_nat_acl_name(internet_exit_policy_type)
         if acl_name not in self.inputs.ipv4_acls:
             # TODO: Evaluate if we should continue so we raise when there is no ACL.
@@ -73,23 +87,9 @@ class IpAccesslistsMixin(Protocol):
     def _acl_internet_exit(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]) -> None:
         acls = self._acl_internet_exit_user_defined(internet_exit_policy_type)
         if acls:
-            self.structured_config.ip_access_lists.append(acls)
+            self.structured_config.ip_access_lists.append(acls._cast_as(EosCliConfigGen.IpAccessListsItem))
 
         elif internet_exit_policy_type == "zscaler":
             self._acl_internet_exit_zscaler()
         elif internet_exit_policy_type == "direct":
             self._acl_internet_exit_direct()
-
-    @structured_config_contributor
-    def ip_access_lists(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Set the structured config for ip_access_lists."""
-        for ie_policy_type in self._filtered_internet_exit_policy_types:
-            self._acl_internet_exit(ie_policy_type)
-
-    def _set_ipv4_acl(self: AvdStructuredConfigNetworkServicesProtocol, ipv4_acl: EosDesigns.Ipv4AclsItem) -> None:
-        """
-        Set structured config for ip_access_lists.
-
-        Called for each interface in l3_interfaces and l3_port_channels when applying ipv4_acls
-        """
-        self.structured_config.ip_access_lists.append(ipv4_acl._cast_as(EosCliConfigGen.IpAccessListsItem))

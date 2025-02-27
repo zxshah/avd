@@ -2153,7 +2153,6 @@ keys:
     keys:
       enable_http:
         type: bool
-        default: false
       enable_https:
         type: bool
         default: true

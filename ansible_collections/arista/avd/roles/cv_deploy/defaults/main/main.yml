@@ -22,7 +22,8 @@ cv_devices: "{{ ansible_play_hosts }}"
 # If false, the deployment will fail if any devices are missing (excempting devices where 'is_deployed' is set to false).
 cv_skip_missing_devices: false
 
-# If true, then tolerate identical `serial_number` or `metadata.system_mac_address` values in the structured configuration of multiple EOS devices.
+# If true, only warn if two or more devices have the same `metadata.system_mac_address` and unique `serial_number` values.
+# If false - raise an exception.
 cv_tolerate_duplicated_devices: true
 
 # Submit Workspace on deployment. Otherwise the Workspace will be left in "pending" mode.

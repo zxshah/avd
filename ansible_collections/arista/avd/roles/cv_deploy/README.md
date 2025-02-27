@@ -185,9 +185,20 @@ It is possible to ignore other missing devices by simply skipping them and conti
 cv_skip_missing_devices: true
 ```
 
-Role will by default tolerate the presence of the same `serial_number` or `metadata.system_mac_address` values in the structured configuration of multiple EOS devices (although this may be an indicator of a potential issue and may eventually lead to the unexpected behavior on the CV side due to the possibility of pushing designed configuration of one device to another device). Information about devices with duplicated `serial_number` or `metadata.system_mac_address` values will be appended to the role's returned `cv_deploy_results.warnings`.
+Presence of the same `serial_number` or `metadata.system_mac_address` values in structured configuration of multiple EOS devices may lead to the unexpected results (or even network outages) on the CloudVision side due to the possibility of pushing designed configuration of one device to another device.
 
-Setting role's variable `cv_tolerate_duplicated_devices` to `false` will change this default behavior and will cause role to raise an error if same `serial_number` or `metadata.system_mac_address` is assigned in the structured config to more than one device.
+To eliminate this risk - role will always raise an error and will terminate it's execution prior to an attempt to update CloudVision in the following cases:
+
+- Structured configuration files of two or more targeted devices have the same `serial_number` (values of `metadata.system_mac_address` are not important in this case)
+- Structured configuration files of two or more targeted devices have the same `metadata.system_mac_address` and have `serial_number` values unset
+
+By default - role will not raise/terminate and will only warn user (with log message and returned `cv_deploy_results.warnings`) about present inconsistency in input structured configuration files in the following case:
+
+- Structured configuration files of two or more targeted devices have the same `metadata.system_mac_address` but unique `serial_number` values
+
+This later usecase by default should not lead to an unexpected results on a CloudVision (as role overwrites duplicated `metadata.system_mac_address` values based on the real values fetched from the CloudVision using devices' unique `serial_number`s).
+
+Setting role's variable `cv_tolerate_duplicated_devices` to `false` will change that later behavior and will cause role to raise an error even if structured configuration files of two or more targeted devices contain the same `metadata.system_mac_address` but unique `serial_number` values.
 
 ```yaml
 cv_tolerate_duplicated_devices: false

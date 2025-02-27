@@ -3555,6 +3555,102 @@ class EosDesigns(EosDesignsRootModel):
 
                 """
 
+    class FabricNumbering(AvdModel):
+        """Subclass of AvdModel."""
+
+        class NodeId(AvdModel):
+            """Subclass of AvdModel."""
+
+            _fields: ClassVar[dict] = {"algorithm": {"type": str, "default": "static"}, "pools_file": {"type": str}}
+            algorithm: Literal["static", "pool_manager"]
+            """
+            IDs will be automatically assigned according to the configured algorithm.
+            - `static` will use the
+            statically set IDs under node setting.
+            - `pool_manager` will activate the pool manager for ID pools.
+            Any statically set ID under node settings will be reserved in the pool if possible.
+              Otherwise an
+            error will be raised.
+
+            Default value: `"static"`
+            """
+            pools_file: str | None
+            """
+            Path to file to use for storing ID pool data when using "pool_manager" as algorithm.
+            This can be an
+            absolute path or a path relative to current working directory.
+
+            By default the path is
+            "<root_dir>/intended/data/<fabric_name>-ids.yml".
+
+            Note: Since the pool manager will remove stale
+            entries after every run, each fabric should be using its own file.
+            """
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self, *, algorithm: Literal["static", "pool_manager"] | UndefinedType = Undefined, pools_file: str | None | UndefinedType = Undefined
+                ) -> None:
+                    """
+                    NodeId.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        algorithm:
+                           IDs will be automatically assigned according to the configured algorithm.
+                           - `static` will use the
+                           statically set IDs under node setting.
+                           - `pool_manager` will activate the pool manager for ID pools.
+                           Any statically set ID under node settings will be reserved in the pool if possible.
+                             Otherwise an
+                           error will be raised.
+                        pools_file:
+                           Path to file to use for storing ID pool data when using "pool_manager" as algorithm.
+                           This can be an
+                           absolute path or a path relative to current working directory.
+
+                           By default the path is
+                           "<root_dir>/intended/data/<fabric_name>-ids.yml".
+
+                           Note: Since the pool manager will remove stale
+                           entries after every run, each fabric should be using its own file.
+
+                    """
+
+        _fields: ClassVar[dict] = {"node_id": {"type": NodeId}}
+        node_id: NodeId
+        """
+        Assignment policy for Node ID.
+        Node ID is mainly used for IP address assignment but can also affect
+        BGP AS and/or
+        interface assignments depending on other settings.
+
+        Subclass of AvdModel.
+        """
+
+        if TYPE_CHECKING:
+
+            def __init__(self, *, node_id: NodeId | UndefinedType = Undefined) -> None:
+                """
+                FabricNumbering.
+
+
+                Subclass of AvdModel.
+
+                Args:
+                    node_id:
+                       Assignment policy for Node ID.
+                       Node ID is mainly used for IP address assignment but can also affect
+                       BGP AS and/or
+                       interface assignments depending on other settings.
+
+                       Subclass of AvdModel.
+
+                """
+
     class FabricSflow(AvdModel):
         """Subclass of AvdModel."""
 
@@ -8204,8 +8300,6 @@ class EosDesigns(EosDesignsRootModel):
         `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
         `server` indicates that the router is a
         route-reflector.
-
-        Only supported if `overlay_routing_protocol` is set to `ibgp`.
         """
         default_flow_tracker_type: Literal["sampled", "hardware"]
         """
@@ -8357,8 +8451,6 @@ class EosDesigns(EosDesignsRootModel):
                        `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                        `server` indicates that the router is a
                        route-reflector.
-
-                       Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     default_flow_tracker_type: Set the default flow tracker type.
                     mlag_support: Can this node type support mlag.
                     network_services:
@@ -8732,8 +8824,6 @@ class EosDesigns(EosDesignsRootModel):
         `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
         `server` indicates that the router is a
         route-reflector.
-
-        Only supported if `overlay_routing_protocol` is set to `ibgp`.
         """
         default_flow_tracker_type: Literal["sampled", "hardware"]
         """
@@ -8885,8 +8975,6 @@ class EosDesigns(EosDesignsRootModel):
                        `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                        `server` indicates that the router is a
                        route-reflector.
-
-                       Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     default_flow_tracker_type: Set the default flow tracker type.
                     mlag_support: Can this node type support mlag.
                     network_services:
@@ -9135,11 +9223,13 @@ class EosDesigns(EosDesignsRootModel):
         The method for deriving RD Administrator subfield (first part of RD) for VRF services:
         - 'router_id'
         means the IP address of Loopback0.
-        - 'vtep_loopback' means the IP address of the VTEP loopback
-        interface.
+        - 'vrf_router_id' means the Router ID assigned for the BGP in the
+        VRF - falling back to IP address of Loopback0.
+        - 'vtep_loopback' means the IP address of the VTEP
+        loopback interface.
         - 'bgp_as' means the AS number of the device.
-        - 'switch_id' means the 'id' value of the
-        device.
+        - 'switch_id' means the 'id' value
+        of the device.
         - Any <IPv4 Address> without mask.
         - Integer between <0-65535>.
         - Integer between
@@ -9213,11 +9303,13 @@ class EosDesigns(EosDesignsRootModel):
                        The method for deriving RD Administrator subfield (first part of RD) for VRF services:
                        - 'router_id'
                        means the IP address of Loopback0.
-                       - 'vtep_loopback' means the IP address of the VTEP loopback
-                       interface.
+                       - 'vrf_router_id' means the Router ID assigned for the BGP in the
+                       VRF - falling back to IP address of Loopback0.
+                       - 'vtep_loopback' means the IP address of the VTEP
+                       loopback interface.
                        - 'bgp_as' means the AS number of the device.
-                       - 'switch_id' means the 'id' value of the
-                       device.
+                       - 'switch_id' means the 'id' value
+                       of the device.
                        - Any <IPv4 Address> without mask.
                        - Integer between <0-65535>.
                        - Integer between
@@ -20863,8 +20955,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -21554,8 +21644,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -24736,8 +24824,6 @@ class EosDesigns(EosDesignsRootModel):
                         `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                         `server` indicates that the router is a
                         route-reflector.
-
-                        Only supported if `overlay_routing_protocol` is set to `ibgp`.
                         """
                         cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                         """
@@ -25436,8 +25522,6 @@ class EosDesigns(EosDesignsRootModel):
                                        `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                        `server` indicates that the router is a
                                        route-reflector.
-
-                                       Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                     cv_pathfinder_transit_mode:
                                        Configure the transit mode for a WAN client for CV Pathfinder designs
                                        only when the `wan_mode` root
@@ -28546,8 +28630,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -29248,8 +29330,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -32414,8 +32494,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -33114,8 +33192,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -42562,8 +42638,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -43253,8 +43327,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -46435,8 +46507,6 @@ class EosDesigns(EosDesignsRootModel):
                         `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                         `server` indicates that the router is a
                         route-reflector.
-
-                        Only supported if `overlay_routing_protocol` is set to `ibgp`.
                         """
                         cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                         """
@@ -47135,8 +47205,6 @@ class EosDesigns(EosDesignsRootModel):
                                        `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                        `server` indicates that the router is a
                                        route-reflector.
-
-                                       Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                     cv_pathfinder_transit_mode:
                                        Configure the transit mode for a WAN client for CV Pathfinder designs
                                        only when the `wan_mode` root
@@ -50245,8 +50313,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -50947,8 +51013,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -54113,8 +54177,6 @@ class EosDesigns(EosDesignsRootModel):
                     `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                     `server` indicates that the router is a
                     route-reflector.
-
-                    Only supported if `overlay_routing_protocol` is set to `ibgp`.
                     """
                     cv_pathfinder_transit_mode: Literal["region", "zone"] | None
                     """
@@ -54813,8 +54875,6 @@ class EosDesigns(EosDesignsRootModel):
                                    `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
                                    `server` indicates that the router is a
                                    route-reflector.
-
-                                   Only supported if `overlay_routing_protocol` is set to `ibgp`.
                                 cv_pathfinder_transit_mode:
                                    Configure the transit mode for a WAN client for CV Pathfinder designs
                                    only when the `wan_mode` root
@@ -55088,6 +55148,7 @@ class EosDesigns(EosDesignsRootModel):
         "fabric_flow_tracking": {"type": FabricFlowTracking},
         "fabric_ip_addressing": {"type": FabricIpAddressing},
         "fabric_name": {"type": str},
+        "fabric_numbering": {"type": FabricNumbering},
         "fabric_sflow": {"type": FabricSflow},
         "flow_tracking_settings": {"type": FlowTrackingSettings},
         "generate_cv_tags": {"type": GenerateCvTags},
@@ -55352,6 +55413,7 @@ class EosDesigns(EosDesignsRootModel):
         "wan_route_servers": {"type": WanRouteServers},
         "wan_stun_dtls_disable": {"type": bool, "default": False},
         "wan_stun_dtls_profile_name": {"type": str, "default": "STUN-DTLS"},
+        "wan_use_evpn_node_settings_for_lan": {"type": bool, "default": False},
         "wan_virtual_topologies": {"type": WanVirtualTopologies},
         "zscaler_endpoints": {"type": ZscalerEndpoints},
         "_custom_structured_configurations": {"type": _CustomStructuredConfigurations},
@@ -56027,6 +56089,13 @@ class EosDesigns(EosDesignsRootModel):
     """
     Fabric Name, required to match Ansible Group name covering all devices in the Fabric, **must** be an
     inventory group name.
+    """
+    fabric_numbering: FabricNumbering
+    """
+    PREVIEW: This feature is in marked as "preview", which means it is subject to change at any time.
+    Assignment policies for numbers like Node ID.
+
+    Subclass of AvdModel.
     """
     fabric_sflow: FabricSflow
     """
@@ -57098,6 +57167,18 @@ class EosDesigns(EosDesignsRootModel):
 
     Default value: `"STUN-DTLS"`
     """
+    wan_use_evpn_node_settings_for_lan: bool
+    """
+    PREVIEW: This key is currently not supported and may produce invalid configuration.
+    When true,
+    `eos_designs` will use `overlay_routing_protocol`, `evpn_role` and `vtep`
+    node settings for LAN side
+    on WAN devices. Otherwise these will be ignored for WAN.
+    This will be the default in AVD version
+    6.0.0 and this option will be removed.
+
+    Default value: `False`
+    """
     wan_virtual_topologies: WanVirtualTopologies
     """
     Configure Virtual Topologies for CV Pathfinder and AutoVPN.
@@ -57194,6 +57275,7 @@ class EosDesigns(EosDesignsRootModel):
             fabric_flow_tracking: FabricFlowTracking | UndefinedType = Undefined,
             fabric_ip_addressing: FabricIpAddressing | UndefinedType = Undefined,
             fabric_name: str | UndefinedType = Undefined,
+            fabric_numbering: FabricNumbering | UndefinedType = Undefined,
             fabric_sflow: FabricSflow | UndefinedType = Undefined,
             flow_tracking_settings: FlowTrackingSettings | UndefinedType = Undefined,
             generate_cv_tags: GenerateCvTags | UndefinedType = Undefined,
@@ -57317,6 +57399,7 @@ class EosDesigns(EosDesignsRootModel):
             wan_route_servers: WanRouteServers | UndefinedType = Undefined,
             wan_stun_dtls_disable: bool | UndefinedType = Undefined,
             wan_stun_dtls_profile_name: str | UndefinedType = Undefined,
+            wan_use_evpn_node_settings_for_lan: bool | UndefinedType = Undefined,
             wan_virtual_topologies: WanVirtualTopologies | UndefinedType = Undefined,
             zscaler_endpoints: ZscalerEndpoints | UndefinedType = Undefined,
             _custom_structured_configurations: _CustomStructuredConfigurations | UndefinedType = Undefined,
@@ -57816,6 +57899,11 @@ class EosDesigns(EosDesignsRootModel):
                 fabric_name:
                    Fabric Name, required to match Ansible Group name covering all devices in the Fabric, **must** be an
                    inventory group name.
+                fabric_numbering:
+                   PREVIEW: This feature is in marked as "preview", which means it is subject to change at any time.
+                   Assignment policies for numbers like Node ID.
+
+                   Subclass of AvdModel.
                 fabric_sflow:
                    Default enabling of sFlow for various interface types across the fabric.
                    sFlow can also be
@@ -58566,6 +58654,14 @@ class EosDesigns(EosDesignsRootModel):
                    Name of the SSL profile used for DTLS on WAN STUN connections.
                    When using automatic ceritficate
                    deployment via CloudVision this name must be the same on all WAN routers.
+                wan_use_evpn_node_settings_for_lan:
+                   PREVIEW: This key is currently not supported and may produce invalid configuration.
+                   When true,
+                   `eos_designs` will use `overlay_routing_protocol`, `evpn_role` and `vtep`
+                   node settings for LAN side
+                   on WAN devices. Otherwise these will be ignored for WAN.
+                   This will be the default in AVD version
+                   6.0.0 and this option will be removed.
                 wan_virtual_topologies:
                    Configure Virtual Topologies for CV Pathfinder and AutoVPN.
                    Auto create a control plane

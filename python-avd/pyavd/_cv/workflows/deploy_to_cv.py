@@ -43,7 +43,7 @@ async def deploy_to_cv(
     studio_inputs: list[CVStudioInputs] | None = None,
     cv_pathfinder_metadata: list[CVPathfinderMetadata] | None = None,
     skip_missing_devices: bool = False,
-    tolerate_duplicated_devices: bool = True,
+    strict_system_mac_address: bool = False,
     strict_tags: bool = True,
     timeouts: CVTimeOuts | None = None,  # pylint: disable=unused-argument # noqa: ARG001
 ) -> DeployToCvResult:
@@ -74,7 +74,7 @@ async def deploy_to_cv(
         cv_pathfinder_metadata: Special metadata for CV Pathfinder solution. Metadata will be combined and deployed to the hidden metadata studio.
         skip_missing_devices: If `True` anything that can be deployed will get deployed. \
             Otherwise the Workspace will be abandoned on any issue.
-        tolerate_duplicated_devices: If `False` - raise error if devices with duplicated `metadata.system_mac_address` but unique `serial_number` are present.
+        strict_system_mac_address: If `True` - raise error if devices with duplicated `system_mac_address` but unique `serial_number` are present.
         strict_tags: If `True` other tags associated with the devices will get removed. \
             Otherwise other tags will be left as-is. \
             Other Tags with the same label are always removed.
@@ -142,7 +142,7 @@ async def deploy_to_cv(
                 + [config.device for config in configs if config.device is not None]
             )
             # Check structured config of the targeted devices for overlapping `serial_number`s or `system_mac_address`es.
-            verify_device_inputs(devices=devices, tolerate_duplicated_devices=tolerate_duplicated_devices, warnings=result.warnings)
+            verify_device_inputs(devices=devices, strict_system_mac_address=strict_system_mac_address, warnings=result.warnings)
 
             try:
                 # Verify devices exist and update CVDevice objects with _exists_on_cv.

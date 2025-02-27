@@ -118,7 +118,7 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
 @pytest.mark.parametrize(
     (
         "devices",
-        "tolerate_duplicated_devices",
+        "strict_system_mac_address",
         "warnings_qty",
         "expected_warning_patterns",
         "logs_qty",
@@ -129,22 +129,7 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
     [
         pytest.param(
             NO_DUPS_DEVICES,
-            # Toleration
-            True,
-            # Warnings
-            0,
-            [],
-            # Logs
-            0,
-            [],
-            # Exceptions
-            [],
-            does_not_raise(),
-            id="NO_DUPS_TOLER_TRUE",
-        ),
-        pytest.param(
-            NO_DUPS_DEVICES,
-            # Toleration
+            # strict_system_mac_address
             False,
             # Warnings
             0,
@@ -155,12 +140,27 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
             # Exceptions
             [],
             does_not_raise(),
-            id="NO_DUPS_TOLER_FALSE",
+            id="NO_DUPS_STRICT_MAC_FALSE",
+        ),
+        pytest.param(
+            NO_DUPS_DEVICES,
+            # strict_system_mac_address
+            True,
+            # Warnings
+            0,
+            [],
+            # Logs
+            0,
+            [],
+            # Exceptions
+            [],
+            does_not_raise(),
+            id="NO_DUPS_STRICT_MAC_TRUE",
         ),
         pytest.param(
             TWO_DUPED_SERIAL_DEVICES,
-            # Toleration
-            True,
+            # strict_system_mac_address
+            False,
             # Warnings
             0,
             [],
@@ -170,12 +170,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
             # Exceptions
             TWO_DUPED_SERIAL_PATTERNS,
             pytest.raises(CVDuplicatedDevices),
-            id="TWO_DUPED_SERIAL_TOLER_TRUE",
+            id="TWO_DUPED_SERIAL_STRICT_MAC_FALSE",
         ),
         pytest.param(
             TWO_DUPED_SERIAL_DEVICES,
-            # Toleration
-            False,
+            # strict_system_mac_address
+            True,
             # Warnings
             0,
             [],
@@ -185,12 +185,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
             # Exception
             TWO_DUPED_SERIAL_PATTERNS,
             pytest.raises(CVDuplicatedDevices),
-            id="TWO_DUPED_SERIAL_TOLER_FALSE",
+            id="TWO_DUPED_SERIAL_STRICT_MAC_TRUE",
         ),
         pytest.param(
             TWO_DUPED_SYS_MAC_DEVICES,
-            # Toleration
-            True,
+            # strict_system_mac_address
+            False,
             # Warnings
             0,
             [],
@@ -205,12 +205,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch2'.*system_mac_address='aa:bb:cc:dd:ee:f1'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="TWO_DUPED_SYS_MAC_TOLER_TRUE",
+            id="TWO_DUPED_SYS_MAC_STRICT_MAC_FALSE",
         ),
         pytest.param(
             TWO_DUPED_SYS_MAC_DEVICES,
-            # Toleration
-            False,
+            # strict_system_mac_address
+            True,
             # Warnings
             0,
             [],
@@ -228,12 +228,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch4'.*system_mac_address='aa:bb:cc:dd:ee:f3'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="TWO_DUPED_SYS_MAC_TOLER_FALSE",
+            id="TWO_DUPED_SYS_MAC_STRICT_MAC_TRUE",
         ),
         pytest.param(
             TWO_DUPED_SYS_MAC_UNIQ_SER_DEVICES,
-            # Toleration
-            True,
+            # strict_system_mac_address
+            False,
             # Warnings
             1,
             [
@@ -259,12 +259,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
             # Exceptions
             [],
             does_not_raise(),
-            id="TWO_DUPED_SYS_MAC_UNIQ_SER_TOLER_TRUE",
+            id="TWO_DUPED_SYS_MAC_UNIQ_SER_STRICT_MAC_FALSE",
         ),
         pytest.param(
             TWO_DUPED_SYS_MAC_UNIQ_SER_DEVICES,
-            # Toleration
-            False,
+            # strict_system_mac_address
+            True,
             # Warnings
             0,
             [],
@@ -282,12 +282,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch6'.*system_mac_address='aa:bb:cc:dd:ee:f5'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="TWO_DUPED_SYS_MAC_UNIQ_SER_TOLER_FALSE",
+            id="TWO_DUPED_SYS_MAC_UNIQ_SER_STRICT_MAC_TRUE",
         ),
         pytest.param(
             ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_DEVICES,
-            # Toleration
-            True,
+            # strict_system_mac_address
+            False,
             # Warnings
             0,
             [],
@@ -302,12 +302,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch2'.*serial_number='serial1'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_TOLER_TRUE",
+            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_STRICT_MAC_FALSE",
         ),
         pytest.param(
             ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_DEVICES,
-            # Toleration
-            False,
+            # strict_system_mac_address
+            True,
             # Warnings
             0,
             [],
@@ -325,12 +325,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch4'.*system_mac_address='aa:bb:cc:dd:ee:f3'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_TOLER_FALSE",
+            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_STRICT_MAC_TRUE",
         ),
         pytest.param(
             ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES,
-            # Toleration
-            True,
+            # strict_system_mac_address
+            False,
             # Warnings
             0,
             [],
@@ -345,12 +345,12 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch2'.*serial_number='serial1'.*system_mac_address='aa:bb:cc:dd:ee:f1'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_TOLER_TRUE",
+            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_STRICT_MAC_FALSE",
         ),
         pytest.param(
             ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES,
-            # Toleration
-            False,
+            # strict_system_mac_address
+            True,
             # Warnings
             0,
             [],
@@ -368,7 +368,7 @@ ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_DEVICES = [
                 "CVDevice\\(hostname='switch2'.*serial_number='serial1'.*system_mac_address='aa:bb:cc:dd:ee:f1'.*",
             ],
             pytest.raises(CVDuplicatedDevices),
-            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_TOLER_FALSE",
+            id="ONE_DUPED_SERIAL_ONE_DUPED_SYS_MAC_SAME_DEVICES_STRICT_MAC_TRUE",
         ),
     ],
 )
@@ -376,7 +376,7 @@ def test_verify_device_inputs(
     *,
     caplog: pytest.LogCaptureFixture,
     devices: list[CVDevice],
-    tolerate_duplicated_devices: bool,
+    strict_system_mac_address: bool,
     warnings: list[Exception] | None = None,
     warnings_qty: int,
     expected_warning_patterns: list[str],
@@ -389,7 +389,7 @@ def test_verify_device_inputs(
     warnings = []
     with caplog.at_level(logging.DEBUG), expected_exception as exc_info:
         # Engage FUT
-        verify_device_inputs(devices=devices, tolerate_duplicated_devices=tolerate_duplicated_devices, warnings=warnings)
+        verify_device_inputs(devices=devices, strict_system_mac_address=strict_system_mac_address, warnings=warnings)
     # Assert number of returned warnings
     assert len(warnings) == warnings_qty
     # Assert that updated warnings match expected warning patterns

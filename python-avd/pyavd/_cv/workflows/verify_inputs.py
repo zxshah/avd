@@ -15,17 +15,17 @@ if TYPE_CHECKING:
 LOGGER = getLogger(__name__)
 
 
-def verify_device_inputs(*, devices: list[CVDevice], tolerate_duplicated_devices: bool, warnings: list[Exception]) -> None:
+def verify_device_inputs(*, devices: list[CVDevice], strict_system_mac_address: bool, warnings: list[Exception]) -> None:
     """
     Verify device inputs from structured config files.
 
-    Check for presence of the duplicated `serial_number` or `metadata.system_mac_address` values.
+    Check for presence of the duplicated `serial_number` or `system_mac_address` values.
     Raise an exception and terminate execution if:
-      - two or more devices have the same `serial_number` (values of `metadata.system_mac_address` are not important in this case)
-      - two or more devices have the same `metadata.system_mac_address` and have `serial_number` values unset
-      - two or more targeted devices have the same `metadata.system_mac_address`, unique `serial_number` and `tolerate_duplicated_devices` is `False`
+      - two or more devices have the same `serial_number` (values of `system_mac_address` are not important in this case)
+      - two or more devices have the same `system_mac_address` and have `serial_number` values unset
+      - two or more targeted devices have the same `system_mac_address`, unique `serial_number` and `strict_system_mac_address` is `True`
     Warn user (with log message and updated `cv_deploy_results.warnings`) if:
-      - two or more targeted devices have the same `metadata.system_mac_address`, unique `serial_number` and `tolerate_duplicated_devices` is `True`
+      - two or more targeted devices have the same `system_mac_address`, unique `serial_number` and `strict_system_mac_address` is `False`
     """
     # List holding CVDevices with duplicated serial_number
     duplicated_serial_number: list[dict[str, str | list[CVDevice]]] = []
@@ -64,18 +64,14 @@ def verify_device_inputs(*, devices: list[CVDevice], tolerate_duplicated_devices
     # Populate list of CVDevice with duplicated system_mac_address values
     for current_system_mac_address, device_iterator_object in devices_grouped_by_system_mac_address:
         if len(devices_with_current_system_mac_address := list(device_iterator_object)) > 1:
-            # Catch devices with unset serial_number
-            devices_with_unset_serial_number: list[CVDevice] = [device for device in devices_with_current_system_mac_address if device.serial_number is None]
-            devices_with_set_serial_number: list[CVDevice] = [device for device in devices_with_current_system_mac_address if device.serial_number is not None]
-
-            if devices_with_unset_serial_number:
+            if devices_with_unset_serial_number := [device for device in devices_with_current_system_mac_address if device.serial_number is None]:
                 duplicated_system_mac_address_unset_serial_number.append(
                     {
                         "duplicated_system_mac_address": current_system_mac_address,
                         "devices_with_duplicated_system_mac_address": devices_with_unset_serial_number,
                     }
                 )
-            if devices_with_set_serial_number:
+            if devices_with_set_serial_number := [device for device in devices_with_current_system_mac_address if device.serial_number is not None]:
                 duplicated_system_mac_address_set_serial_number.append(
                     {
                         "duplicated_system_mac_address": current_system_mac_address,
@@ -89,7 +85,7 @@ def verify_device_inputs(*, devices: list[CVDevice], tolerate_duplicated_devices
                 duplicated_serial_number=duplicated_serial_number,
                 duplicated_system_mac_address_unset_serial_number=duplicated_system_mac_address_unset_serial_number,
                 duplicated_system_mac_address_set_serial_number=duplicated_system_mac_address_set_serial_number,
-                tolerate_duplicated_devices=tolerate_duplicated_devices,
+                strict_system_mac_address=strict_system_mac_address,
             )
         )
 
@@ -99,22 +95,22 @@ def duplicated_devices_handler(
     duplicated_serial_number: list[dict[str, str | list[CVDevice]]],
     duplicated_system_mac_address_unset_serial_number: list[dict[str, str | list[CVDevice]]],
     duplicated_system_mac_address_set_serial_number: list[dict[str, str | list[CVDevice]]],
-    tolerate_duplicated_devices: bool,
+    strict_system_mac_address: bool,
 ) -> Exception:
     """
-    Handle input devices with duplicated `serial_number`s or `metadata.system_mac_address`es.
+    Handle input devices with duplicated `serial_number`s or `system_mac_address`es.
 
     Raise an exception if (match-any):
         - duplicated_serial_number is not empty
         - duplicated_system_mac_address_unset_serial_number is not empty
-        - duplicated_system_mac_address_set_serial_number is not empty and tolerate_duplicated_devices set to False
+        - duplicated_system_mac_address_set_serial_number is not empty and strict_system_mac_address set to True
     Raise warning if (match-any):
-        - duplicated_system_mac_address_set_serial_number is not empty and tolerate_duplicated_devices set to True
+        - duplicated_system_mac_address_set_serial_number is not empty and strict_system_mac_address set to False
     """
     if (
         duplicated_serial_number
         or duplicated_system_mac_address_unset_serial_number
-        or (duplicated_system_mac_address_set_serial_number and not tolerate_duplicated_devices)
+        or (duplicated_system_mac_address_set_serial_number and strict_system_mac_address)
     ):
         exception = CVDuplicatedDevices(
             "Duplicated devices found in inventory",
@@ -123,7 +119,7 @@ def duplicated_devices_handler(
                 for item in (
                     duplicated_serial_number,
                     duplicated_system_mac_address_unset_serial_number,
-                    duplicated_system_mac_address_set_serial_number if not tolerate_duplicated_devices else None,
+                    duplicated_system_mac_address_set_serial_number if strict_system_mac_address else None,
                 )
                 if item
             ],

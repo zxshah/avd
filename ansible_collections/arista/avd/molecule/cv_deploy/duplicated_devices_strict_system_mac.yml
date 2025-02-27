@@ -1,5 +1,5 @@
 ---
-- name: "{{ test_id | upper }} Converge - cv_deploy with duplicated devices in inventory and disabled duplication tolerance"
+- name: "{{ test_id | upper }} Converge - cv_deploy with duplicated devices in inventory and non-default strict_system_mac_address"
   hosts: SITE1_FABRIC
   connection: local
   gather_facts: false
@@ -13,7 +13,7 @@
     structured_dir: "{{ playbook_dir }}/intended/structured_configs/test_duplicated_devices_configs"
     intended_tag_device: avd-ci-leaf1
     intended_tags: "{{ lookup('file', structured_dir ~ '/' ~ intended_tag_device ~ '.yml')| from_yaml }}"
-    test_id: "duplicated-inventory-devices-without-tolerance"
+    test_id: "duplicated-inventory-devices-strict-mac-true"
     cv_common_pattern: "avd_cv-deploy_{{ test_id }}"
 
   tasks:
@@ -149,7 +149,7 @@
       run_once: true
       delegate_to: localhost
       block:
-        - name: "{{ test_id | upper }} Attempt to provision CVP with AVD configuration containing overlapping devices and disabled tolerance"
+        - name: "{{ test_id | upper }} Attempt to provision CVP with AVD configuration containing overlapping devices and non-default strict_system_mac_address"
           run_once: true
           ansible.builtin.import_role:
             name: arista.avd.cv_deploy
@@ -157,7 +157,7 @@
             cv_workspace_name: "{{ cv_common_pattern }}-{{ r }}-converge"
             cv_workspace_description: "{{ (cv_common_pattern + '-' + r + '-converge') | upper }}"
             cv_submit_workspace: false
-            cv_tolerate_duplicated_devices: false
+            cv_strict_system_mac_address: true
             cv_register_detailed_results: true
       rescue:
         - name: "{{ test_id | upper }} Display CVP result"

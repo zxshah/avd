@@ -185,25 +185,6 @@ It is possible to ignore other missing devices by simply skipping them and conti
 cv_skip_missing_devices: true
 ```
 
-Presence of the same `serial_number` or `metadata.system_mac_address` values in structured configuration of multiple EOS devices may lead to the unexpected results (or even network outages) on the CloudVision side due to the possibility of pushing designed configuration of one device to another device.
-
-To eliminate this risk - role will always raise an error and will terminate it's execution prior to an attempt to update CloudVision in the following cases:
-
-- Structured configuration files of two or more targeted devices have the same `serial_number` (values of `metadata.system_mac_address` are not important in this case)
-- Structured configuration files of two or more targeted devices have the same `metadata.system_mac_address` and have `serial_number` values unset
-
-By default - role will not raise/terminate and will only warn user (with log message and returned `cv_deploy_results.warnings`) about present inconsistency in input structured configuration files in the following case:
-
-- Structured configuration files of two or more targeted devices have the same `metadata.system_mac_address` but unique `serial_number` values
-
-This later usecase by default should not lead to an unexpected results on a CloudVision (as role overwrites duplicated `metadata.system_mac_address` values based on the real values fetched from the CloudVision using devices' unique `serial_number`s).
-
-Setting role's variable `cv_tolerate_duplicated_devices` to `false` will change that later behavior and will cause role to raise an error even if structured configuration files of two or more targeted devices contain the same `metadata.system_mac_address` but unique `serial_number` values.
-
-```yaml
-cv_tolerate_duplicated_devices: false
-```
-
 #### Role behavior configuration
 
 By default the role will
@@ -262,6 +243,27 @@ cv_register_detailed_results: false
 
 # Time to wait for a Workspace to build. Depending on the scale this can be adjusted.
 cv_workspace_build_timeout: 300
+```
+
+##### Structured configuration validation
+
+Presence of the same `serial_number` or `system_mac_address` values in structured configuration of multiple EOS devices may lead to the unexpected results (or even network outages) on the CloudVision side due to the possibility of pushing designed configuration of one device to another device.
+
+To eliminate this risk, this role will always raise an error and will terminate it's execution prior to an attempt to update CloudVision in the following cases:
+
+- Structured configuration files of two or more targeted devices have the same `serial_number` (values of `system_mac_address` are not important in this case)
+- Structured configuration files of two or more targeted devices have the same `system_mac_address` and have `serial_number` values unset
+
+By default, this role will warn the user about inconsistencies in the structured configuration files in the following case:
+
+- Structured configuration files of two or more targeted devices have the same `system_mac_address` but unique `serial_number` values
+
+Having duplicate `system_mac_address` but unique `serial_number` will not lead to unexpected results on CloudVision as the `serial_number` takes precedence.
+
+To force an error to always be raised in case of duplicate `system_mac_address`, set the `cv_strict_system_mac_address` to `true`.
+
+```yaml
+cv_strict_system_mac_address: true
 ```
 
 #### Role default input directories

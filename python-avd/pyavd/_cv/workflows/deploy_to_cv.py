@@ -74,7 +74,7 @@ async def deploy_to_cv(
         cv_pathfinder_metadata: Special metadata for CV Pathfinder solution. Metadata will be combined and deployed to the hidden metadata studio.
         skip_missing_devices: If `True` anything that can be deployed will get deployed. \
             Otherwise the Workspace will be abandoned on any issue.
-        tolerate_duplicated_devices: If `False`, then raise an error if duplicated `serial_number` or `metadata.system_mac_address` are present.
+        tolerate_duplicated_devices: If `False` - raise error if devices with duplicated `metadata.system_mac_address` but unique `serial_number` are present.
         strict_tags: If `True` other tags associated with the devices will get removed. \
             Otherwise other tags will be left as-is. \
             Other Tags with the same label are always removed.
@@ -94,7 +94,7 @@ async def deploy_to_cv(
             - Add objects to result.deployed_x/skipped_x as we go through each of the following steps.
         + Initialize CVClient
         + Gather all devices from the given lists.
-        + Verify that device inputs have no overlapping serial numbers or System MAC addresses
+        + Verify that device inputs have no overlapping serial numbers or System MAC addresses.
         + On CV Identify all devices based on hostname, serial number or System MAC address.
             + In-place update device objects.
         + On CV Create or update existing Workspace with name and description.

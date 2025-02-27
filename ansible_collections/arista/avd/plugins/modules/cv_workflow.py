@@ -62,7 +62,7 @@ options:
     default: false
   tolerate_duplicated_devices:
     description: |-
-      Controls behavior if input structured config contains devices with duplicated system_mac_address but unique serial_number values.
+      Controls behavior if input structured configuration contains devices with duplicated system_mac_address but unique serial_number values.
     type: bool
     default: true
   configlet_name_template:

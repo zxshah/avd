@@ -6,6 +6,7 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING, Protocol
 
+from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 
 if TYPE_CHECKING:
@@ -33,7 +34,6 @@ class StunMixin(Protocol):
                 self.structured_config.stun.server.local_interfaces.append(wan_port_channel.name)
 
         if self.shared_utils.is_wan_client:
-            for stun_profile in itertools.chain.from_iterable(self._stun_server_profiles.values()):
-                self.structured_config.stun.client.server_profiles.append_new(
-                    name=stun_profile["name"], ip_address=stun_profile["ip_address"], ssl_profile=stun_profile["ssl_profile"]
-                )
+            self.structured_config.stun.client.server_profiles = EosCliConfigGen.Stun.Client.ServerProfiles(
+                itertools.chain.from_iterable(self._stun_server_profiles.values())
+            )

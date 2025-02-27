@@ -140,9 +140,9 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         for policy in self._filtered_wan_policies:
             if policy.get("is_default") and self._wan_control_plane_application_profile_name in self.inputs.application_classification.application_profiles:
-                application_profile_item = self.inputs.application_classification.application_profiles[self._wan_control_plane_application_profile_name]._cast_as(
-                    EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem
-                )
+                application_profile_item = self.inputs.application_classification.application_profiles[
+                    self._wan_control_plane_application_profile_name
+                ]._cast_as(EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem)
                 self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
             for match in get(policy, "matches", []):

@@ -68,45 +68,44 @@ class MetadataMixin(Protocol):
 
     def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set the metadata.cv_pathfinder.applications if available."""
-        if not self.shared_utils.is_cv_pathfinder_server or self.application_traffic_recognition is None:
+        if not self.shared_utils.is_cv_pathfinder_server or (atr := self.structured_config.application_traffic_recognition) is None:
             return
-
-        applications = get(self.application_traffic_recognition, "applications", default=[])
-        user_defined_app_names = set(get_all(applications, "ipv4_applications.name") + get_all(applications, "ipv6_applications.name"))
-        categories = get(self.application_traffic_recognition, "categories", default=[])
-        for profile in get(self.application_traffic_recognition, "application_profiles", default=[]):
-            application_profile = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem(name=profile["name"])
-            protocols = get(profile, "application_transports")
+        applications = atr.applications
+        user_defined_app_names = set(get_all(applications._as_dict(), "ipv4_applications.name") + get_all(applications._as_dict(), "ipv6_applications.name"))
+        categories = atr.categories
+        for profile in atr.application_profiles:
+            application_profile = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem(name=profile.name)
+            protocols = profile.application_transports
             if protocols:
                 application_profile.transport_protocols.extend(protocols)
-            for application in get(profile, "applications", default=[]):
-                if application["name"] not in user_defined_app_names:
-                    services = get_all(application, "service")
+            for application in profile.applications:
+                if application.name not in user_defined_app_names:
+                    services = get_all(application._as_dict(), "service")
                     services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.BuiltinApplicationsItem.Services()
                     for service in services:
                         services_item.append(service)
-                    application_profile.builtin_applications.append_new(name=application["name"], services=services_item)
-                if application["name"] in user_defined_app_names:
-                    application_profile.user_defined_applications.append_new(name=application["name"])
-            for category in get(profile, "categories", default=[]):
-                services = get_all(category, "service")
+                    application_profile.builtin_applications.append_new(name=application.name, services=services_item)
+                if application.name in user_defined_app_names:
+                    application_profile.user_defined_applications.append_new(name=application.name)
+            for category in profile.categories:
+                services = get_all(category._as_dict(), "service")
                 services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.CategoriesItem.Services()
                 for service in services:
                     services_item.append(service)
-                application_profile.categories.append_new(category=category["name"], services=services_item)
+                application_profile.categories.append_new(category=category.name, services=services_item)
             self.structured_config.metadata.cv_pathfinder.applications.profiles.append(application_profile)
         for category in categories:
-            for application in get(category, "applications", default=[]):
-                if application["name"] not in user_defined_app_names:
+            for application in category.applications:
+                if application.name not in user_defined_app_names:
                     services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.Categories.BuiltinApplicationsItem.Services()
-                    services = get(category, "service", default=[])
+                    services = get(category._as_dict(), "service", default=[])
                     for service in services:
                         services_item.append(service)
                     self.structured_config.metadata.cv_pathfinder.applications.categories.builtin_applications.append_new(
-                        name=application["name"], category=category["name"], services=services_item
+                        name=application.name, category=category.name, services=services_item
                     )
 
-                if application["name"] in user_defined_app_names:
+                if application.name in user_defined_app_names:
                     self.structured_config.metadata.cv_pathfinder.applications.categories.user_defined_applications.append_new(
-                        name=application["name"], category=category["name"]
+                        name=application.name, category=category.name
                     )

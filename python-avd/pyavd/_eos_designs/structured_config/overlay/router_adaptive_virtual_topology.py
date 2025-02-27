@@ -42,6 +42,9 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
 
         # Edge or Transit
         self.structured_config.router_adaptive_virtual_topology.topology_role = self.shared_utils.cv_pathfinder_role
-        self.structured_config.router_adaptive_virtual_topology.zone._update(name=self.shared_utils.wan_zone["name"], id=self.shared_utils.wan_zone["id"])
-        self.structured_config.router_adaptive_virtual_topology.region._update(name=self.shared_utils.wan_region.name, id=self.shared_utils.wan_region.id)
-        self.structured_config.router_adaptive_virtual_topology.site._update(name=self.shared_utils.wan_site.name, id=self.shared_utils.wan_site.id)
+        wan_zone = self.shared_utils.wan_zone
+        wan_region = self.shared_utils.wan_region
+        wan_site = self.shared_utils.wan_site
+        self.structured_config.router_adaptive_virtual_topology.zone._update(name=wan_zone["name"], id=wan_zone["id"])
+        self.structured_config.router_adaptive_virtual_topology.region._update(name=wan_region.name, id=wan_region.id)
+        self.structured_config.router_adaptive_virtual_topology.site._update(name=wan_site.name, id=wan_site.id)

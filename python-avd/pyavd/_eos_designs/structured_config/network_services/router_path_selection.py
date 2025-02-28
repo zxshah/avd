@@ -45,30 +45,10 @@ class RouterPathSelectionMixin(Protocol):
         for policy in self._filtered_wan_policies:
             for match in policy.get("matches", []):
                 if "load_balance_policy" in match:
-                    lb_policy = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem(
-                        name=get(match["load_balance_policy"], "name", None),
-                        lowest_hop_count=get(match["load_balance_policy"], "lowest_hop_count", None),
-                        jitter=get(match["load_balance_policy"], "jitter", None),
-                        latency=get(match["load_balance_policy"], "latency", None),
-                        loss_rate=get(match["load_balance_policy"], "loss_rate", None),
-                    )
-                    for group in get(match["load_balance_policy"], "path_groups", None):
-                        path_group_item = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem.PathGroupsItem(
-                            name=group["name"], priority=get(group, "priority", None)
-                        )
-                        lb_policy.path_groups.append(path_group_item)
-                    self.structured_config.router_path_selection.load_balance_policies.append(lb_policy)
+                    self.structured_config.router_path_selection.load_balance_policies.append(match["load_balance_policy"])
 
             if (default_match := policy.get("default_match")) is not None and "load_balance_policy" in default_match:
-                lb_policy = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem(
-                    name=get(default_match["load_balance_policy"], "name", None),
-                )
-                for group in get(default_match["load_balance_policy"], "path_groups", None):
-                    path_group_item = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem.PathGroupsItem(
-                        name=get(group, "name", None), priority=get(group, "priority", None)
-                    )
-                    lb_policy.path_groups.append(path_group_item)
-                self.structured_config.router_path_selection.load_balance_policies.append(lb_policy)
+                self.structured_config.router_path_selection.load_balance_policies.append(default_match["load_balance_policy"])
 
     def _autovpn_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Return a list of policies for AutoVPN."""
@@ -80,9 +60,9 @@ class RouterPathSelectionMixin(Protocol):
                     EosCliConfigGen.RouterPathSelection.PoliciesItem.RulesItem(
                         id=10 * index,
                         application_profile=get(match, "application_profile"),
-                        load_balance=get(match["load_balance_policy"], "name") if "load_balance_policy" in match else None,
+                        load_balance=match["load_balance_policy"].name if "load_balance_policy" in match else None,
                     )
                 )
             if (default_match := policy.get("default_match")) is not None and "load_balance_policy" in default_match:
-                policy_item.default_match.load_balance = get(default_match["load_balance_policy"], "name")
+                policy_item.default_match.load_balance = default_match["load_balance_policy"].name
             self.structured_config.router_path_selection.policies.append(policy_item)

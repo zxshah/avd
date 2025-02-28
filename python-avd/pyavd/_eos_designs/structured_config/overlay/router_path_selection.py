@@ -27,14 +27,12 @@ class RouterPathSelectionMixin(Protocol):
         """Set structured config for router path-selection (DPS)."""
         if not self.shared_utils.is_wan_router:
             return
-        router_path_selection = EosCliConfigGen.RouterPathSelection()
-        router_path_selection.tcp_mss_ceiling.ipv4_segment_size = self.shared_utils.node_config.dps_mss_ipv4
-        self._get_path_groups(router_path_selection)
+
+        self.structured_config.router_path_selection.tcp_mss_ceiling.ipv4_segment_size = self.shared_utils.node_config.dps_mss_ipv4
+        self._set_path_groups()
 
         if self.shared_utils.is_wan_server:
-            router_path_selection.peer_dynamic_source = "stun"
-
-        self.structured_config.router_path_selection = router_path_selection
+            self.structured_config.router_path_selection.peer_dynamic_source = "stun"
 
     @cached_property
     def _dp_ipsec_profile_name(self: AvdStructuredConfigOverlayProtocol) -> str:
@@ -46,8 +44,8 @@ class RouterPathSelectionMixin(Protocol):
             return self.inputs.wan_ipsec_profiles.data_plane.profile_name
         return self.inputs.wan_ipsec_profiles.control_plane.profile_name
 
-    def _get_path_groups(self: AvdStructuredConfigOverlayProtocol, router_path_selection: EosCliConfigGen.RouterPathSelection) -> None:
-        """Generate the required path-groups locally."""
+    def _set_path_groups(self: AvdStructuredConfigOverlayProtocol) -> None:
+        """Set the required path-groups locally."""
         # Configure all path-groups on Pathfinders and AutoVPN RRs. Otherwise only configure the local path-groups
         path_groups_to_configure = self.inputs.wan_path_groups if self.shared_utils.is_wan_server else self.shared_utils.wan_local_path_groups
 
@@ -59,9 +57,9 @@ class RouterPathSelectionMixin(Protocol):
                 name=path_group.name,
                 id=self._get_path_group_id(path_group.name, path_group.id),
             )
-            self._get_local_interfaces_for_path_group(path_group.name, path_group_item)
-            self._get_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group_item=path_group_item)
-            self._get_static_peers_for_path_group(path_group.name, path_group_item)
+            self._set_local_interfaces_for_path_group(path_group.name, path_group_item)
+            self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group_item=path_group_item)
+            self._set_static_peers_for_path_group(path_group.name, path_group_item)
 
             if is_local_pg:
                 # On pathfinder IPsec profile is not required for non local path_groups
@@ -81,12 +79,12 @@ class RouterPathSelectionMixin(Protocol):
                             raise AristaAvdError(msg)
                         path_group_item.keepalive._update(interval=int(interval), failure_threshold=path_group.dps_keepalive.failure_threshold)
 
-            router_path_selection.path_groups.append(path_group_item)
+            self.structured_config.router_path_selection.path_groups.append(path_group_item)
 
         if self.shared_utils.wan_ha or self.shared_utils.is_cv_pathfinder_server:
             path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
             self._generate_ha_path_group(path_group_item=path_group_item)
-            router_path_selection.path_groups.append(path_group_item)
+            self.structured_config.router_path_selection.path_groups.append(path_group_item)
 
     def _generate_ha_path_group(self: AvdStructuredConfigOverlayProtocol, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """Called only when self.shared_utils.wan_ha is True or on Pathfinders."""
@@ -137,7 +135,7 @@ class RouterPathSelectionMixin(Protocol):
             return config_id
         return 500
 
-    def _get_local_interfaces_for_path_group(
+    def _set_local_interfaces_for_path_group(
         self: AvdStructuredConfigOverlayProtocol, path_group_name: str, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """
@@ -160,7 +158,7 @@ class RouterPathSelectionMixin(Protocol):
 
             path_group_item.local_interfaces.append(local_interface_item)
 
-    def _get_dynamic_peers(
+    def _set_dynamic_peers(
         self: AvdStructuredConfigOverlayProtocol, disable_ipsec: bool, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """TODO: support ip_local ?"""
@@ -172,7 +170,7 @@ class RouterPathSelectionMixin(Protocol):
         if disable_ipsec:
             path_group_item.dynamic_peers.ipsec = False
 
-    def _get_static_peers_for_path_group(
+    def _set_static_peers_for_path_group(
         self: AvdStructuredConfigOverlayProtocol, path_group_name: str, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """Retrieves the static peers to configure for a given path-group based on the connected nodes."""

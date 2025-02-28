@@ -26,7 +26,7 @@ class RouterPathSelectionMixin(Protocol):
         if not self.shared_utils.is_wan_router:
             return
 
-        self._wan_load_balance_policies()
+        self._set_wan_load_balance_policies()
 
         # When running CV Pathfinder, only load balance policies are configured
         # for AutoVPN, need also vrfs and policies.
@@ -40,7 +40,7 @@ class RouterPathSelectionMixin(Protocol):
 
             self._autovpn_policies()
 
-    def _wan_load_balance_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_wan_load_balance_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set list of load balance policies."""
         for policy in self._filtered_wan_policies:
             for match in policy.get("matches", []):

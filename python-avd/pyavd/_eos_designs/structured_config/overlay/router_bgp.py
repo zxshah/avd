@@ -89,6 +89,7 @@ class RouterBgpMixin(Protocol):
         )
 
     def _set_peer_groups(self: AvdStructuredConfigOverlayProtocol) -> None:
+        peer_groups = EosCliConfigGen.RouterBgp.PeerGroups()
         if self.shared_utils.overlay_routing_protocol == "ebgp":
             # EVPN OVERLAY peer group
             ebgp_overlay_peer_group = self._generate_base_peer_group("evpn", "evpn_overlay_peers")
@@ -97,12 +98,12 @@ class RouterBgpMixin(Protocol):
             if self.shared_utils.evpn_role == "server":
                 ebgp_overlay_peer_group.next_hop_unchanged = True
 
-            self.structured_config.router_bgp.peer_groups.append(ebgp_overlay_peer_group)
+            peer_groups.append(ebgp_overlay_peer_group)
 
             if self.shared_utils.node_config.evpn_gateway.evpn_l2.enabled or self.shared_utils.node_config.evpn_gateway.evpn_l3.enabled:
                 evpn_overlay_core_peer_group = self._generate_base_peer_group("evpn", "evpn_overlay_core")
                 evpn_overlay_core_peer_group.ebgp_multihop = self.inputs.evpn_ebgp_gateway_multihop
-                self.structured_config.router_bgp.peer_groups.append(evpn_overlay_core_peer_group)
+                peer_groups.append(evpn_overlay_core_peer_group)
 
         elif self.shared_utils.overlay_routing_protocol == "ibgp":
             if self.shared_utils.overlay_mpls is True:
@@ -113,7 +114,7 @@ class RouterBgpMixin(Protocol):
                 if self.shared_utils.mpls_overlay_role == "server" or (self.shared_utils.evpn_role == "server" and self.shared_utils.overlay_evpn_mpls is True):
                     mpls_peer_group.route_reflector_client = True
 
-                self.structured_config.router_bgp.peer_groups.append(mpls_peer_group)
+                peer_groups.append(mpls_peer_group)
 
             # TODO: AVD 6.0.0 remove the check for WAN routers.
             if self.shared_utils.overlay_evpn_vxlan is True and (not self.shared_utils.is_wan_router or self.inputs.wan_use_evpn_node_settings_for_lan):
@@ -122,13 +123,13 @@ class RouterBgpMixin(Protocol):
                 # EVPN OVERLAY peer group - also in EBGP..
                 if self.shared_utils.evpn_role == "server":
                     evpn_overlay_peer_group.route_reflector_client = True
-                self.structured_config.router_bgp.peer_groups.append(evpn_overlay_peer_group)
+                peer_groups.append(evpn_overlay_peer_group)
 
             # RR Overlay peer group rendered either for MPLS route servers
             if self._is_mpls_server is True:
                 rr_overlay_peer_group = self._generate_base_peer_group("mpls", "rr_overlay_peers")
                 rr_overlay_peer_group.remote_as = self.shared_utils.bgp_as
-                self.structured_config.router_bgp.peer_groups.append(rr_overlay_peer_group)
+                peer_groups.append(rr_overlay_peer_group)
 
         # Always render the WAN routers
         # TODO: probably should move from overlay
@@ -143,7 +144,7 @@ class RouterBgpMixin(Protocol):
             wan_overlay_peer_group.bfd_timers._update(
                 interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]
             )
-            self.structured_config.router_bgp.peer_groups.append(wan_overlay_peer_group)
+            peer_groups.append(wan_overlay_peer_group)
 
             if self._is_wan_server_with_peers:
                 wan_rr_overlay_peer_group = self._generate_base_peer_group("wan", "wan_rr_overlay_peers", update_source=self.shared_utils.vtep_loopback)
@@ -157,7 +158,7 @@ class RouterBgpMixin(Protocol):
                 wan_rr_overlay_peer_group.bfd_timers._update(
                     interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]
                 )
-                self.structured_config.router_bgp.peer_groups.append(wan_rr_overlay_peer_group)
+                peer_groups.append(wan_rr_overlay_peer_group)
 
         # same for ebgp and ibgp
         if self.shared_utils.overlay_ipvpn_gateway is True:
@@ -165,49 +166,41 @@ class RouterBgpMixin(Protocol):
             ipvpn_gateway_peer_group._update(
                 local_as=self.shared_utils.node_config.ipvpn_gateway.local_as, maximum_routes=self.shared_utils.node_config.ipvpn_gateway.maximum_routes
             )
-            self.structured_config.router_bgp.peer_groups.append(ipvpn_gateway_peer_group)
+            peer_groups.append(ipvpn_gateway_peer_group)
+
+        self.structured_config.router_bgp.peer_groups = peer_groups
 
     def _set_address_family_ipv4(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Deactivate the relevant peer_groups in address_family_ipv4."""
+        peer_groups = EosCliConfigGen.RouterBgp.AddressFamilyIpv4.PeerGroups()
         if self.shared_utils.is_wan_router:
-            self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=False
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=False)
             if self._is_wan_server_with_peers:
-                self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                    name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=False
-                )
+                peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=False)
 
         # TODO: no elif
         elif self.shared_utils.overlay_evpn_vxlan is True:
-            self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.evpn_overlay_peers.name, activate=False
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.evpn_overlay_peers.name, activate=False)
 
         if self.shared_utils.overlay_routing_protocol == "ebgp" and (
             self.shared_utils.node_config.evpn_gateway.evpn_l2.enabled or self.shared_utils.node_config.evpn_gateway.evpn_l3.enabled
         ):
-            self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.evpn_overlay_core.name, activate=False
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.evpn_overlay_core.name, activate=False)
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
             if self.shared_utils.overlay_mpls is True:
-                self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                    name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=False
-                )
+                peer_groups.append_new(name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=False)
 
             if self._is_mpls_server is True:
-                self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                    name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=False
-                )
+                peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=False)
 
         if self.shared_utils.overlay_ipvpn_gateway is True:
-            self.structured_config.router_bgp.address_family_ipv4.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name, activate=False
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name, activate=False)
+
+        self.structured_config.router_bgp.address_family_ipv4.peer_groups = peer_groups
 
     def _set_address_family_evpn(self: AvdStructuredConfigOverlayProtocol) -> None:
+        peer_groups = EosCliConfigGen.RouterBgp.AddressFamilyEvpn.PeerGroups()
         overlay_peer_group = EosCliConfigGen.RouterBgp.AddressFamilyEvpn.PeerGroupsItem()
         if self.shared_utils.is_wan_router:
             wan_overlay_peer_group = EosCliConfigGen.RouterBgp.AddressFamilyEvpn.PeerGroupsItem(
@@ -220,14 +213,14 @@ class RouterBgpMixin(Protocol):
                     route_map_in="RM-EVPN-SOO-IN",
                     route_map_out="RM-EVPN-SOO-OUT",
                 )
-            self.structured_config.router_bgp.address_family_evpn.peer_groups.append(wan_overlay_peer_group)
+            peer_groups.append(wan_overlay_peer_group)
 
         if self.shared_utils.overlay_evpn_vxlan is True:
             overlay_peer_group._update(name=self.inputs.bgp_peer_groups.evpn_overlay_peers.name, activate=True)
 
         if self.shared_utils.overlay_routing_protocol == "ebgp":
             if self.shared_utils.node_config.evpn_gateway.evpn_l2.enabled or self.shared_utils.node_config.evpn_gateway.evpn_l3.enabled:
-                self.structured_config.router_bgp.address_family_evpn.peer_groups.append_new(
+                peer_groups.append_new(
                     name=self.inputs.bgp_peer_groups.evpn_overlay_core.name,
                     domain_remote=True,
                     activate=True,
@@ -247,9 +240,7 @@ class RouterBgpMixin(Protocol):
                     self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_source_interface = "Loopback0"
 
                 if self._is_mpls_server is True:
-                    self.structured_config.router_bgp.address_family_evpn.peer_groups.append_new(
-                        name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True
-                    )
+                    peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True)
 
             # TODO: this is written for matching either evpn_mpls or evpn_vlxan based for iBGP see if we cannot make this better.
             if self.shared_utils.overlay_vtep is True and self.shared_utils.evpn_role != "server" and overlay_peer_group:
@@ -258,7 +249,7 @@ class RouterBgpMixin(Protocol):
                     route_map_out="RM-EVPN-SOO-OUT",
                 )
 
-        self.structured_config.router_bgp.address_family_evpn.peer_groups.append(overlay_peer_group)
+        peer_groups.append(overlay_peer_group)
 
         # host flap detection & route pruning
         if self.shared_utils.overlay_vtep is True:
@@ -279,7 +270,7 @@ class RouterBgpMixin(Protocol):
             self.structured_config.router_bgp.address_family_evpn.next_hop.resolution_disabled = True
 
             if self._is_wan_server_with_peers:
-                self.structured_config.router_bgp.address_family_evpn.peer_groups.append_new(
+                peer_groups.append_new(
                     name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name,
                     activate=True,
                     encapsulation=self.inputs.wan_encapsulation,
@@ -294,56 +285,52 @@ class RouterBgpMixin(Protocol):
                 encapsulation=self.inputs.wan_encapsulation,
             )
 
+        self.structured_config.router_bgp.address_family_evpn.peer_groups = peer_groups
+
     def _set_address_family_ipv4_sr_te(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Set the structured config for IPv4 SR-TE address family."""
         if not self.shared_utils.is_cv_pathfinder_router:
             return
 
-        self.structured_config.router_bgp.address_family_ipv4_sr_te.peer_groups.append_new(
-            name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True
-        )
+        peer_groups = EosCliConfigGen.RouterBgp.AddressFamilyIpv4SrTe.PeerGroups()
+
+        peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True)
 
         if self._is_wan_server_with_peers:
-            self.structured_config.router_bgp.address_family_ipv4_sr_te.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True)
+        self.structured_config.router_bgp.address_family_ipv4_sr_te.peer_groups = peer_groups
 
     def _set_address_family_link_state(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Set the structured config for link-state address family."""
         if not self.shared_utils.is_cv_pathfinder_router:
             return
 
-        self.structured_config.router_bgp.address_family_link_state.peer_groups.append_new(
-            name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True
-        )
+        peer_groups = EosCliConfigGen.RouterBgp.AddressFamilyLinkState.PeerGroups()
+        peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True)
 
         if self.shared_utils.is_cv_pathfinder_server:
             self.structured_config.router_bgp.address_family_link_state.path_selection.roles._update(consumer=True, propagator=True)
-            self.structured_config.router_bgp.address_family_link_state.peer_groups.obtain(
-                self.inputs.bgp_peer_groups.wan_overlay_peers.name
-            ).missing_policy.direction_out_action = "deny"
+            peer_groups.obtain(self.inputs.bgp_peer_groups.wan_overlay_peers.name).missing_policy.direction_out_action = "deny"
         else:  # other roles are transit / edge
             self.structured_config.router_bgp.address_family_link_state.path_selection.roles.producer = True
 
         if self._is_wan_server_with_peers:
-            self.structured_config.router_bgp.address_family_link_state.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True)
+
+        self.structured_config.router_bgp.address_family_link_state.peer_groups = peer_groups
 
     def _set_address_family_path_selection(self: AvdStructuredConfigOverlayProtocol) -> None:
         if not self.shared_utils.is_wan_router:
             return
 
-        self.structured_config.router_bgp.address_family_path_selection.peer_groups.append_new(
-            name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True
-        )
+        peer_groups = EosCliConfigGen.RouterBgp.AddressFamilyPathSelection.PeerGroups()
+        peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True)
 
         self.structured_config.router_bgp.address_family_path_selection.bgp.additional_paths._update(receive=True, send="any")
 
         if self._is_wan_server_with_peers:
-            self.structured_config.router_bgp.address_family_path_selection.peer_groups.append_new(
-                name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True
-            )
+            peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True)
+        self.structured_config.router_bgp.address_family_path_selection.peer_groups = peer_groups
 
     def _set_address_family_rtc(self: AvdStructuredConfigOverlayProtocol) -> None:
         """
@@ -389,47 +376,23 @@ class RouterBgpMixin(Protocol):
         if (version == 4 and self.shared_utils.overlay_vpn_ipv4 is not True) or (version == 6 and self.shared_utils.overlay_vpn_ipv6 is not True):
             return
 
-        if self.shared_utils.overlay_ler is True or self.shared_utils.overlay_ipvpn_gateway is True:
-            if version == 4:
-                self.structured_config.router_bgp.address_family_vpn_ipv4.neighbor_default_encapsulation_mpls_next_hop_self.source_interface = "Loopback0"
-            elif version == 6:
-                self.structured_config.router_bgp.address_family_vpn_ipv6.neighbor_default_encapsulation_mpls_next_hop_self.source_interface = "Loopback0"
-        if self.shared_utils.overlay_ipvpn_gateway is True:
-            if version == 4:
-                self.structured_config.router_bgp.address_family_vpn_ipv4.peer_groups.append_new(
-                    name=self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name, activate=True
-                )
-            elif version == 6:
-                self.structured_config.router_bgp.address_family_vpn_ipv6.peer_groups.append_new(
-                    name=self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name, activate=True
-                )
+        af_vpn = getattr(self.structured_config.router_bgp, f"address_family_vpn_ipv{version}")
+
+        if self.shared_utils.overlay_ler or self.shared_utils.overlay_ipvpn_gateway:
+            af_vpn.neighbor_default_encapsulation_mpls_next_hop_self.source_interface = "Loopback0"
+
+        if self.shared_utils.overlay_ipvpn_gateway:
+            af_vpn.peer_groups.append_new(name=self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name, activate=True)
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
-            if self.shared_utils.overlay_mpls is True:
-                if version == 4:
-                    self.structured_config.router_bgp.address_family_vpn_ipv4.peer_groups.append_new(
-                        name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=True
-                    )
-                elif version == 6:
-                    self.structured_config.router_bgp.address_family_vpn_ipv6.peer_groups.append_new(
-                        name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=True
-                    )
+            if self.shared_utils.overlay_mpls:
+                af_vpn.peer_groups.append_new(name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=True)
 
             if self.shared_utils.mpls_overlay_role == "server":
-                if version == 4:
-                    self.structured_config.router_bgp.address_family_vpn_ipv4.peer_groups.append_new(
-                        name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True
-                    )
-                elif version == 6:
-                    self.structured_config.router_bgp.address_family_vpn_ipv6.peer_groups.append_new(
-                        name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True
-                    )
+                af_vpn.peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True)
 
-        if self.shared_utils.overlay_dpath is True:
-            if version == 4:
-                self.structured_config.router_bgp.address_family_vpn_ipv4.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.ipvpn_domain_id
-            elif version == 6:
-                self.structured_config.router_bgp.address_family_vpn_ipv6.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.ipvpn_domain_id
+        if self.shared_utils.overlay_dpath:
+            af_vpn.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.ipvpn_domain_id
 
     def _create_neighbor(
         self: AvdStructuredConfigOverlayProtocol,
@@ -459,6 +422,7 @@ class RouterBgpMixin(Protocol):
         return neighbor
 
     def _set_neighbors(self: AvdStructuredConfigOverlayProtocol) -> None:
+        neighbors = EosCliConfigGen.RouterBgp.Neighbors()
         if self.shared_utils.overlay_routing_protocol == "ebgp":
             for route_server, data in natural_sort(self._evpn_route_servers.items()):
                 neighbor = self._create_neighbor(
@@ -471,7 +435,7 @@ class RouterBgpMixin(Protocol):
 
                 if self.inputs.evpn_prevent_readvertise_to_server:
                     neighbor.route_map_out = f"RM-EVPN-FILTER-AS{data['bgp_as']}"
-                self.structured_config.router_bgp.neighbors.append(neighbor)
+                neighbors.append(neighbor)
 
             for route_client, data in natural_sort(self._evpn_route_clients.items()):
                 neighbor = self._create_neighbor(
@@ -481,7 +445,7 @@ class RouterBgpMixin(Protocol):
                     remote_as=data["bgp_as"],
                     overlay_peering_interface=data.get("overlay_peering_interface"),
                 )
-                self.structured_config.router_bgp.neighbors.append(neighbor)
+                neighbors.append(neighbor)
 
             for gw_remote_peer, data in natural_sort(self._evpn_gateway_remote_peers.items()):
                 neighbor = self._create_neighbor(
@@ -491,7 +455,7 @@ class RouterBgpMixin(Protocol):
                     remote_as=data["bgp_as"],
                     overlay_peering_interface=data.get("overlay_peering_interface"),
                 )
-                self.structured_config.router_bgp.neighbors.append(neighbor)
+                neighbors.append(neighbor)
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
             if self.shared_utils.overlay_mpls is True:
@@ -502,7 +466,7 @@ class RouterBgpMixin(Protocol):
                         self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
                         overlay_peering_interface=data.get("overlay_peering_interface"),
                     )
-                    self.structured_config.router_bgp.neighbors.append(neighbor)
+                    neighbors.append(neighbor)
 
                 for route_client, data in natural_sort(self._mpls_route_clients.items()):
                     neighbor = self._create_neighbor(
@@ -511,7 +475,7 @@ class RouterBgpMixin(Protocol):
                         self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
                         overlay_peering_interface=data.get("overlay_peering_interface"),
                     )
-                    self.structured_config.router_bgp.neighbors.append(neighbor)
+                    neighbors.append(neighbor)
 
                 for mesh_pe, data in natural_sort(self._mpls_mesh_pe.items()):
                     neighbor = self._create_neighbor(
@@ -520,7 +484,7 @@ class RouterBgpMixin(Protocol):
                         self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
                         overlay_peering_interface=data.get("overlay_peering_interface"),
                     )
-                    self.structured_config.router_bgp.neighbors.append(neighbor)
+                    neighbors.append(neighbor)
 
                 if self._is_mpls_server is True:
                     for rr_peer, data in natural_sort(self._mpls_rr_peers.items()):
@@ -530,7 +494,7 @@ class RouterBgpMixin(Protocol):
                             self.inputs.bgp_peer_groups.rr_overlay_peers.name,
                             overlay_peering_interface=data.get("overlay_peering_interface"),
                         )
-                        self.structured_config.router_bgp.neighbors.append(neighbor)
+                        neighbors.append(neighbor)
 
             if self.shared_utils.overlay_evpn_vxlan is True:
                 for route_server, data in natural_sort(self._evpn_route_servers.items()):
@@ -540,7 +504,7 @@ class RouterBgpMixin(Protocol):
                         self.inputs.bgp_peer_groups.evpn_overlay_peers.name,
                         overlay_peering_interface=data.get("overlay_peering_interface"),
                     )
-                    self.structured_config.router_bgp.neighbors.append(neighbor)
+                    neighbors.append(neighbor)
 
                 for route_client, data in natural_sort(self._evpn_route_clients.items()):
                     neighbor = self._create_neighbor(
@@ -549,7 +513,7 @@ class RouterBgpMixin(Protocol):
                         self.inputs.bgp_peer_groups.evpn_overlay_peers.name,
                         overlay_peering_interface=data.get("overlay_peering_interface"),
                     )
-                    self.structured_config.router_bgp.neighbors.append(neighbor)
+                    neighbors.append(neighbor)
 
         if self.shared_utils.is_wan_client:
             if not self._ip_in_listen_ranges(self.shared_utils.vtep_ip, self.shared_utils.wan_listen_ranges):
@@ -562,10 +526,10 @@ class RouterBgpMixin(Protocol):
                     self.inputs.bgp_peer_groups.wan_overlay_peers.name,
                     overlay_peering_interface=self.shared_utils.vtep_loopback,
                 )
-                self.structured_config.router_bgp.neighbors.append(neighbor)
+                neighbors.append(neighbor)
 
             if self.shared_utils.wan_ha:
-                self.structured_config.router_bgp.neighbors.append_new(
+                neighbors.append_new(
                     ip_address=self._wan_ha_peer_vtep_ip(),
                     peer=self.shared_utils.wan_ha_peer,
                     description=self.shared_utils.wan_ha_peer,
@@ -586,7 +550,7 @@ class RouterBgpMixin(Protocol):
                     self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name,
                     overlay_peering_interface=self.shared_utils.vtep_loopback,
                 )
-                self.structured_config.router_bgp.neighbors.append(neighbor)
+                neighbors.append(neighbor)
 
         for ipvpn_gw_peer, data in natural_sort(self._ipvpn_gateway_remote_peers.items()):
             neighbor = self._create_neighbor(
@@ -600,7 +564,9 @@ class RouterBgpMixin(Protocol):
             if data["bgp_as"] != default(self.shared_utils.node_config.ipvpn_gateway.local_as, self.shared_utils.bgp_as):
                 neighbor.ebgp_multihop = self.inputs.evpn_ebgp_gateway_multihop
 
-            self.structured_config.router_bgp.neighbors.append(neighbor)
+            neighbors.append(neighbor)
+
+        self.structured_config.router_bgp.neighbors = neighbors
 
     def _ip_in_listen_ranges(
         self: AvdStructuredConfigOverlayProtocol, source_ip: str, listen_range_prefixes: EosDesigns.BgpPeerGroups.WanOverlayPeers.ListenRangePrefixes

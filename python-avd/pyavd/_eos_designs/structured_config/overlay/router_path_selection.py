@@ -154,7 +154,7 @@ class RouterPathSelectionMixin(Protocol):
                 stun_server_profiles = self._stun_server_profiles.get(path_group_name, [])
                 if stun_server_profiles:
                     for profile in stun_server_profiles:
-                        local_interface_item.stun.server_profiles.append_new(profile["name"])
+                        local_interface_item.stun.server_profiles.append_new(profile.name)
 
             path_group_item.local_interfaces.append(local_interface_item)
 

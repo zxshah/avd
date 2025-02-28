@@ -36,11 +36,9 @@ class RouterInternetExitMixin(Protocol):
             #       This works for zscaler but later we may need to use some sorting intelligence as order matters.
             for connection in connections:
                 exit_group_name = connection["exit_group"]
-                exit_groups.obtain(exit_group_name).local_connections.append_unique(
-                    EosCliConfigGen.RouterInternetExit.ExitGroupsItem.LocalConnectionsItem(name=connection["name"])
-                )
+                exit_groups.obtain(exit_group_name).local_connections.append_new(name=connection["name"])
                 # Recording the exit_group in the policy
-                policies.obtain(policy.name).exit_groups.append_unique(EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroupsItem(name=exit_group_name))
+                policies.obtain(policy.name).exit_groups.append_new(name=exit_group_name)
 
             if policy.fallback_to_system_default:
                 policies.obtain(policy.name).exit_groups.append_new(name="system-default-exit-group")

@@ -59,8 +59,7 @@ class DhcpServersMixin(Protocol):
                     and get(peer_facts, "inband_ztp")
                 ):
                     dhcp_server.vrf = "default"
-                    subnet_item = EosCliConfigGen.DhcpServersItem.SubnetsItem()
-                    subnet_item._update(
+                    subnet_item = EosCliConfigGen.DhcpServersItem.SubnetsItem(
                         subnet=str(ip_network(f"{uplink['peer_ip_address']}/{uplink['prefix_length']}", strict=False)),
                         name=f"inband ztp for {peer}-{uplink['interface']}",
                         default_gateway=f"{uplink['peer_ip_address']}",

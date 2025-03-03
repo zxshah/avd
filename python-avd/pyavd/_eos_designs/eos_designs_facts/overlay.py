@@ -46,7 +46,7 @@ class OverlayMixin(Protocol):
     def mpls_route_reflectors(self: EosDesignsFactsProtocol) -> list | None:
         """Exposed in avd_switch_facts."""
         if self.shared_utils.underlay_router is True and (
-            self.mpls_overlay_role in ["client", "server"] or (self.evpn_role in ["client", "server"] and self.overlay["evpn_mpls"])
+            self.mpls_overlay_role in ["client", "server"] or (self.evpn_role in ["client", "server"] and self.shared_utils.overlay_evpn_mpls)
         ):
             return self.shared_utils.node_config.mpls_route_reflectors._as_list()
         return None
@@ -64,6 +64,6 @@ class OverlayMixin(Protocol):
     @cached_property
     def vtep_ip(self: EosDesignsFactsProtocol) -> str | None:
         """Exposed in avd_switch_facts."""
-        if self.shared_utils.vtep:
+        if self.shared_utils.vtep or self.shared_utils.is_wan_router:
             return self.shared_utils.vtep_ip
         return None

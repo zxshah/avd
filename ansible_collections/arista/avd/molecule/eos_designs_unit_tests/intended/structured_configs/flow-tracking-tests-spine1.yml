@@ -150,9 +150,7 @@ flow_tracking:
           host: 127.0.0.2
         local_interface: Loopback0
         template_interval: 40002
-    - table_size: 4331
-      record_export:
-        mpls: true
+    - record_export:
         on_inactive_timeout: 50000
         on_interval: 300331
       name: FLOW-TRACKER-1

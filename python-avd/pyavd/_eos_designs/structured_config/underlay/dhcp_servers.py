@@ -101,9 +101,7 @@ class DhcpServersMixin(Protocol):
             raise AristaAvdInvalidInputsError(msg)
 
         suboptions = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions()
-        suboptions.append_new(
-            code=42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers)
-        )
+        suboptions.append_new(code=42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers))
         dhcp_server.ipv4_vendor_options.append_new(
             vendor_id="NTP",
             sub_options=suboptions,

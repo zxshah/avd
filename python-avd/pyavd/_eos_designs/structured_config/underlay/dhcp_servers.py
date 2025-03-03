@@ -31,6 +31,7 @@ class DhcpServersMixin(Protocol):
         self._set_subnets(dhcp_server)
         if len(dhcp_server.subnets) == 0:
             return
+        dhcp_server.vrf = "default"
         # Set ZTP bootfile
         self._set_ipv4_ztp_boot_file(dhcp_server)
         # Set DNS servers
@@ -58,7 +59,6 @@ class DhcpServersMixin(Protocol):
                     and "unnumbered" not in uplink["ip_address"]
                     and get(peer_facts, "inband_ztp")
                 ):
-                    dhcp_server.vrf = "default"
                     subnet_item = EosCliConfigGen.DhcpServersItem.SubnetsItem(
                         subnet=str(ip_network(f"{uplink['peer_ip_address']}/{uplink['prefix_length']}", strict=False)),
                         name=f"inband ztp for {peer}-{uplink['interface']}",
@@ -96,17 +96,15 @@ class DhcpServersMixin(Protocol):
                 continue
             ntp_servers.append(str(ntp_server_ip))
 
-        if ntp_servers:
-            suboptions = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions()
-            suboptions.append_new(
-                code=42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers)
-            )
-            dhcp_server.ipv4_vendor_options.append_new(
-                vendor_id="NTP",
-                sub_options=suboptions,
-            )
+        if not ntp_servers:
+            msg = "When in-band ZTP is enabled, at least one NTP server's `name` field provided under `ntp_settings.servers` must be a valid IPv4 address."
+            raise AristaAvdInvalidInputsError(msg)
 
-            return
-
-        msg = "When in-band ZTP is enabled, at least one NTP server's `name` field provided under `ntp_settings.servers` must be a valid IPv4 address."
-        raise AristaAvdInvalidInputsError(msg)
+        suboptions = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions()
+        suboptions.append_new(
+            code=42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers)
+        )
+        dhcp_server.ipv4_vendor_options.append_new(
+            vendor_id="NTP",
+            sub_options=suboptions,
+        )

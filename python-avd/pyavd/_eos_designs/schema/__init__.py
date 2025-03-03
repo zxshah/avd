@@ -54932,6 +54932,7 @@ class EosDesigns(EosDesignsRootModel):
         "flow_tracking_settings": {"type": FlowTrackingSettings},
         "generate_cv_tags": {"type": GenerateCvTags},
         "hardware_counters": {"type": EosCliConfigGen.HardwareCounters},
+        "inband_ztp_bootstrap_file": {"type": str},
         "internal_vlan_order": {
             "type": InternalVlanOrder,
             "default": lambda cls: coerce_type({"allocation": "ascending", "range": {"beginning": 1006, "ending": 1199}}, target_type=cls),
@@ -55901,6 +55902,7 @@ class EosDesigns(EosDesignsRootModel):
     of AvdModel.
     """
     hardware_counters: EosCliConfigGen.HardwareCounters
+    inband_ztp_bootstrap_file: str | None
     internal_vlan_order: InternalVlanOrder
     """
     Internal vlan allocation order and range.
@@ -57059,6 +57061,7 @@ class EosDesigns(EosDesignsRootModel):
             flow_tracking_settings: FlowTrackingSettings | UndefinedType = Undefined,
             generate_cv_tags: GenerateCvTags | UndefinedType = Undefined,
             hardware_counters: EosCliConfigGen.HardwareCounters | UndefinedType = Undefined,
+            inband_ztp_bootstrap_file: str | None | UndefinedType = Undefined,
             internal_vlan_order: InternalVlanOrder | UndefinedType = Undefined,
             ipv4_acls: Ipv4Acls | UndefinedType = Undefined,
             ipv4_prefix_list_catalog: Ipv4PrefixListCatalog | UndefinedType = Undefined,
@@ -57702,6 +57705,7 @@ class EosDesigns(EosDesignsRootModel):
                    Subclass
                    of AvdModel.
                 hardware_counters: hardware_counters
+                inband_ztp_bootstrap_file: inband_ztp_bootstrap_file
                 internal_vlan_order:
                    Internal vlan allocation order and range.
 

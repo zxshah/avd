@@ -1,0 +1,5 @@
+---
+type: dict
+keys:
+  inband_ztp_bootstrap_file:
+    type: str

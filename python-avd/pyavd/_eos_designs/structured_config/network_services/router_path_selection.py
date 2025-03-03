@@ -31,12 +31,11 @@ class RouterPathSelectionMixin(Protocol):
         # When running CV Pathfinder, only load balance policies are configured
         # for AutoVPN, need also vrfs and policies.
         if self.inputs.wan_mode == "autovpn":
-            vrfs = [
-                {"name": vrf.name, "path_selection_policy": f"{vrf.policy}-WITH-CP" if vrf.name == "default" else vrf.policy} for vrf in self._filtered_wan_vrfs
-            ]
-
-            for vrf in vrfs:
-                self.structured_config.router_path_selection.vrfs.append(EosCliConfigGen.RouterPathSelection.VrfsItem(**vrf))
+            for vrf in self._filtered_wan_vrfs:
+                self.structured_config.router_path_selection.vrfs.append_new(
+                    name=vrf.name,
+                    path_selection_policy=f"{vrf.policy}-WITH-CP" if vrf.name == "default" else vrf.policy,
+                )
 
             self._autovpn_policies()
 
@@ -51,17 +50,15 @@ class RouterPathSelectionMixin(Protocol):
                 self.structured_config.router_path_selection.load_balance_policies.append(default_match["load_balance_policy"])
 
     def _autovpn_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Return a list of policies for AutoVPN."""
+        """Set list of policies for AutoVPN."""
         for policy in self._filtered_wan_policies:
             policy_item = EosCliConfigGen.RouterPathSelection.PoliciesItem()
             policy_item.name = policy["name"]
             for index, match in enumerate(get(policy, "matches", default=[]), start=1):
-                policy_item.rules.append(
-                    EosCliConfigGen.RouterPathSelection.PoliciesItem.RulesItem(
-                        id=10 * index,
-                        application_profile=get(match, "application_profile"),
-                        load_balance=match["load_balance_policy"].name if "load_balance_policy" in match else None,
-                    )
+                policy_item.rules.append_new(
+                    id=10 * index,
+                    application_profile=get(match, "application_profile"),
+                    load_balance=match["load_balance_policy"].name if "load_balance_policy" in match else None,
                 )
             if (default_match := policy.get("default_match")) is not None and "load_balance_policy" in default_match:
                 policy_item.default_match.load_balance = default_match["load_balance_policy"].name

@@ -212,14 +212,14 @@ class UtilsMixin(Protocol):
 
         return ptp_config
 
-    def _get_common_interface_cfg(
+    def _set_common_interface_cfg(
         self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol,
         p2p_link: T_P2pLinksItem,
         p2p_link_data: dict,
         interface: EosCliConfigGen.EthernetInterfacesItem | EosCliConfigGen.PortChannelInterfacesItem,
     ) -> None:
         """
-        Return partial structured_config for one p2p_link.
+        Set the partial structured_config for one p2p_link.
 
         Covers common config that is applicable to both port-channels and ethernet interfaces.
         This config will only be used on the main interface - so not port-channel members.
@@ -300,7 +300,7 @@ class UtilsMixin(Protocol):
                 interface.mpls.ldp.interface = True
                 interface.mpls.ldp.igp_sync = True
 
-    def _get_port_channel_member_cfg(
+    def _set_port_channel_member_cfg(
         self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol,
         p2p_link: T_P2pLinksItem,
         p2p_link_data: dict,
@@ -308,7 +308,7 @@ class UtilsMixin(Protocol):
         interface: EosCliConfigGen.EthernetInterfacesItem | EosCliConfigGen.PortChannelInterfacesItem,
     ) -> None:
         """
-        Return partial structured_config for one p2p_link.
+        Set the partial structured_config for one p2p_link.
 
         Covers config for ethernet interfaces that are port-channel members.
         """

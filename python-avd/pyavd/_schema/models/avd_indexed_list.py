@@ -277,6 +277,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
         for primary_key, new_item in other.items():
             if self.get(primary_key) is Undefined:
                 # New item so we can just append
+                # TODO: this contradict docstring which states new items are not added.
                 self[primary_key] = new_item
                 continue
 

@@ -293,3 +293,14 @@ def test_data_inherit_source_indexed_list(
     merged = a._deepinherited(b)
     for item, expected_source in zip(merged.some_indexed_list.values(), expected_sources, strict=True):
         assert str(item._source) == expected_source
+
+
+# append_new
+
+
+def test_data_source_indexed_list_append_new(data_merging_schema_class: DataMergingTestSchema) -> None:
+    a = data_merging_schema_class._from_dict({"some_indexed_list": []}, data_source=InputPath("a"))
+    assert str(a.some_indexed_list._source) == "a.some_indexed_list"
+    a.some_indexed_list.append_new(name="blah", some_int=42)
+    assert str(a.some_indexed_list["blah"]._source) == "a.some_indexed_list[name=blah]"
+    assert str(a.some_indexed_list["blah"]._get_field_source("some_int")) == "a.some_indexed_list[name=blah].some_int"

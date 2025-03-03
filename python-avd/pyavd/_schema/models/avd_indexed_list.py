@@ -156,6 +156,13 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
 
             Returns the new item, or in case of an identical duplicate item it returns the existing item.
             """
+            if "_source" not in kwargs:
+                item_key = self._item_type._field_to_key_map.get(self._primary_key, self._primary_key)
+                kwargs["_source"] = (
+                    InputPath(kwargs[item_key])
+                    if self.__class__.__name__.startswith("Dynamic")
+                    else self._source.create_descendant(PathIndexedListKey(len(self), item_key, kwargs[item_key]))
+                )
             new_item = self._item_type(*args, **kwargs)
             self.append(new_item)
             return self._items[kwargs[self._primary_key]]

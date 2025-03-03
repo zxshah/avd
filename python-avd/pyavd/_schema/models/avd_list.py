@@ -107,6 +107,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
 
     def append(self, item: T_ItemType) -> None:
         self._items.append(item)
+        self._items_source.append(self._source.create_descendant(len(self._items_source)))
 
     def append_unique(self, item: T_ItemType) -> None:
         """Append the item if not there already. Otherwise ignore."""

@@ -252,6 +252,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
                 continue
 
             # Existing item of same type, so deepmerge.
+            # TODO: when prepending the source of the object should be the one of new_item.
             self[primary_key]._deepmerge(new_item, list_merge=list_merge)
 
         if prepend_items:
@@ -290,6 +291,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
 
         Useful when inheriting from profiles.
         """
+        # TODO: support an extra keyword param to override source in _cast_as
         cls = type(self)
         if not issubclass(new_type, AvdIndexedList):
             msg = f"Unable to cast '{cls}' as type '{new_type}' since '{new_type}' is not an AvdIndexedList subclass."

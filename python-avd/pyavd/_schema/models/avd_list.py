@@ -75,8 +75,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
         self._items = list(items)
         if source:
             self._source = source
-        for index, _ in enumerate(self._items):
-            self._items_source[index] = self._source.create_descendant(index)
+        self._items_source = [self._source.create_descendant(index) for index in range(len(self._items))]
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""
@@ -204,22 +203,36 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
         match list_merge:
             case "append_unique":
                 # Append non-existing items.
-                self._items.extend(new_item for new_item in other._items if new_item not in self._items)
+                for index, new_item in enumerate(other._items):
+                    if new_item not in self._items:
+                        self._items.append(new_item)
+                        self._items_source.append(other._items_source[index])
             case "append":
                 # Append all items.
                 self._items.extend(other._items)
+                self._items_source.extend(other._items_source)
             case "replace":
                 # Replace with the "other" list.
                 self._items = other._items.copy()
+                self._items_source = other._items_source.copy()
                 return
             case "keep":
                 # We only get here if there was a defined instance of the old list, so we "keep" the existing list as-is.
+                # TODO: check for source
                 return
             case "prepend_unique":
                 # Prepend non-existing items.
-                self._items[:0] = [new_item for new_item in other._items if new_item not in self._items]
+                prepend_unique = []
+                prepend_unique_source = []
+                for index, new_item in enumerate(other._items):
+                    if new_item not in self._items:
+                        prepend_unique.append(new_item)
+                        prepend_unique_source.append(other._items_source[index])
+                self._items[:0] = prepend_unique
+                self._items_source[:0] = prepend_unique_source
             case "prepend":
                 self._items[:0] = other._items
+                self._items_source[:0] = other._items_source
 
     def _cast_as(self, new_type: type[T_AvdList], ignore_extra_keys: bool = False) -> T_AvdList:
         """

@@ -48,7 +48,6 @@ class InputPath:
         result = ""
         add_dot = False
         for element in self.path_elements:
-            print(element, type(element))
             if isinstance(element, str):
                 result += "." if add_dot else ""
                 result += f"{element}"

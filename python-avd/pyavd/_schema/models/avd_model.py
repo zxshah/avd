@@ -306,6 +306,7 @@ class AvdModel(AvdBase):
             # Force all fields on this instance back to unset if other is a "null" class.
             self.__dict__ = {}
             self._custom_data = {}
+            self._source = InputPath()
 
         for field, new_value in other.items():
             old_value = self._get_defined_attr(field)
@@ -327,6 +328,7 @@ class AvdModel(AvdBase):
                 old_value = cast(AvdBase, old_value)
                 new_value = cast(AvdBase, new_value)
                 old_value._deepmerge(new_value, list_merge=list_merge)
+                self._field_source[field] = other._field_source[field]
                 continue
 
             if field_type is dict:
@@ -337,6 +339,7 @@ class AvdModel(AvdBase):
                 continue
 
             setattr(self, field, new_value)
+            self._field_source[field] = other._field_source[field]
 
         if other._created_from_null:
             # Inherit the _created_from_null attribute to make sure we output null values instead of empty dicts.

@@ -17,9 +17,9 @@ class PathIndexedListKey:
             value: Value of the primary_key in the AvdIndexedList
             primary_key: Name of the primary key in the AvdIndexedList
         """
-        self.index = index
-        self.primary_key = primary_key
-        self.value = value
+        self.index: int = index
+        self.primary_key: str = primary_key
+        self.value: str = value
 
     def __str__(self) -> str:
         """String representation."""
@@ -52,13 +52,16 @@ class InputPath:
                 result += "." if add_dot else ""
                 result += f"{element}"
             elif isinstance(element, bool):
-                raise AristaAvdError(f"Wrong element type '{type(element)}' in InputPath.")
+                # bool are int..
+                msg = f"Wrong element type '{type(element)}' in InputPath."
+                raise AristaAvdError(msg)
             elif isinstance(element, int):
                 result += f"[{element}]"
             elif isinstance(element, PathIndexedListKey):
                 result += f"{element!s}"
             else:
-                raise AristaAvdError(f"Wrong element type '{type(element)}' in InputPath.")
+                msg = f"Wrong element type '{type(element)}' in InputPath."
+                raise AristaAvdError(msg)
             add_dot = True
 
         return result

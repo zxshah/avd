@@ -160,5 +160,4 @@ class AvdBase(ABC):
         """
         new_instance = deepcopy(self)
         new_instance._deepmerge(other=other, list_merge=list_merge)
-        print(f"SOURCE {new_instance._source} - SELF - {self._source}")
         return new_instance

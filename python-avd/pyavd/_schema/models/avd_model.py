@@ -318,7 +318,7 @@ class AvdModel(AvdBase):
                 # Different types so we can just replace with the new value.
                 setattr(self, field, new_value)
                 # Keep the source of the merged value field
-                self._field_source[field] = other._field_source[field]
+                self._field_source[field] = other._get_field_source(field)
                 continue
 
             # Merge new value
@@ -328,7 +328,7 @@ class AvdModel(AvdBase):
                 old_value = cast(AvdBase, old_value)
                 new_value = cast(AvdBase, new_value)
                 old_value._deepmerge(new_value, list_merge=list_merge)
-                self._field_source[field] = other._field_source[field]
+                self._field_source[field] = other._get_field_source(field)
                 continue
 
             if field_type is dict:
@@ -339,7 +339,7 @@ class AvdModel(AvdBase):
                 continue
 
             setattr(self, field, new_value)
-            self._field_source[field] = other._field_source[field]
+            self._field_source[field] = other._get_field_source(field)
 
         if other._created_from_null:
             # Inherit the _created_from_null attribute to make sure we output null values instead of empty dicts.

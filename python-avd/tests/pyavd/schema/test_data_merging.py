@@ -282,7 +282,7 @@ INHERIT_INDEXED_LIST = [
         pytest.param(A_INDEXED_LIST, B_INDEXED_LIST, INHERIT_INDEXED_LIST, id="Inherit indexed list"),
     ],
 )
-def test_data_merging_source_indexed_list(
+def test_data_inherit_source_indexed_list(
     a_data: dict,
     b_data: dict,
     expected_sources: list,
@@ -291,6 +291,5 @@ def test_data_merging_source_indexed_list(
     a = data_merging_schema_class._from_dict(a_data, data_source=InputPath("a"))
     b = data_merging_schema_class._from_dict(b_data, data_source=InputPath("b"))
     merged = a._deepinherited(b)
-    print(merged.some_indexed_list.values())
     for item, expected_source in zip(merged.some_indexed_list.values(), expected_sources, strict=True):
         assert str(item._source) == expected_source

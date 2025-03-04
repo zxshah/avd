@@ -39,13 +39,13 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     The order of the @cached_properties methods imported from Mixins will also control the order in the output.
     """
 
-    @cached_property
-    def hostname(self) -> str:
-        return self.shared_utils.hostname
+    @structured_config_contributor
+    def hostname(self) -> None:
+        self.structured_config.hostname = self.shared_utils.hostname
 
-    @cached_property
-    def is_deployed(self) -> bool:
-        return self.inputs.is_deployed
+    @structured_config_contributor
+    def is_deployed(self) -> None:
+        self.structured_config.is_deployed = self.inputs.is_deployed
 
     @cached_property
     def serial_number(self) -> str | None:
@@ -164,64 +164,61 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             vrf=self.inputs.mgmt_interface_vrf, destination_address_prefix="::/0", gateway=self.shared_utils.ipv6_mgmt_gateway
         )
 
-    @cached_property
-    def service_routing_protocols_model(self) -> str:
+    @structured_config_contributor
+    def service_routing_protocols_model(self) -> None:
         """service_routing_protocols_model set to 'multi-agent'."""
-        return "multi-agent"
+        self.structured_config.service_routing_protocols_model = "multi-agent"
 
-    @cached_property
-    def ip_routing(self) -> bool | None:
+    @structured_config_contributor
+    def ip_routing(self) -> None:
         """
         For l3 devices, configure ip routing unless ip_routing_ipv6_interfaces is True.
 
         For other devices only configure if "always_configure_ip_routing" is True.
         """
         if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return None
+            return
 
         if self.ip_routing_ipv6_interfaces is True:
-            return None
-        return True
+            return
 
-    @cached_property
-    def ipv6_unicast_routing(self) -> bool | None:
+        self.structured_config.ip_routing = True
+
+    @structured_config_contributor
+    def ipv6_unicast_routing(self) -> None:
         """ipv6_unicast_routing set based on underlay_rfc5549 and underlay_ipv6."""
         if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return None
+            return
 
         if self.inputs.underlay_rfc5549 or self.shared_utils.underlay_ipv6:
-            return True
-        return None
+            self.structured_config.ipv6_unicast_routing = True
 
-    @cached_property
-    def ip_routing_ipv6_interfaces(self) -> bool | None:
+    @structured_config_contributor
+    def ip_routing_ipv6_interfaces(self) -> None:
         """ip_routing_ipv6_interfaces set based on underlay_rfc5549 variable."""
         if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return None
+            return
 
         if self.inputs.underlay_rfc5549:
-            return True
-        return None
+            self.structured_config.ip_routing_ipv6_interfaces = True
 
-    @cached_property
-    def router_multicast(self) -> dict | None:
+    @structured_config_contributor
+    def router_multicast(self) -> None:
         """router_multicast set based on underlay_multicast, underlay_router and switch.evpn_multicast facts."""
         if not self.shared_utils.underlay_multicast:
-            return None
+            return
 
-        router_multicast = {"ipv4": {"routing": True}}
+        self.structured_config.router_multicast.ipv4.routing = True
         if self.shared_utils.evpn_multicast:
-            router_multicast["ipv4"]["software_forwarding"] = "sfe"
+            self.structured_config.router_multicast.ipv4.software_forwarding = "sfe"
 
-        return router_multicast
-
-    @cached_property
-    def hardware_counters(self) -> dict | None:
+    @structured_config_contributor
+    def hardware_counters(self) -> None:
         """hardware_counters set based on hardware_counters.features variable."""
-        return self.inputs.hardware_counters._as_dict() or None
+        self.structured_config.hardware_counters = self.inputs.hardware_counters._cast_as(EosCliConfigGen.HardwareCounters)
 
-    @cached_property
-    def hardware(self) -> dict | None:
+    @structured_config_contributor
+    def hardware(self) -> None:
         """
         Hardware set based on platform_speed_groups variable and switch.platform fact.
 
@@ -230,10 +227,10 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         platform_speed_groups = self.inputs.platform_speed_groups
         switch_platform = self.shared_utils.platform
         if not platform_speed_groups or switch_platform is None:
-            return None
+            return
 
         if switch_platform not in platform_speed_groups:
-            return None
+            return
 
         tmp_speed_groups = {}
         for speed in platform_speed_groups[switch_platform].speeds._natural_sorted():
@@ -241,14 +238,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
                 tmp_speed_groups[speed_group] = speed.speed
 
         if tmp_speed_groups:
-            hardware = {"speed_groups": []}
             for speed_group in natural_sort(tmp_speed_groups):
-                hardware["speed_groups"].append({"speed_group": speed_group, "serdes": tmp_speed_groups[speed_group]})
-            return hardware
-        return None
+                self.structured_config.hardware.speed_groups.append_new(speed_group=speed_group, serdes=tmp_speed_groups[speed_group])
 
-    @cached_property
-    def daemon_terminattr(self) -> dict | None:
+    @structured_config_contributor
+    def daemon_terminattr(self) -> None:
         """
         daemon_terminattr set based on cvp_instance_ips.
 
@@ -261,175 +255,148 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         """
         cvp_instance_ip_list = self.inputs.cvp_instance_ips
         if not cvp_instance_ip_list:
-            return None
+            return
 
-        daemon_terminattr = {"cvaddrs": []}
         for cvp_instance_ip in cvp_instance_ip_list:
             if "arista.io" in cvp_instance_ip:
                 # updating for cvaas_ips
-                daemon_terminattr["cvaddrs"].append(f"{cvp_instance_ip}:443")
-                daemon_terminattr["cvauth"] = {
-                    "method": "token-secure",
-                    # Ignoring sonar-lint false positive for tmp path since this is config for EOS
-                    "token_file": self.inputs.cvp_token_file or "/tmp/cv-onboarding-token",  # NOSONAR # noqa: S108
-                }
+                self.structured_config.daemon_terminattr.cvaddrs.append(f"{cvp_instance_ip}:443")
+                self.structured_config.daemon_terminattr.cvauth.method = "token-secure"
+                self.structured_config.daemon_terminattr.cvauth.token_file = self.inputs.cvp_token_file or "/tmp/cv-onboarding-token"  # NOSONAR # noqa: S108
             else:
                 # updating for cvp_on_prem_ips
                 cv_address = f"{cvp_instance_ip}:{self.inputs.terminattr_ingestgrpcurl_port}"
-                daemon_terminattr["cvaddrs"].append(cv_address)
+                self.structured_config.daemon_terminattr.cvaddrs.append(cv_address)
                 if (cvp_ingestauth_key := self.inputs.cvp_ingestauth_key) is not None:
-                    daemon_terminattr["cvauth"] = {
-                        "method": "key",
-                        "key": cvp_ingestauth_key,
-                    }
+                    self.structured_config.daemon_terminattr.cvauth.method = "key"
+                    self.structured_config.daemon_terminattr.cvauth.key = cvp_ingestauth_key
                 else:
-                    daemon_terminattr["cvauth"] = {
-                        "method": "token",
-                        # Ignoring sonar-lint false positive for tmp path since this is config for EOS
-                        "token_file": self.inputs.cvp_token_file or "/tmp/token",  # NOSONAR # noqa: S108
-                    }
+                    self.structured_config.daemon_terminattr.cvauth.method = "token"
+                    self.structured_config.daemon_terminattr.cvauth.token_file = self.inputs.cvp_token_file or "/tmp/token"  # NOSONAR # noqa: S108
 
-        daemon_terminattr["cvvrf"] = self.inputs.mgmt_interface_vrf
-        daemon_terminattr["smashexcludes"] = self.inputs.terminattr_smashexcludes
-        daemon_terminattr["ingestexclude"] = self.inputs.terminattr_ingestexclude
-        daemon_terminattr["disable_aaa"] = self.inputs.terminattr_disable_aaa
+        self.structured_config.daemon_terminattr.cvvrf = self.inputs.mgmt_interface_vrf
+        self.structured_config.daemon_terminattr.smashexcludes = self.inputs.terminattr_smashexcludes
+        self.structured_config.daemon_terminattr.ingestexclude = self.inputs.terminattr_ingestexclude
+        self.structured_config.daemon_terminattr.disable_aaa = self.inputs.terminattr_disable_aaa
 
-        return daemon_terminattr
-
-    @cached_property
-    def vlan_internal_order(self) -> dict | None:
+    @structured_config_contributor
+    def vlan_internal_order(self) -> None:
         """vlan_internal_order set based on internal_vlan_order data-model."""
         if self.shared_utils.wan_role:
-            return None
+            return
 
-        return self.inputs.internal_vlan_order._as_dict()
+        self.structured_config.vlan_internal_order = self.inputs.internal_vlan_order._cast_as(EosCliConfigGen.VlanInternalOrder)
 
-    @cached_property
-    def aaa_root(self) -> dict:
+    @structured_config_contributor
+    def aaa_root(self) -> None:
         """aaa_root.disable is always set to match EOS default config and historic configs."""
-        return {"disabled": True}
+        self.structured_config.aaa_root.disabled = True
 
-    @cached_property
-    def config_end(self) -> bool:
+    @structured_config_contributor
+    def config_end(self) -> None:
         """config_end is always set to match EOS default config and historic configs."""
-        return True
+        self.structured_config.config_end = True
 
-    @cached_property
-    def enable_password(self) -> dict:
+    @structured_config_contributor
+    def enable_password(self) -> None:
         """enable_password.disable is always set to match EOS default config and historic configs."""
-        return {"disabled": True}
+        self.structured_config.enable_password.disabled = True
 
-    @cached_property
-    def transceiver_qsfp_default_mode_4x10(self) -> bool:
+    @structured_config_contributor
+    def transceiver_qsfp_default_mode_4x10(self) -> None:
         """
         transceiver_qsfp_default_mode_4x10 is on for all devices except WAN routers.
 
         TODO: Add platform_setting to control this.
         """
-        return not self.shared_utils.is_wan_router
+        self.structured_config.transceiver_qsfp_default_mode_4x10 = not self.shared_utils.is_wan_router
 
-    @cached_property
-    def event_monitor(self) -> dict | None:
+    @structured_config_contributor
+    def event_monitor(self) -> None:
         """event_monitor set based on event_monitor data-model."""
-        return self.inputs.event_monitor._as_dict() or None
+        self.structured_config.event_monitor = self.inputs.event_monitor._cast_as(EosCliConfigGen.EventMonitor)
 
-    @cached_property
-    def event_handlers(self) -> list | None:
+    @structured_config_contributor
+    def event_handlers(self) -> None:
         """event_handlers set based on event_handlers data-model."""
-        return self.inputs.event_handlers._as_list() or None
+        self.structured_config.event_handlers = self.inputs.event_handlers._cast_as(EosCliConfigGen.EventHandlers)
 
-    @cached_property
-    def load_interval(self) -> dict | None:
+    @structured_config_contributor
+    def load_interval(self) -> None:
         """load_interval set based on load_interval_default variable."""
-        return self.inputs.load_interval._as_dict() or None
+        self.structured_config.load_interval = self.inputs.load_interval._cast_as(EosCliConfigGen.LoadInterval)
 
-    @cached_property
-    def queue_monitor_length(self) -> dict | None:
+    @structured_config_contributor
+    def queue_monitor_length(self) -> None:
         """queue_monitor_length set based on queue_monitor_length data-model and platform_settings.feature_support.queue_monitor_length_notify fact."""
         if not self.inputs.queue_monitor_length:
-            return None
+            return
 
         # Remove notifying key if not supported by the platform settings.
-        queue_monitor_length = self.inputs.queue_monitor_length._as_dict()
+        queue_monitor_length = self.inputs.queue_monitor_length._cast_as(EosCliConfigGen.QueueMonitorLength)
         if not self.shared_utils.platform_settings.feature_support.queue_monitor_length_notify:
-            queue_monitor_length.pop("notifying", None)
+            del queue_monitor_length.notifying
 
-        return queue_monitor_length
-
-    @cached_property
-    def ip_name_servers(self) -> list | None:
+    @structured_config_contributor
+    def ip_name_servers(self) -> None:
         """ip_name_servers set based on name_servers data-model and mgmt_interface_vrf."""
-        ip_name_servers = [
-            {
-                "ip_address": name_server,
-                "vrf": self.inputs.mgmt_interface_vrf,
-            }
-            for name_server in self.inputs.name_servers
-        ]
+        for name_server in self.inputs.name_servers:
+            self.structured_config.ip_name_servers.append(EosCliConfigGen.IpNameServersItem(ip_address=name_server, vrf=self.inputs.mgmt_interface_vrf))
 
-        return ip_name_servers or None
-
-    @cached_property
-    def redundancy(self) -> dict | None:
+    @structured_config_contributor
+    def redundancy(self) -> None:
         """Redundancy set based on redundancy data-model."""
         if self.inputs.redundancy.protocol:
-            return {"protocol": self.inputs.redundancy.protocol}
-        return None
+            self.structured_config.redundancy.protocol = self.inputs.redundancy.protocol
 
-    @cached_property
-    def interface_defaults(self) -> dict | None:
+    @structured_config_contributor
+    def interface_defaults(self) -> None:
         """interface_defaults set based on default_interface_mtu."""
         if self.shared_utils.default_interface_mtu is not None:
-            return {
-                "mtu": self.shared_utils.default_interface_mtu,
-            }
-        return None
+            self.structured_config.interface_defaults.mtu = self.shared_utils.default_interface_mtu
 
-    @cached_property
-    def spanning_tree(self) -> dict | None:
+    @structured_config_contributor
+    def spanning_tree(self) -> None:
         """spanning_tree set based on spanning_tree_root_super, spanning_tree_mode and spanning_tree_priority."""
         if not self.shared_utils.network_services_l2:
-            return {"mode": "none"}
+            self.structured_config.spanning_tree.mode = "none"
 
         spanning_tree_root_super = self.shared_utils.node_config.spanning_tree_root_super
         spanning_tree_mode = self.shared_utils.node_config.spanning_tree_mode
         if spanning_tree_root_super is not True and spanning_tree_mode is None:
-            return None
+            return
 
-        spanning_tree = {}
         if spanning_tree_root_super is True:
-            spanning_tree["root_super"] = True
+            self.structured_config.spanning_tree.root_super = True
 
         if spanning_tree_mode is not None:
-            spanning_tree["mode"] = spanning_tree_mode
+            self.structured_config.spanning_tree.mode = spanning_tree_mode
             priority = self.shared_utils.node_config.spanning_tree_priority
             # "rapid-pvst" is not included below. Per vlan spanning-tree priorities are set under network-services.
             if spanning_tree_mode == "mstp":
-                spanning_tree["mst_instances"] = [{"id": "0", "priority": priority}]
+                self.structured_config.spanning_tree.mst_instances.append(EosCliConfigGen.SpanningTree.MstInstancesItem(id="0", priority=priority))
             elif spanning_tree_mode == "rstp":
-                spanning_tree["rstp_priority"] = priority
+                self.structured_config.spanning_tree.rstp_priority = priority
 
-        return spanning_tree
-
-    @cached_property
-    def service_unsupported_transceiver(self) -> dict | None:
+    @structured_config_contributor
+    def service_unsupported_transceiver(self) -> None:
         """service_unsupported_transceiver based on unsupported_transceiver data-model."""
-        return self.inputs.unsupported_transceiver._as_dict() or None
+        self.structured_config.service_unsupported_transceiver = self.inputs.unsupported_transceiver
 
-    @cached_property
-    def local_users(self) -> list | None:
+    @structured_config_contributor
+    def local_users(self) -> None:
         """local_users set based on local_users data model."""
         if not self.inputs.local_users:
-            return None
+            return
 
-        return [user._as_dict() for user in self.inputs.local_users._natural_sorted()]
+        for user in self.inputs.local_users._natural_sorted():
+            self.structured_config.local_users.append(user)
 
-    @cached_property
-    def clock(self) -> dict | None:
+    @structured_config_contributor
+    def clock(self) -> None:
         """Clock set based on timezone variable."""
         if self.inputs.timezone:
-            return {"timezone": self.inputs.timezone}
-        return None
+            self.structured_config.clock.timezone = self.inputs.timezone
 
     @structured_config_contributor
     def vrfs(self) -> None:
@@ -440,34 +407,28 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             vrf_settings.ipv6_routing = self.inputs.mgmt_vrf_routing
         self.structured_config.vrfs.append(vrf_settings)
 
-    @cached_property
-    def management_interfaces(self) -> list | None:
+    @structured_config_contributor
+    def management_interfaces(self) -> None:
         """management_interfaces set based on mgmt_interface, mgmt_ip, ipv6_mgmt_ip facts, mgmt_gateway, ipv6_mgmt_gateway and mgmt_interface_vrf variables."""
         if self.shared_utils.node_config.mgmt_ip or self.shared_utils.node_config.ipv6_mgmt_ip:
-            interface_settings = {
-                "name": self.shared_utils.mgmt_interface,
-                "description": self.inputs.mgmt_interface_description,
-                "shutdown": False,
-                "vrf": self.inputs.mgmt_interface_vrf,
-                "ip_address": self.shared_utils.node_config.mgmt_ip,
-                "gateway": self.shared_utils.mgmt_gateway,
-                "type": "oob",
-            }
+            interface_settings = EosCliConfigGen.ManagementInterfacesItem(
+                name=self.shared_utils.mgmt_interface,
+                description=self.inputs.mgmt_interface_description,
+                shutdown=False,
+                vrf=self.inputs.mgmt_interface_vrf,
+                ip_address=self.shared_utils.node_config.mgmt_ip,
+                gateway=self.shared_utils.mgmt_gateway,
+                type="oob",
+            )
             """
             inserting ipv6 variables if ipv6_mgmt_ip is set
             """
             if self.shared_utils.node_config.ipv6_mgmt_ip:
-                interface_settings.update(
-                    {
-                        "ipv6_enable": True,
-                        "ipv6_address": self.shared_utils.node_config.ipv6_mgmt_ip,
-                        "ipv6_gateway": self.shared_utils.ipv6_mgmt_gateway,
-                    },
-                )
+                interface_settings.ipv6_enable = True
+                interface_settings.ipv6_address = self.shared_utils.node_config.ipv6_mgmt_ip
+                interface_settings.ipv6_gateway = self.shared_utils.ipv6_mgmt_gateway
 
-            return [strip_empties_from_dict(interface_settings)]
-
-        return None
+            self.structured_config.management_interfaces.append(interface_settings)
 
     @structured_config_contributor
     def management_security(self) -> None:
@@ -476,15 +437,14 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             EosCliConfigGen.ManagementSecurity.EntropySources
         )
 
-    @cached_property
-    def tcam_profile(self) -> dict | None:
+    @structured_config_contributor
+    def tcam_profile(self) -> None:
         """tcam_profile set based on platform_settings.tcam_profile fact."""
         if tcam_profile := self.shared_utils.platform_settings.tcam_profile:
-            return {"system": tcam_profile}
-        return None
+            self.structured_config.tcam_profile.system = tcam_profile
 
-    @cached_property
-    def platform(self) -> dict | None:
+    @structured_config_contributor
+    def platform(self) -> None:
         """
         Platform set based on.
 
@@ -492,61 +452,51 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         * platform_settings.trident_forwarding_table_partition and switch.evpn_multicast facts
         * data_plane_cpu_allocation_max.
         """
-        platform = {}
         if (lag_hardware_only := self.shared_utils.platform_settings.lag_hardware_only) is not None:
-            platform["sand"] = {"lag": {"hardware_only": lag_hardware_only}}
+            self.structured_config.platform.sand.lag.hardware_only = lag_hardware_only
 
         trident_forwarding_table_partition = self.shared_utils.platform_settings.trident_forwarding_table_partition
         if trident_forwarding_table_partition and self.shared_utils.evpn_multicast:
-            platform["trident"] = {"forwarding_table_partition": trident_forwarding_table_partition}
+            self.structured_config.platform.trident.forwarding_table_partition = trident_forwarding_table_partition
 
         if (cpu_max_allocation := self.shared_utils.node_config.data_plane_cpu_allocation_max) is not None:
-            platform["sfe"] = {"data_plane_cpu_allocation_max": cpu_max_allocation}
+            self.structured_config.platform.sfe.data_plane_cpu_allocation_max = cpu_max_allocation
         elif self.shared_utils.is_wan_server:
             # For AutoVPN Route Reflectors and Pathfinders, running on CloudEOS, setting
             # this value is required for the solution to work.
             msg = "For AutoVPN RRs and Pathfinders, 'data_plane_cpu_allocation_max' must be set"
             raise AristaAvdInvalidInputsError(msg)
 
-        if platform:
-            return platform
-        return None
-
-    @cached_property
-    def mac_address_table(self) -> dict | None:
+    @structured_config_contributor
+    def mac_address_table(self) -> None:
         """mac_address_table set based on mac_address_table data-model."""
         if self.inputs.mac_address_table.aging_time is not None:
-            return {"aging_time": self.inputs.mac_address_table.aging_time}
-        return None
+            self.structured_config.mac_address_table.aging_time = self.inputs.mac_address_table.aging_time
 
-    @cached_property
-    def queue_monitor_streaming(self) -> dict | None:
+    @structured_config_contributor
+    def queue_monitor_streaming(self) -> None:
         """queue_monitor_streaming set based on queue_monitor_streaming data-model."""
-        return self.inputs.queue_monitor_streaming._as_dict() or None
+        self.structured_config.queue_monitor_streaming = self.inputs.queue_monitor_streaming
 
-    @cached_property
-    def management_api_http(self) -> dict:
+    @structured_config_contributor
+    def management_api_http(self) -> None:
         """management_api_http set based on management_eapi data-model."""
-        return strip_empties_from_dict(
-            {
-                "enable_vrfs": [{"name": self.inputs.mgmt_interface_vrf}],
-                "enable_http": self.inputs.management_eapi.enable_http,
-                "enable_https": self.inputs.management_eapi.enable_https,
-                "default_services": self.inputs.management_eapi.default_services,
-            }
-        )
+        self.structured_config.management_api_http.enable_vrfs.append(EosCliConfigGen.ManagementApiHttp.EnableVrfsItem(name=self.inputs.mgmt_interface_vrf))
+        self.structured_config.management_api_http.enable_http = self.inputs.management_eapi.enable_http
+        self.structured_config.management_api_http.enable_https = self.inputs.management_eapi.enable_https
+        self.structured_config.management_api_http.default_services = self.inputs.management_eapi.default_services
 
     @cached_property
     def link_tracking_groups(self) -> list | None:
         """link_tracking_groups."""
         return self.shared_utils.link_tracking_groups
 
-    @cached_property
-    def lacp(self) -> dict | None:
+    @structured_config_contributor
+    def lacp(self) -> None:
         """Lacp set based on lacp_port_id_range."""
         lacp_port_id_range = self.shared_utils.node_config.lacp_port_id_range
         if not lacp_port_id_range.enabled:
-            return None
+            return
 
         if (switch_id := self.shared_utils.id) is None:
             msg = f"'id' is not set on '{self.shared_utils.hostname}' to set LACP port ID ranges"
@@ -557,14 +507,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         begin = 1 + (((switch_id - 1) % node_group_length) * lacp_port_id_range.size) + lacp_port_id_range.offset
         end = (((switch_id - 1) % node_group_length + 1) * lacp_port_id_range.size) + lacp_port_id_range.offset
 
-        return {
-            "port_id": {
-                "range": {
-                    "begin": begin,
-                    "end": end,
-                },
-            },
-        }
+        self.structured_config.lacp.port_id.range.begin = begin
+        self.structured_config.lacp.port_id.range.end = end
 
     @cached_property
     def ptp(self) -> dict | None:
@@ -619,11 +563,14 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         }
         return strip_null_from_data(ptp, (None, {}))
 
-    @cached_property
-    def eos_cli(self) -> str | None:
+    @structured_config_contributor
+    def eos_cli(self) -> None:
         """Aggregate the values of raw_eos_cli and platform_settings.platform_raw_eos_cli facts."""
-        return "\n".join(filter(None, [self.shared_utils.node_config.raw_eos_cli, self.shared_utils.platform_settings.raw_eos_cli])) or None
+        eos_cli = "\n".join(filter(None, [self.shared_utils.node_config.raw_eos_cli, self.shared_utils.platform_settings.raw_eos_cli]))
+        if eos_cli:
+            self.structured_config.eos_cli = eos_cli
 
+    # need to update return type in self._build_source_interfaces() method, then update the below cached_property where this method is used
     @cached_property
     def ip_radius_source_interfaces(self) -> list | None:
         """Parse source_interfaces.radius and return list of source_interfaces."""
@@ -679,22 +626,16 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
         return None
 
-    @cached_property
-    def prefix_lists(self) -> list | None:
-        prefix_lists = []
-        prefix_lists_in_use = set()
+    @structured_config_contributor
+    def prefix_lists(self) -> None:
         for neighbor in self.shared_utils.l3_bgp_neighbors:
-            if (prefix_list_in := get(neighbor, "ipv4_prefix_list_in")) and prefix_list_in not in prefix_lists_in_use:
-                pfx_list = self._get_prefix_list(prefix_list_in)._as_dict()
-                prefix_lists.append(pfx_list)
-                prefix_lists_in_use.add(prefix_list_in)
+            if (prefix_list_in := get(neighbor, "ipv4_prefix_list_in")) and prefix_list_in:
+                pfx_list = self._get_prefix_list(prefix_list_in)._cast_as(EosCliConfigGen.PrefixListsItem)
+                self.structured_config.prefix_lists.append(pfx_list)
 
-            if (prefix_list_out := get(neighbor, "ipv4_prefix_list_out")) and prefix_list_out not in prefix_lists_in_use:
-                pfx_list = self._get_prefix_list(prefix_list_out)._as_dict()
-                prefix_lists.append(pfx_list)
-                prefix_lists_in_use.add(prefix_list_out)
-
-        return prefix_lists or None
+            if (prefix_list_out := get(neighbor, "ipv4_prefix_list_out")) and prefix_list_out:
+                pfx_list = self._get_prefix_list(prefix_list_out)._cast_as(EosCliConfigGen.PrefixListsItem)
+                self.structured_config.prefix_lists.append(pfx_list)
 
     def _get_prefix_list(self, name: str) -> EosDesigns.Ipv4PrefixListCatalogItem:
         if name not in self.inputs.ipv4_prefix_list_catalog:
@@ -702,49 +643,37 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             raise AristaAvdMissingVariableError(msg)
         return self.inputs.ipv4_prefix_list_catalog[name]
 
-    @cached_property
-    def route_maps(self) -> list | None:
-        route_maps = []
+    @structured_config_contributor
+    def route_maps(self) -> None:
         for neighbor in self.shared_utils.l3_bgp_neighbors:
             # RM-BGP-<PEER-IP>-IN
             if prefix_list_in := get(neighbor, "ipv4_prefix_list_in"):
-                sequence_numbers = [
-                    {
-                        "sequence": 10,
-                        "type": "permit",
-                        "match": [f"ip address prefix-list {prefix_list_in}"],
-                    },
-                ]
+                route_maps_item = EosCliConfigGen.RouteMapsItem(name=neighbor["route_map_in"])
+                sequence_number = EosCliConfigGen.RouteMapsItem.SequenceNumbersItem(
+                    sequence=10, type="permit", match=EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Match([f"ip address prefix-list {prefix_list_in}"])
+                )
+
                 # set no advertise is set only for WAN neighbors, which will also have prefix_list_in
                 if neighbor.get("set_no_advertise"):
-                    sequence_numbers[0]["set"] = ["community no-advertise additive"]
+                    sequence_number.set = EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Set(["community no-advertise additive"])
 
-                route_maps.append({"name": neighbor["route_map_in"], "sequence_numbers": sequence_numbers})
+                route_maps_item.sequence_numbers.append(sequence_number)
+                self.structured_config.route_maps.append(route_maps_item)
 
             # RM-BGP-<PEER-IP>-OUT
+            route_maps_item = EosCliConfigGen.RouteMapsItem(name=neighbor["route_map_out"])
             if prefix_list_out := get(neighbor, "ipv4_prefix_list_out"):
-                sequence_numbers = [
-                    {
-                        "sequence": 10,
-                        "type": "permit",
-                        "match": [f"ip address prefix-list {prefix_list_out}"],
-                    },
-                    {
-                        "sequence": 20,
-                        "type": "deny",
-                    },
-                ]
+                route_maps_item.sequence_numbers.append_new(
+                    sequence=10, type="permit", match=EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Match([f"ip address prefix-list {prefix_list_out}"])
+                )
+                route_maps_item.sequence_numbers.append_new(sequence=20, type="deny")
             else:
-                sequence_numbers = [
-                    {
-                        "sequence": 10,
-                        "type": "deny",
-                    },
-                ]
+                route_maps_item.sequence_numbers.append_new(
+                    sequence=10,
+                    type="deny",
+                )
 
-            route_maps.append({"name": neighbor["route_map_out"], "sequence_numbers": sequence_numbers})
-
-        return route_maps or None
+            self.structured_config.route_maps.append(route_maps_item)
 
     @cached_property
     def struct_cfgs(self) -> None:

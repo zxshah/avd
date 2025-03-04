@@ -6,6 +6,7 @@ enable_password:
 hostname: always-configure-ip-routing
 ip_igmp_snooping:
   globally_enabled: true
+ip_routing: true
 ip_routing_ipv6_interfaces: true
 ipv6_unicast_routing: true
 is_deployed: true

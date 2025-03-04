@@ -51,15 +51,19 @@ class RouterPathSelectionMixin(Protocol):
 
         for path_group in path_groups_to_configure:
             is_local_pg = path_group.name in self.shared_utils.wan_local_path_group_names
+
+            if not is_local_pg:
+                continue
+
             disable_dynamic_peer_ipsec = is_local_pg and not path_group.ipsec.dynamic_peers
             path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
             path_group_item._update(
                 name=path_group.name,
                 id=self._get_path_group_id(path_group.name, path_group.id),
             )
-            self._set_local_interfaces_for_path_group(path_group.name, path_group_item)
-            self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group_item=path_group_item)
-            self._set_static_peers_for_path_group(path_group.name, path_group_item)
+            self._set_local_interfaces_for_path_group(path_group_item)
+            self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group=path_group_item)
+            self._set_static_peers_for_path_group(path_group_item)
 
             if is_local_pg:
                 # On pathfinder IPsec profile is not required for non local path_groups
@@ -82,13 +86,11 @@ class RouterPathSelectionMixin(Protocol):
             self.structured_config.router_path_selection.path_groups.append(path_group_item)
 
         if self.shared_utils.wan_ha or self.shared_utils.is_cv_pathfinder_server:
-            path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
-            self._generate_ha_path_group(path_group_item=path_group_item)
-            self.structured_config.router_path_selection.path_groups.append(path_group_item)
+            self._set_ha_path_group()
 
-    def _generate_ha_path_group(self: AvdStructuredConfigOverlayProtocol, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
+    def _generate_ha_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """Called only when self.shared_utils.wan_ha is True or on Pathfinders."""
-        path_group_item._update(
+        path_group._update(
             name=self.inputs.wan_ha.lan_ha_path_group_name,
             id=self._get_path_group_id(self.inputs.wan_ha.lan_ha_path_group_name),
             flow_assignment="lan",
@@ -98,12 +100,12 @@ class RouterPathSelectionMixin(Protocol):
             return
 
         if self.shared_utils.use_port_channel_for_direct_ha is True:
-            path_group_item.local_interfaces.append_new(name=f"Port-Channel{self.shared_utils.wan_ha_port_channel_id}")
+            path_group.local_interfaces.append_new(name=f"Port-Channel{self.shared_utils.wan_ha_port_channel_id}")
         else:
             for interface in self.shared_utils.wan_ha_interfaces:
-                path_group_item.local_interfaces.append_new(name=interface)
+                path_group.local_interfaces.append_new(name=interface)
         # not a pathfinder device
-        path_group_item.static_peers.append_new(
+        path_group.static_peers.append_new(
             router_ip=self._wan_ha_peer_vtep_ip(),
             name=self.shared_utils.wan_ha_peer,
             ipv4_addresses=EosCliConfigGen.RouterPathSelection.PathGroupsItem.StaticPeersItem.Ipv4Addresses(
@@ -112,7 +114,7 @@ class RouterPathSelectionMixin(Protocol):
         )
 
         if self.shared_utils.wan_ha_ipsec:
-            path_group_item.ipsec_profile = self._dp_ipsec_profile_name
+            path_group.ipsec_profile = self._dp_ipsec_profile_name
 
     def _wan_ha_interfaces(self: AvdStructuredConfigOverlayProtocol) -> list:
         """Return list of interfaces for HA."""
@@ -136,57 +138,62 @@ class RouterPathSelectionMixin(Protocol):
         return 500
 
     def _set_local_interfaces_for_path_group(
-        self: AvdStructuredConfigOverlayProtocol, path_group_name: str, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
+        self: AvdStructuredConfigOverlayProtocol,path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """
         Generate the router_path_selection.local_interfaces list.
 
         For AUTOVPN clients, configure the stun server profiles as appropriate
         """
-        if path_group_name not in self.shared_utils.wan_local_path_groups:
+        if path_group.name not in self.shared_utils.wan_local_path_groups:
             return
 
-        for interface in self.shared_utils.wan_local_path_groups[path_group_name]._internal_data.interfaces:
+        for interface in self.shared_utils.wan_local_path_groups[path_group.name]._internal_data.interfaces:
             local_interface_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem()
             local_interface_item.name = get(interface, "name", required=True)
 
-            if self.shared_utils.is_wan_client and self.shared_utils.should_connect_to_wan_rs([path_group_name]):
-                stun_server_profiles = self._stun_server_profiles.get(path_group_name, [])
+            if self.shared_utils.is_wan_client and self.shared_utils.should_connect_to_wan_rs([path_group.name]):
+                stun_server_profiles = self._stun_server_profiles.get(path_group.name, [])
                 if stun_server_profiles:
                     for profile in stun_server_profiles:
                         local_interface_item.stun.server_profiles.append_new(profile.name)
 
-            path_group_item.local_interfaces.append(local_interface_item)
+            path_group.local_interfaces.append(local_interface_item)
 
     def _set_dynamic_peers(
-        self: AvdStructuredConfigOverlayProtocol, disable_ipsec: bool, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
+        self: AvdStructuredConfigOverlayProtocol, disable_ipsec: bool, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """TODO: support ip_local ?"""
         if not self.shared_utils.is_wan_client:
             return
 
-        path_group_item.dynamic_peers.enabled = True
+        path_group.dynamic_peers.enabled = True
 
         if disable_ipsec:
-            path_group_item.dynamic_peers.ipsec = False
+            path_group.dynamic_peers.ipsec = False
 
     def _set_static_peers_for_path_group(
-        self: AvdStructuredConfigOverlayProtocol, path_group_name: str, path_group_item: EosCliConfigGen.RouterPathSelection.PathGroupsItem
+        self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
-        """Retrieves the static peers to configure for a given path-group based on the connected nodes."""
+        """Set the static peers to configure for a given path-group based on the connected nodes."""
         if not self.shared_utils.is_wan_router:
             return
 
         for wan_route_server in self.shared_utils.filtered_wan_route_servers:
-            if path_group_name not in wan_route_server.path_groups:
+            if path_group.name not in wan_route_server.path_groups:
                 continue
 
             ipv4_addresses = [
-                get_ip_from_ip_prefix(interface.public_ip) for interface in wan_route_server.path_groups[path_group_name].interfaces if interface.public_ip
+                get_ip_from_ip_prefix(interface.public_ip) for interface in wan_route_server.path_groups[path_group.name].interfaces if interface.public_ip
             ]
 
-            path_group_item.static_peers.append_new(
+            path_group.static_peers.append_new(
                 router_ip=wan_route_server.vtep_ip,
                 name=wan_route_server.hostname,
                 ipv4_addresses=EosCliConfigGen.RouterPathSelection.PathGroupsItem.StaticPeersItem.Ipv4Addresses(ipv4_addresses),
             )
+
+    def _set_ha_path_group(self: AvdStructuredConfigOverlayProtocol):
+        path_group = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
+        self._generate_ha_path_group(path_group=path_group)
+        self.structured_config.router_path_selection.path_groups.append(path_group)

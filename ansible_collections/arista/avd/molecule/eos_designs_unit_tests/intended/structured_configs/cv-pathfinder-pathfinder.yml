@@ -758,14 +758,6 @@ router_path_selection:
     local_interfaces:
     - name: Ethernet1
     - name: Ethernet3
-  - name: LTE
-    id: 102
-  - name: Equinix
-    id: 103
-  - name: Satellite
-    id: 104
-  - name: AWS
-    id: 105
   - name: LAN_HA
     id: 65535
     flow_assignment: lan

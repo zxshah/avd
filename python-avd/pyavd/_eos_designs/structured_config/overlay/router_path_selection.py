@@ -137,9 +137,7 @@ class RouterPathSelectionMixin(Protocol):
             return config_id
         return 500
 
-    def _set_local_interfaces_for_path_group(
-        self: AvdStructuredConfigOverlayProtocol,path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
-    ) -> None:
+    def _set_local_interfaces_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """
         Generate the router_path_selection.local_interfaces list.
 
@@ -172,9 +170,7 @@ class RouterPathSelectionMixin(Protocol):
         if disable_ipsec:
             path_group.dynamic_peers.ipsec = False
 
-    def _set_static_peers_for_path_group(
-        self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
-    ) -> None:
+    def _set_static_peers_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """Set the static peers to configure for a given path-group based on the connected nodes."""
         if not self.shared_utils.is_wan_router:
             return

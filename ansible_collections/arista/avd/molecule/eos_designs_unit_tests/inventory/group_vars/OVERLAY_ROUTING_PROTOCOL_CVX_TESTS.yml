@@ -36,7 +36,7 @@ cvxserver:
       id: 2
       mgmt_ip: 192.168.254.255/23
     - name: OVERLAY_ROUTING_PROTOCOL_CVX_SERVER3
-      id: 2
+      id: 3
       mgmt_ip: 192.168.254.253/23
 l3leaf:
   defaults:

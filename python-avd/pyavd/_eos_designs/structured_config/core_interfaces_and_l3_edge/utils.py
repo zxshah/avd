@@ -185,10 +185,7 @@ class UtilsMixin(Protocol):
         msg = f"{self.data_model}.p2p_links must have either 'interfaces' or 'port_channel' with correct members set."
         raise AristaAvdInvalidInputsError(msg)
 
-    def _get_ptp_config_interface(
-            self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol,
-            p2p_link: T_P2pLinksItem,
-            output_type: type[T_Ptp]) -> T_Ptp:
+    def _get_ptp_config_interface(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol, p2p_link: T_P2pLinksItem, output_type: type[T_Ptp]) -> T_Ptp:
         """
         Return ptp config for one p2p_link.
 

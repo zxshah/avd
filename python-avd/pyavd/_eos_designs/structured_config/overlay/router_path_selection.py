@@ -189,7 +189,7 @@ class RouterPathSelectionMixin(Protocol):
                 ipv4_addresses=EosCliConfigGen.RouterPathSelection.PathGroupsItem.StaticPeersItem.Ipv4Addresses(ipv4_addresses),
             )
 
-    def _set_ha_path_group(self: AvdStructuredConfigOverlayProtocol):
+    def _set_ha_path_group(self: AvdStructuredConfigOverlayProtocol) -> None:
         path_group = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
         self._generate_ha_path_group(path_group=path_group)
         self.structured_config.router_path_selection.path_groups.append(path_group)

@@ -139,7 +139,7 @@ class RouterBgpMixin(Protocol):
             wan_overlay_peer_group._update(remote_as=self.shared_utils.bgp_as, ttl_maximum_hops=self.inputs.bgp_peer_groups.wan_overlay_peers.ttl_maximum_hops)
             if self.shared_utils.is_wan_server:
                 wan_overlay_peer_group.route_reflector_client = True
-            # TODO: Getting error while use _cast_as
+
             bfd_timers_dict = self.inputs.bgp_peer_groups.wan_overlay_peers.bfd_timers._as_dict(include_default_values=True)
             wan_overlay_peer_group.bfd_timers._update(
                 interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]
@@ -153,7 +153,7 @@ class RouterBgpMixin(Protocol):
                     ttl_maximum_hops=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.ttl_maximum_hops,
                     route_reflector_client=True,
                 )
-                # TODO: Getting error while using _cast_as
+
                 bfd_timers_dict = self.inputs.bgp_peer_groups.wan_rr_overlay_peers.bfd_timers._as_dict(include_default_values=True)
                 wan_rr_overlay_peer_group.bfd_timers._update(
                     interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]

@@ -33,7 +33,7 @@ class DhcpServersMixin(Protocol):
             return
         dhcp_server.vrf = "default"
         # Set ZTP bootfile
-        self._set_ipv4_ztp_boot_file(dhcp_server)
+        self._update_ipv4_ztp_boot_file(dhcp_server)
         # Set DNS servers
         if dns_servers := self.inputs.name_servers:
             dns_servers = dns_servers._cast_as(EosCliConfigGen.DhcpServersItem.DnsServersIpv4)
@@ -67,9 +67,9 @@ class DhcpServersMixin(Protocol):
                     subnet_item.ranges.append_new(start=str(uplink["ip_address"]), end=str(uplink["ip_address"]))
                     dhcp_server.subnets.append(subnet_item)
 
-    def _set_ipv4_ztp_boot_file(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
-        """Set the file name to allow for ZTP to CV. TODO: Add inband_ztp_bootstrap_file to schema."""
-        if custom_bootfile := get(self._hostvars, "inband_ztp_bootstrap_file"):
+    def _update_ipv4_ztp_boot_file(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
+        """Update the file name to allow for ZTP to CV."""
+        if custom_bootfile := self.inputs.inband_ztp_bootstrap_file:
             dhcp_server.tftp_server.file_ipv4 = custom_bootfile
             return
         if not (cvp_instance_ips := self.inputs.cvp_instance_ips):

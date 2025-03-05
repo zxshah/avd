@@ -1891,6 +1891,8 @@ keys:
     type: dict
   inband_ztp_bootstrap_file:
     type: str
+    documentation_options:
+      table: management-settings
   internal_vlan_order:
     documentation_options:
       table: system-settings

@@ -3,11 +3,9 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
-
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import StructuredConfigGenerator, structured_config_contributor
-from pyavd._utils import AvdStringFormatter, default, get, strip_empties_from_dict
+from pyavd._utils import AvdStringFormatter, default, get
 from pyavd.api.interface_descriptions import InterfaceDescriptionData
 from pyavd.j2filters import list_compress
 
@@ -192,7 +190,7 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
             ptp_config_item.sync_message.interval = get(ptp_config, "sync_message.interval")
             # TODO: Geeting issue with PTP profile
             # if (profile:=get(ptp_config,"profile")):
-            #     ptp_config_item.profile = profile
+            #     ptp_config_item.profile = profile  # noqa: ERA001
 
             # Apply ptp config to port-channel
             port_channel_interface.ptp = ptp_config_item

@@ -56,8 +56,7 @@ class RouterPathSelectionMixin(Protocol):
                 continue
 
             disable_dynamic_peer_ipsec = is_local_pg and not path_group.ipsec.dynamic_peers
-            path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
-            path_group_item._update(
+            path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem(
                 name=path_group.name,
                 id=self._get_path_group_id(path_group.name, path_group.id),
             )
@@ -65,23 +64,22 @@ class RouterPathSelectionMixin(Protocol):
             self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group=path_group_item)
             self._set_static_peers_for_path_group(path_group_item)
 
-            if is_local_pg:
-                # On pathfinder IPsec profile is not required for non local path_groups
-                if path_group.ipsec.static_peers:
-                    path_group_item.ipsec_profile = self.inputs.wan_ipsec_profiles.control_plane.profile_name
+            # On pathfinder IPsec profile is not required for non local path_groups
+            if path_group.ipsec.static_peers:
+                path_group_item.ipsec_profile = self.inputs.wan_ipsec_profiles.control_plane.profile_name
 
-                # KeepAlive config is not required for non local path_groups
-                if interval := path_group.dps_keepalive.interval:
-                    if interval == "auto":
-                        path_group_item.keepalive.auto = True
-                    else:
-                        if not (interval.isdigit() and 50 <= int(interval) <= 60000):
-                            msg = (
-                                f"Invalid value '{interval}' for dps_keepalive.interval - "
-                                f"should be either 'auto', or an integer[50-60000] for wan_path_groups[{path_group.name}]"
-                            )
-                            raise AristaAvdError(msg)
-                        path_group_item.keepalive._update(interval=int(interval), failure_threshold=path_group.dps_keepalive.failure_threshold)
+            # KeepAlive config is not required for non local path_groups
+            if interval := path_group.dps_keepalive.interval:
+                if interval == "auto":
+                    path_group_item.keepalive.auto = True
+                else:
+                    if not (interval.isdigit() and 50 <= int(interval) <= 60000):
+                        msg = (
+                            f"Invalid value '{interval}' for dps_keepalive.interval - "
+                            f"should be either 'auto', or an integer[50-60000] for wan_path_groups[{path_group.name}]"
+                        )
+                        raise AristaAvdError(msg)
+                    path_group_item.keepalive._update(interval=int(interval), failure_threshold=path_group.dps_keepalive.failure_threshold)
 
             self.structured_config.router_path_selection.path_groups.append(path_group_item)
 
@@ -147,16 +145,15 @@ class RouterPathSelectionMixin(Protocol):
             return
 
         for interface in self.shared_utils.wan_local_path_groups[path_group.name]._internal_data.interfaces:
-            local_interface_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem()
-            local_interface_item.name = get(interface, "name", required=True)
+            local_interface = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem(name = get(interface, "name", required=True))
 
             if self.shared_utils.is_wan_client and self.shared_utils.should_connect_to_wan_rs([path_group.name]):
                 stun_server_profiles = self._stun_server_profiles.get(path_group.name, [])
                 if stun_server_profiles:
                     for profile in stun_server_profiles:
-                        local_interface_item.stun.server_profiles.append_new(profile.name)
+                        local_interface.stun.server_profiles.append(profile.name)
 
-            path_group.local_interfaces.append(local_interface_item)
+            path_group.local_interfaces.append(local_interface)
 
     def _set_dynamic_peers(
         self: AvdStructuredConfigOverlayProtocol, disable_ipsec: bool, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem

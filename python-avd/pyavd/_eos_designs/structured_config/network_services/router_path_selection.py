@@ -37,7 +37,7 @@ class RouterPathSelectionMixin(Protocol):
                     path_selection_policy=f"{vrf.policy}-WITH-CP" if vrf.name == "default" else vrf.policy,
                 )
 
-            self._autovpn_policies()
+            self._set_autovpn_policies()
 
     def _set_wan_load_balance_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set list of load balance policies."""
@@ -49,11 +49,10 @@ class RouterPathSelectionMixin(Protocol):
             if (default_match := policy.get("default_match")) is not None and "load_balance_policy" in default_match:
                 self.structured_config.router_path_selection.load_balance_policies.append(default_match["load_balance_policy"])
 
-    def _autovpn_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_autovpn_policies(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set list of policies for AutoVPN."""
         for policy in self._filtered_wan_policies:
-            policy_item = EosCliConfigGen.RouterPathSelection.PoliciesItem()
-            policy_item.name = policy["name"]
+            policy_item = EosCliConfigGen.RouterPathSelection.PoliciesItem(name=policy["name"])
             for index, match in enumerate(get(policy, "matches", default=[]), start=1):
                 policy_item.rules.append_new(
                     id=10 * index,

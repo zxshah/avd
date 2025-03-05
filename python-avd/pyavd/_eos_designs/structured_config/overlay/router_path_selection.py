@@ -145,7 +145,7 @@ class RouterPathSelectionMixin(Protocol):
             return
 
         for interface in self.shared_utils.wan_local_path_groups[path_group.name]._internal_data.interfaces:
-            local_interface = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem(name = get(interface, "name", required=True))
+            local_interface = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem(name=get(interface, "name", required=True))
 
             if self.shared_utils.is_wan_client and self.shared_utils.should_connect_to_wan_rs([path_group.name]):
                 stun_server_profiles = self._stun_server_profiles.get(path_group.name, [])

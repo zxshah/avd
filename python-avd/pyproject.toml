@@ -20,7 +20,6 @@ classifiers = [
 keywords = ["pyavd"]
 requires-python = ">=3.10"
 dependencies = [
-    "avdutils @ file://avdutils/",
     "aristaproto>=0.1.1",
     "cryptography>=38.0.4",
     "deepmerge>=1.1.0",
@@ -164,3 +163,7 @@ markers = [
     "molecule_scenarios: Create test case fixtures 'molecule_host' or 'molecule_scenario' for the given molecule scenarios.",
 ]
 asyncio_default_fixture_loop_scope = "function"
+
+# Stop tox from running avdutils tests when called for pyavd.
+# TODO: Move pyavd tests and pyproject into a dedicated pyavd folder.
+norecursedirs = "avdutils/*"

@@ -13,7 +13,7 @@ from pyavd._eos_designs.structured_config.structured_config_generator import (
     structured_config_contributor,
 )
 from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import default, get, strip_empties_from_dict, strip_null_from_data
+from pyavd._utils import default, get
 from pyavd.j2filters import natural_sort
 
 from .ntp import NtpMixin
@@ -47,20 +47,21 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     def is_deployed(self) -> None:
         self.structured_config.is_deployed = self.inputs.is_deployed
 
+    # TODO: reafactor with structured_config_contributor
     @cached_property
     def serial_number(self) -> str | None:
         """serial_number variable set based on serial_number fact."""
         return self.shared_utils.serial_number
 
-    @cached_property
-    def router_bgp(self) -> dict | None:
+    @structured_config_contributor
+    def router_bgp(self) -> None:
         """
-        Structured config for router_bgp.
+        Set the structured config for router_bgp.
 
         router_bgp set based on switch.bgp_as, switch.bgp_defaults, router_id facts and aggregating the values of bgp_maximum_paths and bgp_ecmp variables.
         """
         if self.shared_utils.bgp_as is None:
-            return None
+            return
 
         platform_bgp_update_wait_for_convergence = self.shared_utils.platform_settings.feature_support.bgp_update_wait_for_convergence
         platform_bgp_update_wait_install = self.shared_utils.platform_settings.feature_support.bgp_update_wait_install
@@ -73,63 +74,45 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             default_maximum_paths = 4
             default_ecmp = 4
 
-        router_bgp = {
-            "as": self.shared_utils.bgp_as,
-            "router_id": self.shared_utils.router_id if not self.inputs.use_router_general_for_router_id else None,
-            "distance": self.inputs.bgp_distance._as_dict() or None,
-            "bgp_defaults": self.shared_utils.node_config.bgp_defaults._as_list() or None,
-            "bgp": {
-                "default": {
-                    "ipv4_unicast": self.inputs.bgp_default_ipv4_unicast,
-                },
-            },
-            "maximum_paths": {
-                "paths": self.inputs.bgp_maximum_paths or default_maximum_paths,
-                "ecmp": self.inputs.bgp_ecmp or default_ecmp,
-            },
-            "redistribute": self._router_bgp_redistribute_routes,
-        }
+        self.structured_config.router_bgp.router_id = self.shared_utils.router_id if not self.inputs.use_router_general_for_router_id else None
+        self.structured_config.router_bgp.field_as = self.shared_utils.bgp_as
+        if bgp_defaults := self.shared_utils.node_config.bgp_defaults:
+            self.structured_config.router_bgp.bgp_defaults = bgp_defaults
+
+        if bgp_distance := self.inputs.bgp_distance:
+            self.structured_config.router_bgp.distance = bgp_distance
+
+        self.structured_config.router_bgp.bgp.default.ipv4_unicast = self.inputs.bgp_default_ipv4_unicast
+        self.structured_config.router_bgp.maximum_paths._update(
+            paths=self.inputs.bgp_maximum_paths or default_maximum_paths, ecmp=self.inputs.bgp_ecmp or default_ecmp
+        )
+
+        if redistribute_routes := self._router_bgp_redistribute_routes:
+            self.structured_config.router_bgp.redistribute = redistribute_routes
 
         if self.inputs.bgp_update_wait_for_convergence and platform_bgp_update_wait_for_convergence:
-            router_bgp.setdefault("updates", {})["wait_for_convergence"] = True
+            self.structured_config.router_bgp.updates.wait_for_convergence = True
 
         if self.inputs.bgp_update_wait_install and platform_bgp_update_wait_install:
-            router_bgp.setdefault("updates", {})["wait_install"] = True
+            self.structured_config.router_bgp.updates.wait_install = True
 
         if self.inputs.bgp_graceful_restart.enabled:
-            router_bgp.update(
-                {
-                    "graceful_restart": {
-                        "enabled": True,
-                        "restart_time": self.inputs.bgp_graceful_restart.restart_time,
-                    },
-                },
-            )
+            self.structured_config.router_bgp.graceful_restart._update(enabled=True, restart_time=self.inputs.bgp_graceful_restart.restart_time)
 
-        l3_interfaces_neighbors = []
+        l3_interfaces_neighbors = EosCliConfigGen.RouterBgp.Neighbors()
         for neighbor_info in self.shared_utils.l3_bgp_neighbors:
-            neighbor = {
-                "ip_address": neighbor_info["ip_address"],
-                "remote_as": neighbor_info["remote_as"],
-                "description": neighbor_info["description"],
-                "route_map_in": get(neighbor_info, "route_map_in"),
-                "route_map_out": get(neighbor_info, "route_map_out"),
-                "rcf_in": get(neighbor_info, "rcf_in"),
-                "rcf_out": get(neighbor_info, "rcf_out"),
-            }
-            l3_interfaces_neighbors.append(strip_empties_from_dict(neighbor))
+            l3_interfaces_neighbors.append_new(
+                ip_address=neighbor_info["ip_address"],
+                remote_as=neighbor_info["remote_as"],
+                description=neighbor_info["description"] if neighbor_info["description"] else None,
+                route_map_in=get(neighbor_info, "route_map_in"),
+                route_map_out=get(neighbor_info, "route_map_out"),
+            )
 
         if l3_interfaces_neighbors:
-            router_bgp.update(
-                {
-                    "neighbors": l3_interfaces_neighbors,
-                    "address_family_ipv4": {
-                        "neighbors": [{"ip_address": neighbor["ip_address"], "activate": True} for neighbor in l3_interfaces_neighbors],
-                    },
-                }
-            )
-
-        return strip_null_from_data(router_bgp)
+            self.structured_config.router_bgp.neighbors = l3_interfaces_neighbors
+            for neighbor in l3_interfaces_neighbors:
+                self.structured_config.router_bgp.address_family_ipv4.neighbors.append_new(ip_address=neighbor.ip_address, activate=True)
 
     @structured_config_contributor
     def static_routes(self) -> None:
@@ -336,6 +319,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         queue_monitor_length = self.inputs.queue_monitor_length._cast_as(EosCliConfigGen.QueueMonitorLength)
         if not self.shared_utils.platform_settings.feature_support.queue_monitor_length_notify:
             del queue_monitor_length.notifying
+        self.structured_config.queue_monitor_length = queue_monitor_length
 
     @structured_config_contributor
     def ip_name_servers(self) -> None:
@@ -486,10 +470,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         self.structured_config.management_api_http.enable_https = self.inputs.management_eapi.enable_https
         self.structured_config.management_api_http.default_services = self.inputs.management_eapi.default_services
 
-    @cached_property
-    def link_tracking_groups(self) -> list | None:
-        """link_tracking_groups."""
-        return self.shared_utils.link_tracking_groups
+    @structured_config_contributor
+    def link_tracking_groups(self) -> None:
+        """Set link_tracking_groups."""
+        if link_tracking_groups := self.shared_utils.link_tracking_groups:
+            self.structured_config.link_tracking_groups = link_tracking_groups
 
     @structured_config_contributor
     def lacp(self) -> None:
@@ -510,10 +495,10 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         self.structured_config.lacp.port_id.range.begin = begin
         self.structured_config.lacp.port_id.range.end = end
 
-    @cached_property
-    def ptp(self) -> dict | None:
+    @structured_config_contributor
+    def ptp(self) -> None:
         """
-        Generates PTP config on node level as well as for interfaces, using various defaults.
+        Set PTP config on node level as well as for interfaces, using various defaults.
 
         - The following are set in default node_type_keys for design "l3ls-evpn":
                 spine:
@@ -524,7 +509,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             default_priority2 = self.id % 256.
         """
         if not self.shared_utils.ptp_enabled:
-            return None
+            return
         default_ptp_domain = self.inputs.ptp_settings.domain
         default_ptp_priority1 = self.shared_utils.node_type_key_data.default_ptp_priority1
         default_clock_identity = None
@@ -541,27 +526,41 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             clock_identity_prefix = self.shared_utils.node_config.ptp.clock_identity_prefix
             default_clock_identity = f"{clock_identity_prefix}:{priority1:02x}:00:{priority2:02x}"
 
-        ptp = {
-            "mode": self.shared_utils.node_config.ptp.mode,
-            "mode_one_step": self.shared_utils.node_config.ptp.mode_one_step or None,  # Historic output is without false
-            "forward_unicast": self.shared_utils.node_config.ptp.forward_unicast or None,  # Historic output is without false
-            "clock_identity": default(self.shared_utils.node_config.ptp.clock_identity, default_clock_identity),
-            "source": {"ip": self.shared_utils.node_config.ptp.source_ip},
-            "priority1": priority1,
-            "priority2": priority2,
-            "ttl": self.shared_utils.node_config.ptp.ttl,
-            "domain": default(self.shared_utils.node_config.ptp.domain, default_ptp_domain),
-            "message_type": {
-                "general": {
-                    "dscp": self.shared_utils.node_config.ptp.dscp.general_messages,
-                },
-                "event": {
-                    "dscp": self.shared_utils.node_config.ptp.dscp.event_messages,
-                },
-            },
-            "monitor": self.shared_utils.node_config.ptp.monitor._as_dict(include_default_values=True),
-        }
-        return strip_null_from_data(ptp, (None, {}))
+        self.structured_config.ptp._update(
+            mode=self.shared_utils.node_config.ptp.mode,
+            mode_one_step=self.shared_utils.node_config.ptp.mode_one_step or None,  # Historic output is without false
+            forward_unicast=self.shared_utils.node_config.ptp.forward_unicast or None,  # Historic output is without false
+            clock_identity=default(self.shared_utils.node_config.ptp.clock_identity, default_clock_identity),
+            priority1=priority1,
+            priority2=priority2,
+            ttl=self.shared_utils.node_config.ptp.ttl,
+            domain=default(self.shared_utils.node_config.ptp.domain, default_ptp_domain),
+        )
+        monitor = self.shared_utils.node_config.ptp.monitor._as_dict(include_default_values=True)
+        self.structured_config.ptp.monitor.enabled = get(monitor, "enabled")
+        self.structured_config.ptp.monitor.threshold._update(
+            offset_from_master=get(monitor, "threshold.offset_from_master"), mean_path_delay=get(monitor, "threshold.mean_path_delay")
+        )
+        self.structured_config.ptp.monitor.threshold.drop._update(
+            offset_from_master=get(monitor, "threshold.drop.offset_from_master"), mean_path_delay=get(monitor, "threshold.drop.mean_path_delay")
+        )
+
+        self.structured_config.ptp.monitor.missing_message.intervals._update(
+            announce=get(monitor, "missing_message.intervals.announce"),
+            follow_up=get(monitor, "missing_message.intervals.follow_up"),
+            sync=get(monitor, "missing_message.intervals.sync"),
+        )
+        self.structured_config.ptp.monitor.missing_message.sequence_ids._update(
+            enabled=get(monitor, "missing_message.sequence_ids.enabled"),
+            announce=get(monitor, "missing_message.sequence_ids.announce"),
+            delay_resp=get(monitor, "missing_message.sequence_ids.delay_resp"),
+            follow_up=get(monitor, "missing_message.sequence_ids.follow_up"),
+            sync=get(monitor, "missing_message.sequence_ids.sync"),
+        )
+
+        self.structured_config.ptp.source.ip = self.shared_utils.node_config.ptp.source_ip
+        self.structured_config.ptp.message_type.general.dscp = self.shared_utils.node_config.ptp.dscp.general_messages
+        self.structured_config.ptp.message_type.event.dscp = self.shared_utils.node_config.ptp.dscp.event_messages
 
     @structured_config_contributor
     def eos_cli(self) -> None:
@@ -571,60 +570,50 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             self.structured_config.eos_cli = eos_cli
 
     # need to update return type in self._build_source_interfaces() method, then update the below cached_property where this method is used
-    @cached_property
-    def ip_radius_source_interfaces(self) -> list | None:
+    @structured_config_contributor
+    def ip_radius_source_interfaces(self) -> None:
         """Parse source_interfaces.radius and return list of source_interfaces."""
         if not (inputs := self.inputs.source_interfaces.radius):
-            return None
+            return
 
         if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Radius"):
-            return source_interfaces
+            self.structured_config.ip_radius_source_interfaces = source_interfaces
 
-        return None
-
-    @cached_property
-    def ip_tacacs_source_interfaces(self) -> list | None:
+    @structured_config_contributor
+    def ip_tacacs_source_interfaces(self) -> None:
         """Parse source_interfaces.tacacs and return list of source_interfaces."""
         if not (inputs := self.inputs.source_interfaces.tacacs):
-            return None
+            return
 
         if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Tacacs"):
-            return source_interfaces
+            self.structured_config.ip_tacacs_source_interfaces = source_interfaces
 
-        return None
-
-    @cached_property
-    def ip_ssh_client_source_interfaces(self) -> list | None:
+    @structured_config_contributor
+    def ip_ssh_client_source_interfaces(self) -> None:
         """Parse source_interfaces.ssh_client and return list of source_interfaces."""
         if not (inputs := self.inputs.source_interfaces.ssh_client):
-            return None
+            return
 
         if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP SSH Client"):
-            return source_interfaces
+            self.structured_config.ip_ssh_client_source_interfaces = source_interfaces
 
-        return None
-
-    @cached_property
-    def ip_domain_lookup(self) -> dict | None:
+    @structured_config_contributor
+    def ip_domain_lookup(self) -> None:
         """Parse source_interfaces.domain_lookup and return dict with nested source_interfaces list."""
         if not (inputs := self.inputs.source_interfaces.domain_lookup):
-            return None
+            return
 
         if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Domain Lookup"):
-            return {"source_interfaces": source_interfaces}
+            self.structured_config.ip_domain_lookup.source_interfaces = source_interfaces
 
-        return None
-
-    @cached_property
-    def ip_http_client_source_interfaces(self) -> list | None:
-        """Parse source_interfaces.http_client and return list of source_interfaces."""
+    @structured_config_contributor
+    def ip_http_client_source_interfaces(self) -> None:
+        """Parse source_interfaces.http_client and set list of source_interfaces."""
         if not (inputs := self.inputs.source_interfaces.http_client):
-            return None
+            return
 
         if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP HTTP Client"):
-            return source_interfaces
-
-        return None
+            self.structured_config.ip_http_client_source_interfaces = source_interfaces
 
     @structured_config_contributor
     def prefix_lists(self) -> None:

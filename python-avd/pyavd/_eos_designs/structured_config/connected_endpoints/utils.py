@@ -228,7 +228,7 @@ class UtilsMixin(Protocol):
             return Undefined
 
         output = output_type()
-        output.append_new(name=adapter.link_tracking.name or self.shared_utils.link_tracking_groups[0]["name"], direction="downstream")
+        output.append_new(name=adapter.link_tracking.name or self.shared_utils.link_tracking_groups._as_list()[0]["name"], direction="downstream")
         return output
 
     def _get_adapter_ptp(

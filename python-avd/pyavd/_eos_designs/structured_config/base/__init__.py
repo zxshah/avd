@@ -247,7 +247,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
                 self.structured_config.daemon_terminattr.cvaddrs.append(f"{cvp_instance_ip}:443")
                 self.structured_config.daemon_terminattr.cvauth._update(
                     method="token-secure",
-                    token_file=self.inputs.cvp_token_file or "/tmp/cv-onboarding-token",  # noqa: S108
+                    # Ignoring sonar-lint false positive for tmp path since this is config for EOS
+                    token_file=self.inputs.cvp_token_file or "/tmp/cv-onboarding-token",  # NOSONAR # noqa: S108
                 )
             else:
                 # updating for cvp_on_prem_ips
@@ -258,7 +259,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
                 else:
                     self.structured_config.daemon_terminattr.cvauth._update(
                         method="token",
-                        token_file=self.inputs.cvp_token_file or "/tmp/token",  # noqa: S108
+                        # Ignoring sonar-lint false positive for tmp path since this is config for EOS
+                        token_file=self.inputs.cvp_token_file or "/tmp/token",  # NOSONAR # noqa: S108
                     )
 
         self.structured_config.daemon_terminattr._update(

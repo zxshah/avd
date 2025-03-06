@@ -432,7 +432,7 @@ ipv4_prefix_list_catalog:
 2. `wan_circuit_id` is optional and used for description.
 3. Configure IPv4 ACLs in and out for the L3 interface. The access lists must be defined under `ipv4_acls` top level key.
 4. For BGP peering for WAN interfaces, the `ipv4_prefix_list_in` is mandatory for security reaasons. It is defined in the `ipv4_prefix_list_catalog`.
-5. Mbps
+5. The maximum bandwidths for the circuit in Mbps. This bandwidth is used in CloudVision to visualize circuit utilization and to generate events.
 
 ### WAN policies
 

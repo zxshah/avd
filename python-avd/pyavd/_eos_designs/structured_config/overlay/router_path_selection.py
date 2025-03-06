@@ -31,8 +31,7 @@ class RouterPathSelectionMixin(Protocol):
             "path_groups": self._get_path_groups(),
         }
 
-        metric_interfaces = self._get_interface_bandwidths(router_path_selection["path_groups"])
-        router_path_selection["interfaces"] = metric_interfaces
+        router_path_selection["interfaces"] = self._get_interface_bandwidths(router_path_selection["path_groups"])
 
         if self.shared_utils.is_wan_server:
             router_path_selection["peer_dynamic_source"] = "stun"

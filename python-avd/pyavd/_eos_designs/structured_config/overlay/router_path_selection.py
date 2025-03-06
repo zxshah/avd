@@ -51,11 +51,8 @@ class RouterPathSelectionMixin(Protocol):
 
         for path_group in path_groups_to_configure:
             is_local_pg = path_group.name in self.shared_utils.wan_local_path_group_names
-
-            if not is_local_pg:
-                continue
-
             disable_dynamic_peer_ipsec = is_local_pg and not path_group.ipsec.dynamic_peers
+
             path_group_item = EosCliConfigGen.RouterPathSelection.PathGroupsItem(
                 name=path_group.name,
                 id=self._get_path_group_id(path_group.name, path_group.id),
@@ -63,6 +60,10 @@ class RouterPathSelectionMixin(Protocol):
             self._set_local_interfaces_for_path_group(path_group_item)
             self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group=path_group_item)
             self._set_static_peers_for_path_group(path_group_item)
+
+            if not is_local_pg:
+                self.structured_config.router_path_selection.path_groups.append(path_group_item)
+                continue
 
             # On pathfinder IPsec profile is not required for non local path_groups
             if path_group.ipsec.static_peers:

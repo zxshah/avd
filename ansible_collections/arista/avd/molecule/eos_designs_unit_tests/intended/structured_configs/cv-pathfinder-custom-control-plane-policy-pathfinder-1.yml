@@ -598,6 +598,14 @@ router_path_selection:
       ipv4_addresses:
       - 172.17.7.7
       - 10.9.9.9
+  - name: LTE
+    id: 102
+  - name: Equinix
+    id: 103
+  - name: Satellite
+    id: 104
+  - name: AWS
+    id: 105
   - name: LAN_HA
     id: 65535
     flow_assignment: lan

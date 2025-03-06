@@ -213,6 +213,8 @@ router_bgp:
 router_path_selection:
   peer_dynamic_source: stun
   path_groups:
+  - name: MPLS
+    id: 100
   - name: INET
     id: 101
     ipsec_profile: AUTOVPN
@@ -223,6 +225,8 @@ router_path_selection:
       name: autovpn-rr2
       ipv4_addresses:
       - 10.8.8.8
+  - name: LTE
+    id: 102
   load_balance_policies:
   - name: LB-DEFAULT-AUTOVPN-POLICY-CONTROL-PLANE
     path_groups:

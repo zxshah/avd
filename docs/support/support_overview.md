@@ -28,7 +28,7 @@ Arista AVD is a multi-domain network automation framework consumable as code, pr
 
 ## Software Life Cycle Policy
 
-Arista AVD Software Release Policy and Life Cycle defines the various phases of development and support to guide customers in transitioning to newer versions of the product based on the milestones in the life cycle. Arista Networks will support each major software release train (i.e., **4.**x.x, **5.**x.x) during the **Active Development** phase and up to 12 months after the release enters the **Maintenance** and **Support Only** phase. The following diagram depicts the release phases and the Arista TAC support mapping across this timeline.
+Arista AVD Software Release Policy and Life Cycle defines the various phases of development and support to guide customers in transitioning to newer versions of the product based on the milestones in the life cycle. Arista Networks will support each major software release train (i.e., 4.x.x, 5.x.x) during the **Active Development** phase and up to 12 months after the release enters the **Maintenance** and **Support Only** phase. The following diagram depicts the release phases and the Arista TAC support mapping across this timeline.
 
 ### Software Life Cycle
 

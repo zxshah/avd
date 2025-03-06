@@ -28,7 +28,7 @@ class DhcpServersMixin(Protocol):
         """Set structured config for dhcp_server."""
         dhcp_server = EosCliConfigGen.DhcpServersItem()
         # Set subnets for DHCP server
-        self._set_subnets(dhcp_server)
+        self._update_subnets(dhcp_server)
         if len(dhcp_server.subnets) == 0:
             return
         dhcp_server.vrf = "default"
@@ -39,11 +39,11 @@ class DhcpServersMixin(Protocol):
             dns_servers = dns_servers._cast_as(EosCliConfigGen.DhcpServersItem.DnsServersIpv4)
             dhcp_server.dns_servers_ipv4 = dns_servers
         # Set NTP servers
-        self._set_ntp_servers(dhcp_server)
+        self._update_ntp_servers(dhcp_server)
 
         self.structured_config.dhcp_servers.append(dhcp_server)
 
-    def _set_subnets(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
+    def _update_subnets(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
         """
         Set a list of dhcp subnets for downstream p2p interfaces.
 
@@ -69,8 +69,8 @@ class DhcpServersMixin(Protocol):
 
     def _update_ipv4_ztp_boot_file(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
         """Update the file name to allow for ZTP to CV."""
-        if custom_bootfile := self.inputs.inband_ztp_bootstrap_file:
-            dhcp_server.tftp_server.file_ipv4 = custom_bootfile
+        if self.inputs.inband_ztp_bootstrap_file:
+            dhcp_server.tftp_server.file_ipv4 = self.inputs.inband_ztp_bootstrap_file
             return
         if not (cvp_instance_ips := self.inputs.cvp_instance_ips):
             return
@@ -81,7 +81,7 @@ class DhcpServersMixin(Protocol):
 
         dhcp_server.tftp_server.file_ipv4 = f"https://{cvp_instance_ips[0]}/ztp/bootstrap"
 
-    def _set_ntp_servers(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
+    def _update_ntp_servers(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
         """Set list of NTP servers."""
         ntp_servers_settings = self.inputs.ntp_settings.servers
         if not ntp_servers_settings:

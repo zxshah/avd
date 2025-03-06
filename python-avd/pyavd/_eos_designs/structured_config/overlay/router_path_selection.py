@@ -145,6 +145,10 @@ class RouterPathSelectionMixin(Protocol):
                     if l3_intf.transmit_bandwidth is not None:
                         bandwidths["transmit"] = l3_intf.transmit_bandwidth
                     if bandwidths:
+                        if "." in name:
+                            schema_key = f"{self.shared_utils.node_type_key_data.key}.nodes[name={self.shared_utils.hostname}].l3_interfaces[name={name}]"
+                            msg = f"Fields 'receive_bandwidth' and 'transmit_bandwidth' configured on {schema_key} are not supported for subinterfaces."
+                            raise AristaAvdError(msg)
                         metric_interfaces.append({"name": name, "metric_bandwidth": bandwidths})
         return metric_interfaces
 

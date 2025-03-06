@@ -54,49 +54,49 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
 
         for destination in natural_sort(destinations, "destination"):
             destination: EosDesigns.SflowSettings.DestinationsItem
-            vrf = destination.vrf
-            if vrf is None:
-                vrf = self.shared_utils.default_mgmt_protocol_vrf
+            vrf_name = destination.vrf
+            if vrf_name is None:
+                vrf_name = self.shared_utils.default_mgmt_protocol_vrf
                 source_interface = self.shared_utils.default_mgmt_protocol_interface
 
-            elif vrf == "use_mgmt_interface_vrf":
+            elif vrf_name == "use_mgmt_interface_vrf":
                 if (self.shared_utils.node_config.mgmt_ip is None) and (self.shared_utils.node_config.ipv6_mgmt_ip is None):
                     msg = "Unable to configure sFlow source-interface with 'use_mgmt_interface_vrf' since 'mgmt_ip' or 'ipv6_mgmt_ip' are not set."
                     raise AristaAvdInvalidInputsError(msg)
 
-                vrf = self.inputs.mgmt_interface_vrf
-                if vrf in sflow_settings_vrfs and sflow_settings_vrfs[vrf].source_interface:
-                    source_interface = sflow_settings_vrfs[vrf].source_interface
+                vrf_name = self.inputs.mgmt_interface_vrf
+                if vrf_name in sflow_settings_vrfs and sflow_settings_vrfs[vrf_name].source_interface:
+                    source_interface = sflow_settings_vrfs[vrf_name].source_interface
                 else:
                     source_interface = self.shared_utils.mgmt_interface
 
-            elif vrf == "use_inband_mgmt_vrf":
+            elif vrf_name == "use_inband_mgmt_vrf":
                 # Check for missing interface
                 if self.shared_utils.inband_mgmt_interface is None:
                     msg = "Unable to configure sFlow source-interface with 'use_inband_mgmt_vrf' since 'inband_mgmt_interface' is not set."
                     raise AristaAvdInvalidInputsError(msg)
 
                 # self.shared_utils.inband_mgmt_vrf returns None for the default VRF, but here we need "default" to avoid duplicates.
-                vrf = self.shared_utils.inband_mgmt_vrf or "default"
-                if vrf in sflow_settings_vrfs and sflow_settings_vrfs[vrf].source_interface:
-                    source_interface = sflow_settings_vrfs[vrf].source_interface
+                vrf_name = self.shared_utils.inband_mgmt_vrf or "default"
+                if vrf_name in sflow_settings_vrfs and sflow_settings_vrfs[vrf_name].source_interface:
+                    source_interface = sflow_settings_vrfs[vrf_name].source_interface
                 else:
                     source_interface = self.shared_utils.inband_mgmt_interface
 
             # Default is none, meaning we will not configure a source interface for this VRF.
-            elif vrf in sflow_settings_vrfs and sflow_settings_vrfs[vrf].source_interface:
-                source_interface = sflow_settings_vrfs[vrf].source_interface
+            elif vrf_name in sflow_settings_vrfs and sflow_settings_vrfs[vrf_name].source_interface:
+                source_interface = sflow_settings_vrfs[vrf_name].source_interface
             else:
                 source_interface = None
 
-            if vrf in [None, "default"]:
+            if vrf_name in [None, "default"]:
                 # Add destination without VRF field
                 self.structured_config.sflow.destinations.append_new(destination=destination.destination, port=destination.port)
                 self.structured_config.sflow.source_interface = source_interface
 
             else:
                 # Add destination with VRF field.
-                vrf_item = sflow_vrfs.obtain(vrf)
+                vrf_item = sflow_vrfs.obtain(vrf_name)
                 vrf_item.destinations.append_new(destination=destination.destination, port=destination.port)
                 vrf_item.source_interface = source_interface
 
@@ -114,8 +114,7 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
     def resolve_flow_tracker_by_type(
         self, tracker_settings: EosDesigns.FlowTrackingSettings.TrackersItem
     ) -> EosCliConfigGen.FlowTracking.Hardware.TrackersItem | EosCliConfigGen.FlowTracking.Sampled.TrackersItem:
-        tracker_type = self.shared_utils.flow_tracking_type
-        if tracker_type == "sampled":
+        if self.shared_utils.flow_tracking_type == "sampled":
             tracker = EosCliConfigGen.FlowTracking.Sampled.TrackersItem(
                 name=tracker_settings.name,
                 record_export=tracker_settings.record_export._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.RecordExport),
@@ -137,16 +136,15 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         if not configured_trackers:
             return
 
-        tracker_type = self.shared_utils.flow_tracking_type
         structured_config = self.structured_config.flow_tracking
         flow_tracking_settings = self.inputs.flow_tracking_settings
 
-        if tracker_type == "hardware":
+        if self.shared_utils.flow_tracking_type == "hardware":
             structured_config.hardware = flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
             structured_config.hardware.shutdown = False
             tracker_list = structured_config.hardware.trackers
         else:
-            structured_config.sampled.sample = flow_tracking_settings.sampled.sample
+            structured_config.sampled._update(sample=flow_tracking_settings.sampled.sample, shutdown=False)
             structured_config.sampled.encapsulation._update(
                 ipv4_ipv6=flow_tracking_settings.sampled.encapsulation.ipv4_ipv6,
                 mpls=flow_tracking_settings.sampled.encapsulation.mpls,
@@ -156,7 +154,6 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
                 ipv6=flow_tracking_settings.sampled.hardware_offload.ipv6,
                 threshold_minimum=flow_tracking_settings.sampled.hardware_offload.threshold_minimum,
             )
-            structured_config.sampled.shutdown = False
             tracker_list = structured_config.sampled.trackers
 
         default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))

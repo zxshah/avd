@@ -358,7 +358,7 @@ wan_router:
 
 ### WAN interfaces
 
-A WAN interface in AVD is defined under the node settings either under the `l3_interfaces` or the `l3_port_channels` list. To be considered as a WAN interface by AVD, an `l3_interface` pr `l3_port_channel` must have the `wan_carrier` key defined (which will allow to detect the path-group thanks to the carrier to path-group mapping). The `wan_circuit_id` is optional and used on CVaaS to provide more information in the visualization as well as in the AVD generated interface description. The `receive_bandwidth` and `transmit_bandwidth` fields are also used just for visualization on CVaaS. Finally the key `connected_to_pathfinder` allows to disable the static peering configuration on a given path-group.
+A WAN interface in AVD is defined under the node settings either under the `l3_interfaces` or the `l3_port_channels` list. To be considered as a WAN interface by AVD, an `l3_interface` pr `l3_port_channel` must have the `wan_carrier` key defined (which will allow to detect the path-group thanks to the carrier to path-group mapping). The `wan_circuit_id` is optional and used on CVaaS to provide more information in the visualization as well as in the AVD generated interface description. The `receive_bandwidth` and `transmit_bandwidth` fields are currently only used for visualization on CVaaS. Finally the key `connected_to_pathfinder` allows to disable the static peering configuration on a given path-group.
 
 !!! Danger
 

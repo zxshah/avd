@@ -74,10 +74,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             default_maximum_paths = 4
             default_ecmp = 4
 
-        self.structured_config.router_bgp.router_id = self.shared_utils.router_id if not self.inputs.use_router_general_for_router_id else None
-        self.structured_config.router_bgp.field_as = self.shared_utils.bgp_as
+        self.structured_config.router_bgp._update(
+            router_id=self.shared_utils.router_id if not self.inputs.use_router_general_for_router_id else None, field_as=self.shared_utils.bgp_as
+        )
         if bgp_defaults := self.shared_utils.node_config.bgp_defaults:
-            self.structured_config.router_bgp.bgp_defaults = bgp_defaults
+            self.structured_config.router_bgp.bgp_defaults = bgp_defaults._cast_as(EosCliConfigGen.RouterBgp.BgpDefaults)
 
         if bgp_distance := self.inputs.bgp_distance:
             self.structured_config.router_bgp.distance = bgp_distance
@@ -153,6 +154,15 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         self.structured_config.service_routing_protocols_model = "multi-agent"
 
     @structured_config_contributor
+    def ip_routing_ipv6_interfaces(self) -> None:
+        """ip_routing_ipv6_interfaces set based on underlay_rfc5549 variable."""
+        if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
+            return
+
+        if self.inputs.underlay_rfc5549:
+            self.structured_config.ip_routing_ipv6_interfaces = True
+
+    @structured_config_contributor
     def ip_routing(self) -> None:
         """
         For l3 devices, configure ip routing unless ip_routing_ipv6_interfaces is True.
@@ -162,7 +172,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
             return
 
-        if self.ip_routing_ipv6_interfaces is True:
+        if self.structured_config.ip_routing_ipv6_interfaces is True:
             return
 
         self.structured_config.ip_routing = True
@@ -175,15 +185,6 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
         if self.inputs.underlay_rfc5549 or self.shared_utils.underlay_ipv6:
             self.structured_config.ipv6_unicast_routing = True
-
-    @structured_config_contributor
-    def ip_routing_ipv6_interfaces(self) -> None:
-        """ip_routing_ipv6_interfaces set based on underlay_rfc5549 variable."""
-        if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return
-
-        if self.inputs.underlay_rfc5549:
-            self.structured_config.ip_routing_ipv6_interfaces = True
 
     @structured_config_contributor
     def router_multicast(self) -> None:
@@ -244,23 +245,28 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             if "arista.io" in cvp_instance_ip:
                 # updating for cvaas_ips
                 self.structured_config.daemon_terminattr.cvaddrs.append(f"{cvp_instance_ip}:443")
-                self.structured_config.daemon_terminattr.cvauth.method = "token-secure"
-                self.structured_config.daemon_terminattr.cvauth.token_file = self.inputs.cvp_token_file or "/tmp/cv-onboarding-token"  # NOSONAR # noqa: S108
+                self.structured_config.daemon_terminattr.cvauth._update(
+                    method="token-secure",
+                    token_file=self.inputs.cvp_token_file or "/tmp/cv-onboarding-token",  # noqa: S108
+                )
             else:
                 # updating for cvp_on_prem_ips
                 cv_address = f"{cvp_instance_ip}:{self.inputs.terminattr_ingestgrpcurl_port}"
                 self.structured_config.daemon_terminattr.cvaddrs.append(cv_address)
                 if (cvp_ingestauth_key := self.inputs.cvp_ingestauth_key) is not None:
-                    self.structured_config.daemon_terminattr.cvauth.method = "key"
-                    self.structured_config.daemon_terminattr.cvauth.key = cvp_ingestauth_key
+                    self.structured_config.daemon_terminattr.cvauth._update(method="key", key=cvp_ingestauth_key)
                 else:
-                    self.structured_config.daemon_terminattr.cvauth.method = "token"
-                    self.structured_config.daemon_terminattr.cvauth.token_file = self.inputs.cvp_token_file or "/tmp/token"  # NOSONAR # noqa: S108
+                    self.structured_config.daemon_terminattr.cvauth._update(
+                        method="token",
+                        token_file=self.inputs.cvp_token_file or "/tmp/token",  # noqa: S108
+                    )
 
-        self.structured_config.daemon_terminattr.cvvrf = self.inputs.mgmt_interface_vrf
-        self.structured_config.daemon_terminattr.smashexcludes = self.inputs.terminattr_smashexcludes
-        self.structured_config.daemon_terminattr.ingestexclude = self.inputs.terminattr_ingestexclude
-        self.structured_config.daemon_terminattr.disable_aaa = self.inputs.terminattr_disable_aaa
+        self.structured_config.daemon_terminattr._update(
+            cvvrf=self.inputs.mgmt_interface_vrf,
+            smashexcludes=self.inputs.terminattr_smashexcludes,
+            ingestexclude=self.inputs.terminattr_ingestexclude,
+            disable_aaa=self.inputs.terminattr_disable_aaa,
+        )
 
     @structured_config_contributor
     def vlan_internal_order(self) -> None:
@@ -325,7 +331,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     def ip_name_servers(self) -> None:
         """ip_name_servers set based on name_servers data-model and mgmt_interface_vrf."""
         for name_server in self.inputs.name_servers:
-            self.structured_config.ip_name_servers.append(EosCliConfigGen.IpNameServersItem(ip_address=name_server, vrf=self.inputs.mgmt_interface_vrf))
+            self.structured_config.ip_name_servers.append_new(ip_address=name_server, vrf=self.inputs.mgmt_interface_vrf)
 
     @structured_config_contributor
     def redundancy(self) -> None:
@@ -358,7 +364,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             priority = self.shared_utils.node_config.spanning_tree_priority
             # "rapid-pvst" is not included below. Per vlan spanning-tree priorities are set under network-services.
             if spanning_tree_mode == "mstp":
-                self.structured_config.spanning_tree.mst_instances.append(EosCliConfigGen.SpanningTree.MstInstancesItem(id="0", priority=priority))
+                self.structured_config.spanning_tree.mst_instances.append_new(id="0", priority=priority)
             elif spanning_tree_mode == "rstp":
                 self.structured_config.spanning_tree.rstp_priority = priority
 
@@ -465,10 +471,12 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def management_api_http(self) -> None:
         """management_api_http set based on management_eapi data-model."""
-        self.structured_config.management_api_http.enable_vrfs.append(EosCliConfigGen.ManagementApiHttp.EnableVrfsItem(name=self.inputs.mgmt_interface_vrf))
-        self.structured_config.management_api_http.enable_http = self.inputs.management_eapi.enable_http
-        self.structured_config.management_api_http.enable_https = self.inputs.management_eapi.enable_https
-        self.structured_config.management_api_http.default_services = self.inputs.management_eapi.default_services
+        self.structured_config.management_api_http.enable_vrfs.append_new(name=self.inputs.mgmt_interface_vrf)
+        self.structured_config.management_api_http._update(
+            enable_http=self.inputs.management_eapi.enable_http,
+            enable_https=self.inputs.management_eapi.enable_https,
+            default_services=self.inputs.management_eapi.default_services,
+        )
 
     @structured_config_contributor
     def link_tracking_groups(self) -> None:
@@ -492,8 +500,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         begin = 1 + (((switch_id - 1) % node_group_length) * lacp_port_id_range.size) + lacp_port_id_range.offset
         end = (((switch_id - 1) % node_group_length + 1) * lacp_port_id_range.size) + lacp_port_id_range.offset
 
-        self.structured_config.lacp.port_id.range.begin = begin
-        self.structured_config.lacp.port_id.range.end = end
+        self.structured_config.lacp.port_id.range._update(begin=begin, end=end)
 
     @structured_config_contributor
     def ptp(self) -> None:

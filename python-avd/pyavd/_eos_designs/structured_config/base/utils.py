@@ -28,6 +28,7 @@ class UtilsMixin(Protocol):
         | EosCliConfigGen.IpSshClientSourceInterfaces
         | EosCliConfigGen.IpTacacsSourceInterfaces
         | EosCliConfigGen.SnmpServer.LocalInterfaces
+        | EosCliConfigGen.IpRadiusSourceInterfaces
     ):
         """
         Return list of source interfaces with VRFs.
@@ -47,7 +48,7 @@ class UtilsMixin(Protocol):
         elif error_context == "SNMP":
             source_interfaces = EosCliConfigGen.SnmpServer.LocalInterfaces()
         else:
-            source_interfaces = EosCliConfigGen.IpTacacsSourceInterfaces()
+            source_interfaces = EosCliConfigGen.IpRadiusSourceInterfaces()
 
         if include_mgmt_interface:
             if (self.shared_utils.node_config.mgmt_ip is None) and (self.shared_utils.node_config.ipv6_mgmt_ip is None):
@@ -68,7 +69,7 @@ class UtilsMixin(Protocol):
             # Check for duplicate VRF
             # inband_mgmt_vrf returns None in case of VRF "default", but here we want the "default" VRF name to have proper duplicate detection.
             inband_mgmt_vrf = self.shared_utils.inband_mgmt_vrf or "default"
-            if [source_interface for source_interface in source_interfaces if getattr(source_interface, "vrf", "default") == inband_mgmt_vrf]:
+            if [source_interface for source_interface in source_interfaces if (getattr(source_interface, "vrf", "default") or "default") == inband_mgmt_vrf]:
                 msg = f"Unable to configure multiple {error_context} source-interfaces for the same VRF '{inband_mgmt_vrf}'."
                 raise AristaAvdError(msg)
 

@@ -1,12 +1,16 @@
----
-# This title is used for search results
-title: Single Data Center - L3LS
----
 <!--
-  ~ Copyright (c) 2023-2025 Arista Networks, Inc.
+  ~ Copyright (c) 2025 Arista Networks, Inc.
   ~ Use of this source code is governed by the Apache License 2.0
   ~ that can be found in the LICENSE file.
   -->
+
+---
+
+# This title is used for search results
+
+title: Single Data Center - L3LS
+
+---
 
 # Single Data Center - L3LS
 
@@ -169,7 +173,7 @@ The above is what is included in this example, *purely* to make it as simple as 
 
 ```yaml title="inventory.yml"
 --8<--
-examples/single-dc-l3ls/inventory_without_ip.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/inventory_without_ip.yml
 --8<--
 ```
 
@@ -203,7 +207,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml
+    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml
     --8<--
     ```
 
@@ -211,7 +215,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
+    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
     --8<--
     ```
 
@@ -219,7 +223,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml:l2leaf
+    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml:l2leaf
     --8<--
     ```
 
@@ -233,7 +237,7 @@ The first file defines how the Ansible host connects to the devices:
 
 ```yaml title="fabric_ansible_connectivity.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC/fabric_ansible_connectivity.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_ansible_connectivity.yml
 --8<--
 ```
 
@@ -241,7 +245,7 @@ The following section specifies variables that generate configuration to be appl
 
 ```yaml title="fabric_variables.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/FABRIC/fabric_variables.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_variables.yml
 --8<--
 ```
 
@@ -251,7 +255,7 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/DCI/dc1.yml` file defines se
 
 ```yaml title="dc1.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1/dc1.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1/dc1.yml
 --8<--
 ```
 
@@ -259,7 +263,7 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml` cover
 
 ```yaml title="spines.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_SPINES/spines.yml
 --8<--
 ```
 
@@ -267,7 +271,7 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml`
 
 ```yaml title="l3_leaves.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L3_LEAVES/l3_leaves.yml
 --8<--
 ```
 
@@ -275,7 +279,7 @@ Finally, more of the same, but this time for the L2 leaf switches:
 
 ```yaml title="l2_leaves.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
 --8<--
 ```
 
@@ -287,7 +291,7 @@ The `ansible-avd-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/network_ser
 
 ```yaml title="network_services.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/network_services.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/NETWORK_SERVICES/network_services.yml
 --8<--
 ```
 
@@ -299,7 +303,7 @@ After the previous section, all VRFs and VLANs across the fabric are now defined
 
 ```yaml title="connected_endpoints.yml"
 --8<--
-examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/connected_endpoints.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/CONNECTED_ENDPOINTS/connected_endpoints.yml
 --8<--
 ```
 
@@ -318,7 +322,7 @@ The `build.yml` playbook looks like the following:
 
 ```yaml title="build.yml"
 --8<--
-ansible_collections/arista/avd/examples/single-dc-l3ls/build.yml
+ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/build.yml
 --8<--
 ```
 
@@ -330,7 +334,7 @@ The `deploy.yml` playbook looks like the following:
 
 ```yaml title="deploy.yml"
 --8<--
-ansible_collections/arista/avd/examples/single-dc-l3ls/deploy.yml
+ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/deploy.yml
 --8<--
 ```
 
@@ -341,7 +345,7 @@ The `deploy-cvp.yml` playbook looks like the following:
 
 ```yaml title="deploy-cvp.yml"
 --8<--
-ansible_collections/arista/avd/examples/single-dc-l3ls/deploy-cvp.yml
+ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/deploy-cvp.yml
 --8<--
 ```
 

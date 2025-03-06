@@ -219,7 +219,7 @@ Since this example covers building an L3LS network, AVD must know about the devi
 
     ```yaml
     --8<--
-    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml:l2leaf
+    ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/DC1_L2_LEAVES/l2_leaves.yml
     --8<--
     ```
 

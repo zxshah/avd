@@ -318,7 +318,7 @@ The `build.yml` playbook looks like the following:
 
 ```yaml title="build.yml"
 --8<--
-ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/build.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/build.yml
 --8<--
 ```
 
@@ -330,7 +330,7 @@ The `deploy.yml` playbook looks like the following:
 
 ```yaml title="deploy.yml"
 --8<--
-ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/deploy.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/deploy.yml
 --8<--
 ```
 
@@ -341,7 +341,7 @@ The `deploy-cvp.yml` playbook looks like the following:
 
 ```yaml title="deploy-cvp.yml"
 --8<--
-ansible_collections/arista/avd/ansible_collections/arista/avd/examples/single-dc-l3ls/deploy-cvp.yml
+ansible_collections/arista/avd/examples/single-dc-l3ls/deploy-cvp.yml
 --8<--
 ```
 

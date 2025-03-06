@@ -352,13 +352,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         """spanning_tree set based on spanning_tree_root_super, spanning_tree_mode and spanning_tree_priority."""
         if not self.shared_utils.network_services_l2:
             self.structured_config.spanning_tree.mode = "none"
-
-        spanning_tree_root_super = self.shared_utils.node_config.spanning_tree_root_super
-        spanning_tree_mode = self.shared_utils.node_config.spanning_tree_mode
-        if spanning_tree_root_super is not True and spanning_tree_mode is None:
             return
 
-        if spanning_tree_root_super is True:
+        spanning_tree_mode = self.shared_utils.node_config.spanning_tree_mode
+
+        if self.shared_utils.node_config.spanning_tree_root_super is True:
             self.structured_config.spanning_tree.root_super = True
 
         if spanning_tree_mode is not None:

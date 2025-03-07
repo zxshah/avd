@@ -57,9 +57,9 @@ class RouterPathSelectionMixin(Protocol):
                 name=path_group.name,
                 id=self._get_path_group_id(path_group.name, path_group.id),
             )
-            self._set_local_interfaces_for_path_group(path_group_item)
-            self._set_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group=path_group_item)
-            self._set_static_peers_for_path_group(path_group_item)
+            self._update_local_interfaces_for_path_group(path_group_item)
+            self._update_dynamic_peers(disable_ipsec=disable_dynamic_peer_ipsec, path_group=path_group_item)
+            self._update_static_peers_for_path_group(path_group_item)
 
             if not is_local_pg:
                 self.structured_config.router_path_selection.path_groups.append(path_group_item)
@@ -87,15 +87,16 @@ class RouterPathSelectionMixin(Protocol):
         if self.shared_utils.wan_ha or self.shared_utils.is_cv_pathfinder_server:
             self._set_ha_path_group()
 
-    def _generate_ha_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
+    def _set_ha_path_group(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Called only when self.shared_utils.wan_ha is True or on Pathfinders."""
-        path_group._update(
+        path_group = EosCliConfigGen.RouterPathSelection.PathGroupsItem(
             name=self.inputs.wan_ha.lan_ha_path_group_name,
             id=self._get_path_group_id(self.inputs.wan_ha.lan_ha_path_group_name),
             flow_assignment="lan",
         )
 
         if self.shared_utils.is_cv_pathfinder_server:
+            self.structured_config.router_path_selection.path_groups.append(path_group)
             return
 
         if self.shared_utils.use_port_channel_for_direct_ha is True:
@@ -114,6 +115,8 @@ class RouterPathSelectionMixin(Protocol):
 
         if self.shared_utils.wan_ha_ipsec:
             path_group.ipsec_profile = self._dp_ipsec_profile_name
+
+        self.structured_config.router_path_selection.path_groups.append(path_group)
 
     def _wan_ha_interfaces(self: AvdStructuredConfigOverlayProtocol) -> list:
         """Return list of interfaces for HA."""
@@ -136,7 +139,7 @@ class RouterPathSelectionMixin(Protocol):
             return config_id
         return 500
 
-    def _set_local_interfaces_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
+    def _update_local_interfaces_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """
         Generate the router_path_selection.local_interfaces list.
 
@@ -156,7 +159,7 @@ class RouterPathSelectionMixin(Protocol):
 
             path_group.local_interfaces.append(local_interface)
 
-    def _set_dynamic_peers(
+    def _update_dynamic_peers(
         self: AvdStructuredConfigOverlayProtocol, disable_ipsec: bool, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """TODO: support ip_local ?"""
@@ -168,7 +171,7 @@ class RouterPathSelectionMixin(Protocol):
         if disable_ipsec:
             path_group.dynamic_peers.ipsec = False
 
-    def _set_static_peers_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
+    def _update_static_peers_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
         """Set the static peers to configure for a given path-group based on the connected nodes."""
         if not self.shared_utils.is_wan_router:
             return
@@ -186,8 +189,3 @@ class RouterPathSelectionMixin(Protocol):
                 name=wan_route_server.hostname,
                 ipv4_addresses=EosCliConfigGen.RouterPathSelection.PathGroupsItem.StaticPeersItem.Ipv4Addresses(ipv4_addresses),
             )
-
-    def _set_ha_path_group(self: AvdStructuredConfigOverlayProtocol) -> None:
-        path_group = EosCliConfigGen.RouterPathSelection.PathGroupsItem()
-        self._generate_ha_path_group(path_group=path_group)
-        self.structured_config.router_path_selection.path_groups.append(path_group)

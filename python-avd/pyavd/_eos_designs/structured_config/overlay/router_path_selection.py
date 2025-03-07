@@ -99,7 +99,7 @@ class RouterPathSelectionMixin(Protocol):
             self.structured_config.router_path_selection.path_groups.append(path_group)
             return
 
-        if self.shared_utils.use_port_channel_for_direct_ha is True:
+        if self.shared_utils.use_port_channel_for_direct_ha:
             path_group.local_interfaces.append_new(name=f"Port-Channel{self.shared_utils.wan_ha_port_channel_id}")
         else:
             for interface in self.shared_utils.wan_ha_interfaces:

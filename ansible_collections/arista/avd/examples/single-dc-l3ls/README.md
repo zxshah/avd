@@ -1,6 +1,6 @@
 ---
 title: Single Data Center - L3LS  # This title is used for search results
-link: https://avd.arista.com/stable/ansible_collections/arista/avd/examples
+link: https://avd.arista.com/stable/ansible_collections/arista/avd/examples/single-dc-l3ls/index.html
 ---
 <!--
   ~ Copyright (c) 2025 Arista Networks, Inc.

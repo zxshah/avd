@@ -102,8 +102,7 @@ class RouterPathSelectionMixin(Protocol):
         if self.shared_utils.use_port_channel_for_direct_ha:
             path_group.local_interfaces.append_new(name=f"Port-Channel{self.shared_utils.wan_ha_port_channel_id}")
         else:
-            for interface in self.shared_utils.wan_ha_interfaces:
-                path_group.local_interfaces.append_new(name=interface)
+            path_group.local_interfaces.extend(self.shared_utils.wan_ha_interfaces)
         # not a pathfinder device
         path_group.static_peers.append_new(
             router_ip=self._wan_ha_peer_vtep_ip(),

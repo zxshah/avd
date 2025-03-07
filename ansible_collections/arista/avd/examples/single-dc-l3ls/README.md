@@ -247,7 +247,7 @@ ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/FABRIC/fabric_
 
 ## Setting device specific configuration parameters
 
-The `ansible-avd-examples/single-dc-l3ls/group_vars/DCI/dc1.yml` file defines settings that apply to all children of the `DC1` group as specified in the inventory described earlier. However, this time the settings defined are no longer fabric-wide but are limited to DC1. This example is of limited benefit with only a single data center. Still, it allows us to scale the configuration to a scenario with multiple data centers in the future.
+The `ansible-avd-examples/single-dc-l3ls/group_vars/DC1/dc1.yml` file defines settings that apply to all children of the `DC1` group as specified in the inventory described earlier. However, this time the settings defined are no longer fabric-wide but are limited to DC1. This example is of limited benefit with only a single data center. Still, it allows us to scale the configuration to a scenario with multiple data centers in the future.
 
 ```yaml title="dc1.yml"
 --8<--

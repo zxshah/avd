@@ -19,8 +19,6 @@ Arista AVD is a multi-domain network automation framework consumable as code, pr
 ### AVD Ansible Collections
 
 - arista.avd
-- arista.eos
-  - Note: eos_config and eos_command modules only!
 - arista.cvp
 
 !!! note

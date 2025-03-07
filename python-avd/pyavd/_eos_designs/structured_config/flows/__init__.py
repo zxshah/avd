@@ -152,7 +152,7 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
             We allow overriding the default flow tracker name, so if user has configured a tracker
             with the default tracker name, then we just use that, if not, we create a default config
             """
-            if tracker_name not in self.inputs.flow_tracking_settings.trackers:
+            if tracker_name not in flow_tracking_settings.trackers:
                 if tracker_name == default_tracker.name:
                     tracker = default_tracker
                 else:

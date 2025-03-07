@@ -52,8 +52,8 @@ Arista AVD Software Release Policy and Life Cycle defines the various phases of 
 The Arista AVD project follows [Semantic Versioning](../versioning/semantic-versioning.md): <font class="v-r">Major</font>.<font class="v-gr">Minor</font>.<font class="v-ygr">Maintenance</font> (ex. <font class="v-r">4</font>.<font class="v-gr">10</font>.<font class="v-ygr">2</font>):
 
 - <font class="v-r">Major: Contains breaking changes, follow the</font> [porting guide](../porting-guides/5.x.x.md).
-- <font class="v-gr">Minor: New features and fixes (non-breaking).</font>
-- <font class="v-ygr">Maintenance: Fixes only (non-breaking).</font>
+- <font class="v-gr">Minor: New features and fixes (non-breaking)</font>.
+- <font class="v-ygr">Maintenance: Fixes only (non-breaking)</font>.
 
 ![Figure: Release timeline example](../_media/release_timeline_example.png)
 

@@ -59,6 +59,30 @@ The Arista AVD project follows [Semantic Versioning](../versioning/semantic-vers
 
 ![Figure: Release timeline example](../_media/release_timeline_example.png)
 
+## Supported Upgrade Paths
+
+AVD supports the following upgrade paths:
+
+- Between any minor versions in the same release train, i.e., from 4.1.0 to 4.5.0.
+  - Skipping minor versions is supported.
+- Between major release trains, i.e., from 4.10.2 to 5.0.0.
+  - Skipping a major version is not supported, i.e, from 3.8.0 to 5.0.0.
+  - Major versions may contain changes requiring updates to the inventory variables. Required updates will be described in a Porting Guide for each major version.
+
+Release notes and porting guide for version 5.x.x can be found here:
+
+- [Release Notes](../release-notes/5.x.x.md)
+- [Porting Guide](../porting-guides/5.x.x.md)
+
+## Support Matrix
+
+The following table depicts the Arista Validated Designs release support matrix, including the timelines for each major software train (based on the lifecycle policy) and  the current state of support for each train.
+
+| Release | Current Status | Initial Release Date | End of Support |
+| ------- | -------------- | -------------------- | -------------- |
+| 5.x.x | Active Development | Oct-2024 | TBD |
+| 4.x.x | Maintenance Phase | Jun-2023 | Oct-2025 |
+
 ## Ordering Information
 
 | Product Number | Product Description |

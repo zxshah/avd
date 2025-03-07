@@ -139,7 +139,9 @@ class RouterPathSelectionMixin(Protocol):
             return config_id
         return 500
 
-    def _update_local_interfaces_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
+    def _update_local_interfaces_for_path_group(
+        self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
+    ) -> None:
         """
         Generate the router_path_selection.local_interfaces list.
 

@@ -174,7 +174,7 @@ class RouterPathSelectionMixin(Protocol):
             path_group.dynamic_peers.ipsec = False
 
     def _update_static_peers_for_path_group(self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem) -> None:
-        """Set the static peers to configure for a given path-group based on the connected nodes."""
+        """Update the static peers for the given path-group based on the connected nodes."""
         if not self.shared_utils.is_wan_router:
             return
 

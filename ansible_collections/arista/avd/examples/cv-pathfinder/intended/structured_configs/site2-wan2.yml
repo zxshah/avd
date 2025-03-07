@@ -704,6 +704,7 @@ router_path_selection:
       - 10.42.0.0
   load_balance_policies:
   - name: LB-BLUE-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
@@ -717,25 +718,31 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-BLUE-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
   - name: LB-RED-POLICY-CRITICAL-SECRET-DATA
+    lowest_hop_count: false
     path_groups:
     - name: LAN_HA
   - name: LB-RED-POLICY-NORMAL-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
   - name: LB-RED-POLICY-NOT-SO-IMPORTANT-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-CONTROL-PLANE
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA

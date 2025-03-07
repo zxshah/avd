@@ -569,6 +569,7 @@ router_path_selection:
       - 100.64.200.2
   load_balance_policies:
   - name: LB-BLUE-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   - name: LB-BLUE-POLICY-VOICE
@@ -580,18 +581,23 @@ router_path_selection:
     - name: INTERNET
       priority: 2
   - name: LB-BLUE-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   - name: LB-RED-POLICY-NORMAL-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   - name: LB-RED-POLICY-NOT-SO-IMPORTANT-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   - name: LB-DEFAULT-POLICY-CONTROL-PLANE
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
   tcp_mss_ceiling:

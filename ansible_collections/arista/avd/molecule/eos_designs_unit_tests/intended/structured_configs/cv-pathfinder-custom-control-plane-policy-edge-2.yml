@@ -437,9 +437,11 @@ router_path_selection:
     path_groups:
     - name: INET
   - name: LB-DEFAULT-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: INET
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INET
   tcp_mss_ceiling:

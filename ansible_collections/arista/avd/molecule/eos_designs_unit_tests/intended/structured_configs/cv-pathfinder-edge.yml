@@ -898,14 +898,17 @@ router_path_selection:
       failure_threshold: 12
   load_balance_policies:
   - name: LB-DEFAULT-AVT-POLICY-CONTROL-PLANE
+    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS
   - name: LB-DEFAULT-AVT-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: INET
   - name: LB-DEFAULT-AVT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS
@@ -918,6 +921,7 @@ router_path_selection:
     - name: INET
       priority: 2
   - name: LB-PROD-AVT-POLICY-VIDEO
+    lowest_hop_count: false
     loss_rate: '42.0'
     path_groups:
     - name: MPLS
@@ -925,14 +929,17 @@ router_path_selection:
     - name: INET
       priority: 2
   - name: LB-PROD-AVT-POLICY-MPLS-ONLY
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
   - name: LB-PROD-AVT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS
       priority: 2
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS

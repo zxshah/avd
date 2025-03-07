@@ -722,14 +722,17 @@ router_path_selection:
       - 172.17.0.7
   load_balance_policies:
   - name: LB-DEFAULT-AVT-POLICY-CONTROL-PLANE
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: CUSTOM_LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: CUSTOM_LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
       priority: 4223
@@ -741,20 +744,24 @@ router_path_selection:
     - name: MPLS
     - name: CUSTOM_LAN_HA
   - name: LB-PROD-AVT-POLICY-VIDEO
+    lowest_hop_count: false
     loss_rate: '42.0'
     path_groups:
     - name: MPLS
     - name: CUSTOM_LAN_HA
   - name: LB-PROD-AVT-POLICY-MPLS-ONLY
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: CUSTOM_LAN_HA
   - name: LB-PROD-AVT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
       priority: 2
     - name: CUSTOM_LAN_HA
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: CUSTOM_LAN_HA

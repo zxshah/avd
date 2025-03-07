@@ -654,6 +654,7 @@ router_path_selection:
     flow_assignment: lan
   load_balance_policies:
   - name: LB-BLUE-POLICY-VIDEO
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: MPLS
@@ -670,30 +671,36 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-BLUE-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: MPLS
     - name: LAN_HA
   - name: LB-RED-POLICY-CRITICAL-SECRET-DATA
+    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: LAN_HA
   - name: LB-RED-POLICY-NORMAL-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: MPLS
       priority: 2
     - name: LAN_HA
   - name: LB-RED-POLICY-NOT-SO-IMPORTANT-DATA
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-CONTROL-PLANE
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: MPLS
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-DEFAULT
+    lowest_hop_count: false
     path_groups:
     - name: INTERNET
     - name: MPLS

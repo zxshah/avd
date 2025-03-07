@@ -243,8 +243,7 @@ class UtilsWanMixin(Protocol):
         )
 
         if self.inputs.wan_mode == "cv-pathfinder":
-            # TODO: Decide if the default value in schema for lowest_hop_count is correct.
-            wan_load_balance_policy.lowest_hop_count = input_topology._get_defined_attr("lowest_hop_count") or None
+            wan_load_balance_policy.lowest_hop_count = input_topology.lowest_hop_count
 
         # Using this flag while looping through all entries to keep track of any path group present on the remote host
         any_path_group_on_wan_ha_peer = self.shared_utils.wan_ha

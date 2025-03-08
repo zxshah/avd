@@ -1446,6 +1446,21 @@ $defs:
               new_key: inband_mgmt_vlan
               remove_in_version: 5.0.0
             type: int
+          campus:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus.
+            type: str
+          campus_pod:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus pod.
+            type: str
+          campus_access_pod:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus access pod.
+            type: str
       node_groups:
         type: list
         description: Define variables related to all nodes part of this group.

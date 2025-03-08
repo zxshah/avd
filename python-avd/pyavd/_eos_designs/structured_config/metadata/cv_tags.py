@@ -3,6 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING, Any, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
@@ -15,7 +16,9 @@ if TYPE_CHECKING:
 
     from . import AvdStructuredConfigMetadataProtocol
 
+CAMPUS_TOPOLOGY_NETWORK_TYPE = "campusV2"
 INVALID_CUSTOM_DEVICE_TAGS = [
+    "topology_hint_network_type",
     "topology_hint_type",
     "topology_type",
     "topology_hint_datacenter",
@@ -37,6 +40,10 @@ INVALID_CUSTOM_DEVICE_TAGS = [
     "tapagg",
     "hostname",
     "terminattr",
+    "Campus",
+    "Campus-Pod",
+    "Access-Pod",
+    "Link-Type",
 ]
 """These tag names overlap with CV system tags or topology_hints"""
 
@@ -68,14 +75,43 @@ class CvTagsMixin(Protocol):
         if not self.inputs.generate_cv_tags.topology_hints:
             return
 
-        default_type_hint = self.shared_utils.node_type_key_data.cv_tags_topology_type
+        if not (self.inputs.generate_cv_tags.campus_fabric and self.shared_utils.is_campus_device):
+            for name, value in [
+                ("topology_hint_datacenter", self.inputs.dc_name),
+                ("topology_hint_fabric", self.shared_utils.fabric_name),
+                ("topology_hint_pod", self.inputs.pod_name),
+                ("topology_hint_type", self.shared_utils.hint_type),
+                ("topology_hint_rack", default(self.shared_utils.node_config.rack, self.shared_utils.group)),
+            ]:
+                tag = self._tag_dict(name, value)
+                if tag:
+                    self.structured_config.metadata.cv_tags.device_tags.append_new(name=name, value=tag["value"])
+        else:
+            self._set_topology_hints_for_campus()
 
+    def _set_topology_hints_for_campus(self: AvdStructuredConfigMetadataProtocol) -> None:
+        """Set the data structure of topology_hint tags for Campus fabric devices."""
         for name, value in [
-            ("topology_hint_datacenter", self.inputs.dc_name),
-            ("topology_hint_fabric", self.shared_utils.fabric_name),
-            ("topology_hint_pod", self.inputs.pod_name),
-            ("topology_hint_type", default(self.inputs.cv_tags_topology_type, default_type_hint)),
-            ("topology_hint_rack", default(self.shared_utils.node_config.rack, self.shared_utils.group)),
+            ("topology_hint_network_type", CAMPUS_TOPOLOGY_NETWORK_TYPE),
+            (
+                "topology_hint_type",
+                default(
+                    "Spine" if self.shared_utils.hint_type == "spine" else None,
+                    "Leaf"
+                    if (
+                        self.shared_utils.hint_type == "leaf"
+                        and any(re.search("spine", uplink_switches_type, re.IGNORECASE) for uplink_switches_type in self.shared_utils.uplink_switches_types)
+                    )
+                    else None,
+                    "Member-Leaf",
+                ),
+            ),
+            ("Campus", default(self.shared_utils.node_config.campus, self.inputs.campus)),
+            ("Campus-Pod", default(self.shared_utils.node_config.campus_pod, self.inputs.campus_pod)),
+            (
+                "Access-Pod",
+                None if self.shared_utils.hint_type == "spine" else default(self.shared_utils.node_config.campus_access_pod, self.inputs.campus_access_pod),
+            ),
         ]:
             tag = self._tag_dict(name, value)
             if tag:
@@ -144,7 +180,11 @@ class CvTagsMixin(Protocol):
 
     def _set_interface_tags(self: AvdStructuredConfigMetadataProtocol) -> None:
         """Set the data structure of interface_tags."""
-        if not (tags_to_generate := self.inputs.generate_cv_tags.interface_tags) and not self.shared_utils.is_cv_pathfinder_router:
+        if (
+            not (tags_to_generate := self.inputs.generate_cv_tags.interface_tags)
+            and not self.shared_utils.is_cv_pathfinder_router
+            and not (self.inputs.generate_cv_tags.campus_fabric and self.shared_utils.is_campus_device)
+        ):
             return
 
         for ethernet_interface in self.structured_config.ethernet_interfaces:
@@ -172,8 +212,19 @@ class CvTagsMixin(Protocol):
             if self.shared_utils.is_cv_pathfinder_router:
                 tags.extend(self._get_cv_pathfinder_interface_tags(ethernet_interface))
 
+            if self.inputs.generate_cv_tags.topology_hints and self.inputs.generate_cv_tags.campus_fabric and self.shared_utils.is_campus_device:
+                tags.extend(self._get_campus_interface_tags(ethernet_interface))
+
             if tags:
                 self.structured_config.metadata.cv_tags.interface_tags.append_new(interface=ethernet_interface.name, tags=tags)
+
+        # Handle tags for management interface
+        if self.inputs.generate_cv_tags.topology_hints and self.inputs.generate_cv_tags.campus_fabric and self.shared_utils.is_campus_device:
+            for management_interface in self.structured_config.management_interfaces:
+                tags = EosCliConfigGen.Metadata.CvTags.InterfaceTagsItem.Tags()
+                tags.append_new(name="Link-Type", value="AVDManaged")
+                tags.append_new(name="Link-Type", value="Management")
+                self.structured_config.metadata.cv_tags.interface_tags.append_new(interface=management_interface.name, tags=tags)
 
         # handle tags for L3 port-channel interfaces (cv_pathfinder use case)
         for port_channel_intf in self.structured_config.port_channel_interfaces:
@@ -228,4 +279,30 @@ class CvTagsMixin(Protocol):
             tags.append_new(name="Carrier", value=str(wan_interface.wan_carrier))
         if wan_interface.wan_circuit_id:
             tags.append_new(name="Circuit", value=str(wan_interface.wan_circuit_id))
+        return tags
+
+    def _get_campus_interface_tags(
+        self: AvdStructuredConfigMetadataProtocol, generic_interface: EosCliConfigGen.EthernetInterfacesItem | EosCliConfigGen.PortChannelInterfacesItem
+    ) -> EosCliConfigGen.Metadata.CvTags.InterfaceTagsItem.Tags:
+        """Return list of Campus interface tags for a given interface of a Campus device."""
+        tags = EosCliConfigGen.Metadata.CvTags.InterfaceTagsItem.Tags()
+        tags.append_new(name="Link-Type", value="AVDManaged")
+        fabric_peer_types = list(self.inputs._dynamic_keys.custom_node_types.keys()) + list(self.inputs._dynamic_keys.node_types.keys())
+
+        if generic_interface.peer_type in ["mlag_peer"]:
+            tags.append_new(name="Link-Type", value="Fabric")
+            tags.append_new(name="Link-Type", value="MLAG")
+        elif generic_interface.peer_type in fabric_peer_types:
+            tags.append_new(name="Link-Type", value="Fabric")
+            if (interface_peer := generic_interface.peer) and interface_peer in self.shared_utils.uplink_switches:
+                tags.append_new(name="Link-Type", value="Uplink")
+            else:
+                tags.append_new(name="Link-Type", value="Downlink")
+        elif generic_interface.peer_type in ["other"]:
+            tags.append_new(name="Link-Type", value="Egress")
+        elif generic_interface.peer_type in ["network_port"]:
+            tags.append_new(name="Link-Type", value="NetworkPort")
+        elif generic_interface.peer_type:
+            tags.append_new(name="Link-Type", value=generic_interface.peer_type.title())
+
         return tags

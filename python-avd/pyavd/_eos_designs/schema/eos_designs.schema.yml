@@ -528,6 +528,33 @@ keys:
     type: bool
     default: false
     $ref: eos_cli_config_gen#/keys/router_bgp/keys/updates/keys/wait_for_convergence
+  campus:
+    documentation_options:
+      table: fabric-topology
+    description: 'Name of the Campus fabric.
+
+      Used to generate CloudVision device Topology tags.
+
+      '
+    type: str
+  campus_access_pod:
+    documentation_options:
+      table: fabric-topology
+    description: 'Name of the Campus access pod.
+
+      Used to generate CloudVision device Topology tags.
+
+      '
+    type: str
+  campus_pod:
+    documentation_options:
+      table: fabric-topology
+    description: 'Name of the Campus pod.
+
+      Used to generate CloudVision device Topology tags.
+
+      '
+    type: str
   connected_endpoints_keys:
     documentation_options:
       table: connected-endpoints-keys
@@ -1831,6 +1858,11 @@ keys:
         type: bool
         default: false
         description: Enable the generation of CloudVision Topology Tags (hints).
+      campus_fabric:
+        type: bool
+        default: false
+        description: Generate CloudVision device and interface Topology Tags for Campus
+          fabric devices.
       interface_tags:
         description: List of interface tags that should be generated.
         type: list
@@ -9560,6 +9592,21 @@ $defs:
               new_key: inband_mgmt_vlan
               remove_in_version: 5.0.0
             type: int
+          campus:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus.
+            type: str
+          campus_pod:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus pod.
+            type: str
+          campus_access_pod:
+            documentation_options:
+              table: node-type-common-configuration
+            description: Name of the campus access pod.
+            type: str
       node_groups:
         type: list
         description: Define variables related to all nodes part of this group.

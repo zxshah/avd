@@ -10,6 +10,7 @@
     | [<samp>cv_tags_topology_type</samp>](## "cv_tags_topology_type") | String |  |  | Valid Values:<br>- <code>leaf</code><br>- <code>spine</code><br>- <code>core</code><br>- <code>edge</code> | PREVIEW: This key is currently not supported<br>Device type that CloudVision should use when generating the Topology. Defaults to the setting under node_type_keys. |
     | [<samp>generate_cv_tags</samp>](## "generate_cv_tags") | Dictionary |  |  |  | PREVIEW: This key is currently not supported<br>Generate CloudVision Tags based on AVD data. |
     | [<samp>&nbsp;&nbsp;topology_hints</samp>](## "generate_cv_tags.topology_hints") | Boolean |  | `False` |  | Enable the generation of CloudVision Topology Tags (hints). |
+    | [<samp>&nbsp;&nbsp;campus_fabric</samp>](## "generate_cv_tags.campus_fabric") | Boolean |  | `False` |  | Generate CloudVision device and interface Topology Tags for Campus fabric devices. |
     | [<samp>&nbsp;&nbsp;interface_tags</samp>](## "generate_cv_tags.interface_tags") | List, items: Dictionary |  |  |  | List of interface tags that should be generated. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "generate_cv_tags.interface_tags.[].name") | String | Required, Unique |  |  | Tag name to be assigned to generated tags. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;data_path</samp>](## "generate_cv_tags.interface_tags.[].data_path") | String |  |  |  | Structured config field/key path to be used to find the value for the tag. Dot notation is supported to reference values inside dictionaries.<br>For Example: 'data_path: channel_group.id' would set the tag with the value of the channel id of the interface. If there is no channel id, the tag is not created.<br>`data_path` is ignored if `value` is set. |
@@ -38,6 +39,9 @@
 
       # Enable the generation of CloudVision Topology Tags (hints).
       topology_hints: <bool; default=False>
+
+      # Generate CloudVision device and interface Topology Tags for Campus fabric devices.
+      campus_fabric: <bool; default=False>
 
       # List of interface tags that should be generated.
       interface_tags:

@@ -22,7 +22,7 @@ class RouterPathSelectionMixin(Protocol):
 
     @structured_config_contributor
     def router_path_selection(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Return structured config for router path-selection (DPS)."""
+        """Set the structured config for router path-selection (DPS)."""
         if not self.shared_utils.is_wan_router:
             return
 

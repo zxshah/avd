@@ -102,7 +102,9 @@ class RouterPathSelectionMixin(Protocol):
         if self.shared_utils.use_port_channel_for_direct_ha:
             path_group.local_interfaces.append_new(name=f"Port-Channel{self.shared_utils.wan_ha_port_channel_id}")
         else:
-            path_group.local_interfaces.extend(self.shared_utils.wan_ha_interfaces)
+            # TODO: See if we can make the function returns directly the list of interfaces
+            for interface in self.shared_utils.wan_ha_interfaces:
+                path_group.local_interfaces.append_new(name=interface)
         # not a pathfinder device
         path_group.static_peers.append_new(
             router_ip=self._wan_ha_peer_vtep_ip(),
@@ -116,10 +118,6 @@ class RouterPathSelectionMixin(Protocol):
             path_group.ipsec_profile = self._dp_ipsec_profile_name
 
         self.structured_config.router_path_selection.path_groups.append(path_group)
-
-    def _wan_ha_interfaces(self: AvdStructuredConfigOverlayProtocol) -> list:
-        """Return list of interfaces for HA."""
-        return [uplink for uplink in self.shared_utils.get_switch_fact("uplinks") if get(uplink, "vrf") is None]
 
     def _wan_ha_peer_vtep_ip(self: AvdStructuredConfigOverlayProtocol) -> str:
         peer_facts = self.shared_utils.get_peer_facts(self.shared_utils.wan_ha_peer, required=True)

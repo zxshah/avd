@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ._anta.lib import AntaCatalog
-    from .api.anta import AntaCatalogGenerationSettings, MinimalStructuredConfig
+    from .api.anta import AvdCatalogGenerationSettings, MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 
@@ -18,13 +18,13 @@ def get_device_anta_catalog(
     hostname: str,
     structured_config: dict,
     minimal_structured_configs: dict[str, MinimalStructuredConfig],
-    settings: AntaCatalogGenerationSettings | None = None,
+    settings: AvdCatalogGenerationSettings | None = None,
 ) -> AntaCatalog:
     """Generate an ANTA catalog for a single device.
 
     By default, the ANTA catalog will be generated from all tests specified in the PyAVD test index.
 
-    An optional instance of `pyavd.api.anta.AntaCatalogGenerationSettings` can be provided
+    An optional instance of `pyavd.api.anta.AvdCatalogGenerationSettings` can be provided
     to customize the catalog generation process, such as running only specific tests, or skipping certain tests.
 
     PyAVD uses minimal structured configurations of all devices containing only the required data.
@@ -44,9 +44,9 @@ def get_device_anta_catalog(
     minimal_structured_configs : dict[str, MinimalStructuredConfig]
         Dictionary keyed by hostname containing minimal structured configurations for all devices.
         Must be generated using `pyavd.api.anta.get_minimal_structured_configs`.
-    settings : AntaCatalogGenerationSettings, optional
+    settings : AvdCatalogGenerationSettings, optional
         The settings object to customize the catalog generation process.
-        Must be an instance of `pyavd.api.anta.AntaCatalogGenerationSettings`, by default `None`.
+        Must be an instance of `pyavd.api.anta.AvdCatalogGenerationSettings`, by default `None`.
 
     Returns:
     -------
@@ -57,9 +57,9 @@ def get_device_anta_catalog(
     from ._anta.index import PYAVD_TEST_INDEX, PYAVD_TEST_NAMES
     from ._anta.lib import AntaCatalog
     from ._anta.utils import dump_anta_catalog
-    from .api.anta import AntaCatalogGenerationSettings
+    from .api.anta import AvdCatalogGenerationSettings
 
-    settings = settings or AntaCatalogGenerationSettings()
+    settings = settings or AvdCatalogGenerationSettings()
 
     start_time = perf_counter()
     LOGGER.info("<%s>: generating catalog with settings: %s", hostname, settings.model_dump(mode="json"))

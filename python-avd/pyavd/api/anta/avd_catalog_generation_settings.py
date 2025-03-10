@@ -22,10 +22,10 @@ class InputFactorySettings(BaseModel):
     allow_bgp_vrfs: bool = Field(default=False)
 
 
-class AntaCatalogGenerationSettings(BaseModel):
-    """Model defining settings for ANTA catalog generation.
+class AvdCatalogGenerationSettings(BaseModel):
+    """Model defining settings for the AVD-generated ANTA catalog.
 
-    Used in `pyavd.get_device_anta_catalog` to customize the ANTA test catalog generation.
+    Used in `pyavd.get_device_anta_catalog` to customize the AVD test catalog generation.
 
     Attributes:
     ----------

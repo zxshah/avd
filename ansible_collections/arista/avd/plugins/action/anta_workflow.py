@@ -29,7 +29,7 @@ PLUGIN_NAME = "arista.avd.anta_workflow"
 try:
     from pyavd._anta.lib import AntaCatalog, AntaInventory, AsyncEOSDevice, MDReportGenerator, ReportCsv, ResultManager, anta_runner
     from pyavd._utils import default, get, strip_empties_from_dict
-    from pyavd.api.anta import AntaCatalogGenerationSettings, InputFactorySettings, get_minimal_structured_configs
+    from pyavd.api.anta import AvdCatalogGenerationSettings, InputFactorySettings, get_minimal_structured_configs
     from pyavd.get_device_anta_catalog import get_device_anta_catalog
 
     HAS_PYAVD = True
@@ -158,17 +158,17 @@ class ActionModule(ActionBase):
         ANSIBLE_VARS = extract_hostvars(device_list, task_vars["hostvars"])
         deployed_devices = list(ANSIBLE_VARS.keys())
 
-        generate_avd_catalog = get(PLUGIN_ARGS, "avd_catalogs.enabled")
+        generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")
         structured_config_dir = get(PLUGIN_ARGS, "avd_catalogs.structured_config_dir")
         user_catalog_dir = get(PLUGIN_ARGS, "user_catalogs.input_dir")
 
-        if generate_avd_catalog is False and user_catalog_dir is None:
+        if generate_avd_catalogs is False and user_catalog_dir is None:
             msg = (
                 "When 'avd_catalogs.enabled' is False, a directory with user-defined ANTA catalogs "
                 "must be provided using the 'user_catalogs.input_dir' argument"
             )
             raise AnsibleActionFail(msg)
-        if generate_avd_catalog is True and structured_config_dir is None:
+        if generate_avd_catalogs is True and structured_config_dir is None:
             msg = (
                 "When 'avd_catalogs.enabled' is True, a directory with device structured configurations "
                 "must be provided using the 'avd_catalogs.structured_config_dir' argument"
@@ -179,9 +179,12 @@ class ActionModule(ActionBase):
             # Load the user-defined ANTA catalogs if provided
             if user_catalog_dir is not None:
                 USER_CATALOG = load_user_catalogs(user_catalog_dir)
+                if not generate_avd_catalogs and not USER_CATALOG.tests:
+                    LOGGER.warning("no tests found in the user-defined ANTA catalogs, exiting")
+                    return result
 
             # Load the structured configs and build the minimal structured configs if needed
-            if generate_avd_catalog:
+            if generate_avd_catalogs:
                 STRUCTURED_CONFIGS = load_structured_configs(deployed_devices, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
                 MINIMAL_STRUCTURED_CONFIGS = get_minimal_structured_configs(STRUCTURED_CONFIGS)
 
@@ -238,6 +241,7 @@ def build_reports(batch_results: list[ResultManager], report_settings: dict) -> 
     # Sort the result manager
     result_manager.sort(sort_by=["name", "categories", "test", "result", "custom_field"])
 
+    # TODO: Consider using multiprocessing to generate reports in parallel
     if csv_output_path:
         LOGGER.info("generating CSV report at %s", csv_output_path)
         path = Path(csv_output_path)
@@ -298,10 +302,10 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
         inventory.add_device(anta_device)
         # We generate the device's AVD catalog only if structured configs are loaded
         if STRUCTURED_CONFIGS is not None and MINIMAL_STRUCTURED_CONFIGS is not None:
-            settings = AntaCatalogGenerationSettings(
+            settings = AvdCatalogGenerationSettings(
                 input_factory_settings=InputFactorySettings(allow_bgp_vrfs=get(PLUGIN_ARGS, "avd_catalogs.allow_bgp_vrfs")),
                 output_dir=get(PLUGIN_ARGS, "avd_catalogs.output_dir"),
-                **get_anta_catalog_filters(device, get(PLUGIN_ARGS, "avd_catalogs.filters", default=[])),
+                **get_avd_catalogs_filters(device, get(PLUGIN_ARGS, "avd_catalogs.filters", default=[])),
             )
             catalog = get_device_anta_catalog(
                 hostname=device,
@@ -316,7 +320,7 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
     return result_manager, inventory, catalog
 
 
-def get_anta_catalog_filters(device: str, avd_catalog_filters: list[dict]) -> dict[str, list[str]]:
+def get_avd_catalogs_filters(device: str, avd_catalog_filters: list[dict]) -> dict[str, list[str]]:
     """Get the test filters for a device from the provided AVD catalog filters.
 
     More specific filters (appearing later in the list) override earlier ones.
@@ -367,7 +371,7 @@ def build_anta_device(device: str) -> AsyncEOSDevice:
         "port": get(
             device_vars,
             "ansible_httpapi_port",
-            default=(80 if get(device_vars, "ansible_httpapi_use_ssl", default=False) is False else 443),
+            default=(80 if get(device_vars, "ansible_httpapi_use_ssl", default=True) is False else 443),
         ),
         "timeout": get(PLUGIN_ARGS, "runner.timeout"),
         "tags": set(get(device_vars, "anta_tags", default=[])),
@@ -453,9 +457,9 @@ def setup_module_logging(queue: Queue) -> None:
 
     1. Clears existing handlers for the 'pyavd' logger and enables propagation to use root queue handler
     2. Sets up a queue-based logging system where all logs are sent to a central queue
-    3. Implements filtering for ANTA and its dependencies (anta, aiocache, asyncio, asyncssh, httpcore, httpx)
+    3. Implements filtering for ANTA and its dependencies (anta, asyncio, asyncssh, httpcore, httpx)
        to reduce noise in the Ansible console:
-       - Only warnings and above from these libraries are sent to the queue
+       - Only errors and above from these libraries are sent to the queue
        - When running with -vvv, all logs are still written to per-process debug files
     4. Sets appropriate log levels based on Ansible verbosity:
        - verbosity >= 3: DEBUG level
@@ -482,11 +486,11 @@ def setup_module_logging(queue: Queue) -> None:
         def filter(self, record: logging.LogRecord) -> bool:
             # Filter out logs from ANTA and its underlying libraries
             if any(record.name.startswith(name) for name in self.logger_names):
-                return record.levelno >= logging.WARNING
+                return record.levelno >= logging.ERROR
             return True
 
     # Add the filter to the queue handler
-    anta_libraries = ["anta", "aiocache", "asyncio", "asyncssh", "httpcore", "httpx"]
+    anta_libraries = ["anta", "asyncio", "asyncssh", "httpcore", "httpx"]
     queue_handler.addFilter(QueueFilter(anta_libraries))
 
     # Add the handler to the root logger

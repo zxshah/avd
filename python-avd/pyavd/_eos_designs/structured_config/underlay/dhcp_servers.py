@@ -36,8 +36,7 @@ class DhcpServersMixin(Protocol):
         self._update_ipv4_ztp_boot_file(dhcp_server)
         # Set DNS servers
         if dns_servers := self.inputs.name_servers:
-            dns_servers = dns_servers._cast_as(EosCliConfigGen.DhcpServersItem.DnsServersIpv4)
-            dhcp_server.dns_servers_ipv4 = dns_servers
+            dhcp_server.dns_servers_ipv4 = dns_servers._cast_as(EosCliConfigGen.DhcpServersItem.DnsServersIpv4)
         # Set NTP servers
         self._update_ntp_servers(dhcp_server)
 
@@ -45,7 +44,7 @@ class DhcpServersMixin(Protocol):
 
     def _update_subnets(self: AvdStructuredConfigUnderlayProtocol, dhcp_server: EosCliConfigGen.DhcpServersItem) -> None:
         """
-        Set a list of dhcp subnets for downstream p2p interfaces.
+        Update dhcp_server with a list of dhcp subnets for downstream p2p interfaces.
 
         Used for l3 inband ztp/ztr.
         """
@@ -87,7 +86,7 @@ class DhcpServersMixin(Protocol):
         if not ntp_servers_settings:
             return
 
-        ntp_servers = []
+        ntp_servers = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address()
         for ntp_server in ntp_servers_settings:
             # Check and validate NTP server IP address
             try:
@@ -101,7 +100,7 @@ class DhcpServersMixin(Protocol):
             raise AristaAvdInvalidInputsError(msg)
 
         suboptions = EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptions()
-        suboptions.append_new(code=42, array_ipv4_address=EosCliConfigGen.DhcpServersItem.Ipv4VendorOptionsItem.SubOptionsItem.ArrayIpv4Address(ntp_servers))
+        suboptions.append_new(code=42, array_ipv4_address=ntp_servers)
         dhcp_server.ipv4_vendor_options.append_new(
             vendor_id="NTP",
             sub_options=suboptions,

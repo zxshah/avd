@@ -232,8 +232,8 @@
 | 148 | dc1-leaf1a | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 149 | dc1-leaf1a | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 150 | dc1-leaf1a | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 151 | dc1-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 152 | dc1-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 151 | dc1-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 152 | dc1-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 153 | dc1-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 154 | dc1-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 155 | dc1-leaf1a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -388,8 +388,8 @@
 | 304 | dc1-leaf1b | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 305 | dc1-leaf1b | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 306 | dc1-leaf1b | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 307 | dc1-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 308 | dc1-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 307 | dc1-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 308 | dc1-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 309 | dc1-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 310 | dc1-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 311 | dc1-leaf1b | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -478,8 +478,8 @@
 | 394 | dc1-leaf1c | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 395 | dc1-leaf1c | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 396 | dc1-leaf1c | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 397 | dc1-leaf1c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 398 | dc1-leaf1c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 397 | dc1-leaf1c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 398 | dc1-leaf1c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 399 | dc1-leaf1c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 400 | dc1-leaf1c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 401 | dc1-leaf1c | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -626,8 +626,8 @@
 | 542 | dc1-leaf2a | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 543 | dc1-leaf2a | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 544 | dc1-leaf2a | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 545 | dc1-leaf2a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 546 | dc1-leaf2a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 545 | dc1-leaf2a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 546 | dc1-leaf2a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 547 | dc1-leaf2a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 548 | dc1-leaf2a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 549 | dc1-leaf2a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -739,8 +739,8 @@
 | 655 | dc1-leaf2c | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 656 | dc1-leaf2c | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 657 | dc1-leaf2c | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 658 | dc1-leaf2c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 659 | dc1-leaf2c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 658 | dc1-leaf2c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 659 | dc1-leaf2c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 660 | dc1-leaf2c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 661 | dc1-leaf2c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 662 | dc1-leaf2c | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -855,8 +855,8 @@
 | 771 | dc1-spine1 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 772 | dc1-spine1 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 773 | dc1-spine1 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 774 | dc1-spine1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 775 | dc1-spine1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 774 | dc1-spine1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 775 | dc1-spine1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 776 | dc1-spine1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 777 | dc1-spine1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 778 | dc1-spine1 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -971,8 +971,8 @@
 | 887 | dc1-spine2 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 888 | dc1-spine2 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 889 | dc1-spine2 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 890 | dc1-spine2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 891 | dc1-spine2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 890 | dc1-spine2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 891 | dc1-spine2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 892 | dc1-spine2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 893 | dc1-spine2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 894 | dc1-spine2 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1100,8 +1100,8 @@
 | 1016 | dc1-svc-leaf1a | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1017 | dc1-svc-leaf1a | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1018 | dc1-svc-leaf1a | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1019 | dc1-svc-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1020 | dc1-svc-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1019 | dc1-svc-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1020 | dc1-svc-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1021 | dc1-svc-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1022 | dc1-svc-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1023 | dc1-svc-leaf1a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1229,8 +1229,8 @@
 | 1145 | dc1-svc-leaf1b | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1146 | dc1-svc-leaf1b | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1147 | dc1-svc-leaf1b | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1148 | dc1-svc-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1149 | dc1-svc-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1148 | dc1-svc-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1149 | dc1-svc-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1150 | dc1-svc-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1151 | dc1-svc-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1152 | dc1-svc-leaf1b | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1332,8 +1332,8 @@
 | 1248 | dc1-wan1 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1249 | dc1-wan1 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1250 | dc1-wan1 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1251 | dc1-wan1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1252 | dc1-wan1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1251 | dc1-wan1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1252 | dc1-wan1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1253 | dc1-wan1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1254 | dc1-wan1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1255 | dc1-wan1 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1434,8 +1434,8 @@
 | 1350 | dc1-wan2 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1351 | dc1-wan2 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1352 | dc1-wan2 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1353 | dc1-wan2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1354 | dc1-wan2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1353 | dc1-wan2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1354 | dc1-wan2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1355 | dc1-wan2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1356 | dc1-wan2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1357 | dc1-wan2 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1596,8 +1596,8 @@
 | 1512 | dc2-leaf1a | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1513 | dc2-leaf1a | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1514 | dc2-leaf1a | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1515 | dc2-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1516 | dc2-leaf1a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1515 | dc2-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1516 | dc2-leaf1a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1517 | dc2-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1518 | dc2-leaf1a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1519 | dc2-leaf1a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1758,8 +1758,8 @@
 | 1674 | dc2-leaf1b | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1675 | dc2-leaf1b | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1676 | dc2-leaf1b | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1677 | dc2-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1678 | dc2-leaf1b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1677 | dc2-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1678 | dc2-leaf1b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1679 | dc2-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1680 | dc2-leaf1b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1681 | dc2-leaf1b | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1830,8 +1830,8 @@
 | 1746 | dc2-leaf1c | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1747 | dc2-leaf1c | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1748 | dc2-leaf1c | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1749 | dc2-leaf1c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1750 | dc2-leaf1c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1749 | dc2-leaf1c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1750 | dc2-leaf1c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1751 | dc2-leaf1c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1752 | dc2-leaf1c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1753 | dc2-leaf1c | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -1997,8 +1997,8 @@
 | 1913 | dc2-leaf2a | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 1914 | dc2-leaf2a | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 1915 | dc2-leaf2a | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 1916 | dc2-leaf2a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 1917 | dc2-leaf2a | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 1916 | dc2-leaf2a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 1917 | dc2-leaf2a | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 1918 | dc2-leaf2a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1919 | dc2-leaf2a | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 1920 | dc2-leaf2a | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2160,8 +2160,8 @@
 | 2076 | dc2-leaf2b | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2077 | dc2-leaf2b | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2078 | dc2-leaf2b | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2079 | dc2-leaf2b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2080 | dc2-leaf2b | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2079 | dc2-leaf2b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2080 | dc2-leaf2b | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2081 | dc2-leaf2b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2082 | dc2-leaf2b | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2083 | dc2-leaf2b | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2232,8 +2232,8 @@
 | 2148 | dc2-leaf2c | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2149 | dc2-leaf2c | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2150 | dc2-leaf2c | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2151 | dc2-leaf2c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2152 | dc2-leaf2c | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2151 | dc2-leaf2c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2152 | dc2-leaf2c | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2153 | dc2-leaf2c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2154 | dc2-leaf2c | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2155 | dc2-leaf2c | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2400,8 +2400,8 @@
 | 2316 | dc2-leaf3a.arista.com | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2317 | dc2-leaf3a.arista.com | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2318 | dc2-leaf3a.arista.com | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2319 | dc2-leaf3a.arista.com | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2320 | dc2-leaf3a.arista.com | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2319 | dc2-leaf3a.arista.com | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2320 | dc2-leaf3a.arista.com | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2321 | dc2-leaf3a.arista.com | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2322 | dc2-leaf3a.arista.com | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2323 | dc2-leaf3a.arista.com | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2560,8 +2560,8 @@
 | 2476 | dc2-leaf3b.arista.com | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2477 | dc2-leaf3b.arista.com | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2478 | dc2-leaf3b.arista.com | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2479 | dc2-leaf3b.arista.com | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2480 | dc2-leaf3b.arista.com | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2479 | dc2-leaf3b.arista.com | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2480 | dc2-leaf3b.arista.com | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2481 | dc2-leaf3b.arista.com | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2482 | dc2-leaf3b.arista.com | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2483 | dc2-leaf3b.arista.com | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2658,8 +2658,8 @@
 | 2574 | dc2-spine1 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2575 | dc2-spine1 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2576 | dc2-spine1 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2577 | dc2-spine1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2578 | dc2-spine1 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2577 | dc2-spine1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2578 | dc2-spine1 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2579 | dc2-spine1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2580 | dc2-spine1 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2581 | dc2-spine1 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |
@@ -2756,8 +2756,8 @@
 | 2672 | dc2-spine2 | System | VerifyCPUUtilization | Verifies whether the CPU utilization is below 75%. | - | NOT RUN | - |
 | 2673 | dc2-spine2 | System | VerifyFileSystemUtilization | Verifies that no partition is utilizing more than 75% of its disk space. | - | NOT RUN | - |
 | 2674 | dc2-spine2 | System | VerifyMemoryUtilization | Verifies whether the memory utilization is below 75%. | - | NOT RUN | - |
-| 2675 | dc2-spine2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
-| 2676 | dc2-spine2 | System | VerifyNTP | Verifies if NTP is synchronised. | - | NOT RUN | - |
+| 2675 | dc2-spine2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
+| 2676 | dc2-spine2 | System | VerifyNTP | Verifies that the Network Time Protocol (NTP) is synchronized. | - | NOT RUN | - |
 | 2677 | dc2-spine2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2678 | dc2-spine2 | System | VerifyReloadCause | Verifies the last reload cause of the device. | - | NOT RUN | - |
 | 2679 | dc2-spine2 | System | VerifyUptime | Verifies the device uptime. | - | NOT RUN | - |

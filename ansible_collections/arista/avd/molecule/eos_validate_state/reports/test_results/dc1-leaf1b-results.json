@@ -1253,7 +1253,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc1-leaf1b",
@@ -1261,7 +1261,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc1-leaf1b",

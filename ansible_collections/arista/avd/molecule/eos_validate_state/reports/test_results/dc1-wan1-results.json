@@ -821,7 +821,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc1-wan1",
@@ -829,7 +829,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc1-wan1",

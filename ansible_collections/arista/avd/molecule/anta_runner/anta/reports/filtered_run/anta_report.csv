@@ -361,7 +361,7 @@ dc2-spine1,VerifyAPIHttpsSSL,unset,,Verifies if eAPI HTTPS server SSL profile is
 dc2-spine1,VerifyEOSExtensions,unset,,Verifies that all EOS extensions installed on the device are enabled for boot persistence.,Software
 dc2-spine1,VerifyEOSVersion,unset,,Verifies the EOS version of the device.,Software
 dc2-spine1,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the device.,Software
-dc2-spine1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+dc2-spine1,VerifyNTP,unset,,Verifies that the Network Time Protocol (NTP) is synchronized.,System
 dc2-spine1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-spine2,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-spine2,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
@@ -379,5 +379,5 @@ dc2-spine2,VerifyAPIHttpsSSL,unset,,Verifies if eAPI HTTPS server SSL profile is
 dc2-spine2,VerifyEOSExtensions,unset,,Verifies that all EOS extensions installed on the device are enabled for boot persistence.,Software
 dc2-spine2,VerifyEOSVersion,unset,,Verifies the EOS version of the device.,Software
 dc2-spine2,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the device.,Software
-dc2-spine2,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
+dc2-spine2,VerifyNTP,unset,,Verifies that the Network Time Protocol (NTP) is synchronized.,System
 dc2-spine2,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System

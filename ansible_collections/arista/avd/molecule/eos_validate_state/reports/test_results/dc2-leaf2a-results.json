@@ -1377,7 +1377,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc2-leaf2a",
@@ -1385,7 +1385,7 @@
     "categories": [
       "system"
     ],
-    "description": "Verifies if NTP is synchronised."
+    "description": "Verifies that the Network Time Protocol (NTP) is synchronized."
   },
   {
     "name": "dc2-leaf2a",

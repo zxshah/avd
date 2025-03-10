@@ -130,4 +130,4 @@ def duplicated_devices_handler(
         "verify_inputs: Devices with duplicated system_mac_address and unique serial_number discovered in inventory (structured config): %s",
         duplicated_system_mac_address_set_serial_number,
     )
-    warnings.append(CVDuplicatedDevices("Duplicated devices found in inventory", duplicated_system_mac_address_set_serial_number))
+    warnings.append(CVDuplicatedDevices("Duplicated devices found in inventory1", duplicated_system_mac_address_set_serial_number))

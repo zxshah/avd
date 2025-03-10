@@ -80,13 +80,12 @@ def verify_device_inputs(*, devices: list[CVDevice], strict_system_mac_address: 
                 )
 
     if duplicated_serial_number or duplicated_system_mac_address_unset_serial_number or duplicated_system_mac_address_set_serial_number:
-        warnings.append(
-            duplicated_devices_handler(
-                duplicated_serial_number=duplicated_serial_number,
-                duplicated_system_mac_address_unset_serial_number=duplicated_system_mac_address_unset_serial_number,
-                duplicated_system_mac_address_set_serial_number=duplicated_system_mac_address_set_serial_number,
-                strict_system_mac_address=strict_system_mac_address,
-            )
+        duplicated_devices_handler(
+            duplicated_serial_number=duplicated_serial_number,
+            duplicated_system_mac_address_unset_serial_number=duplicated_system_mac_address_unset_serial_number,
+            duplicated_system_mac_address_set_serial_number=duplicated_system_mac_address_set_serial_number,
+            strict_system_mac_address=strict_system_mac_address,
+            warnings=warnings,
         )
 
 
@@ -96,7 +95,8 @@ def duplicated_devices_handler(
     duplicated_system_mac_address_unset_serial_number: list[dict[str, str | list[CVDevice]]],
     duplicated_system_mac_address_set_serial_number: list[dict[str, str | list[CVDevice]]],
     strict_system_mac_address: bool,
-) -> Exception:
+    warnings: list[Exception],
+) -> None:
     """
     Handle input devices with duplicated `serial_number`s or `system_mac_address`es.
 
@@ -130,4 +130,4 @@ def duplicated_devices_handler(
         "verify_inputs: Devices with duplicated system_mac_address and unique serial_number discovered in inventory (structured config): %s",
         duplicated_system_mac_address_set_serial_number,
     )
-    return CVDuplicatedDevices("Duplicated devices found in inventory", duplicated_system_mac_address_set_serial_number)
+    warnings.append(CVDuplicatedDevices("Duplicated devices found in inventory", duplicated_system_mac_address_set_serial_number))

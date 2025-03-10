@@ -140,7 +140,7 @@ class RouterPathSelectionMixin(Protocol):
         self: AvdStructuredConfigOverlayProtocol, path_group: EosCliConfigGen.RouterPathSelection.PathGroupsItem
     ) -> None:
         """
-        Generate the router_path_selection.local_interfaces list.
+        Update the local_interfaces list for the given path group.
 
         For AUTOVPN clients, configure the stun server profiles as appropriate
         """

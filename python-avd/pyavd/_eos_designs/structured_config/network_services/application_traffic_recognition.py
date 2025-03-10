@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
-from pyavd._utils import get, get_item
+from pyavd._utils import get
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -87,28 +87,26 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     prefix_values: [Pathfinder vtep_ip]
         """
         # Adding the application-profile
-        application_profiles = self.structured_config.application_traffic_recognition.application_profiles
-        if get_item(application_profiles._as_list(), "name", self._wan_control_plane_application_profile_name) is not None:
+        if self._wan_control_plane_application_profile_name in self.structured_config.application_traffic_recognition.application_profiles:
             return
 
-        application_profile_item = EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem()
-        application_profile_item.name = self._wan_control_plane_application_profile_name
+        application_profile_item = EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem(name=self._wan_control_plane_application_profile_name)
         application_profile_item.applications.append_new(name=self._wan_control_plane_application)
         self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
         # Adding the application
-        ipv4_applications = self.structured_config.application_traffic_recognition.applications.ipv4_applications
-        if get_item(ipv4_applications._as_list(), "name", self._wan_control_plane_application) is not None:
+        if self._wan_control_plane_application in self.structured_config.application_traffic_recognition.applications.ipv4_applications:
             return
+
         if self.shared_utils.is_wan_client:
             self.structured_config.application_traffic_recognition.applications.ipv4_applications.append_new(
                 name=self._wan_control_plane_application,
                 dest_prefix_set_name=self._wan_cp_app_dst_prefix,
             )
             # Adding the field-set based on the connected Pathfinder router-ids
-            ipv4_prefixes_field_sets = self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes
-            if get_item(ipv4_prefixes_field_sets._as_list(), "name", self._wan_cp_app_dst_prefix) is not None:
+            if self._wan_cp_app_dst_prefix in self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes:
                 return
+
             pathfinder_vtep_ips = [f"{wan_rs.vtep_ip}/32" for wan_rs in self.shared_utils.filtered_wan_route_servers]
 
             self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.append_new(
@@ -140,9 +138,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         for policy in self._filtered_wan_policies:
             if policy.get("is_default") and self._wan_control_plane_application_profile_name in self.inputs.application_classification.application_profiles:
-                application_profile_item = self.inputs.application_classification.application_profiles[
-                    self._wan_control_plane_application_profile_name
-                ]._cast_as(EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem)
+                application_profile_item = self.inputs.application_classification.application_profiles[self._wan_control_plane_application_profile_name]
                 self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
             for match in get(policy, "matches", []):
@@ -158,10 +154,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                         "is not defined in 'application_classification.application_profiles'."
                     )
                     raise AristaAvdInvalidInputsError(msg)
-                application_profile_item = self.inputs.application_classification.application_profiles[application_profile]._cast_as(
-                    EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem
-                )
-
+                application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
                 self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
             if (default_match := policy.get("default_match")) is not None:
@@ -174,9 +167,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                         )
                         raise AristaAvdInvalidInputsError(msg)
 
-                    application_profile_item = self.inputs.application_classification.application_profiles[application_profile]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem
-                    )
+                    application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
 
                     self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
@@ -190,27 +181,19 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     raise AristaAvdInvalidInputsError(msg)
 
                 if category.name:
-                    category_item = self.inputs.application_classification.categories[category.name]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.CategoriesItem,
-                        ignore_extra_keys=True,
-                    )
+                    category_item = self.inputs.application_classification.categories[category.name]
                     self.structured_config.application_traffic_recognition.categories.append(category_item)
             # Applications in application profiles
             for application in application_profile.applications:
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
-                    application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem,
-                        ignore_extra_keys=True,
-                    )
+                    application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
                     self.structured_config.application_traffic_recognition.applications.ipv4_applications.append(application_item)
 
         # Applications in categories
         for category in self.structured_config.application_traffic_recognition.categories:
             for application in category.applications:
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
-                    application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem
-                    )
+                    application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
 
                     self.structured_config.application_traffic_recognition.applications.ipv4_applications.append(application_item)
 
@@ -223,9 +206,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     )
                     raise AristaAvdInvalidInputsError(msg)
                 if prefix_set_name:
-                    ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem
-                    )
+                    ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]
+
                     self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
 
             for port_set_name in (
@@ -242,7 +224,5 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     raise AristaAvdInvalidInputsError(msg)
 
                 if port_set_name:
-                    l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]._cast_as(
-                        EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.L4PortsItem
-                    )
+                    l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]
                     self.structured_config.application_traffic_recognition.field_sets.l4_ports.append(l4_port)

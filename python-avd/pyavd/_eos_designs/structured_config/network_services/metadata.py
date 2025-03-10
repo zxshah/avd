@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import get, get_all
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -71,7 +70,7 @@ class MetadataMixin(Protocol):
         if not self.shared_utils.is_cv_pathfinder_server or (atr := self.structured_config.application_traffic_recognition) is None:
             return
         applications = atr.applications
-        user_defined_app_names = set(get_all(applications._as_dict(), "ipv4_applications.name") + get_all(applications._as_dict(), "ipv6_applications.name"))
+        user_defined_app_names = set(applications.ipv4_applications.keys())
         categories = atr.categories
         for profile in atr.application_profiles:
             application_profile = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem(name=profile.name)
@@ -80,7 +79,7 @@ class MetadataMixin(Protocol):
                 application_profile.transport_protocols.extend(protocols)
             for application in profile.applications:
                 if application.name not in user_defined_app_names:
-                    services = get_all(application._as_dict(), "service")
+                    services = application.service or []
                     services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.BuiltinApplicationsItem.Services()
                     for service in services:
                         services_item.append(service)
@@ -88,7 +87,7 @@ class MetadataMixin(Protocol):
                 if application.name in user_defined_app_names:
                     application_profile.user_defined_applications.append_new(name=application.name)
             for category in profile.categories:
-                services = get_all(category._as_dict(), "service")
+                services = category.service or []
                 services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.CategoriesItem.Services()
                 for service in services:
                     services_item.append(service)
@@ -98,7 +97,7 @@ class MetadataMixin(Protocol):
             for application in category.applications:
                 if application.name not in user_defined_app_names:
                     services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.Categories.BuiltinApplicationsItem.Services()
-                    services = get(category._as_dict(), "service", default=[])
+                    services = application.service or []
                     for service in services:
                         services_item.append(service)
                     self.structured_config.metadata.cv_pathfinder.applications.categories.builtin_applications.append_new(

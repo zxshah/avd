@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import StructuredConfigGenerator, structured_config_contributor
-from pyavd._utils import AvdStringFormatter, default, get
+from pyavd._utils import AvdStringFormatter, default
 from pyavd.api.interface_descriptions import InterfaceDescriptionData
 from pyavd.j2filters import list_compress
 
@@ -81,7 +81,7 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
 
         # Add L3 config if the main interface is also used for L3 peering
         if self.shared_utils.mlag_peer_l3_vlan is None:
-            self._set_l3_vlan_or_mlag_vlan(main_vlan_interface)
+            self._set_mlag_l3_vlan_interface(main_vlan_interface)
             # Applying structured config from l3_vlan only when not set on the main vlan
             if self.shared_utils.node_config.mlag_peer_l3_vlan_structured_config and not self.shared_utils.node_config.mlag_peer_vlan_structured_config:
                 self.custom_structured_configs.nested.vlan_interfaces.obtain(main_vlan_interface_name)._deepmerge(
@@ -103,7 +103,7 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
         if not self.inputs.underlay_rfc5549:
             l3_vlan_interface.ip_address = f"{self.shared_utils.mlag_l3_ip}/{self.inputs.fabric_ip_addressing.mlag.ipv4_prefix_length}"
 
-        self._set_l3_vlan_or_mlag_vlan(l3_vlan_interface)
+        self._set_mlag_l3_vlan_interface(l3_vlan_interface)
 
         if self.shared_utils.node_config.mlag_peer_l3_vlan_structured_config:
             self.custom_structured_configs.nested.vlan_interfaces.obtain(l3_vlan_interface_name)._deepmerge(
@@ -111,7 +111,7 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
             )
         self.structured_config.vlan_interfaces.append(main_vlan_interface)
 
-    def _set_l3_vlan_or_mlag_vlan(self, vlan_interface: EosCliConfigGen.VlanInterfacesItem) -> None:
+    def _set_mlag_l3_vlan_interface(self, vlan_interface: EosCliConfigGen.VlanInterfacesItem) -> None:
         if self.shared_utils.underlay_routing_protocol == "ospf":
             vlan_interface._update(
                 ospf_network_point_to_point=True,
@@ -181,19 +181,10 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
             port_channel_interface.sflow.enable = self.inputs.fabric_sflow.mlag_interfaces
 
         if self.shared_utils.ptp_enabled and self.shared_utils.node_config.ptp.mlag:
-            ptp_config = {}
-            ptp_config.update(self.shared_utils.ptp_profile._as_dict(include_default_values=True))
-            ptp_config_item = EosCliConfigGen.PortChannelInterfacesItem.Ptp(
-                enable=True, delay_req=get(ptp_config, "delay_req"), transport=get(ptp_config, "transport")
-            )
-            ptp_config_item.announce._update(interval=get(ptp_config, "announce.interval"), timeout=get(ptp_config, "announce.timeout"))
-            ptp_config_item.sync_message.interval = get(ptp_config, "sync_message.interval")
-            # TODO: Geeting issue with PTP profile
-            # if (profile:=get(ptp_config,"profile")):
-            #     ptp_config_item.profile = profile  # noqa: ERA001
-
-            # Apply ptp config to port-channel
-            port_channel_interface.ptp = ptp_config_item
+            ptp_profile_config = self.shared_utils.ptp_profile._deepcopy()
+            delattr(ptp_profile_config, "profile")
+            port_channel_interface.ptp = ptp_profile_config._cast_as(EosCliConfigGen.PortChannelInterfacesItem.Ptp, ignore_extra_keys=True)
+            port_channel_interface.ptp.enable = True
 
         if self.shared_utils.get_mlag_peer_fact("inband_ztp", required=False) is True:
             port_channel_interface._update(
@@ -280,14 +271,14 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
 
         # MLAG Peer group
         peer_group_name = self.inputs.bgp_peer_groups.mlag_ipv4_underlay_peer.name
-        router_bgp = self.shared_utils.get_router_bgp_with_mlag_peer_group(self.custom_structured_configs)
+        self.shared_utils.update_router_bgp_with_mlag_peer_group(self.structured_config.router_bgp, self.custom_structured_configs)
 
         vlan = default(self.shared_utils.mlag_peer_l3_vlan, self.shared_utils.node_config.mlag_peer_vlan)
         interface_name = f"Vlan{vlan}"
 
         # Underlay MLAG peering
         if self.inputs.underlay_rfc5549:
-            router_bgp.neighbor_interfaces.append_new(
+            self.structured_config.router_bgp.neighbor_interfaces.append_new(
                 name=interface_name,
                 peer_group=peer_group_name,
                 peer=self.shared_utils.mlag_peer,
@@ -302,7 +293,7 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
 
         else:
             neighbor_ip = default(self.shared_utils.mlag_peer_l3_ip, self.shared_utils.mlag_peer_ip)
-            router_bgp.neighbors.append_new(
+            self.structured_config.router_bgp.neighbors.append_new(
                 ip_address=neighbor_ip,
                 peer_group=peer_group_name,
                 peer=self.shared_utils.mlag_peer,
@@ -313,5 +304,3 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
                     peer_interface=interface_name,
                 ),
             )
-
-        self.structured_config.router_bgp = router_bgp

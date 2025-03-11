@@ -173,20 +173,13 @@ jobs:
         with:
           name: pyavd
           path: /tmp/python_env
-      - name: Activate Virtual Environment
-        run: |
-          source /tmp/python_env/bin/activate
-          ls -la /tmp/python_env/lib/python*/site-packages/
-        shell: /usr/bin/bash -e {0}
-      - name: Install Python & Ansible Requirements
-        run: |
-          pip install --upgrade "${{ matrix.ansible_version }}"
-          pip install molecule distlib
       - name: Run Molecule action
         run: |
-          echo "Python executable: $(which python)"
-          echo "Pip executable: $(which pip)"
-          pip list && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
+          source /tmp/python_env/bin/activate
+          pip install --upgrade "${{ matrix.ansible_version }}"
+          pip install molecule distlib
+          cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
+        shell: /usr/bin/bash -e {0}
       # - name: Run molecule action
       #   uses: arista-netdevops-community/action-molecule-avd@v1.8.1
       #   with:

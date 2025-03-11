@@ -135,16 +135,13 @@ jobs:
           source /tmp/python_env/bin/activate
           pip install --upgrade pip
           pip install build
-          pip install -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
           cd python-avd && python -m build --wheel --outdir /tmp/wheels
           pip install --no-cache-dir /tmp/wheels/*.whl
-          pip list
       - name: Upload Virtual Environment
         uses: actions/upload-artifact@v4
         with:
           name: pyavd
           path: /tmp/python_env/
-          retention-days: 1
 
   # ----------------------------------- #
   # EOS CLI CONFIG GEN MOLECULE
@@ -179,7 +176,7 @@ jobs:
           ls -la /tmp/python_env/bin  # Check permissions
       - name: Install Ansible Requirements and Run Molecule
         run: |
-          python -m pip install --upgrade ${{ matrix.ansible_version }}
+          python -m pip install --upgrade '${{ matrix.ansible_version }}'
           cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"
         shell: /usr/bin/bash -e {0}
         env:

@@ -54,6 +54,19 @@ tenants:
             enabled: true
             ip_address: 10.10.10.2/29
             node: network-services-l3-port-channels
+          - name: Port-Channel22
+            mode: active
+            peer: inet-cloud
+            peer_port_channel: Po22
+            enabled: true
+            node: network-services-l3-port-channels
+            member_interfaces:
+              - name: Ethernet20
+                peer_interface: Ethernet20
+                peer: inet-cloud
+              - name: Ethernet21
+                peer_interface: Ethernet21
+                peer: inet-cloud
       - name: TESTING
         vrf_id: 2
         ospf:
@@ -129,3 +142,16 @@ tenants:
             raw_eos_cli: |
                logging event storm-control discards
                logging event link-status
+
+  - name: Subinterface
+    mac_vrf_vni_base: 20000
+    vrfs:
+      - name: subIntVRF
+        vrf_id: 3
+        l3_port_channels:
+          - name: Port-Channel22.100
+            peer: inet-cloud-sub100
+            peer_port_channel: Po22.100
+            enabled: true
+            ip_address: 10.10.10.2/29
+            node: network-services-l3-port-channels

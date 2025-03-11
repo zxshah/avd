@@ -22,6 +22,24 @@ ethernet_interfaces:
   peer: inet-cloud
   peer_interface: Ethernet11
   peer_type: l3_port_channel_member
+- name: Ethernet20
+  description: inet-cloud_Ethernet20
+  shutdown: false
+  channel_group:
+    id: 22
+    mode: active
+  peer: inet-cloud
+  peer_interface: Ethernet20
+  peer_type: l3_port_channel_member
+- name: Ethernet21
+  description: inet-cloud_Ethernet21
+  shutdown: false
+  channel_group:
+    id: 22
+    mode: active
+  peer: inet-cloud
+  peer_interface: Ethernet21
+  peer_type: l3_port_channel_member
 - name: Ethernet4
   description: man descr inet-clout eth8
   shutdown: false
@@ -108,6 +126,14 @@ port_channel_interfaces:
   peer: inet-cloud-sub100
   peer_interface: Po11.100
   peer_type: l3_port_channel
+- name: Port-Channel22
+  description: inet-cloud_Po22
+  shutdown: false
+  peer: inet-cloud
+  peer_interface: Po22
+  peer_type: l3_port_channel
+  switchport:
+    enabled: false
 - name: Port-Channel1111
   description: Description list
   shutdown: false
@@ -169,6 +195,16 @@ port_channel_interfaces:
     logging event link-status
 
     '
+- name: Port-Channel22.100
+  description: inet-cloud-sub100_Po22.100
+  shutdown: false
+  encapsulation_dot1q:
+    vlan: 100
+  vrf: subIntVRF
+  ip_address: 10.10.10.2/29
+  peer: inet-cloud-sub100
+  peer_interface: Po22.100
+  peer_type: l3_port_channel
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -243,6 +279,21 @@ router_bgp:
         enabled: true
       ospf:
         enabled: true
+  - name: subIntVRF
+    rd: 192.168.255.109:3
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '3:3'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '3:3'
+    router_id: 192.168.255.109
+    redistribute:
+      connected:
+        enabled: true
 router_ospf:
   process_ids:
   - id: 2
@@ -268,6 +319,9 @@ vrfs:
 - name: TESTING
   ip_routing: true
   tenant: L3PO
+- name: subIntVRF
+  ip_routing: true
+  tenant: Subinterface
 vxlan_interface:
   vxlan1:
     description: network-services-l3-port-channels_VTEP
@@ -279,3 +333,5 @@ vxlan_interface:
         vni: 1
       - name: TESTING
         vni: 2
+      - name: subIntVRF
+        vni: 3

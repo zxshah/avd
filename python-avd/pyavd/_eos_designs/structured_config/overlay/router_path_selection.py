@@ -166,19 +166,40 @@ class RouterPathSelectionMixin(Protocol):
         """
         Update the local_interfaces list for the given path group.
 
+        If the local_interface is configured with metric bandwidth, also set the metric bandwidth for router_path_selection.
+
         For AUTOVPN clients, configure the stun server profiles as appropriate
         """
         if path_group.name not in self.shared_utils.wan_local_path_groups:
             return
 
         for interface in self.shared_utils.wan_local_path_groups[path_group.name]._internal_data.interfaces:
-            local_interface = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem(name=get(interface, "name", required=True))
+            interface_name: str = get(interface, "name", required=True)
+            local_interface = EosCliConfigGen.RouterPathSelection.PathGroupsItem.LocalInterfacesItem(name=interface_name)
 
             if self.shared_utils.is_wan_client and self.shared_utils.should_connect_to_wan_rs([path_group.name]):
                 stun_server_profiles = self._stun_server_profiles.get(path_group.name, [])
                 if stun_server_profiles:
                     for profile in stun_server_profiles:
                         local_interface.stun.server_profiles.append(profile.name)
+
+            if interface_name.startswith("Port-Channel"):
+                # metric bandwidth not supported on port-channel
+                path_group.local_interfaces.append(local_interface)
+                continue
+
+            interface_input = self.shared_utils.wan_interfaces[interface_name]
+            if interface_input.receive_bandwidth or interface_input.transmit_bandwidth:
+                if "." in interface_name:
+                    schema_key = f"{self.shared_utils.node_type_key_data.key}.nodes[name={self.shared_utils.hostname}].l3_interfaces[name={interface_name}]"
+                    msg = f"Fields 'receive_bandwidth' and 'transmit_bandwidth' configured on {schema_key} are not supported for subinterfaces."
+                    raise AristaAvdError(msg)
+                self.structured_config.router_path_selection.interfaces.append_new(
+                    name=interface_name,
+                    metric_bandwidth=EosCliConfigGen.RouterPathSelection.InterfacesItem.MetricBandwidth(
+                        receive=interface_input.receive_bandwidth, transmit=interface_input.transmit_bandwidth
+                    ),
+                )
 
             path_group.local_interfaces.append(local_interface)
 

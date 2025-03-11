@@ -30,21 +30,17 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
             self.structured_config.router_adaptive_virtual_topology.topology_role = "pathfinder"
             return
 
-        if self.shared_utils.wan_region is None:
+        if (wan_region := self.shared_utils.wan_region) is None:
             # Should never happen but just in case.
             msg = "Could not find 'cv_pathfinder_region' so it is not possible to generate config for router_adaptive_virtual_topology."
             raise AristaAvdInvalidInputsError(msg)
 
-        if self.shared_utils.wan_site is None:
+        if (wan_site := self.shared_utils.wan_site) is None:
             # Should never happen but just in case.
             msg = "Could not find 'cv_pathfinder_site' so it is not possible to generate config for router_adaptive_virtual_topology."
             raise AristaAvdInvalidInputsError(msg)
 
         # Edge or Transit
-        self.structured_config.router_adaptive_virtual_topology.topology_role = self.shared_utils.cv_pathfinder_role
-        wan_zone = self.shared_utils.wan_zone
-        wan_region = self.shared_utils.wan_region
-        wan_site = self.shared_utils.wan_site
-        self.structured_config.router_adaptive_virtual_topology.zone._update(name=wan_zone["name"], id=wan_zone["id"])
+        self.structured_config.router_adaptive_virtual_topology._update(topology_role=self.shared_utils.cv_pathfinder_role, zone=self.shared_utils.wan_zone)
         self.structured_config.router_adaptive_virtual_topology.region._update(name=wan_region.name, id=wan_region.id)
         self.structured_config.router_adaptive_virtual_topology.site._update(name=wan_site.name, id=wan_site.id)

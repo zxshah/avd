@@ -10,6 +10,7 @@ from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._eos_designs.structured_config.structured_config_generator import StructuredConfigGenerator, structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
+from pyavd._utils.undefined import Undefined
 from pyavd.j2filters import natural_sort
 
 
@@ -109,91 +110,95 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         """
         return any(interface.sflow.enable for interface in chain(self.structured_config.ethernet_interfaces, self.structured_config.port_channel_interfaces))
 
-    def resolve_flow_tracker_by_type(
-        self, tracker_settings: EosDesigns.FlowTrackingSettings.TrackersItem
-    ) -> EosCliConfigGen.FlowTracking.Hardware.TrackersItem | EosCliConfigGen.FlowTracking.Sampled.TrackersItem | None:
-        if self.shared_utils.flow_tracking_type == "sampled":
-            tracker = EosCliConfigGen.FlowTracking.Sampled.TrackersItem(
-                name=tracker_settings.name,
-                record_export=tracker_settings.record_export._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.RecordExport),
-                exporters=tracker_settings.exporters._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.Exporters),
-                table_size=tracker_settings.sampled.table_size,
-            )
-            tracker.record_export.mpls = tracker_settings.sampled.record_export.mpls
-            return tracker
-        if self.shared_utils.flow_tracking_type == "hardware":
-            return EosCliConfigGen.FlowTracking.Hardware.TrackersItem(
-                name=tracker_settings.name,
-                record_export=tracker_settings.record_export._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.RecordExport),
-                exporters=tracker_settings.exporters._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.Exporters),
-            )
-        return None
-
     @structured_config_contributor
     def flow_tracking(self) -> None:
-        """Set the structured config for flow_tracking."""
-        configured_trackers = self._get_enabled_flow_trackers()
-        if not configured_trackers:
-            return
-
-        flow_tracking_settings = self.inputs.flow_tracking_settings
-        if self.shared_utils.flow_tracking_type == "hardware":
-            self.structured_config.flow_tracking.hardware = flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
-            self.structured_config.flow_tracking.hardware.shutdown = False
-
-            # Validate and configure trackers
-            self._validate_and_configure_trackers(self.structured_config.flow_tracking.hardware, flow_tracking_settings, configured_trackers)
-        elif self.shared_utils.flow_tracking_type == "sampled":
-            sampled = self.structured_config.flow_tracking.sampled
-            sampled._update(sample=flow_tracking_settings.sampled.sample, shutdown=False)
-
-            sampled.encapsulation._update(
-                ipv4_ipv6=flow_tracking_settings.sampled.encapsulation.ipv4_ipv6,
-                mpls=flow_tracking_settings.sampled.encapsulation.mpls,
-            )
-
-            sampled.hardware_offload._update(
-                ipv4=flow_tracking_settings.sampled.hardware_offload.ipv4,
-                ipv6=flow_tracking_settings.sampled.hardware_offload.ipv6,
-                threshold_minimum=flow_tracking_settings.sampled.hardware_offload.threshold_minimum,
-            )
-
-            # Validate and configure trackers
-            self._validate_and_configure_trackers(sampled, flow_tracking_settings, configured_trackers)
-
-    def _validate_and_configure_trackers(
-        self,
-        structure_config: EosCliConfigGen.FlowTracking.Hardware | EosCliConfigGen.FlowTracking.Sampled,
-        flow_tracking_settings: EosDesigns.FlowTrackingSettings,
-        configured_trackers: set[str],
-    ) -> None:
-        """Validate tracker configurations and append them to the structure."""
-        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
-        for tracker_name in natural_sort(configured_trackers):
-            """
-            We allow overriding the default flow tracker name, so if user has configured a tracker
-            with the default tracker name, then we just use that, if not, we create a default config
-            """
-            if tracker_name not in flow_tracking_settings.trackers:
-                if tracker_name == default_tracker.name:
-                    tracker = default_tracker
-                else:
-                    msg = f"{tracker_name} is being used for one of the interfaces, but is not configured in flow_tracking_settings"
-                    raise AristaAvdInvalidInputsError(msg)
-            else:
-                tracker = flow_tracking_settings.trackers[tracker_name]
-            structure_config.trackers.append(self.resolve_flow_tracker_by_type(tracker))
-
-    def _get_enabled_flow_trackers(self) -> set[str]:
-        """
-        Enable flow-tracking if any interface is enabled for flow-tracking.
+        """Set the structured config for flow_tracking if any interface is enabled for flow-tracking.
 
         This relies on flow-tracking being rendered after all other eos_designs modules (except structured config).
         """
+        if self.shared_utils.flow_tracking_type == "hardware":
+            self._set_hardware_flow_tracking()
+        elif self.shared_utils.flow_tracking_type == "sampled":
+            self._set_sampled_flow_tracking()
+
+    def _set_hardware_flow_tracking(self) -> None:
+        """Set the structured configuration for hardware flow tracking if any interface is configured."""
         all_interfaces = chain(
             self.structured_config.ethernet_interfaces, self.structured_config.port_channel_interfaces, self.structured_config.dps_interfaces
         )
-        if self.shared_utils.flow_tracking_type == "hardware":
-            return {interface.flow_tracker.hardware for interface in all_interfaces if interface.flow_tracker.hardware}
 
-        return {interface.flow_tracker.sampled for interface in all_interfaces if interface.flow_tracker.sampled}
+        trackers: set[str] = {interface.flow_tracker.hardware for interface in all_interfaces if interface.flow_tracker.hardware}
+        if not trackers:
+            return
+
+        self.structured_config.flow_tracking.hardware = self.inputs.flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
+        self.structured_config.flow_tracking.hardware.shutdown = False
+
+        # Validate and configure trackers
+        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
+        for tracker_name in natural_sort(trackers):
+            config = self._get_tracker_input_config(default_tracker, tracker_name)
+            self.structured_config.flow_tracking.hardware.trackers.append_new(
+                name=config.name,
+                record_export=config.record_export._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.RecordExport),
+                exporters=config.exporters._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.Exporters),
+            )
+
+    def _set_sampled_flow_tracking(self) -> None:
+        """Set the structured configuration for sampled flow tracking if any interface is configured."""
+        all_interfaces = chain(
+            self.structured_config.ethernet_interfaces, self.structured_config.port_channel_interfaces, self.structured_config.dps_interfaces
+        )
+
+        trackers: set[str] = {interface.flow_tracker.sampled for interface in all_interfaces if interface.flow_tracker.sampled}
+        if not trackers:
+            return
+
+        self.structured_config.flow_tracking.sampled._update(
+            sample=self.inputs.flow_tracking_settings.sampled.sample,
+            shutdown=False,
+            encapsulation=EosCliConfigGen.FlowTracking.Sampled.Encapsulation(
+                ipv4_ipv6=self.inputs.flow_tracking_settings.sampled.encapsulation.ipv4_ipv6,
+                mpls=self.inputs.flow_tracking_settings.sampled.encapsulation.mpls,
+            ),
+            hardware_offload=EosCliConfigGen.FlowTracking.Sampled.HardwareOffload(
+                ipv4=self.inputs.flow_tracking_settings.sampled.hardware_offload.ipv4,
+                ipv6=self.inputs.flow_tracking_settings.sampled.hardware_offload.ipv6,
+                threshold_minimum=self.inputs.flow_tracking_settings.sampled.hardware_offload.threshold_minimum,
+            ),
+        )
+
+        # Validate and configure trackers
+        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
+        for tracker_name in natural_sort(trackers):
+            config = self._get_tracker_input_config(default_tracker, tracker_name)
+
+            # Need to handle mpls specifically
+            record_export = config.record_export._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.RecordExport)
+            record_export.mpls = config.sampled.record_export.mpls
+
+            self.structured_config.flow_tracking.sampled.trackers.append_new(
+                name=config.name,
+                record_export=record_export,
+                exporters=config.exporters._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.Exporters),
+                table_size=config.sampled.table_size,
+            )
+
+    def _get_tracker_input_config(
+        self, default_tracker: EosDesigns.FlowTrackingSettings.TrackersItem, tracker_name: str
+    ) -> EosDesigns.FlowTrackingSettings.TrackersItem:
+        """Retrieves inputs for the given tracker_name.
+
+        If the name matches the default tracker_name, return the default tracker.
+
+        We allow overriding the default flow tracker name, so if user has configured a tracker
+        with the default tracker name, then we just use that, if not, we create a default config
+        """
+        if (tracker_settings := self.inputs.flow_tracking_settings.trackers.get(tracker_name)) != Undefined:
+            return tracker_settings
+
+        if tracker_name == default_tracker.name:
+            return default_tracker
+
+        msg = f"'{tracker_name}' is being used for one of the interfaces, but is not configured in 'self.inputs.flow_tracking_settings'."
+        raise AristaAvdInvalidInputsError(msg)

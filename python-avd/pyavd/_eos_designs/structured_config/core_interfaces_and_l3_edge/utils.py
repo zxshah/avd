@@ -295,10 +295,8 @@ class UtilsMixin(Protocol):
             interface.sflow.enable = p2p_link_sflow
 
         if (p2p_link_flow_tracking := self.shared_utils.get_flow_tracker(p2p_link.flow_tracking)) is not None:
-            if "sampled" in p2p_link_flow_tracking:
-                interface.flow_tracker.sampled = p2p_link_flow_tracking["sampled"]
-            if "hardware" in p2p_link_flow_tracking:
-                interface.flow_tracker.hardware = p2p_link_flow_tracking["hardware"]
+            interface.flow_tracker.sampled = p2p_link_flow_tracking.get("sampled")
+            interface.flow_tracker.hardware = p2p_link_flow_tracking.get("hardware")
 
         if self.shared_utils.mpls_lsr and default(p2p_link.mpls_ip, True):  # noqa: FBT003
             interface.mpls.ip = True

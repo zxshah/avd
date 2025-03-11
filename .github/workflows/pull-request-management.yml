@@ -129,12 +129,10 @@ jobs:
           python-version: |
             3.11
       - uses: actions/checkout@v4
-      - name: install build
-        run: |
-          pip install build
       - name: "Build and install pyavd"
         run: |
           # distlib is required when using manifest
+          pip install build
           cd python-avd && build --wheel --outdir /tmp/wheels && pip install --no-cache-dir /tmp/wheels/*.whl
       - name: Upload collection
         uses: actions/upload-artifact@v4

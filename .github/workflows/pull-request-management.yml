@@ -129,16 +129,19 @@ jobs:
           python-version: |
             3.11
       - uses: actions/checkout@v4
-      - name: "Build and install pyavd"
+      - name: "Create Virtual Environment & Install pyavd"
         run: |
-          # distlib is required when using manifest
+          python -m venv /tmp/python_env
+          source /tmp/python_env/bin/activate
+          pip install --upgrade pip
           pip install build
-          cd python-avd && python -m build --wheel --outdir /tmp/wheels && pip install --no-cache-dir /tmp/wheels/*.whl
-      - name: Upload collection
+          cd python-avd && python -m build --wheel --outdir /tmp/wheels
+          pip install --no-cache-dir /tmp/wheels/*.whl
+      - name: Upload Virtual Environment
         uses: actions/upload-artifact@v4
         with:
           name: pyavd
-          path: /tmp/
+          path: /tmp/python_env/
 
   # ----------------------------------- #
   # EOS CLI CONFIG GEN MOLECULE
@@ -166,6 +169,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pyavd
+      - name: Activate Virtual Environment
+        run: |
+          source pyavd/bin/activate
       - name: Install Python & Ansible Requirements
         run: |
           pip install "${{ matrix.ansible_version }}"

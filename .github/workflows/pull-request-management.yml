@@ -138,12 +138,13 @@ jobs:
           pip install -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
           cd python-avd && python -m build --wheel --outdir /tmp/wheels
           pip install --no-cache-dir /tmp/wheels/*.whl
-        shell: /usr/bin/bash -e {0}
+          pip list
       - name: Upload Virtual Environment
         uses: actions/upload-artifact@v4
         with:
           name: pyavd
           path: /tmp/python_env/
+          retention-days: 1
 
   # ----------------------------------- #
   # EOS CLI CONFIG GEN MOLECULE
@@ -176,24 +177,20 @@ jobs:
         run: |
           chmod -R +x /tmp/python_env/bin
           ls -la /tmp/python_env/bin  # Check permissions
-      - name: Install Ansible Requirements and Run Molecule
+      - name: Install Python & Ansible Requirements
         run: |
-          python -m pip install --upgrade '${{ matrix.ansible_version }}'
-          cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
+          echo "Python executable: $(command -v python)"
+          echo "Pip executable: $(command -v pip)"
+          python -m pip install --upgrade "ansible-core<2.19.0"
+          python -m pip install molecule distlib
         shell: /usr/bin/bash -e {0}
         env:
           PATH: "/tmp/python_env/bin:${PATH}"
-      # - name: Run molecule action
-      #   uses: arista-netdevops-community/action-molecule-avd@v1.8.1
-      #   with:
-      #     molecule_parentdir: "ansible_collections/arista/avd"
-      #     molecule_command: "test"
-      #     molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-      #     pip_file: .github/requirements-ci-dev.txt
-      #     galaxy_file: "ansible_collections/arista/avd/collections.yml"
-      #     ansible: ${{ matrix.ansible_version }}
-      #     check_git: true
-      #     check_git_enforced: true
+      - name: Run molecule action
+        run: " . /tmp/python_env/bin/activate && command -v python && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"
+        shell: /usr/bin/bash -e {0}
+        env:
+          PATH: "/tmp/python_env/bin:${PATH}"
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: molecule-${{ matrix.avd_scenario }}-artifacts

@@ -176,7 +176,7 @@ jobs:
       - name: Activate Virtual Environment
         run: |
           source /tmp/python_env/bin/activate
-          pip list
+          ls -la /tmp/python_env/lib/python*/site-packages/
         shell: /usr/bin/bash -e {0}
       - name: Install Python & Ansible Requirements
         run: |

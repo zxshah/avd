@@ -30,7 +30,8 @@ Arista AVD Software Release Policy and Life Cycle defines the various phases of 
 
 ### Software Life Cycle
 
-![Figure: Arista AVD Software Life Cycle](../_media/software_lifecycle.png)
+![Figure: Arista AVD Software Life Cycle](../_media/software_lifecycle_light.svg#only-light)
+![Figure: Arista AVD Software Life Cycle](../_media/software_lifecycle_dark.svg#only-dark)
 
 **Active Development Phase:**
 
@@ -55,7 +56,8 @@ The Arista AVD project follows [Semantic Versioning](../versioning/semantic-vers
 - <font class="v-gr">Minor: New features and fixes (non-breaking)</font>.
 - <font class="v-ygr">Maintenance: Fixes only (non-breaking)</font>.
 
-![Figure: Release timeline example](../_media/release_timeline_example.png)
+![Figure: Release timeline example](../_media/release_timeline_example_light.svg#only-light)
+![Figure: Release timeline example](../_media/release_timeline_example_dark.svg#only-dark)
 
 ## Supported Upgrade Paths
 

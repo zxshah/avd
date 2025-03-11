@@ -100,20 +100,15 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if self.inputs.bgp_graceful_restart.enabled:
             self.structured_config.router_bgp.graceful_restart._update(enabled=True, restart_time=self.inputs.bgp_graceful_restart.restart_time)
 
-        l3_interfaces_neighbors = EosCliConfigGen.RouterBgp.Neighbors()
         for neighbor_info in self.shared_utils.l3_bgp_neighbors:
-            l3_interfaces_neighbors.append_new(
+            self.structured_config.router_bgp.neighbors.append_new(
                 ip_address=neighbor_info["ip_address"],
                 remote_as=neighbor_info["remote_as"],
                 description=neighbor_info["description"] if neighbor_info["description"] else None,
                 route_map_in=get(neighbor_info, "route_map_in"),
                 route_map_out=get(neighbor_info, "route_map_out"),
             )
-
-        if l3_interfaces_neighbors:
-            self.structured_config.router_bgp.neighbors = l3_interfaces_neighbors
-            for neighbor in l3_interfaces_neighbors:
-                self.structured_config.router_bgp.address_family_ipv4.neighbors.append_new(ip_address=neighbor.ip_address, activate=True)
+            self.structured_config.router_bgp.address_family_ipv4.neighbors.append_new(ip_address=neighbor_info["ip_address"], activate=True)
 
     @structured_config_contributor
     def static_routes(self) -> None:
@@ -199,7 +194,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def hardware_counters(self) -> None:
         """hardware_counters set based on hardware_counters.features variable."""
-        self.structured_config.hardware_counters = self.inputs.hardware_counters._cast_as(EosCliConfigGen.HardwareCounters)
+        self.structured_config.hardware_counters = self.inputs.hardware_counters
 
     @structured_config_contributor
     def hardware(self) -> None:
@@ -305,17 +300,17 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def event_monitor(self) -> None:
         """event_monitor set based on event_monitor data-model."""
-        self.structured_config.event_monitor = self.inputs.event_monitor._cast_as(EosCliConfigGen.EventMonitor)
+        self.structured_config.event_monitor = self.inputs.event_monitor
 
     @structured_config_contributor
     def event_handlers(self) -> None:
         """event_handlers set based on event_handlers data-model."""
-        self.structured_config.event_handlers = self.inputs.event_handlers._cast_as(EosCliConfigGen.EventHandlers)
+        self.structured_config.event_handlers = self.inputs.event_handlers
 
     @structured_config_contributor
     def load_interval(self) -> None:
         """load_interval set based on load_interval_default variable."""
-        self.structured_config.load_interval = self.inputs.load_interval._cast_as(EosCliConfigGen.LoadInterval)
+        self.structured_config.load_interval = self.inputs.load_interval
 
     @structured_config_contributor
     def queue_monitor_length(self) -> None:
@@ -379,8 +374,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not self.inputs.local_users:
             return
 
-        for user in self.inputs.local_users._natural_sorted():
-            self.structured_config.local_users.append(user)
+        self.structured_config.local_users = self.inputs.local_users._natural_sorted()
 
     @structured_config_contributor
     def clock(self) -> None:
@@ -414,10 +408,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             inserting ipv6 variables if ipv6_mgmt_ip is set
             """
             if self.shared_utils.node_config.ipv6_mgmt_ip:
-                interface_settings.ipv6_enable = True
-                interface_settings.ipv6_address = self.shared_utils.node_config.ipv6_mgmt_ip
-                interface_settings.ipv6_gateway = self.shared_utils.ipv6_mgmt_gateway
-
+                interface_settings._update(
+                    ipv6_enable = True,
+                    ipv6_address = self.shared_utils.node_config.ipv6_mgmt_ip,
+                    ipv6_gateway = self.shared_utils.ipv6_mgmt_gateway
+                )
             self.structured_config.management_interfaces.append(interface_settings)
 
     @structured_config_contributor

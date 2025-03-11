@@ -138,6 +138,7 @@ jobs:
           pip install -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
           cd python-avd && python -m build --wheel --outdir /tmp/wheels
           pip install --no-cache-dir /tmp/wheels/*.whl
+          pip list
       - name: Upload Virtual Environment
         uses: actions/upload-artifact@v4
         with:
@@ -174,7 +175,7 @@ jobs:
       - name: Activate Virtual Environment
         run: |
           source /tmp/python_env/bin/activate
-          pip list
+          pip show pyavd
         shell: /usr/bin/bash -e {0}
       - name: Install Python & Ansible Requirements
         run: |

@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class TestSpec(BaseModel):
     """TestSpec model used to define an ANTA test specification in PyAVD.
 
-    Primarily used in the `PYAVD_TEST_INDEX` list to define the ANTA tests to be run
+    Primarily used in the `AVD_TEST_INDEX` list to define the ANTA tests to be run
     but can also be provided in the `get_device_anta_catalog` PyAVD function to add custom tests.
 
     If the ANTA test requires input, either `input_factory` or `input_dict` attributes should be provided, but not both.

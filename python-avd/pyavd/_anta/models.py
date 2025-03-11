@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-    from pyavd.api.anta import InputFactorySettings, MinimalStructuredConfig
+    from pyavd.api._anta import InputFactorySettings, MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 

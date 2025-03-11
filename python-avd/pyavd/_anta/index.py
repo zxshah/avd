@@ -7,11 +7,11 @@ from __future__ import annotations
 
 from pyavd._anta.input_factories import *
 from pyavd._anta.lib.tests import *
-from pyavd.api.anta import TestSpec
+from pyavd.api._anta import TestSpec
 
 from .constants import StructuredConfigKey
 
-PYAVD_TEST_INDEX: list[TestSpec] = [
+AVD_TEST_INDEX: list[TestSpec] = [
     TestSpec(
         test_class=VerifyAPIHttpsSSL,
         conditional_keys=[StructuredConfigKey.HTTPS_SSL_PROFILE],
@@ -75,10 +75,10 @@ PYAVD_TEST_INDEX: list[TestSpec] = [
         test_class=VerifyTransceiversTemperature,
     ),
 ]
-"""List of all ANTA tests with their specifications that PyAVD will run by default."""
+"""List of all ANTA tests with their specifications that AVD will run by default."""
 
-PYAVD_TEST_INDEX.sort(key=lambda x: x.test_class.name)
+AVD_TEST_INDEX.sort(key=lambda x: x.test_class.name)
 """Sort the test index by the test class name."""
 
-PYAVD_TEST_NAMES: list[str] = [test.test_class.name for test in PYAVD_TEST_INDEX]
-"""List of all available ANTA test names that PyAVD will run by default."""
+AVD_TEST_NAMES: list[str] = [test.test_class.name for test in AVD_TEST_INDEX]
+"""List of all available ANTA test names that AVD will run by default."""

@@ -9,26 +9,26 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ._anta.lib import AntaCatalog
-    from .api.anta import AvdCatalogGenerationSettings, MinimalStructuredConfig
+    from .api._anta import AvdCatalogGenerationSettings, MinimalStructuredConfig
 
 LOGGER = getLogger(__name__)
 
 
-def get_device_anta_catalog(
+def get_device_test_catalog(
     hostname: str,
     structured_config: dict,
     minimal_structured_configs: dict[str, MinimalStructuredConfig],
     settings: AvdCatalogGenerationSettings | None = None,
 ) -> AntaCatalog:
-    """Generate an ANTA catalog for a single device.
+    """Generate an ANTA test catalog for a single device.
 
-    By default, the ANTA catalog will be generated from all tests specified in the PyAVD test index.
+    By default, the ANTA catalog will be generated from all tests specified in the AVD test index.
 
-    An optional instance of `pyavd.api.anta.AvdCatalogGenerationSettings` can be provided
+    An optional instance of `pyavd.api._anta.AvdCatalogGenerationSettings` can be provided
     to customize the catalog generation process, such as running only specific tests, or skipping certain tests.
 
-    PyAVD uses minimal structured configurations of all devices containing only the required data.
-    Make sure to create a single `minimal_structured_configs` dictionary using `pyavd.api.anta.get_minimal_structured_configs`
+    AVD uses minimal structured configurations of all devices containing only the required data.
+    Make sure to create a single `minimal_structured_configs` dictionary using `pyavd.api._anta.get_minimal_structured_configs`
     for consistent data across catalog generations.
 
     Test definitions can be omitted from the catalog if the required data is not available for a specific device.
@@ -43,10 +43,10 @@ def get_device_anta_catalog(
         Variables should be converted and validated according to AVD `eos_cli_config_gen` schema first using `pyavd.validate_structured_config`.
     minimal_structured_configs : dict[str, MinimalStructuredConfig]
         Dictionary keyed by hostname containing minimal structured configurations for all devices.
-        Must be generated using `pyavd.api.anta.get_minimal_structured_configs`.
+        Must be generated using `pyavd.api._anta.get_minimal_structured_configs`.
     settings : AvdCatalogGenerationSettings, optional
         The settings object to customize the catalog generation process.
-        Must be an instance of `pyavd.api.anta.AvdCatalogGenerationSettings`, by default `None`.
+        Must be an instance of `pyavd.api._anta.AvdCatalogGenerationSettings`, by default `None`.
 
     Returns:
     -------
@@ -54,10 +54,10 @@ def get_device_anta_catalog(
         The generated ANTA catalog for the device.
     """
     from ._anta.factories import create_catalog
-    from ._anta.index import PYAVD_TEST_INDEX, PYAVD_TEST_NAMES
+    from ._anta.index import AVD_TEST_INDEX, AVD_TEST_NAMES
     from ._anta.lib import AntaCatalog
     from ._anta.utils import dump_anta_catalog
-    from .api.anta import AvdCatalogGenerationSettings
+    from .api._anta import AvdCatalogGenerationSettings
 
     settings = settings or AvdCatalogGenerationSettings()
 
@@ -70,8 +70,8 @@ def get_device_anta_catalog(
 
     # Check for invalid test names across all filters
     invalid_tests = {
-        "run_tests": set(settings.run_tests) - set(PYAVD_TEST_NAMES),
-        "skip_tests": set(settings.skip_tests) - set(PYAVD_TEST_NAMES),
+        "run_tests": set(settings.run_tests) - set(AVD_TEST_NAMES),
+        "skip_tests": set(settings.skip_tests) - set(AVD_TEST_NAMES),
     }
 
     for filter_type, invalid_names in invalid_tests.items():
@@ -87,7 +87,7 @@ def get_device_anta_catalog(
     # Filter test specs based on skip_tests and run_tests
     filtered_test_specs = []
 
-    for test in PYAVD_TEST_INDEX:
+    for test in AVD_TEST_INDEX:
         # Skip tests explicitly mentioned in skip_tests
         if test.test_class.name in settings.skip_tests:
             continue

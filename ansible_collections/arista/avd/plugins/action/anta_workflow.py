@@ -22,15 +22,15 @@ from ansible_collections.arista.avd.plugins.plugin_utils.utils import PythonToAn
 if TYPE_CHECKING:
     from collections.abc import Mapping
 
-    from pyavd.api.anta import MinimalStructuredConfig
+    from pyavd.api._anta import MinimalStructuredConfig
 
 PLUGIN_NAME = "arista.avd.anta_workflow"
 
 try:
     from pyavd._anta.lib import AntaCatalog, AntaInventory, AsyncEOSDevice, MDReportGenerator, ReportCsv, ResultManager, anta_runner
     from pyavd._utils import default, get, strip_empties_from_dict
-    from pyavd.api.anta import AvdCatalogGenerationSettings, InputFactorySettings, get_minimal_structured_configs
-    from pyavd.get_device_anta_catalog import get_device_anta_catalog
+    from pyavd.api._anta import AvdCatalogGenerationSettings, InputFactorySettings, get_minimal_structured_configs
+    from pyavd.get_device_test_catalog import get_device_test_catalog
 
     HAS_PYAVD = True
 except ImportError:
@@ -297,17 +297,21 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
     if USER_CATALOG is not None:
         catalogs.append(USER_CATALOG)
 
+    input_factory_settings = InputFactorySettings(allow_bgp_vrfs=get(PLUGIN_ARGS, "avd_catalogs.allow_bgp_vrfs"))
+    output_dir = get(PLUGIN_ARGS, "avd_catalogs.output_dir")
+    avd_catalogs_filters = get(PLUGIN_ARGS, "avd_catalogs.filters", default=[])
+
     for device in devices:
         anta_device = build_anta_device(device)
         inventory.add_device(anta_device)
         # We generate the device's AVD catalog only if structured configs are loaded
         if STRUCTURED_CONFIGS is not None and MINIMAL_STRUCTURED_CONFIGS is not None:
             settings = AvdCatalogGenerationSettings(
-                input_factory_settings=InputFactorySettings(allow_bgp_vrfs=get(PLUGIN_ARGS, "avd_catalogs.allow_bgp_vrfs")),
-                output_dir=get(PLUGIN_ARGS, "avd_catalogs.output_dir"),
-                **get_avd_catalogs_filters(device, get(PLUGIN_ARGS, "avd_catalogs.filters", default=[])),
+                input_factory_settings=input_factory_settings,
+                output_dir=output_dir,
+                **get_device_catalog_filters(device, avd_catalogs_filters),
             )
-            catalog = get_device_anta_catalog(
+            catalog = get_device_test_catalog(
                 hostname=device,
                 structured_config=STRUCTURED_CONFIGS[device],
                 minimal_structured_configs=MINIMAL_STRUCTURED_CONFIGS,
@@ -320,8 +324,8 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
     return result_manager, inventory, catalog
 
 
-def get_avd_catalogs_filters(device: str, avd_catalog_filters: list[dict]) -> dict[str, list[str]]:
-    """Get the test filters for a device from the provided AVD catalog filters.
+def get_device_catalog_filters(device: str, avd_catalogs_filters: list[dict]) -> dict[str, list[str]]:
+    """Get the test filters for a device from the provided AVD catalogs filters.
 
     More specific filters (appearing later in the list) override earlier ones.
     For example, if a device matches both a group filter and an individual filter,
@@ -330,7 +334,7 @@ def get_avd_catalogs_filters(device: str, avd_catalog_filters: list[dict]) -> di
     """
     final_filters = {"run_tests": [], "skip_tests": []}
 
-    for filter_config in avd_catalog_filters:
+    for filter_config in avd_catalogs_filters:
         if device in get(filter_config, "device_list", default=[]):
             run_tests = get(filter_config, "run_tests")
             skip_tests = get(filter_config, "skip_tests")

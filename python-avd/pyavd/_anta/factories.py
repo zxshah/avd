@@ -19,7 +19,7 @@ from .logs import LogMessage, TestLoggerAdapter
 from .models import DeviceTestContext
 
 if TYPE_CHECKING:
-    from pyavd.api.anta import InputFactorySettings, MinimalStructuredConfig, TestSpec
+    from pyavd.api._anta import InputFactorySettings, MinimalStructuredConfig, TestSpec
 
 
 LOGGER = getLogger(__name__)

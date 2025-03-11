@@ -173,13 +173,14 @@ jobs:
       - name: Activate Virtual Environment
         run: |
           source /tmp/python_env/bin/activate
+          pip list
         shell: /usr/bin/bash -e {0}
       - name: Install Python & Ansible Requirements
         run: |
           pip install --upgrade "${{ matrix.ansible_version }}"
       - name: Run Molecule action
         run: |
-          cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
+          pip list && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
       # - name: Run molecule action
       #   uses: arista-netdevops-community/action-molecule-avd@v1.8.1
       #   with:

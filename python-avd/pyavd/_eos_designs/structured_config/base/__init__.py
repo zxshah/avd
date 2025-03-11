@@ -47,7 +47,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     def is_deployed(self) -> None:
         self.structured_config.is_deployed = self.inputs.is_deployed
 
-    # TODO: reafactor with structured_config_contributor
+    # TODO: refactor with structured_config_contributor
     @cached_property
     def serial_number(self) -> str | None:
         """serial_number variable set based on serial_number fact."""

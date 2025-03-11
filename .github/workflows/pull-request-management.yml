@@ -179,7 +179,7 @@ jobs:
       - name: Install Python & Ansible Requirements
         run: |
           pip install --upgrade "${{ matrix.ansible_version }}"
-          pip install molecule
+          pip install molecule distlib
       - name: Run Molecule action
         run: |
           pip list && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}

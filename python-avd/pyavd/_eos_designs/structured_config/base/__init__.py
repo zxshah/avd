@@ -149,37 +149,17 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         self.structured_config.service_routing_protocols_model = "multi-agent"
 
     @structured_config_contributor
-    def ip_routing_ipv6_interfaces(self) -> None:
-        """ip_routing_ipv6_interfaces set based on underlay_rfc5549 variable."""
-        if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return
-
-        if self.inputs.underlay_rfc5549:
-            self.structured_config.ip_routing_ipv6_interfaces = True
-
-    @structured_config_contributor
     def ip_routing(self) -> None:
-        """
-        For l3 devices, configure ip routing unless ip_routing_ipv6_interfaces is True.
-
-        For other devices only configure if "always_configure_ip_routing" is True.
-        """
-        if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
-            return
-
-        if self.structured_config.ip_routing_ipv6_interfaces is True:
-            return
-
-        self.structured_config.ip_routing = True
-
-    @structured_config_contributor
-    def ipv6_unicast_routing(self) -> None:
-        """ipv6_unicast_routing set based on underlay_rfc5549 and underlay_ipv6."""
+        """Set ip_routing, ip_routing_ipv6_interfaces and ipv6_unicast_routing based on underlay_rfc5549 variable."""
         if not self.shared_utils.underlay_router and not self.shared_utils.node_config.always_configure_ip_routing:
             return
 
         if self.inputs.underlay_rfc5549 or self.shared_utils.underlay_ipv6:
             self.structured_config.ipv6_unicast_routing = True
+        if self.inputs.underlay_rfc5549:
+            self.structured_config.ip_routing_ipv6_interfaces = True
+        else:
+            self.structured_config.ip_routing = True
 
     @structured_config_contributor
     def router_multicast(self) -> None:

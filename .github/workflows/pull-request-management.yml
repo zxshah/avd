@@ -135,6 +135,7 @@ jobs:
           source /tmp/python_env/bin/activate
           pip install --upgrade pip
           pip install build
+          pip install -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
           cd python-avd && python -m build --wheel --outdir /tmp/wheels
           pip install --no-cache-dir /tmp/wheels/*.whl
       - name: Upload Virtual Environment

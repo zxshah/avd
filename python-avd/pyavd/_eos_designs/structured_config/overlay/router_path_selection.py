@@ -31,8 +31,6 @@ class RouterPathSelectionMixin(Protocol):
         self.structured_config.router_path_selection.tcp_mss_ceiling.ipv4_segment_size = self.shared_utils.node_config.dps_mss_ipv4
         self._set_path_groups()
 
-        router_path_selection["interfaces"] = self._get_interface_bandwidths(router_path_selection["path_groups"])
-
         if self.shared_utils.is_wan_server:
             self.structured_config.router_path_selection.peer_dynamic_source = "stun"
 

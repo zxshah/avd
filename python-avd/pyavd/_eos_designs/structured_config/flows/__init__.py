@@ -112,7 +112,8 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
 
     @structured_config_contributor
     def flow_tracking(self) -> None:
-        """Set the structured config for flow_tracking if any interface is enabled for flow-tracking.
+        """
+        Set the structured config for flow_tracking if any interface is enabled for flow-tracking.
 
         This relies on flow-tracking being rendered after all other eos_designs modules (except structured config).
         """

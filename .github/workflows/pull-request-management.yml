@@ -171,7 +171,8 @@ jobs:
           name: pyavd
       - name: Activate Virtual Environment
         run: |
-          source pyavd/bin/activate
+          source /tmp/python_env/bin/activate
+        shell: /usr/bin/bash -e {0}
       - name: Install Python & Ansible Requirements
         run: |
           pip install "${{ matrix.ansible_version }}"

@@ -134,10 +134,8 @@ jobs:
           python -m venv /tmp/python_env
           source /tmp/python_env/bin/activate
           pip install --upgrade pip
-          pip install build
           pip install -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
-          cd python-avd && python -m build --wheel --outdir /tmp/wheels
-          pip install --no-cache-dir /tmp/wheels/*.whl
+          pip install -r .github/requirements-ci-dev.txt
       - name: Upload Virtual Environment
         uses: actions/upload-artifact@v4
         with:

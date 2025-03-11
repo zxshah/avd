@@ -7692,6 +7692,14 @@ ASN Notation: asdot
 | Address Family | ipv4 |
 | Send community | standard large |
 
+##### NHP
+
+| Settings | Value |
+| -------- | ----- |
+| Next-hop peer | True |
+| BFD | True |
+| BFD Timers | interval: 500, min_rx: 500, multiplier: 3 |
+
 ##### NO-COMMUNITY
 
 | Settings | Value |
@@ -7888,6 +7896,8 @@ ASN Notation: asdot
 | 101.0.3.6 | Inherited from peer group WELCOME_ROUTERS | BLUE-C1 | - | - | - | - | True(interval: 2500, min_rx: 2000, multiplier: 3) | - | - | - | - |
 | 101.0.3.7 | - | BLUE-C1 | - | - | - | - | True | - | - | - | - |
 | 101.0.3.8 | - | BLUE-C1 | - | - | - | - | False | - | - | - | - |
+| 10.10.10.0 | - | NHP-PEER | - | - | - | - | Inherited from peer group NHP(interval: 500, min_rx: 500, multiplier: 3) | - | - | - | - |
+| 11.11.11.0 | - | NHP-PEER1 | - | - | - | - | - | - | - | - | - |
 | 10.1.1.0 | Inherited from peer group OBS_WAN | RED-C1 | - | - | - | - | Inherited from peer group OBS_WAN(interval: 2000, min_rx: 2000, multiplier: 3) | - | - | - | - |
 | 10.255.251.1 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | TENANT_A_PROJECT01 | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 | 10.2.3.4 | 1234 | TENANT_A_PROJECT01 | - | all | 0 (no limit) (warning-limit 100, warning-only) | - | - | - | - | - | - |
@@ -8158,6 +8168,8 @@ ASN Notation: asdot
 | VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
 | --- | ------------------- | ------------ | -------------- |
 | BLUE-C1 | 1.0.1.1:101 | static<br>ospf | IPv4: False<br>Transit: False |
+| NHP-PEER | - | - | IPv4: False<br>Transit: False |
+| NHP-PEER1 | - | - | IPv4: False<br>Transit: False |
 | RED-C1 | 1.0.1.1:102 | - | IPv4: False<br>Transit: False |
 | Tenant_A | 10.50.64.15:30001 | ospf<br>ospfv3<br>connected | IPv4: False<br>Transit: False |
 | TENANT_A_PROJECT01 | 192.168.255.3:11 | connected<br>static | IPv4: False<br>Transit: False |
@@ -8272,6 +8284,11 @@ router bgp 65101
    neighbor MPLS-IBGP-PEERS maximum-routes 0
    neighbor MULTIPLE-COMMUNITY peer group
    neighbor MULTIPLE-COMMUNITY send-community standard large
+   neighbor NHP peer group
+   neighbor NHP next-hop-peer
+   neighbor NHP bfd
+   neighbor NHP bfd interval 500 min-rx 500 multiplier 3
+   neighbor NHP password 7 <removed>
    neighbor NO-COMMUNITY peer group
    neighbor OBS_WAN peer group
    neighbor OBS_WAN remote-as 65000
@@ -8637,6 +8654,7 @@ router bgp 65101
       no neighbor IPV4-UNDERLAY additional-paths send
       neighbor IPv4-UNDERLAY-PEERS activate
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
+      neighbor NHP activate
       neighbor OBS_WAN activate
       neighbor OBS_WAN additional-paths send limit 8
       neighbor SEDI activate
@@ -8982,6 +9000,12 @@ router bgp 65101
       Comment created from eos_cli under router_bgp.vrfs.BLUE-C1
       EOF
 
+   !
+   vrf NHP-PEER
+      neighbor 10.10.10.0 peer group NHP
+   !
+   vrf NHP-PEER1
+      neighbor 11.11.11.0 next-hop-peer
    !
    vrf RED-C1
       rd 1.0.1.1:102

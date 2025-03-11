@@ -13521,6 +13521,8 @@ keys:
               description: Time-to-live in range of hops.
               convert_types:
               - str
+            next_hop_peer:
+              type: bool
             next_hop_self:
               type: bool
             password:
@@ -13898,6 +13900,8 @@ keys:
               description: Time-to-live in range of hops.
               convert_types:
               - str
+            next_hop_peer:
+              type: bool
             next_hop_self:
               type: bool
             link_bandwidth:
@@ -17288,6 +17292,8 @@ keys:
                     min: 1
                     max: 255
                     description: Time-to-live in range of hops.
+                  next_hop_peer:
+                    type: bool
                   next_hop_self:
                     type: bool
                   shutdown:

@@ -409,9 +409,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             """
             if self.shared_utils.node_config.ipv6_mgmt_ip:
                 interface_settings._update(
-                    ipv6_enable = True,
-                    ipv6_address = self.shared_utils.node_config.ipv6_mgmt_ip,
-                    ipv6_gateway = self.shared_utils.ipv6_mgmt_gateway
+                    ipv6_enable=True, ipv6_address=self.shared_utils.node_config.ipv6_mgmt_ip, ipv6_gateway=self.shared_utils.ipv6_mgmt_gateway
                 )
             self.structured_config.management_interfaces.append(interface_settings)
 

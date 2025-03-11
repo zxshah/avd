@@ -14,7 +14,7 @@ __pycache__/
 /python/**/*.egg-info/
 /python/**/.tox/
 /python/**/.coverage
-# /python/**/coverage.xml
+/python/**/coverage.xml
 
 # pyavd ignores
 /python-avd/build/

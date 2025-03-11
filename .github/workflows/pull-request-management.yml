@@ -129,6 +129,9 @@ jobs:
           python-version: |
             3.11
       - uses: actions/checkout@v4
+      - name: install build
+        run: |
+          pip install build
       - name: "Build and install pyavd"
         run: |
           # distlib is required when using manifest

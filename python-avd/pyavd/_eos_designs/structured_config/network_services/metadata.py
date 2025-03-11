@@ -70,6 +70,7 @@ class MetadataMixin(Protocol):
         if not self.shared_utils.is_cv_pathfinder_server or (atr := self.structured_config.application_traffic_recognition) is None:
             return
         applications = atr.applications
+        # applications.ipv6_applications is not present in the model. Hence corrected the line.
         user_defined_app_names = set(applications.ipv4_applications.keys())
         categories = atr.categories
         for profile in atr.application_profiles:

@@ -169,6 +169,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pyavd
+          path: /tmp/python_env
       - name: Activate Virtual Environment
         run: |
           source /tmp/python_env/bin/activate

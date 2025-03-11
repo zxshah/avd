@@ -173,6 +173,10 @@ jobs:
         with:
           name: pyavd
           path: /tmp/python_env
+      - name: Fix Virtual Environment Permissions
+        run: |
+          chmod -R +x /tmp/python_env/bin
+          ls -la /tmp/python_env/bin  # Check permissions
       - name: Install Python & Ansible Requirements
         run: |
           echo "Python executable: $(command -v python)"

@@ -176,6 +176,7 @@ jobs:
       - name: Install the specified Ansible version
         run: |
           "/tmp/python_env/bin/python -m pip install ${{ matrix.ansible_version }}"
+        shell: /usr/bin/bash -e {0}
       - name: Run molecule action
         run: " . /tmp/python_env/bin/activate && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"
       # - name: Run molecule action

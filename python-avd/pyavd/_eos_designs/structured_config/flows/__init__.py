@@ -111,7 +111,7 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
 
     def resolve_flow_tracker_by_type(
         self, tracker_settings: EosDesigns.FlowTrackingSettings.TrackersItem
-    ) -> EosCliConfigGen.FlowTracking.Hardware.TrackersItem | EosCliConfigGen.FlowTracking.Sampled.TrackersItem:
+    ) -> EosCliConfigGen.FlowTracking.Hardware.TrackersItem | EosCliConfigGen.FlowTracking.Sampled.TrackersItem | None:
         if self.shared_utils.flow_tracking_type == "sampled":
             tracker = EosCliConfigGen.FlowTracking.Sampled.TrackersItem(
                 name=tracker_settings.name,
@@ -121,11 +121,13 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
             )
             tracker.record_export.mpls = tracker_settings.sampled.record_export.mpls
             return tracker
-        return EosCliConfigGen.FlowTracking.Hardware.TrackersItem(
-            name=tracker_settings.name,
-            record_export=tracker_settings.record_export._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.RecordExport),
-            exporters=tracker_settings.exporters._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.Exporters),
-        )
+        if self.shared_utils.flow_tracking_type == "hardware":
+            return EosCliConfigGen.FlowTracking.Hardware.TrackersItem(
+                name=tracker_settings.name,
+                record_export=tracker_settings.record_export._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.RecordExport),
+                exporters=tracker_settings.exporters._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.Exporters),
+            )
+        return None
 
     @structured_config_contributor
     def flow_tracking(self) -> None:
@@ -134,10 +136,30 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         if not configured_trackers:
             return
 
+        flow_tracking_settings = self.inputs.flow_tracking_settings
         if self.shared_utils.flow_tracking_type == "hardware":
-            self._set_hardware_flow_tracking(self.inputs.flow_tracking_settings, configured_trackers)
+            self.structured_config.flow_tracking.hardware = flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
+            self.structured_config.flow_tracking.hardware.shutdown = False
+
+            # Validate and configure trackers
+            self._validate_and_configure_trackers(self.structured_config.flow_tracking.hardware, flow_tracking_settings, configured_trackers)
         elif self.shared_utils.flow_tracking_type == "sampled":
-            self._set_sampled_flow_tracking(self.inputs.flow_tracking_settings, configured_trackers)
+            sampled = self.structured_config.flow_tracking.sampled
+            sampled._update(sample=flow_tracking_settings.sampled.sample, shutdown=False)
+
+            sampled.encapsulation._update(
+                ipv4_ipv6=flow_tracking_settings.sampled.encapsulation.ipv4_ipv6,
+                mpls=flow_tracking_settings.sampled.encapsulation.mpls,
+            )
+
+            sampled.hardware_offload._update(
+                ipv4=flow_tracking_settings.sampled.hardware_offload.ipv4,
+                ipv6=flow_tracking_settings.sampled.hardware_offload.ipv6,
+                threshold_minimum=flow_tracking_settings.sampled.hardware_offload.threshold_minimum,
+            )
+
+            # Validate and configure trackers
+            self._validate_and_configure_trackers(sampled, flow_tracking_settings, configured_trackers)
 
     def _validate_and_configure_trackers(
         self,
@@ -161,33 +183,6 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
             else:
                 tracker = flow_tracking_settings.trackers[tracker_name]
             structure_config.trackers.append(self.resolve_flow_tracker_by_type(tracker))
-
-    def _set_sampled_flow_tracking(self, flow_tracking_settings: EosDesigns.FlowTrackingSettings, configured_trackers: set[str]) -> None:
-        """Set up sampled flow tracking configuration."""
-        sampled = self.structured_config.flow_tracking.sampled
-        sampled._update(sample=flow_tracking_settings.sampled.sample, shutdown=False)
-
-        sampled.encapsulation._update(
-            ipv4_ipv6=flow_tracking_settings.sampled.encapsulation.ipv4_ipv6,
-            mpls=flow_tracking_settings.sampled.encapsulation.mpls,
-        )
-
-        sampled.hardware_offload._update(
-            ipv4=flow_tracking_settings.sampled.hardware_offload.ipv4,
-            ipv6=flow_tracking_settings.sampled.hardware_offload.ipv6,
-            threshold_minimum=flow_tracking_settings.sampled.hardware_offload.threshold_minimum,
-        )
-
-        # Validate and configure trackers
-        self._validate_and_configure_trackers(sampled, flow_tracking_settings, configured_trackers)
-
-    def _set_hardware_flow_tracking(self, flow_tracking_settings: EosDesigns.FlowTrackingSettings, configured_trackers: set[str]) -> None:
-        """Set up hardware flow tracking configuration."""
-        self.structured_config.flow_tracking.hardware = flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
-        self.structured_config.flow_tracking.hardware.shutdown = False
-
-        # Validate and configure trackers
-        self._validate_and_configure_trackers(self.structured_config.flow_tracking.hardware, flow_tracking_settings, configured_trackers)
 
     def _get_enabled_flow_trackers(self) -> set[str]:
         """

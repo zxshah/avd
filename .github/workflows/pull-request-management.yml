@@ -138,7 +138,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: pyavd
-          path: ./arista-pyavd-*.tar.gz
+          path: /tmp/
 
   # ----------------------------------- #
   # EOS CLI CONFIG GEN MOLECULE

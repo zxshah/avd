@@ -187,7 +187,8 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
     def _get_tracker_input_config(
         self, default_tracker: EosDesigns.FlowTrackingSettings.TrackersItem, tracker_name: str
     ) -> EosDesigns.FlowTrackingSettings.TrackersItem:
-        """Retrieves inputs for the given tracker_name.
+        """
+        Retrieves inputs for the given tracker_name.
 
         If the name matches the default tracker_name, return the default tracker.
 

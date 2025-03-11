@@ -239,7 +239,9 @@ class UtilsWanMixin(Protocol):
         """
         wan_load_balance_policy = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem(
             name=name,
-            **input_topology.constraints._as_dict(),
+            jitter=input_topology.constraints.jitter,
+            latency=input_topology.constraints.latency,
+            loss_rate=input_topology.constraints.loss_rate,
         )
 
         if self.inputs.wan_mode == "cv-pathfinder":

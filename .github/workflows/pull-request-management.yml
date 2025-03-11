@@ -133,7 +133,7 @@ jobs:
         run: |
           # distlib is required when using manifest
           pip install build
-          cd python-avd && build --wheel --outdir /tmp/wheels && pip install --no-cache-dir /tmp/wheels/*.whl
+          cd python-avd && python -m build --wheel --outdir /tmp/wheels && pip install --no-cache-dir /tmp/wheels/*.whl
       - name: Upload collection
         uses: actions/upload-artifact@v4
         with:

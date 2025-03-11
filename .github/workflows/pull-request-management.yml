@@ -177,7 +177,7 @@ jobs:
       - name: Install Ansible Requirements and Run Molecule
         run: |
           python -m pip install --upgrade '${{ matrix.ansible_version }}'
-          cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"
+          cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}
         shell: /usr/bin/bash -e {0}
         env:
           PATH: "/tmp/python_env/bin:${PATH}"

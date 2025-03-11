@@ -175,10 +175,14 @@ jobs:
           path: /tmp/python_env
       - name: Install the specified Ansible version
         run: |
-          "/tmp/python_env/bin/python -m pip install ${{ matrix.ansible_version }}"
-        shell: /usr/bin/bash -e {0}
+          source /tmp/python_env/bin/activate
+          echo "Python executable: $(which python)"
+          echo "Pip executable: $(which pip)"
+          /tmp/python_env/bin/python -m pip install ${{ matrix.ansible_version }}
+        
       - name: Run molecule action
         run: " . /tmp/python_env/bin/activate && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"
+        shell: /usr/bin/bash -e {0}
       # - name: Run molecule action
       #   uses: arista-netdevops-community/action-molecule-avd@v1.8.1
       #   with:

@@ -10,7 +10,6 @@ from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._eos_designs.structured_config.structured_config_generator import StructuredConfigGenerator, structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
-from pyavd._utils.undefined import Undefined
 from pyavd.j2filters import natural_sort
 
 
@@ -132,13 +131,14 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         if not trackers:
             return
 
-        self.structured_config.flow_tracking.hardware = self.inputs.flow_tracking_settings.hardware._cast_as(EosCliConfigGen.FlowTracking.Hardware)
+        self.structured_config.flow_tracking.hardware.record.format_ipfix_standard_timestamps_counters = (
+            self.inputs.flow_tracking_settings.hardware.record.format_ipfix_standard_timestamps_counters
+        )
         self.structured_config.flow_tracking.hardware.shutdown = False
 
         # Validate and configure trackers
-        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
         for tracker_name in natural_sort(trackers):
-            config = self._get_tracker_input_config(default_tracker, tracker_name)
+            config = self._get_tracker_input_config(tracker_name)
             self.structured_config.flow_tracking.hardware.trackers.append_new(
                 name=config.name,
                 record_export=config.record_export._cast_as(EosCliConfigGen.FlowTracking.Hardware.TrackersItem.RecordExport),
@@ -170,9 +170,8 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         )
 
         # Validate and configure trackers
-        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
         for tracker_name in natural_sort(trackers):
-            config = self._get_tracker_input_config(default_tracker, tracker_name)
+            config = self._get_tracker_input_config(tracker_name)
 
             # Need to handle mpls specifically
             record_export = config.record_export._cast_as(EosCliConfigGen.FlowTracking.Sampled.TrackersItem.RecordExport)
@@ -185,9 +184,7 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
                 table_size=config.sampled.table_size,
             )
 
-    def _get_tracker_input_config(
-        self, default_tracker: EosDesigns.FlowTrackingSettings.TrackersItem, tracker_name: str
-    ) -> EosDesigns.FlowTrackingSettings.TrackersItem:
+    def _get_tracker_input_config(self, tracker_name: str) -> EosDesigns.FlowTrackingSettings.TrackersItem:
         """
         Retrieves inputs for the given tracker_name.
 
@@ -196,9 +193,10 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         We allow overriding the default flow tracker name, so if user has configured a tracker
         with the default tracker name, then we just use that, if not, we create a default config
         """
-        if (tracker_settings := self.inputs.flow_tracking_settings.trackers.get(tracker_name)) != Undefined:
-            return tracker_settings
+        if tracker_name in self.inputs.flow_tracking_settings.trackers:
+            return self.inputs.flow_tracking_settings.trackers[tracker_name]
 
+        default_tracker = next(iter(EosDesigns.FlowTrackingSettings().trackers))
         if tracker_name == default_tracker.name:
             return default_tracker
 

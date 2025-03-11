@@ -175,12 +175,13 @@ jobs:
           path: /tmp/python_env
       - name: Install Python & Ansible Requirements
         run: |
-          source /tmp/python_env/bin/activate
           echo "Python executable: $(which python)"
           echo "Pip executable: $(which pip)"
           python -m pip install --upgrade "ansible-core<2.19.0"
           python -m pip install molecule distlib
         shell: /usr/bin/bash -e {0}
+        env:
+          PATH: "/tmp/python_env/bin:${PATH}"
         
       - name: Run molecule action
         run: " . /tmp/python_env/bin/activate && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }}"

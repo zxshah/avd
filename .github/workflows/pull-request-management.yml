@@ -176,7 +176,7 @@ jobs:
       - name: Activate Virtual Environment
         run: |
           source /tmp/python_env/bin/activate
-          pip show pyavd
+          pip list
         shell: /usr/bin/bash -e {0}
       - name: Install Python & Ansible Requirements
         run: |

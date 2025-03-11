@@ -451,6 +451,8 @@ vlan_interfaces:
       - 1b11:3a00:22b0:16::14
 
   - name: Vlan26
+    ipv6_ospf_network_point_to_point: true
+    ipv6_ospf_area: 0.0.0.29
     ospf_network_point_to_point: true
     ospf_area: 0.0.0.24
     ospf_cost: 99

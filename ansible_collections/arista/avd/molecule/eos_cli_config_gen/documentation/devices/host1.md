@@ -157,6 +157,7 @@
   - [Router Service Insertion Configuration](#router-service-insertion-configuration)
   - [Router Traffic-Engineering](#router-traffic-engineering)
   - [Router OSPF](#router-ospf)
+  - [IPv6 Router OSPF](#ipv6-router-ospf)
   - [Router ISIS](#router-isis)
   - [Router BGP](#router-bgp)
   - [PBR Policy Maps](#pbr-policy-maps)
@@ -6256,6 +6257,8 @@ interface Vlan26
    ip ospf authentication message-digest
    ip ospf area 0.0.0.24
    ip ospf message-digest-key 55 md5 7 <removed>
+   ipv6 ospf network point-to-point
+   ipv6 ospf area 0.0.0.29
 !
 interface Vlan41
    description SVI Description
@@ -7399,6 +7402,76 @@ router ospf 600
    area 0.0.20.25 nssa default-information-originate metric-type 1
    area 0.0.20.26 nssa no-summary
    area 0.0.20.26 nssa default-information-originate metric 50 metric-type 1 nssa-only
+```
+
+### IPv6 Router OSPF
+
+#### IPv6 Router OSPF Summary
+
+| Process ID | Router ID | Auto Cost Reference Bandwidth |
+| ---------- | --------- | ----------------------------- |
+| 100 | 192.168.255.3 | 100 |
+| 101 | - | - |
+| 201 | - | - |
+| 301 | - | - |
+| 401 | - | - |
+
+#### Router OSPF Router Redistribution
+
+| Process ID | Source Protocol | Include Leaked | Route Map |
+| ---------- | --------------- | -------------- | --------- |
+| 100 | connected | enabled | rm-ospf-connected |
+| 100 | static | enabled | rm-ospf-static |
+| 100 | bgp | enabled | rm-ospf-bgp |
+| 100 | dhcp | - | rm-ospf-dhcp |
+| 100 | isis level-2 | enabled | rm-ospf-isis |
+| 100 | ospfv3 | enabled | rm-ospf-ospfv3 |
+| 100 | ospfv3 match external | enabled | rm-ospf-ospfv3-external |
+| 100 | ospfv3 match nssa external | enabled | rm-ospf-ospfv3-nssa-external |
+| 101 | connected | - | - |
+| 101 | static | - | - |
+| 101 | bgp | - | - |
+| 101 | dhcp | - | - |
+| 101 | isis | - | - |
+| 101 | ospfv3 match external | enabled | - |
+| 101 | ospfv3 match internal | enabled | rm-ospf-ospfv3-internal |
+| 101 | ospfv3 match nssa external | enabled | - |
+| 201 | ospfv3 match internal | enabled | - |
+| 301 | ospfv3 | enabled | - |
+
+#### Router OSPF Device Configuration
+
+```eos
+!
+ipv6 router ospf 100
+   router-id 192.168.255.3
+   auto-cost reference-bandwidth 100
+   redistribute bgp include leaked route-map rm-ospf-bgp
+   redistribute dhcp route-map rm-ospf-dhcp
+   redistribute connected include leaked route-map rm-ospf-connected
+   redistribute isis include leaked level-2 route-map rm-ospf-isis
+   redistribute ospfv3 leaked route-map rm-ospf-ospfv3
+   redistribute ospfv3 leaked match external route-map rm-ospf-ospfv3-external
+   redistribute ospfv3 leaked match nssa-external route-map rm-ospf-ospfv3-nssa-external
+   redistribute static include leaked route-map rm-ospf-static
+!
+ipv6 router ospf 101 vrf TEST2
+   redistribute bgp
+   redistribute dhcp
+   redistribute connected
+   redistribute isis
+   redistribute ospfv3 leaked match internal route-map rm-ospf-ospfv3-internal
+   redistribute ospfv3 leaked match external
+   redistribute ospfv3 leaked match nssa-external
+   redistribute static
+!
+ipv6 router ospf 201 vrf MGMT
+   redistribute ospfv3 leaked match internal
+!
+ipv6 router ospf 301 vrf TEST1
+   redistribute ospfv3 leaked
+!
+ipv6 router ospf 401 vrf TENANT_A_PROJECT02
 ```
 
 ### Router ISIS

@@ -15,9 +15,9 @@ l3leaf:
           member_interfaces:
             - name: Ethernet1/19
               rx_queue:
-                worker:
+                workers:
                   - 2
                   - 14-17
 
 expected_error_message: >-
-  One or more worker ids within '14-17' under 'rx_queue' for interface 'Ethernet1/19' equal or exceed maximum supported '16' for this platform.
+  Worker id '16' specified under 'rx_queue.workers' for interface 'Ethernet1/19' equals or exceeds maximum supported '16' for this platform.

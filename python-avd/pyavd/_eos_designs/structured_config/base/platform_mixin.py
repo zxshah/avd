@@ -53,8 +53,8 @@ class PlatformMixin(Protocol):
 
         # populate interface profile for SFE platform (if supported)
         if self.shared_utils.is_sfe_interface_profile_supported and (sfe_member_interfaces_for_profile := self._get_sfe_interface_profile_member_interfaces):
-            default_sfe_interface_profile_name = "Default_Interface_Profile"
             # build single ProfilesItem and append to Profiles
+            default_sfe_interface_profile_name = "DEFAULT-INTERFACE-PROFILE"
             self.structured_config.platform.sfe.interface.profiles.append_new(
                 name=default_sfe_interface_profile_name,
                 interfaces=sfe_member_interfaces_for_profile,
@@ -65,12 +65,15 @@ class PlatformMixin(Protocol):
     @cached_property
     def _get_sfe_interface_profile_member_interfaces(
         self: AvdStructuredConfigBaseProtocol,
-    ) -> EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.Interfaces | None:
-        """Returns list of eligible SFE interfaces with profile settings for structured config."""
+    ) -> EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.Interfaces:
+        """
+        Returns list of eligible SFE interfaces with profile settings for structured config.
+
+        Caller needs to check if `shared_utils.is_sfe_interface_profile_supported` is true
+        and then call this method.
+        """
         # Iterate through all L3 interfaces checking for those with 'rx_queue' config
         # Also iterate through member interfaces of all L3 Port-Channels with 'rx_queue' config
-        if not self.shared_utils.is_sfe_interface_profile_supported:
-            return None
         sfe_profile_member_interfaces = EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.Interfaces()
         # iterate through each L3 interface
         for interface in self.shared_utils.l3_interfaces:
@@ -87,46 +90,50 @@ class PlatformMixin(Protocol):
 
         if sfe_profile_member_interfaces:
             return sfe_profile_member_interfaces._natural_sorted()
-        return None
+        # return empty list if no candidate interfaces found
+        return sfe_profile_member_interfaces
 
     def _build_interface_with_rx_queue_settings(
         self: AvdStructuredConfigBaseProtocol,
-        l3_member_interface: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3InterfacesItem
+        l3_ethernet_interface: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3InterfacesItem
         | EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3PortChannelsItem.MemberInterfacesItem,
     ) -> EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.InterfacesItem | None:
         """Returns one SFE interface with profile settings for structured config."""
-        if not l3_member_interface._get("rx_queue"):
+        if not l3_ethernet_interface.rx_queue:
             # specified interface does not have explicit "rx_queue" key or sub-keys specified
             # exclude such interface from profile being built
             return None
         # validate rx_queue 'count' when specified
-        if l3_member_interface.rx_queue._get("count") and l3_member_interface.rx_queue.count > self.shared_utils.max_rx_queues:
+        self._validate_rx_queue_count(l3_ethernet_interface.rx_queue.count, l3_ethernet_interface.name)
+
+        rx_queue_workers = set()
+        for _worker in l3_ethernet_interface.rx_queue.workers:
+            for worker_id in map(int, range_expand(_worker)):
+                self._validate_rx_queue_worker(worker_id, l3_ethernet_interface.name)
+                rx_queue_workers.add(worker_id)
+        rx_queue_workers_range = list_compress(list(rx_queue_workers))
+
+        return EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.InterfacesItem(
+            name=l3_ethernet_interface.name,
+            rx_queue=EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.InterfacesItem.RxQueue(
+                count=l3_ethernet_interface.rx_queue.count,
+                worker=rx_queue_workers_range if rx_queue_workers_range else None,
+                mode=l3_ethernet_interface.rx_queue.mode,
+            ),
+        )
+
+    def _validate_rx_queue_count(self: AvdStructuredConfigBaseProtocol, rx_queue_count: int, l3_ethernet_interface_name: str) -> None:
+        if rx_queue_count and rx_queue_count > self.shared_utils.max_rx_queues:
             msg = (
-                f"'rx_queue' count for interface '{l3_member_interface.name}' exceeds maximum supported '{self.shared_utils.max_rx_queues}' for this platform."
+                f"'rx_queue.count' for interface '{l3_ethernet_interface_name}' exceeds maximum supported "
+                f"'{self.shared_utils.max_rx_queues}' for this platform."
             )
             raise AristaAvdInvalidInputsError(msg)
 
-        rx_queue_workers = set()
-        for _worker in l3_member_interface.rx_queue.worker:
-            for worker_id in range_expand(_worker):
-                self._validate_rx_queue_worker(worker_id, _worker, l3_member_interface.name)
-                rx_queue_workers.add(int(worker_id))
-        rx_queue_workers_range = list_compress(list(rx_queue_workers))
-
-        intf_profile_settings = EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.InterfacesItem()
-        intf_profile_settings.name = l3_member_interface.name
-        intf_profile_settings.rx_queue.count = l3_member_interface.rx_queue.count
-        if rx_queue_workers_range:
-            intf_profile_settings.rx_queue.worker = rx_queue_workers_range
-        if l3_member_interface.rx_queue._get("mode"):
-            # "mode" has default value, include value only when explicitly specified
-            intf_profile_settings.rx_queue.mode = l3_member_interface.rx_queue.mode
-        return intf_profile_settings
-
-    def _validate_rx_queue_worker(self: AvdStructuredConfigBaseProtocol, worker_id: str, worker_range: str, l3_member_interface_name: str) -> None:
-        if int(worker_id) >= self.shared_utils.max_rx_queues:
+    def _validate_rx_queue_worker(self: AvdStructuredConfigBaseProtocol, worker_id: int, l3_ethernet_interface_name: str) -> None:
+        if worker_id >= self.shared_utils.max_rx_queues:
             msg = (
-                f"One or more worker ids within '{worker_range}' under 'rx_queue' for interface '{l3_member_interface_name}' "
-                f"equal or exceed maximum supported '{self.shared_utils.max_rx_queues}' for this platform."
+                f"Worker id '{worker_id}' specified under 'rx_queue.workers' for interface '{l3_ethernet_interface_name}' "
+                f"equals or exceeds maximum supported '{self.shared_utils.max_rx_queues}' for this platform."
             )
             raise AristaAvdInvalidInputsError(msg)

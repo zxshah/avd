@@ -33,8 +33,6 @@ class LinkTrackingGroupsMixin(Protocol):
                         links_minimum=lt_group.links_minimum,
                         recovery_delay=default(lt_group.recovery_delay, default_recovery_delay),
                     )
-            else:
-                link_tracking_groups.append_new(name="LT_GROUP1", recovery_delay=default_recovery_delay)
 
             return link_tracking_groups
         return None

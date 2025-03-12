@@ -64,6 +64,16 @@
 | Start limit | Infinite |
 {%             endif %}
 {%         endif %}
+{%         if dot1x.vlan_assignment_groups is arista.avd.defined %}
+
+#### 802.1X VLAN Assignment Groups
+
+| VLAN Group Name | Value |
+| --------------- | ----- |
+{%             for vlan_assignment_group in dot1x.vlan_assignment_groups | arista.avd.natural_sort("name") %}
+| {{ vlan_assignment_group.name }} | {{ vlan_assignment_group.vlan }} |
+{%             endfor %}
+{%         endif %}
 {%         if dot1x.supplicant is arista.avd.defined %}
 
 #### 802.1X Supplicant

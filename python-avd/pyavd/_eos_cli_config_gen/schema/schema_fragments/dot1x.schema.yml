@@ -18,6 +18,8 @@ keys:
         type: bool
       dynamic_authorization:
         type: bool
+      statistics_packets_dropped:
+        type: bool
       mac_based_authentication:
         type: dict
         keys:
@@ -115,6 +117,18 @@ keys:
                     required: true
                   auth_only:
                     type: bool
+          filter_id:
+            type: dict
+            keys:
+              delimiter_period:
+                type: bool
+                description: Delimiter to use, Period as delimiter.
+              ipv4_ipv6_required:
+                type: bool
+                description: IPv4 filter-id, IPv6 filter-id, Filter-id are required.
+              multiple:
+                type: bool
+                description: Multiple attribute
       aaa:
         type: dict
         description: Configure AAA parameters.
@@ -287,3 +301,17 @@ keys:
             min: 60
             max: 65535
             description: Timeout in seconds for removing a disconnected supplicant.
+      vlan_assignment_groups:
+        type: list
+        primary_key: name
+        items:
+          type: dict
+          keys:
+            name:
+              type: str
+            vlan:
+              type: str
+              required: true
+              convert_types:
+                - int
+              description: VLAN value(s) or range(s) of VLAN values.

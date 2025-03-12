@@ -555,8 +555,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not (inputs := self.inputs.source_interfaces.radius):
             return
 
-        if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Radius",
-                                                              output_type=EosCliConfigGen.IpRadiusSourceInterfaces):
+        if source_interfaces := self._build_source_interfaces(
+            inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Radius", output_type=EosCliConfigGen.IpRadiusSourceInterfaces
+        ):
             self.structured_config.ip_radius_source_interfaces = source_interfaces
 
     @structured_config_contributor
@@ -565,8 +566,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not (inputs := self.inputs.source_interfaces.tacacs):
             return
 
-        if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Tacacs",
-                                                              output_type=EosCliConfigGen.IpTacacsSourceInterfaces):
+        if source_interfaces := self._build_source_interfaces(
+            inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Tacacs", output_type=EosCliConfigGen.IpTacacsSourceInterfaces
+        ):
             self.structured_config.ip_tacacs_source_interfaces = source_interfaces
 
     @structured_config_contributor
@@ -575,8 +577,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not (inputs := self.inputs.source_interfaces.ssh_client):
             return
 
-        if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP SSH Client",
-                                                              output_type=EosCliConfigGen.IpSshClientSourceInterfaces):
+        if source_interfaces := self._build_source_interfaces(
+            inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP SSH Client", output_type=EosCliConfigGen.IpSshClientSourceInterfaces
+        ):
             self.structured_config.ip_ssh_client_source_interfaces = source_interfaces
 
     @structured_config_contributor
@@ -585,8 +588,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not (inputs := self.inputs.source_interfaces.domain_lookup):
             return
 
-        if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Domain Lookup",
-                                                              output_type=EosCliConfigGen.IpDomainLookup.SourceInterfaces):
+        if source_interfaces := self._build_source_interfaces(
+            inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP Domain Lookup", output_type=EosCliConfigGen.IpDomainLookup.SourceInterfaces
+        ):
             self.structured_config.ip_domain_lookup.source_interfaces = source_interfaces
 
     @structured_config_contributor
@@ -595,8 +599,9 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if not (inputs := self.inputs.source_interfaces.http_client):
             return
 
-        if source_interfaces := self._build_source_interfaces(inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP HTTP Client",
-                                                              output_type=EosCliConfigGen.IpHttpClientSourceInterfaces):
+        if source_interfaces := self._build_source_interfaces(
+            inputs.mgmt_interface, inputs.inband_mgmt_interface, "IP HTTP Client", output_type=EosCliConfigGen.IpHttpClientSourceInterfaces
+        ):
             self.structured_config.ip_http_client_source_interfaces = source_interfaces
 
     @structured_config_contributor

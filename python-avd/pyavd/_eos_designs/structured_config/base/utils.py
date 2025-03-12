@@ -66,7 +66,7 @@ class UtilsMixin(Protocol):
             # Check for duplicate VRF
             # inband_mgmt_vrf returns None in case of VRF "default", but here we want the "default" VRF name to have proper duplicate detection.
             inband_mgmt_vrf = self.shared_utils.inband_mgmt_vrf or "default"
-            if [source_interface for source_interface in source_interfaces if source_interface.vrf or "default" == inband_mgmt_vrf]:  # noqa: SIM300
+            if [source_interface for source_interface in source_interfaces if source_interface.vrf or inband_mgmt_vrf == "default"]:
                 msg = f"Unable to configure multiple {error_context} source-interfaces for the same VRF '{inband_mgmt_vrf}'."
                 raise AristaAvdError(msg)
 
@@ -84,10 +84,10 @@ class UtilsMixin(Protocol):
             return None
 
         redistribute_route = EosCliConfigGen.RouterBgp.Redistribute()
+        redistribute_route.connected.enabled = True
         if (self.shared_utils.overlay_routing_protocol != "none" or self.shared_utils.is_wan_router) and self.inputs.underlay_filter_redistribute_connected:
             # Use route-map for redistribution
-            redistribute_route.connected._update(enabled=True, route_map="RM-CONN-2-BGP")
+            redistribute_route.connected._update(route_map="RM-CONN-2-BGP")
             return redistribute_route
 
-        redistribute_route.connected.enabled = True
         return redistribute_route

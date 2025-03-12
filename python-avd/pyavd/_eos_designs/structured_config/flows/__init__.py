@@ -200,5 +200,5 @@ class AvdStructuredConfigFlows(StructuredConfigGenerator):
         if tracker_name == default_tracker.name:
             return default_tracker
 
-        msg = f"'{tracker_name}' is being used for one of the interfaces, but is not configured in 'self.inputs.flow_tracking_settings'."
+        msg = f"The flow tracker '{tracker_name}' is being used for at least one interface, but is not configured in 'self.inputs.flow_tracking_settings'."
         raise AristaAvdInvalidInputsError(msg)

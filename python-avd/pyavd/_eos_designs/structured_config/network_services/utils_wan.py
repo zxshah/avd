@@ -244,7 +244,7 @@ class UtilsWanMixin(Protocol):
             loss_rate=input_topology.constraints.loss_rate,
         )
 
-        if self.inputs.wan_mode == "cv-pathfinder":
+        if self.shared_utils.is_cv_pathfinder_router:
             wan_load_balance_policy.lowest_hop_count = input_topology.lowest_hop_count
 
         # Using this flag while looping through all entries to keep track of any path group present on the remote host

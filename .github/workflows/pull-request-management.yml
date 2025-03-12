@@ -187,7 +187,7 @@ jobs:
         env:
           PATH: "/tmp/python_env/bin:${PATH}"
       - name: Run molecule action
-        run: " . /tmp/python_env/bin/activate && command -v python && cd ansible_collections/arista/avd && molecule converge -s eos_cli_config_gen -- -l host1 -vvv"
+        run: " . /tmp/python_env/bin/activate && command -v python && cd ansible_collections/arista/avd && molecule test --scenario-name ${{ matrix.avd_scenario }} -- -l host1 -vvv"
         shell: /usr/bin/bash -e {0}
         env:
           PATH: "/tmp/python_env/bin:${PATH}"

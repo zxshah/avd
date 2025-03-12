@@ -10,7 +10,12 @@ from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
 
 if TYPE_CHECKING:
+    from typing import TypeVar
+
     from . import AvdStructuredConfigBaseProtocol
+    T_Source_Interfaces = TypeVar("T_Source_Interfaces", EosCliConfigGen.IpHttpClientSourceInterfaces, EosCliConfigGen.IpDomainLookup.SourceInterfaces,
+                                  EosCliConfigGen.IpSshClientSourceInterfaces, EosCliConfigGen.IpTacacsSourceInterfaces,
+                                  EosCliConfigGen.SnmpServer.LocalInterfaces, EosCliConfigGen.IpRadiusSourceInterfaces)
 
 
 class UtilsMixin(Protocol):
@@ -21,15 +26,9 @@ class UtilsMixin(Protocol):
     """
 
     def _build_source_interfaces(
-        self: AvdStructuredConfigBaseProtocol, include_mgmt_interface: bool, include_inband_mgmt_interface: bool, error_context: str
-    ) -> (
-        EosCliConfigGen.IpHttpClientSourceInterfaces
-        | EosCliConfigGen.IpDomainLookup.SourceInterfaces
-        | EosCliConfigGen.IpSshClientSourceInterfaces
-        | EosCliConfigGen.IpTacacsSourceInterfaces
-        | EosCliConfigGen.SnmpServer.LocalInterfaces
-        | EosCliConfigGen.IpRadiusSourceInterfaces
-    ):
+        self: AvdStructuredConfigBaseProtocol, include_mgmt_interface: bool, include_inband_mgmt_interface: bool, error_context: str,
+        output_type: type[T_Source_Interfaces]
+    ) -> T_Source_Interfaces:
         """
         Return list of source interfaces with VRFs.
 
@@ -37,19 +36,7 @@ class UtilsMixin(Protocol):
 
         Raises errors for duplicate VRFs or missing interfaces with the given error context.
         """
-        if error_context == "IP HTTP Client":
-            source_interfaces = EosCliConfigGen.IpHttpClientSourceInterfaces()
-        elif error_context == "IP Domain Lookup":
-            source_interfaces = EosCliConfigGen.IpDomainLookup.SourceInterfaces()
-        elif error_context == "IP SSH Client":
-            source_interfaces = EosCliConfigGen.IpSshClientSourceInterfaces()
-        elif error_context == "IP Tacacs":
-            source_interfaces = EosCliConfigGen.IpTacacsSourceInterfaces()
-        elif error_context == "SNMP":
-            source_interfaces = EosCliConfigGen.SnmpServer.LocalInterfaces()
-        else:
-            source_interfaces = EosCliConfigGen.IpRadiusSourceInterfaces()
-
+        source_interfaces = output_type()
         if include_mgmt_interface:
             if (self.shared_utils.node_config.mgmt_ip is None) and (self.shared_utils.node_config.ipv6_mgmt_ip is None):
                 msg = f"Unable to configure {error_context} source-interface since 'mgmt_ip' or 'ipv6_mgmt_ip' are not set."
@@ -57,7 +44,7 @@ class UtilsMixin(Protocol):
 
             # mgmt_interface is always set (defaults to "Management1") so no need for error handling missing interface.
             source_interfaces.append_new(
-                name=self.shared_utils.mgmt_interface, vrf=self.inputs.mgmt_interface_vrf if self.inputs.mgmt_interface_vrf not in [None, "default"] else None
+                name=self.shared_utils.mgmt_interface,vrf=self.inputs.mgmt_interface_vrf if self.inputs.mgmt_interface_vrf not in [None, "default"] else None
             )
 
         if include_inband_mgmt_interface:

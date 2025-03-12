@@ -191,7 +191,8 @@ class SnmpServerMixin(Protocol):
         if not source_interfaces_inputs:
             # Empty dict or None
             return
-        local_interfaces = self._build_source_interfaces(source_interfaces_inputs.mgmt_interface, source_interfaces_inputs.inband_mgmt_interface, "SNMP")
+        local_interfaces = self._build_source_interfaces(source_interfaces_inputs.mgmt_interface, source_interfaces_inputs.inband_mgmt_interface, "SNMP",
+                                                         output_type=EosCliConfigGen.SnmpServer.LocalInterfaces)
         self.structured_config.snmp_server.local_interfaces = local_interfaces
 
     def _snmp_vrfs(self: AvdStructuredConfigBaseProtocol, snmp_settings: EosDesigns.SnmpSettings) -> None:

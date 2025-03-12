@@ -9,7 +9,7 @@ keys:
   serial_number:
     description: |
       Serial Number of the device.
-      Used only for documentation and deployment purposes. It is used by the 'eos_config_deploy_cvp' role.
+      Used only for documentation and deployment purposes. It is used by the 'eos_config_deploy_cvp' and 'cv_deploy' roles.
     type: str
     convert_types:
       - int

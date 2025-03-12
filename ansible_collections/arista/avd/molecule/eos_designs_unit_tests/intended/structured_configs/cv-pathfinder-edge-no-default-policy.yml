@@ -421,13 +421,11 @@ router_path_selection:
       enabled: true
   load_balance_policies:
   - name: LB-DEFAULT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LTE
     - name: MPLS
   - name: LB-DEFAULT-POLICY-CONTROL-PLANE
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS

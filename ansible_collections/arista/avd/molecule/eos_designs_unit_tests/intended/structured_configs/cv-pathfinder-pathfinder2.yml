@@ -798,7 +798,6 @@ router_path_selection:
     flow_assignment: lan
   load_balance_policies:
   - name: LB-DEFAULT-AVT-POLICY-CONTROL-PLANE
-    lowest_hop_count: false
     path_groups:
     - name: AWS
     - name: Equinix
@@ -809,14 +808,12 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-VIDEO
-    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: INET
     - name: Equinix
     - name: LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: Equinix
@@ -833,7 +830,6 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-VIDEO
-    lowest_hop_count: false
     loss_rate: '42.0'
     path_groups:
     - name: MPLS
@@ -842,33 +838,28 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-MPLS-ONLY
-    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS
       priority: 2
     - name: LAN_HA
   - name: LB-CUSTOM-VOICE-PROFILE-NAME
-    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: INET
       priority: 2
     - name: LAN_HA
   - name: LB-TRANSIT-AVT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: MPLS
       priority: 2
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: AWS
     - name: Equinix

@@ -619,13 +619,11 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-VIDEO
-    lowest_hop_count: false
     path_groups:
     - name: MPLS
     - name: INET
     - name: LAN_HA
   - name: LB-DEFAULT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LTE

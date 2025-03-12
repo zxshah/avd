@@ -567,17 +567,14 @@ router_path_selection:
       - 10.10.10.2
   load_balance_policies:
   - name: LB-DEFAULT-AVT-POLICY-CONTROL-PLANE
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-VIDEO
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LAN_HA
   - name: LB-DEFAULT-AVT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LAN_HA
@@ -589,18 +586,15 @@ router_path_selection:
       priority: 2
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-VIDEO
-    lowest_hop_count: false
     loss_rate: '42.0'
     path_groups:
     - name: INET
       priority: 2
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-MPLS-ONLY
-    lowest_hop_count: false
     path_groups:
     - name: LAN_HA
   - name: LB-PROD-AVT-POLICY-DEFAULT
-    lowest_hop_count: false
     path_groups:
     - name: INET
     - name: LAN_HA

@@ -140,10 +140,8 @@ class RouterBgpMixin(Protocol):
             if self.shared_utils.is_wan_server:
                 wan_overlay_peer_group.route_reflector_client = True
 
-            bfd_timers_dict = self.inputs.bgp_peer_groups.wan_overlay_peers.bfd_timers._as_dict(include_default_values=True)
-            wan_overlay_peer_group.bfd_timers._update(
-                interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]
-            )
+            bfd_timers_item = self.inputs.bgp_peer_groups.wan_overlay_peers.bfd_timers
+            wan_overlay_peer_group.bfd_timers._update(interval=bfd_timers_item.interval, min_rx=bfd_timers_item.min_rx, multiplier=bfd_timers_item.multiplier)
             peer_groups.append(wan_overlay_peer_group)
 
             if self._is_wan_server_with_peers:
@@ -154,9 +152,9 @@ class RouterBgpMixin(Protocol):
                     route_reflector_client=True,
                 )
 
-                bfd_timers_dict = self.inputs.bgp_peer_groups.wan_rr_overlay_peers.bfd_timers._as_dict(include_default_values=True)
+                bfd_timers_item = self.inputs.bgp_peer_groups.wan_rr_overlay_peers.bfd_timers
                 wan_rr_overlay_peer_group.bfd_timers._update(
-                    interval=bfd_timers_dict["interval"], min_rx=bfd_timers_dict["min_rx"], multiplier=bfd_timers_dict["multiplier"]
+                    interval=bfd_timers_item.interval, min_rx=bfd_timers_item.min_rx, multiplier=bfd_timers_item.multiplier
                 )
                 peer_groups.append(wan_rr_overlay_peer_group)
 

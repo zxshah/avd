@@ -27,7 +27,7 @@
 {%     endfor %}
 {%     if has.found is arista.avd.defined(true) %}
 
-#### Router OSPF Router Redistribution
+#### IPv6 Router OSPF Router Redistribution
 
 | Process ID | Source Protocol | Include Leaked | Route Map |
 | ---------- | --------------- | -------------- | --------- |
@@ -93,7 +93,7 @@
 {%         endfor %}
 {%     endif %}
 
-#### Router OSPF Device Configuration
+#### IPv6 Router OSPF Device Configuration
 
 ```eos
 {%     include 'eos/ipv6-router-ospf.j2' %}

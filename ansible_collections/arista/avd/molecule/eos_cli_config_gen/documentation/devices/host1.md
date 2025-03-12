@@ -7416,7 +7416,7 @@ router ospf 600
 | 301 | - | - |
 | 401 | - | - |
 
-#### Router OSPF Router Redistribution
+#### IPv6 Router OSPF Router Redistribution
 
 | Process ID | Source Protocol | Include Leaked | Route Map |
 | ---------- | --------------- | -------------- | --------- |
@@ -7439,7 +7439,7 @@ router ospf 600
 | 201 | ospfv3 match internal | enabled | - |
 | 301 | ospfv3 | enabled | - |
 
-#### Router OSPF Device Configuration
+#### IPv6 Router OSPF Device Configuration
 
 ```eos
 !

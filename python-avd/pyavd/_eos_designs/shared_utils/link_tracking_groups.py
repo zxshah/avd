@@ -28,9 +28,11 @@ class LinkTrackingGroupsMixin(Protocol):
             default_recovery_delay = default(self.platform_settings.reload_delay.mlag, 300)
             if len(self.node_config.link_tracking.groups) > 0:
                 for lt_group in self.node_config.link_tracking.groups:
-                    lt_group_item = lt_group._cast_as(EosCliConfigGen.LinkTrackingGroupsItem, ignore_extra_keys=True)
-                    lt_group_item.recovery_delay = default(lt_group.recovery_delay, default_recovery_delay)
-                    link_tracking_groups.append(lt_group_item)
+                    link_tracking_groups.append_new(
+                        name=lt_group.name,
+                        links_minimum=lt_group.links_minimum,
+                        recovery_delay=default(name=lt_group.recovery_delay, default_recovery_delay),
+                    )
             else:
                 link_tracking_groups.append_new(name="LT_GROUP1", recovery_delay=default_recovery_delay)
 

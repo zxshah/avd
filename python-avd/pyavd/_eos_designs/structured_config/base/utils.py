@@ -69,7 +69,7 @@ class UtilsMixin(Protocol):
             # Check for duplicate VRF
             # inband_mgmt_vrf returns None in case of VRF "default", but here we want the "default" VRF name to have proper duplicate detection.
             inband_mgmt_vrf = self.shared_utils.inband_mgmt_vrf or "default"
-            if [source_interface for source_interface in source_interfaces if source_interface.vrf == inband_mgmt_vrf]:
+            if [source_interface for source_interface in source_interfaces if source_interface.vrf or "default" == inband_mgmt_vrf]:  # noqa: SIM300
                 msg = f"Unable to configure multiple {error_context} source-interfaces for the same VRF '{inband_mgmt_vrf}'."
                 raise AristaAvdError(msg)
 

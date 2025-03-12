@@ -24,10 +24,10 @@ class EthernetInterfacesMixin(Protocol):
     def ethernet_interfaces(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol) -> None:
         """Set the structured config for ethernet_interfaces."""
         for p2p_link, p2p_link_data in self._filtered_p2p_links:
-            ethernet_interface = EosCliConfigGen.EthernetInterfacesItem()
             if p2p_link_data["port_channel_id"] is None:
                 # Ethernet interface
-                self._set_common_interface_cfg(p2p_link, p2p_link_data, ethernet_interface)
+                ethernet_interface = EosCliConfigGen.EthernetInterfacesItem()
+                self._update_common_interface_cfg(p2p_link, p2p_link_data, ethernet_interface)
                 ethernet_interface.ptp = self._get_ptp_config_interface(p2p_link, output_type=EosCliConfigGen.EthernetInterfacesItem.Ptp)
                 ethernet_interface.description = self._p2p_link_ethernet_description(p2p_link_data)
                 ethernet_interface.speed = p2p_link.speed
@@ -35,10 +35,17 @@ class EthernetInterfacesMixin(Protocol):
 
             # Port-Channel members
             for member in p2p_link_data["port_channel_members"]:
-                ethernet_interface = EosCliConfigGen.EthernetInterfacesItem()
-                self._set_port_channel_member_cfg(p2p_link, p2p_link_data, member, ethernet_interface)
-                ethernet_interface.description = self._port_channel_member_description(p2p_link_data, member)
-                ethernet_interface.speed = p2p_link.speed
+                ethernet_interface = EosCliConfigGen.EthernetInterfacesItem(
+                    name=member["interface"],
+                    peer=p2p_link_data["peer"],
+                    peer_interface=member["peer_interface"],
+                    peer_type=p2p_link_data["peer_type"],
+                    shutdown=False,
+                    description=self._port_channel_member_description(p2p_link_data, member),
+                    speed=p2p_link.speed,
+                )
+                ethernet_interface.channel_group.id = p2p_link_data["port_channel_id"]
+                ethernet_interface.channel_group.mode = p2p_link.port_channel.mode
                 self.structured_config.ethernet_interfaces.append(ethernet_interface)
 
     def _p2p_link_ethernet_description(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol, p2p_link_data: dict) -> str:

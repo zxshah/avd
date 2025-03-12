@@ -193,39 +193,43 @@ class UtilsMixin(Protocol):
         This config will only be used on the main interface - so not port-channel members.
         """
         ptp_config = output_type()
-        if p2p_link.ptp.enabled:
-            if self.shared_utils.ptp_enabled:
-                # Apply PTP profile config from node settings when profile is not defined on p2p_link
-                if not p2p_link.ptp.profile:
-                    ptp_config = self.shared_utils.ptp_profile._cast_as(output_type, ignore_extra_keys=True)
 
-                # Apply PTP profile defined for the p2p_link
-                elif p2p_link.ptp.profile not in self.inputs.ptp_profiles:
-                    msg = f"PTP Profile '{p2p_link.ptp.profile}' referenced under {self.data_model}.p2p_links does not exist in `ptp_profiles`."
-                    raise AristaAvdInvalidInputsError(msg)
+        # Early return if PTP is not enabled
+        if not p2p_link.ptp.enabled:
+            return ptp_config
 
-                else:
-                    ptp_profile_config = self.inputs.ptp_profiles[p2p_link.ptp.profile]
-                    if hasattr(ptp_profile_config, "profile"):
-                        delattr(ptp_profile_config, "profile")
-                    ptp_config = ptp_profile_config._cast_as(output_type, ignore_extra_keys=True)
+        if self.shared_utils.ptp_enabled:
+            # Apply PTP profile config from node settings when profile is not defined on p2p_link
+            if not p2p_link.ptp.profile:
+                ptp_config = self.shared_utils.ptp_profile._cast_as(output_type, ignore_extra_keys=True)
 
-            node_index = p2p_link.nodes._as_list().index(self.shared_utils.hostname)  # TODO: Implement .index() method on AvdList and AvdIndexedList class.
-            if len(p2p_link.ptp.roles) > node_index and p2p_link.ptp.roles[node_index] == "master":
-                ptp_config.role = "master"
+            # Apply PTP profile defined for the p2p_link
+            elif p2p_link.ptp.profile not in self.inputs.ptp_profiles:
+                msg = f"PTP Profile '{p2p_link.ptp.profile}' referenced under {self.data_model}.p2p_links does not exist in `ptp_profiles`."
+                raise AristaAvdInvalidInputsError(msg)
 
-            ptp_config.enable = True
+            else:
+                ptp_profile_config = self.inputs.ptp_profiles[p2p_link.ptp.profile]
+                if hasattr(ptp_profile_config, "profile"):
+                    delattr(ptp_profile_config, "profile")
+                ptp_config = ptp_profile_config._cast_as(output_type, ignore_extra_keys=True)
+
+        node_index = p2p_link.nodes._as_list().index(self.shared_utils.hostname)  # TODO: Implement .index() method on AvdList and AvdIndexedList class.
+        if len(p2p_link.ptp.roles) > node_index and p2p_link.ptp.roles[node_index] == "master":
+            ptp_config.role = "master"
+
+        ptp_config.enable = True
 
         return ptp_config
 
-    def _set_common_interface_cfg(
+    def _update_common_interface_cfg(
         self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol,
         p2p_link: T_P2pLinksItem,
         p2p_link_data: dict,
         interface: EosCliConfigGen.EthernetInterfacesItem | EosCliConfigGen.PortChannelInterfacesItem,
     ) -> None:
         """
-        Set the partial structured_config for one p2p_link.
+        Update the partial structured_config for one p2p_link under ethernet or port-channel interface.
 
         Covers common config that is applicable to both port-channels and ethernet interfaces.
         This config will only be used on the main interface - so not port-channel members.
@@ -303,23 +307,3 @@ class UtilsMixin(Protocol):
             if p2p_link.include_in_underlay_protocol is True and self.shared_utils.underlay_ldp and default(p2p_link.mpls_ldp, True):  # noqa: FBT003
                 interface.mpls.ldp.interface = True
                 interface.mpls.ldp.igp_sync = True
-
-    def _set_port_channel_member_cfg(
-        self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol,
-        p2p_link: T_P2pLinksItem,
-        p2p_link_data: dict,
-        member: dict,
-        interface: EosCliConfigGen.EthernetInterfacesItem | EosCliConfigGen.PortChannelInterfacesItem,
-    ) -> None:
-        """
-        Set the partial structured_config for one p2p_link.
-
-        Covers config for ethernet interfaces that are port-channel members.
-        """
-        interface.name = member["interface"]
-        interface.peer = p2p_link_data["peer"]
-        interface.peer_interface = member["peer_interface"]
-        interface.peer_type = p2p_link_data["peer_type"]
-        interface.shutdown = False
-        interface.channel_group.id = p2p_link_data["port_channel_id"]
-        interface.channel_group.mode = p2p_link.port_channel.mode

@@ -18530,6 +18530,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     "notification_timestamp": {"type": str},
                     "ip_access_group": {"type": str},
                     "port": {"type": int},
+                    "authorization_requests": {"type": bool},
                 }
                 name: str
                 """Transport name."""
@@ -18556,6 +18557,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 Make sure to update the control-plane ACL accordingly in order for the service to be
                 reachable by external applications.
                 """
+                authorization_requests: bool | None
+                """Use per-RPC authorization."""
 
                 if TYPE_CHECKING:
 
@@ -18568,6 +18571,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         notification_timestamp: Literal["send-time", "last-change-time"] | None | UndefinedType = Undefined,
                         ip_access_group: str | None | UndefinedType = Undefined,
                         port: int | None | UndefinedType = Undefined,
+                        authorization_requests: bool | None | UndefinedType = Undefined,
                     ) -> None:
                         """
                         GrpcItem.
@@ -18593,6 +18597,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                GNMI port.
                                Make sure to update the control-plane ACL accordingly in order for the service to be
                                reachable by external applications.
+                            authorization_requests: Use per-RPC authorization.
 
                         """
 
@@ -51359,11 +51364,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}}
-                name: str | None
+                name: str
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, name: str | UndefinedType = Undefined) -> None:
                         """
                         ExitGroupsItem.
 
@@ -51375,8 +51380,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class ExitGroups(AvdList[ExitGroupsItem]):
-                """Subclass of AvdList with `ExitGroupsItem` items."""
+            class ExitGroups(AvdIndexedList[str, ExitGroupsItem]):
+                """Subclass of AvdIndexedList with `ExitGroupsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             ExitGroups._item_type = ExitGroupsItem
 
@@ -51387,8 +51394,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             The exit groups that are configured under a policy are strictly ordered, meaning an exit group
             appearing first has more priority than the exit group that follows it.
 
-            Subclass of AvdList with
-            `ExitGroupsItem` items.
+            Subclass of AvdIndexedList
+            with `ExitGroupsItem` items. Primary key is `name` (`str`).
             """
 
             if TYPE_CHECKING:
@@ -51406,8 +51413,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            The exit groups that are configured under a policy are strictly ordered, meaning an exit group
                            appearing first has more priority than the exit group that follows it.
 
-                           Subclass of AvdList with
-                           `ExitGroupsItem` items.
+                           Subclass of AvdIndexedList
+                           with `ExitGroupsItem` items. Primary key is `name` (`str`).
 
                     """
 
@@ -51425,11 +51432,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}}
-                name: str | None
+                name: str
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, name: str | UndefinedType = Undefined) -> None:
                         """
                         LocalConnectionsItem.
 
@@ -51441,8 +51448,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class LocalConnections(AvdList[LocalConnectionsItem]):
-                """Subclass of AvdList with `LocalConnectionsItem` items."""
+            class LocalConnections(AvdIndexedList[str, LocalConnectionsItem]):
+                """Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             LocalConnections._item_type = LocalConnectionsItem
 
@@ -51460,7 +51469,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             insertion module reports the health of the connection and the exit will qualify for use only when it
             is healthy.
 
-            Subclass of AvdList with `LocalConnectionsItem` items.
+            Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name`
+            (`str`).
             """
 
             if TYPE_CHECKING:
@@ -51489,7 +51499,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            insertion module reports the health of the connection and the exit will qualify for use only when it
                            is healthy.
 
-                           Subclass of AvdList with `LocalConnectionsItem` items.
+                           Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name`
+                           (`str`).
 
                     """
 

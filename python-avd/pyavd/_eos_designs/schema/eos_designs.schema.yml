@@ -1889,6 +1889,14 @@ keys:
       table: system-settings
     $ref: eos_cli_config_gen#/keys/hardware_counters
     type: dict
+  inband_ztp_bootstrap_file:
+    type: str
+    description: "Bootstrap URL configured in DHCP to use for inband ZTP.\nIf not
+      set and `cvp_instance_ips` is set then the bootstrap value will be set to:\n
+      \   `https://{cvp_instance_ips[0]}/ztp/bootstrap`\nOtherwise no value will be
+      configured."
+    documentation_options:
+      table: management-settings
   internal_vlan_order:
     documentation_options:
       table: system-settings
@@ -9679,6 +9687,26 @@ $defs:
           type: str
           description: Speed should be set in the format `<interface_speed>` or `forced
             <interface_speed>` or `auto <interface_speed>`.
+        receive_bandwidth:
+          type: int
+          description: 'Maximum allowed receive bandwidth (download) in Mbps for this
+            interface.
+
+            This is currently used on CVaaS to provide more information in the visualization.'
+          min: 1
+          max: 4294967295
+          convert_types:
+          - str
+        transmit_bandwidth:
+          type: int
+          description: 'Maximum allowed transmit bandwidth (upload) in Mbps for this
+            interface.
+
+            This is currently used on CVaaS to provide more information in the visualization.'
+          min: 1
+          max: 4294967295
+          convert_types:
+          - str
         peer:
           type: str
           description: The peer device name. Used for description and documentation.

@@ -197,7 +197,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
                     application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
                     atr.applications.ipv4_applications.append(application_item)
-                    self.structured_config.application_traffic_recognition.applications.ipv4_applications.extend(atr.applications.ipv4_applications)
+
+        self.structured_config.application_traffic_recognition.applications.ipv4_applications.extend(atr.applications.ipv4_applications)
 
         for application in atr.applications.ipv4_applications:
             for prefix_set_name in (application.src_prefix_set_name, application.dest_prefix_set_name):
@@ -210,7 +211,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if prefix_set_name:
                     ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]
                     atr.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
-                    self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.extend(atr.field_sets.ipv4_prefixes)
 
             for port_set_name in (
                 application.udp_src_port_set_name,
@@ -228,4 +228,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if port_set_name:
                     l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]
                     atr.field_sets.l4_ports.append(l4_port)
-                    self.structured_config.application_traffic_recognition.field_sets.l4_ports.extend(atr.field_sets.l4_ports)
+
+        self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.extend(atr.field_sets.ipv4_prefixes)
+        self.structured_config.application_traffic_recognition.field_sets.l4_ports.extend(atr.field_sets.l4_ports)

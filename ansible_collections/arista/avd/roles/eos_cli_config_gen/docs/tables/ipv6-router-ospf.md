@@ -9,10 +9,10 @@
     | -------- | ---- | -------- | ------- | ------------------ | ----------- |
     | [<samp>ipv6_router_ospf</samp>](## "ipv6_router_ospf") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;process_ids</samp>](## "ipv6_router_ospf.process_ids") | List, items: Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;id</samp>](## "ipv6_router_ospf.process_ids.[].id") | Integer | Required, Unique |  |  | OSPF Process ID. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ipv6_router_ospf.process_ids.[].vrf") | String |  |  |  | VRF Name for OSPF Process. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;id</samp>](## "ipv6_router_ospf.process_ids.[].id") | Integer | Required, Unique |  |  | OSPF process ID. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ipv6_router_ospf.process_ids.[].vrf") | String |  |  |  | VRF name for OSPF process. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;router_id</samp>](## "ipv6_router_ospf.process_ids.[].router_id") | String |  |  |  | IPv4 Address. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redistribute</samp>](## "ipv6_router_ospf.process_ids.[].redistribute") | Dictionary |  |  |  | Redistribute routes in to OSPF. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redistribute</samp>](## "ipv6_router_ospf.process_ids.[].redistribute") | Dictionary |  |  |  | Redistribute routes with OSPFv3. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgp</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.route_map") | String |  |  |  |  |
@@ -46,7 +46,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dhcp</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auto_cost_reference_bandwidth</samp>](## "ipv6_router_ospf.process_ids.[].auto_cost_reference_bandwidth") | Integer |  |  | Min: 1<br>Max: 429496 | Bandwidth in mbps. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auto_cost_reference_bandwidth</samp>](## "ipv6_router_ospf.process_ids.[].auto_cost_reference_bandwidth") | Integer |  |  | Min: 1<br>Max: 4294967 | Bandwidth in mbps. |
 
 === "YAML"
 
@@ -54,16 +54,16 @@
     ipv6_router_ospf:
       process_ids:
 
-          # OSPF Process ID.
+          # OSPF process ID.
         - id: <int; required; unique>
 
-          # VRF Name for OSPF Process.
+          # VRF name for OSPF process.
           vrf: <str>
 
           # IPv4 Address.
           router_id: <str>
 
-          # Redistribute routes in to OSPF.
+          # Redistribute routes with OSPFv3.
           redistribute:
             bgp:
               enabled: <bool; required>
@@ -120,5 +120,5 @@
               route_map: <str>
 
           # Bandwidth in mbps.
-          auto_cost_reference_bandwidth: <int; 1-429496>
+          auto_cost_reference_bandwidth: <int; 1-4294967>
     ```

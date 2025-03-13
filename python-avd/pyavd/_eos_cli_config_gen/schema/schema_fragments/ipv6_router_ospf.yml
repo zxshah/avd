@@ -20,10 +20,10 @@ keys:
               type: int
               convert_types:
                 - str
-              description: OSPF Process ID.
+              description: OSPF process ID.
             vrf:
               type: str
-              description: VRF Name for OSPF Process.
+              description: VRF name for OSPF process.
               convert_types:
                 - int
             router_id:
@@ -31,7 +31,7 @@ keys:
               description: IPv4 Address.
             redistribute:
               type: dict
-              description: Redistribute routes in to OSPF.
+              description: Redistribute routes with OSPFv3.
               keys:
                 bgp:
                   type: dict
@@ -136,4 +136,4 @@ keys:
                 - str
               description: Bandwidth in mbps.
               min: 1
-              max: 429496
+              max: 4294967

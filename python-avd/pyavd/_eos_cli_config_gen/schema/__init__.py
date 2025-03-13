@@ -16742,14 +16742,14 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "auto_cost_reference_bandwidth": {"type": int},
             }
             id: int
-            """OSPF Process ID."""
+            """OSPF process ID."""
             vrf: str | None
-            """VRF Name for OSPF Process."""
+            """VRF name for OSPF process."""
             router_id: str | None
             """IPv4 Address."""
             redistribute: Redistribute
             """
-            Redistribute routes in to OSPF.
+            Redistribute routes with OSPFv3.
 
             Subclass of AvdModel.
             """
@@ -16774,11 +16774,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        id: OSPF Process ID.
-                        vrf: VRF Name for OSPF Process.
+                        id: OSPF process ID.
+                        vrf: VRF name for OSPF process.
                         router_id: IPv4 Address.
                         redistribute:
-                           Redistribute routes in to OSPF.
+                           Redistribute routes with OSPFv3.
 
                            Subclass of AvdModel.
                         auto_cost_reference_bandwidth: Bandwidth in mbps.

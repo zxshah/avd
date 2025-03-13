@@ -69,7 +69,14 @@ class UtilsMixin(Protocol):
         if self.resolved_port_profiles_cache and profile_name in self.resolved_port_profiles_cache:
             return self.resolved_port_profiles_cache[profile_name]
 
-        return self.resolve_port_profile(profile_name, context)
+        resolved_profile = self.resolve_port_profile(profile_name, context)
+
+        # Update the cache so we don't resolve again next time.
+        if self.resolved_port_profiles_cache is None:
+            self.resolved_port_profiles_cache = {}
+        self.resolved_port_profiles_cache[profile_name] = resolved_profile
+
+        return resolved_profile
 
     def resolve_port_profile(self: SharedUtilsProtocol, profile_name: str, context: str) -> EosDesigns.PortProfilesItem:
         """Resolve one port-profile and return it. Also updates the cache."""
@@ -89,11 +96,6 @@ class UtilsMixin(Protocol):
             port_profile = port_profile._deepinherited(parent_profile)
 
         delattr(port_profile, "parent_profile")
-
-        # Update the cache so we don't resolve again next time.
-        if self.resolved_port_profiles_cache is None:
-            self.resolved_port_profiles_cache = {}
-        self.resolved_port_profiles_cache[profile_name] = port_profile
 
         return port_profile
 

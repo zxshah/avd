@@ -71,7 +71,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_interface</samp>](## "uplinks.[].peer_interface") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_type</samp>](## "uplinks.[].peer_type") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_is_deployed</samp>](## "uplinks.[].peer_is_deployed") | Boolean | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_bgp_as</samp>](## "uplinks.[].peer_bgp_as") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_bgp_as</samp>](## "uplinks.[].peer_bgp_as") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;type</samp>](## "uplinks.[].type") | String | Required |  | Valid Values:<br>- <code>underlay_p2p</code><br>- <code>underlay_l2</code> |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;speed</samp>](## "uplinks.[].speed") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;bfd</samp>](## "uplinks.[].bfd") | Boolean |  |  |  |  |
@@ -85,9 +85,9 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;prefix_length</samp>](## "uplinks.[].prefix_length") | Integer |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;ip_address</samp>](## "uplinks.[].ip_address") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_ip_address</samp>](## "uplinks.[].peer_ip_address") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;link_tracking_groups</samp>](## "uplinks.[].link_tracking_groups") | Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "uplinks.[].link_tracking_groups.name") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direction</samp>](## "uplinks.[].link_tracking_groups.direction") | String | Required |  | Valid Values:<br>- <code>upstream</code><br>- <code>downstream</code> |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;link_tracking_groups</samp>](## "uplinks.[].link_tracking_groups") | List, items: Dictionary |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "uplinks.[].link_tracking_groups.[].name") | String | Required, Unique |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direction</samp>](## "uplinks.[].link_tracking_groups.[].direction") | String | Required |  | Valid Values:<br>- <code>upstream</code><br>- <code>downstream</code> |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_node_group</samp>](## "uplinks.[].peer_node_group") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;node_group</samp>](## "uplinks.[].node_group") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_mlag</samp>](## "uplinks.[].peer_mlag") | Boolean |  |  |  |  |
@@ -95,14 +95,16 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_channel_group_id</samp>](## "uplinks.[].peer_channel_group_id") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;trunk_groups</samp>](## "uplinks.[].trunk_groups") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplinks.[].trunk_groups.[]") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_trunk_groups</samp>](## "uplinks.[].peer_trunk_groups") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplinks.[].peer_trunk_groups.[]") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;vlans</samp>](## "uplinks.[].vlans") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;native_vlan</samp>](## "uplinks.[].native_vlan") | Integer |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_short_esi</samp>](## "uplinks.[].peer_short_esi") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_spanning_tree_portfast</samp>](## "uplinks.[].peer_spanning_tree_portfast") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "uplinks.[].structured_config") | Dictionary |  |  |  | Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".<br>When uplink_type == "p2p", custom structured config added under ethernet_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the ethernet interface level.<br>When uplink_type == "port-channel", custom structured config added under port_channel_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the port-channel interface level.<br>"uplink_structured_config" is applied after "structured_config", so it can override "structured_config" defined on node-level.<br>Note! The content of this dictionary is _not_ validated by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;subinterfaces</samp>](## "uplinks.[].subinterfaces") | List, items: Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;interface</samp>](## "uplinks.[].subinterfaces.[].interface") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer_interfaces</samp>](## "uplinks.[].subinterfaces.[].peer_interfaces") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;interface</samp>](## "uplinks.[].subinterfaces.[].interface") | String | Required, Unique |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer_interface</samp>](## "uplinks.[].subinterfaces.[].peer_interface") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "uplinks.[].subinterfaces.[].vrf") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encapsulation_dot1q_vlan</samp>](## "uplinks.[].subinterfaces.[].encapsulation_dot1q_vlan") | Integer |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_enable</samp>](## "uplinks.[].subinterfaces.[].ipv6_enable") | Boolean |  |  |  |  |
@@ -114,11 +116,12 @@
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplink_peers.[]") | String |  |  |  |  |
     | [<samp>uplink_switch_vrfs</samp>](## "uplink_switch_vrfs") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplink_switch_vrfs.[]") | String |  |  |  |  |
-    | [<samp>vlans</samp>](## "vlans") | String | Required |  |  |  |
-    | [<samp>endpoint_vlans</samp>](## "endpoint_vlans") | String |  |  |  |  |
-    | [<samp>local_endpoint_trunk_groups</samp>](## "local_endpoint_trunk_groups") | List, items: String |  |  |  |  |
+    | [<samp>vlans</samp>](## "vlans") | String | Required |  |  | Compressed list of vlans to be defined on this switch after filtering network services.<br>The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.<br><br>Ex. "1-100, 201-202"<br><br>This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.<br>This is to ensure that native vlan is not necessarily permitted on the uplink trunk. |
+    | [<samp>local_endpoint_vlans</samp>](## "local_endpoint_vlans") | String |  |  |  | Compressed list of vlans in use by endpoints connected to this switch. |
+    | [<samp>endpoint_vlans</samp>](## "endpoint_vlans") | String |  |  |  | Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches. |
+    | [<samp>local_endpoint_trunk_groups</samp>](## "local_endpoint_trunk_groups") | List, items: String |  |  |  | List of trunk_groups in use by endpoints connected to this switch. |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "local_endpoint_trunk_groups.[]") | String |  |  |  |  |
-    | [<samp>endpoint_trunk_groups</samp>](## "endpoint_trunk_groups") | List, items: String |  |  |  |  |
+    | [<samp>endpoint_trunk_groups</samp>](## "endpoint_trunk_groups") | List, items: String |  |  |  | List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches. |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "endpoint_trunk_groups.[]") | String |  |  |  |  |
     | [<samp>wan_path_groups</samp>](## "wan_path_groups") | List, items: Dictionary |  |  |  | List of path-groups used for the WAN configuration. |
     | [<samp>&nbsp;&nbsp;-&nbsp;interfaces</samp>](## "wan_path_groups.[].interfaces") | List, items: Dictionary |  |  |  |  |
@@ -140,6 +143,23 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;dps_keepalive</samp>](## "wan_path_groups.[].dps_keepalive") | Dictionary |  |  |  | Period between the transmission of consecutive keepalive messages, and failure threshold. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval</samp>](## "wan_path_groups.[].dps_keepalive.interval") | String |  |  |  | Interval in milliseconds. Valid values are 50-60000 | "auto".<br><br>When auto, the interval and failure_threshold are automatically determined based on<br>path state. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;failure_threshold</samp>](## "wan_path_groups.[].dps_keepalive.failure_threshold") | Integer |  | `5` | Min: 2<br>Max: 100 | Failure threshold in number of lost keep-alive messages. |
+    | [<samp>local_short_esi</samp>](## "local_short_esi") | String |  |  |  |  |
+    | [<samp>only_used_for_peer_facts</samp>](## "only_used_for_peer_facts") | Dictionary |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;mlag</samp>](## "only_used_for_peer_facts.mlag") | Boolean | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;uplink_switch_port_channel_id</samp>](## "only_used_for_peer_facts.uplink_switch_port_channel_id") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;uplink_port_channel_id</samp>](## "only_used_for_peer_facts.uplink_port_channel_id") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;vrfs</samp>](## "only_used_for_peer_facts.vrfs") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "only_used_for_peer_facts.vrfs.[]") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;underlay_multicast</samp>](## "only_used_for_peer_facts.underlay_multicast") | Boolean |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;overlay_rd_type_admin_subfield</samp>](## "only_used_for_peer_facts.overlay_rd_type_admin_subfield") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;default_downlink_interfaces</samp>](## "only_used_for_peer_facts.default_downlink_interfaces") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "only_used_for_peer_facts.default_downlink_interfaces.[]") | String |  |  |  |  |
+    | [<samp>downlink_switches</samp>](## "downlink_switches") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "downlink_switches.[]") | String |  |  |  |  |
+    | [<samp>evpn_route_server_clients</samp>](## "evpn_route_server_clients") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "evpn_route_server_clients.[]") | String |  |  |  |  |
+    | [<samp>mpls_route_reflector_clients</samp>](## "mpls_route_reflector_clients") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "mpls_route_reflector_clients.[]") | String |  |  |  |  |
 
 === "YAML"
 
@@ -248,7 +268,7 @@
         peer_interface: <str; required>
         peer_type: <str; required>
         peer_is_deployed: <bool; required>
-        peer_bgp_as: <str; required>
+        peer_bgp_as: <str>
         type: <str; "underlay_p2p" | "underlay_l2"; required>
         speed: <str>
         bfd: <bool>
@@ -265,14 +285,16 @@
         ip_address: <str>
         peer_ip_address: <str>
         link_tracking_groups:
-          name: <str; required>
-          direction: <str; "upstream" | "downstream"; required>
+          - name: <str; required; unique>
+            direction: <str; "upstream" | "downstream"; required>
         peer_node_group: <str>
         node_group: <str>
         peer_mlag: <bool>
         channel_group_id: <str>
         peer_channel_group_id: <str>
         trunk_groups:
+          - <str>
+        peer_trunk_groups:
           - <str>
         vlans: <str>
         native_vlan: <int>
@@ -286,8 +308,8 @@
         # Note! The content of this dictionary is _not_ validated by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.
         structured_config: <dict>
         subinterfaces:
-          - interface: <str; required>
-            peer_interfaces: <str; required>
+          - interface: <str; required; unique>
+            peer_interface: <str; required>
             vrf: <str; required>
             encapsulation_dot1q_vlan: <int>
             ipv6_enable: <bool>
@@ -305,10 +327,27 @@
       - <str>
     uplink_switch_vrfs:
       - <str>
+
+    # Compressed list of vlans to be defined on this switch after filtering network services.
+    # The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+    #
+    # Ex. "1-100, 201-202"
+    #
+    # This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+    # This is to ensure that native vlan is not necessarily permitted on the uplink trunk.
     vlans: <str; required>
+
+    # Compressed list of vlans in use by endpoints connected to this switch.
+    local_endpoint_vlans: <str>
+
+    # Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
     endpoint_vlans: <str>
+
+    # List of trunk_groups in use by endpoints connected to this switch.
     local_endpoint_trunk_groups:
       - <str>
+
+    # List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
     endpoint_trunk_groups:
       - <str>
 
@@ -371,6 +410,23 @@
 
           # Failure threshold in number of lost keep-alive messages.
           failure_threshold: <int; 2-100; default=5>
+    local_short_esi: <str>
+    only_used_for_peer_facts:
+      mlag: <bool; required>
+      uplink_switch_port_channel_id: <int>
+      uplink_port_channel_id: <int>
+      vrfs:
+        - <str>
+      underlay_multicast: <bool>
+      overlay_rd_type_admin_subfield: <str>
+      default_downlink_interfaces:
+        - <str>
+    downlink_switches:
+      - <str>
+    evpn_route_server_clients:
+      - <str>
+    mpls_route_reflector_clients:
+      - <str>
     ```
 
     1. Default Value

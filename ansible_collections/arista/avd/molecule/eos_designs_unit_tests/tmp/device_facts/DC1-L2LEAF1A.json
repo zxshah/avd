@@ -34,52 +34,41 @@
   ],
   "port_profile_names": [
     {
-      "profile": "TENANT_A_B",
-      "parent_profile": null
+      "profile": "TENANT_A_B"
     },
     {
-      "profile": "TENANT_A",
-      "parent_profile": null
+      "profile": "TENANT_A"
     },
     {
-      "profile": "TENANT_A_MTU",
-      "parent_profile": null
+      "profile": "TENANT_A_MTU"
     },
     {
-      "profile": "TENANT_B",
-      "parent_profile": null
+      "profile": "TENANT_B"
     },
     {
-      "profile": "PHONE_WITH_PC",
-      "parent_profile": null
+      "profile": "PHONE_WITH_PC"
     },
     {
-      "profile": "ALL_WITH_SECURITY",
-      "parent_profile": null
+      "profile": "ALL_WITH_SECURITY"
     },
     {
-      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL",
-      "parent_profile": null
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL"
     },
     {
-      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK",
-      "parent_profile": null
+      "profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK"
     },
     {
-      "profile": "PORT_CHANNEL_LACP_TIMER",
-      "parent_profile": null
+      "profile": "PORT_CHANNEL_LACP_TIMER"
     },
     {
-      "profile": "PORT_CHANNEL_LACP_TIMER_NORMAL",
-      "parent_profile": null
+      "profile": "PORT_CHANNEL_LACP_TIMER_NORMAL"
     },
     {
       "profile": "NESTED_PORT_PROFILE",
       "parent_profile": "ALL_WITH_SECURITY_PORT_CHANNEL_LACP_FALLBACK"
     },
     {
-      "profile": "DOT1X_PORT_PROFILE",
-      "parent_profile": null
+      "profile": "DOT1X_PORT_PROFILE"
     }
   ],
   "mlag_peer": "DC1-L2LEAF1B",
@@ -93,50 +82,16 @@
     "primary": 8,
     "secondary": 11
   },
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "DC1-LEAF2A",
-      "peer_interface": "Ethernet7",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "speed": "forced 10000",
-      "vlans": "110-112,120-121,130-131,160-161",
-      "peer_short_esi": "0808:0707:0606",
-      "structured_config": {},
-      "peer_node_group": "DC1_LEAF2",
-      "node_group": "DC1_L2LEAF1",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "7"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "DC1-LEAF2B",
-      "peer_interface": "Ethernet7",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "speed": "forced 10000",
-      "vlans": "110-112,120-121,130-131,160-161",
-      "peer_short_esi": "0808:0707:0606",
-      "structured_config": {},
-      "peer_node_group": "DC1_LEAF2",
-      "node_group": "DC1_L2LEAF1",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "7"
-    }
-  ],
   "uplink_peers": [
     "DC1-LEAF2A",
     "DC1-LEAF2B"
   ],
   "vlans": "110-112,120-121,130-131,160-161",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "local_short_esi": "0808:0707:0606",
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  }
 }

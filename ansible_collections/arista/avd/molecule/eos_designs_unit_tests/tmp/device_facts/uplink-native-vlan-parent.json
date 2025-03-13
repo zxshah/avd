@@ -7,31 +7,17 @@
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "uplink-native-vlan-grandparent",
-      "peer_interface": "Ethernet1",
-      "peer_type": "l2leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "100",
-      "native_vlan": 100,
-      "structured_config": {},
-      "peer_mlag": false,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "1"
-    }
-  ],
   "uplink_peers": [
     "uplink-native-vlan-grandparent"
   ],
   "vlans": "100",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "uplink-native-vlan-child"
+  ]
 }

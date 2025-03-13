@@ -14,6 +14,8 @@ from pyavd._utils import default, get, get_ip_from_ip_prefix, strip_empties_from
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
+    from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
+
     from . import SharedUtilsProtocol
 
 
@@ -501,9 +503,13 @@ class WanMixin(Protocol):
         raise AristaAvdError(msg)
 
     @cached_property
-    def vrf_default_uplinks(self: SharedUtilsProtocol) -> list:
-        """Return the uplinkss in VRF default."""
-        return [uplink for uplink in self.get_switch_fact("uplinks") if get(uplink, "vrf") is None]
+    def vrf_default_uplinks(self: SharedUtilsProtocol) -> EosDesignsFacts.Uplinks:
+        """
+        Return the uplinkss in VRF default.
+
+        TODO: Figure out why this is needed. It was checking for .vrf but that is never set except for subinterfaces...
+        """
+        return self.switch_facts.uplinks
 
     @cached_property
     def vrf_default_uplink_interfaces(self: SharedUtilsProtocol) -> list:

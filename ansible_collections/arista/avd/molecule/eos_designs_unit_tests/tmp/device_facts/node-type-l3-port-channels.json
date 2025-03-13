@@ -5,26 +5,23 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65005",
   "underlay_routing_protocol": "none",
   "inband_ztp": false,
   "group": "Site511",
   "router_id": "192.168.255.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.255.1",
     "evpn_mpls": false
   },
   "vtep_ip": "192.168.142.1",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "vlans": "",
   "wan_path_groups": [
     {
-      "name": "INET",
-      "id": 101,
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Port-Channel2",
           "public_ip": "192.168.1.102",
@@ -53,14 +50,17 @@
           "public_ip": "192.168.1.19",
           "connected_to_pathfinder": true
         }
-      ]
+      ],
+      "name": "INET",
+      "id": 101
     }
   ],
-  "max_parallel_uplinks": 1,
-  "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
-  "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "uplink_type": "p2p-vrfs",
+    "vrfs": [
+      "default"
+    ],
+    "underlay_multicast": false
+  }
 }

@@ -6,7 +6,6 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "10.0.255.0/24",
   "uplink_ipv4_pool": "172.16.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65001",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "10.0.254.0/24",
@@ -15,12 +14,7 @@
   "inband_ztp_lacp_fallback_delay": 30,
   "router_id": "10.0.255.2",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "client",
-  "evpn_route_servers": [
-    "inband-mgmt-spine1-ztp"
-  ],
   "overlay": {
     "peering_address": "10.0.255.2",
     "evpn_mpls": false
@@ -28,26 +22,33 @@
   "vtep_ip": "10.0.254.2",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "inband-mgmt-spine1-ztp",
-      "peer_interface": "Ethernet2",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "64999",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "172.16.255.3",
-      "peer_ip_address": "172.16.255.2",
-      "structured_config": {}
-    }
-  ],
   "uplink_peers": [
     "inband-mgmt-spine1-ztp"
   ],
-  "vlans": "103",
-  "endpoint_vlans": "101-103",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "vlans": "",
+  "local_endpoint_vlans": "",
+  "endpoint_vlans": "",
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false,
+    "default_downlink_interfaces": [
+      "Ethernet21",
+      "Ethernet22",
+      "Ethernet23",
+      "Ethernet24",
+      "Ethernet25",
+      "Ethernet26",
+      "Ethernet27",
+      "Ethernet28",
+      "Ethernet29",
+      "Ethernet30"
+    ]
+  },
+  "downlink_switches": [
+    "inband-mgmt-ip",
+    "inband-mgmt-mlag-a",
+    "inband-mgmt-mlag-b",
+    "inband-mgmt-subnet",
+    "inband-mgmt-subnet-vrf"
+  ]
 }

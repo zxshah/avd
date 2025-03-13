@@ -11,47 +11,29 @@
   "inband_mgmt_ip": "192.168.105.22/24",
   "inband_mgmt_interface": "Vlan105",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "inband-mgmt-parent-dualstack1",
-      "peer_interface": "Ethernet25",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "105",
-      "structured_config": {},
-      "peer_node_group": "inband-mgmt-parents-dualstack",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "25"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "inband-mgmt-parent-dualstack2",
-      "peer_interface": "Ethernet25",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "105",
-      "structured_config": {},
-      "peer_node_group": "inband-mgmt-parents-dualstack",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "25"
-    }
-  ],
   "uplink_peers": [
     "inband-mgmt-parent-dualstack1",
     "inband-mgmt-parent-dualstack2"
   ],
   "vlans": "105",
+  "local_endpoint_vlans": "105",
   "endpoint_vlans": "105",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false,
+    "default_downlink_interfaces": [
+      "Ethernet21",
+      "Ethernet22",
+      "Ethernet23",
+      "Ethernet24",
+      "Ethernet25",
+      "Ethernet26",
+      "Ethernet27",
+      "Ethernet28",
+      "Ethernet29",
+      "Ethernet30"
+    ]
+  }
 }

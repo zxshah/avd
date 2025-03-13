@@ -366,16 +366,22 @@ class SrcGenRootDict(SrcGenDict):
 
     def get_base_classes(self) -> list[str]:
         """Return a list of base classes."""
-        if self.get_class_name() == "EosDesigns":
-            return ["EosDesignsRootModel"]
-        return ["EosCliConfigGenRootModel"]
+        match self.get_class_name():
+            case "EosDesigns":
+                return ["EosDesignsRootModel"]
+            case "EosCliConfigGen":
+                return ["EosCliConfigGenRootModel"]
+
+        return ["AvdModel"]
 
     def get_imports(self) -> set[str]:
         imports = super().get_imports()
-        if self.get_class_name() == "EosDesigns":
-            imports.add("from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel")
-        else:
-            imports.add("from pyavd._schema.models.eos_cli_config_gen_root_model import EosCliConfigGenRootModel")
+        match self.get_class_name():
+            case "EosDesigns":
+                imports.add("from pyavd._schema.models.eos_designs_root_model import EosDesignsRootModel")
+            case "EosCliConfigGen":
+                imports.add("from pyavd._schema.models.eos_cli_config_gen_root_model import EosCliConfigGenRootModel")
+
         return imports
 
     def get_children_classes_and_fields(self) -> tuple[list[ModelSrc | ListSrc], list[FieldSrc]]:

@@ -8,7 +8,6 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
   "uplink_ipv4_pool": "172.31.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65102",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "192.168.254.0/24",
@@ -16,8 +15,6 @@
   "group": "DC1_LEAF2",
   "router_id": "192.168.255.5",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "mlag_peer": "UNDERLAY-MULTICAST-L3LEAF2B",
   "mlag_port_channel_id": 3,
   "mlag_interfaces": [
@@ -30,10 +27,6 @@
     "secondary": 4
   },
   "evpn_role": "client",
-  "evpn_route_servers": [
-    "UNDERLAY-MULTICAST-SPINE1",
-    "UNDERLAY-MULTICAST-SPINE2"
-  ],
   "overlay": {
     "peering_address": "192.168.255.5",
     "evpn_mpls": false
@@ -41,40 +34,13 @@
   "vtep_ip": "192.168.254.5",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "UNDERLAY-MULTICAST-SPINE1",
-      "peer_interface": "Ethernet3",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65001",
-      "type": "underlay_p2p",
-      "underlay_multicast": true,
-      "prefix_length": 31,
-      "ip_address": "172.31.255.9",
-      "peer_ip_address": "172.31.255.8",
-      "structured_config": {}
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "UNDERLAY-MULTICAST-SPINE2",
-      "peer_interface": "Ethernet3",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65001",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "172.31.255.11",
-      "peer_ip_address": "172.31.255.10",
-      "structured_config": {}
-    }
-  ],
   "uplink_peers": [
     "UNDERLAY-MULTICAST-SPINE1",
     "UNDERLAY-MULTICAST-SPINE2"
   ],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": true
+  }
 }

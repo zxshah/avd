@@ -27,19 +27,21 @@
   "inband_ztp": false,
   "router_id": "192.168.0.20",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "server",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.0.20",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "downlink-pools-l3leaf2",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4"
+  ]
 }

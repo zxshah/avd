@@ -5,26 +5,22 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "10.10.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65000",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "dc_name": "DC23",
   "router_id": "10.10.255.1",
   "pod": "POD1",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "server",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "10.10.255.1",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

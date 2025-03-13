@@ -1,0 +1,40 @@
+{
+  "id": 2,
+  "type": "spine",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mpls_lsr": false,
+  "loopback_ipv4_pool": "10.0.254.0/24",
+  "bgp_as": "64999",
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "router_id": "10.0.254.2",
+  "pod": "EOS_DESIGNS_UNIT_TESTS",
+  "evpn_role": "server",
+  "overlay": {
+    "peering_address": "10.0.254.2",
+    "evpn_mpls": false
+  },
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "vlans": "",
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false,
+    "default_downlink_interfaces": [
+      "Ethernet1",
+      "Ethernet2",
+      "Ethernet3",
+      "Ethernet4",
+      "Ethernet5",
+      "Ethernet6",
+      "Ethernet7",
+      "Ethernet8",
+      "Ethernet9",
+      "Ethernet10"
+    ]
+  },
+  "downlink_switches": [
+    "inband-mgmt-parent"
+  ]
+}

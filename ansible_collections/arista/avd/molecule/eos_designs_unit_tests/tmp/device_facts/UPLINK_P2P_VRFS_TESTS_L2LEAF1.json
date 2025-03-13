@@ -8,43 +8,14 @@
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "UPLINK_P2P_VRFS_TESTS_LEAF1",
-      "peer_interface": "Ethernet51",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "66",
-      "structured_config": {},
-      "peer_mlag": false,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "51"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "UPLINK_P2P_VRFS_TESTS_LEAF1",
-      "peer_interface": "Ethernet52",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "66",
-      "structured_config": {},
-      "peer_mlag": false,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "51"
-    }
-  ],
   "uplink_peers": [
     "UPLINK_P2P_VRFS_TESTS_LEAF1"
   ],
   "vlans": "66",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

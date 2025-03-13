@@ -37,12 +37,7 @@ def test_get_avd_facts(molecule_scenario: MoleculeScenario) -> None:
         avd_facts = get_avd_facts(molecule_inputs, pool_manager=molecule_scenario.pool_manager)
 
     assert isinstance(avd_facts, dict)
-    assert "avd_switch_facts" in avd_facts
-    assert isinstance(avd_facts["avd_switch_facts"], dict)
-    assert len(avd_facts["avd_switch_facts"]) == len(molecule_inputs)
-    assert "avd_overlay_peers" in avd_facts
-    assert isinstance(avd_facts["avd_overlay_peers"], dict)
-    assert "avd_topology_peers" in avd_facts
-    assert isinstance(avd_facts["avd_topology_peers"], dict)
+    assert len(avd_facts) == len(molecule_inputs)
     # Test that we can dump the returned data as json.
+    assert avd_facts.keys() == molecule_inputs.keys()
     assert json.dumps(avd_facts)

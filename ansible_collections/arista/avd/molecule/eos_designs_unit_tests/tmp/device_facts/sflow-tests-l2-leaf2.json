@@ -20,45 +20,15 @@
       "description": "Server"
     }
   ],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "sflow-tests-leaf3",
-      "peer_interface": "Ethernet17",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "11,4092",
-      "structured_config": {},
-      "peer_node_group": "sflow-tests-leaf-mlag",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "17"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "sflow-tests-leaf4",
-      "peer_interface": "Ethernet17",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "11,4092",
-      "structured_config": {},
-      "peer_node_group": "sflow-tests-leaf-mlag",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "17"
-    }
-  ],
   "uplink_peers": [
     "sflow-tests-leaf3",
     "sflow-tests-leaf4"
   ],
   "vlans": "11",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

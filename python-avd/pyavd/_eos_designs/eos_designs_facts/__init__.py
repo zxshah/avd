@@ -1,237 +1,116 @@
 # Copyright (c) 2023-2025 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
+
+# Copyright (c) 2023-2025 Arista Networks, Inc.
+# Use of this source code is governed by the Apache License 2.0
+# that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
-from typing import Protocol
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from pyavd._eos_designs.avdfacts import AvdFacts, AvdFactsProtocol
-from pyavd._errors import AristaAvdError
+from pyavd._eos_designs.shared_utils import SharedUtils
 
-from .mlag import MlagMixin
-from .overlay import OverlayMixin
-from .short_esi import ShortEsiMixin
-from .uplinks import UplinksMixin
-from .utils import UtilsMixin
-from .vlans import VlansMixin
-from .wan import WanMixin
+from .schema import EosDesignsFacts
+from .stage_one import FactsStageOne
+from .stage_one_and_a_half import FactsStageOneAndAHalf
+from .stage_three import FactsStageThree
+from .stage_two import FactsStageTwo
 
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
-class EosDesignsFactsProtocol(MlagMixin, ShortEsiMixin, OverlayMixin, WanMixin, UplinksMixin, VlansMixin, UtilsMixin, AvdFactsProtocol, Protocol):
-    @cached_property
-    def id(self) -> int | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.id
+    from ansible.template import Templar
 
-    @cached_property
-    def type(self) -> str:
-        """
-        Exposed in avd_switch_facts.
-
-        switch.type fact set based on type variable
-        """
-        return self.shared_utils.type
-
-    @cached_property
-    def platform(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.platform
-
-    @cached_property
-    def is_deployed(self) -> bool:
-        """Exposed in avd_switch_facts."""
-        return self.inputs.is_deployed
-
-    @cached_property
-    def serial_number(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.serial_number
-
-    @cached_property
-    def mgmt_interface(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.mgmt_interface
-
-    @cached_property
-    def mgmt_ip(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.node_config.mgmt_ip
-
-    @cached_property
-    def mpls_lsr(self) -> bool:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.mpls_lsr
-
-    @cached_property
-    def evpn_multicast(self) -> bool | None:
-        """
-        Exposed in avd_switch_facts.
-
-        This method _must_ be in EosDesignsFacts and not in SharedUtils, since it reads the SharedUtils instance on the peer.
-        This is only possible when running from EosDesignsFacts, since this is the only time where we can access the actual
-        python instance of EosDesignsFacts and not the simplified dict.
-        """
-        if "evpn" not in self.shared_utils.overlay_address_families:
-            return None
-        if self.inputs.evpn_multicast and self.shared_utils.vtep:
-            if not (self.shared_utils.underlay_multicast and self.shared_utils.igmp_snooping_enabled):
-                msg = "'evpn_multicast: True' is only supported in combination with 'underlay_multicast: True' and 'igmp_snooping_enabled : True'"
-                raise AristaAvdError(msg)
-
-            if self.shared_utils.mlag and self.shared_utils.overlay_rd_type_admin_subfield == self._mlag_peer_facts.shared_utils.overlay_rd_type_admin_subfield:
-                msg = "For MLAG devices Route Distinguisher must be unique when 'evpn_multicast: True' since it will create a multi-vtep configuration."
-                raise AristaAvdError(msg)
-            return True
-        return None
-
-    @cached_property
-    def loopback_ipv4_pool(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router:
-            return self.shared_utils.loopback_ipv4_pool
-        return None
-
-    @cached_property
-    def uplink_ipv4_pool(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router:
-            return self.shared_utils.node_config.uplink_ipv4_pool
-        return None
-
-    @cached_property
-    def downlink_pools(self) -> list | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router:
-            return [downlink_pool._as_dict() for downlink_pool in self.shared_utils.node_config.downlink_pools]
-        return None
-
-    @cached_property
-    def bgp_as(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router is True:
-            return self.shared_utils.bgp_as
-        return None
-
-    @cached_property
-    def underlay_routing_protocol(self) -> str:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.underlay_routing_protocol
-
-    @cached_property
-    def vtep_loopback_ipv4_pool(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.vtep is True:
-            return self.shared_utils.vtep_loopback_ipv4_pool
-        return None
-
-    @cached_property
-    def inband_mgmt_subnet(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.configure_parent_for_inband_mgmt:
-            return self.shared_utils.node_config.inband_mgmt_subnet
-        return None
-
-    @cached_property
-    def inband_mgmt_ipv6_subnet(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.configure_parent_for_inband_mgmt_ipv6:
-            return self.shared_utils.node_config.inband_mgmt_ipv6_subnet
-        return None
-
-    @cached_property
-    def inband_mgmt_vlan(self) -> int | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.configure_parent_for_inband_mgmt or self.shared_utils.configure_parent_for_inband_mgmt_ipv6:
-            return self.shared_utils.node_config.inband_mgmt_vlan
-        return None
-
-    @cached_property
-    def inband_ztp(self) -> bool | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.node_config.inband_ztp
-
-    @cached_property
-    def inband_ztp_vlan(self) -> int | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.node_config.inband_ztp:
-            return self.shared_utils.node_config.inband_mgmt_vlan
-        return None
-
-    @cached_property
-    def inband_ztp_lacp_fallback_delay(self) -> int | None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.node_config.inband_ztp:
-            return self.shared_utils.node_config.inband_ztp_lacp_fallback_delay
-        return None
-
-    @cached_property
-    def dc_name(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.inputs.dc_name
-
-    @cached_property
-    def group(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.group
-
-    @cached_property
-    def router_id(self) -> str | None:
-        """Exposed in avd_switch_facts."""
-        return self.shared_utils.router_id
-
-    @cached_property
-    def inband_mgmt_ip(self) -> str | None:
-        """
-        Exposed in avd_switch_facts.
-
-        Used for fabric docs
-        """
-        return self.shared_utils.inband_mgmt_ip
-
-    @cached_property
-    def inband_mgmt_interface(self) -> str | None:
-        """
-        Exposed in avd_switch_facts.
-
-        Used for fabric docs
-        """
-        return self.shared_utils.inband_mgmt_interface
-
-    @cached_property
-    def pod(self) -> str:
-        """
-        Exposed in avd_switch_facts.
-
-        Used for fabric docs
-        """
-        return self.inputs.pod_name or self.inputs.dc_name or self.shared_utils.fabric_name
-
-    @cached_property
-    def connected_endpoints_keys(self) -> list[dict]:
-        """
-        List of connected_endpoints_keys in use on this device.
-
-        Exposed in avd_switch_facts.
-
-        Used for fabric docs
-        """
-        return [entry._as_dict() for entry in self.inputs.connected_endpoints_keys if entry.key in self.inputs._dynamic_keys.connected_endpoints]
-
-    @cached_property
-    def port_profile_names(self) -> list:
-        """
-        Exposed in avd_switch_facts.
-
-        Used for fabric docs
-        """
-        return [{"profile": profile.profile, "parent_profile": profile.parent_profile} for profile in self.inputs.port_profiles]
+    from pyavd._eos_designs.schema import EosDesigns
+    from pyavd.api.pool_manager import PoolManager
 
 
-class EosDesignsFacts(AvdFacts, EosDesignsFactsProtocol):
+@dataclass
+class OneDeviceData:
+    facts: EosDesignsFacts
+    hostvars: Mapping
+    inputs: EosDesigns
+    shared_utils: SharedUtils
+
+
+def get_facts(
+    *,
+    all_inputs: dict[str, EosDesigns],
+    pool_manager: PoolManager | None = None,
+    all_hostvars: dict[str, dict] | None = None,
+    templar: Templar | None = None,
+) -> dict[str, EosDesignsFacts]:
     """
-    `EosDesignsFacts` is based on `AvdFacts`, so make sure to read the description there first.
+    Generate structured_config for a device.
 
-    The class is instantiated once per device. Methods may use references to other device instances using `hostvars.avd_switch_facts`,
-    which is a dict of `EosDesignsfacts` instances covering all devices.
+    Args:
+        all_inputs:
+            Dict of inputs loaded into the EosDesigns class keyed by hostnames.
+        pool_manager:
+            Optional instance of PoolManager for assigning resourrces from a pool.
+        all_hostvars:
+            Dict of dicts with raw inputs keys by hostnames.
+        templar:
+            The templar to use for rendering templates. If templar is unset, any calls to jinja templates will fail with Nonetype has no "_loader" attribute
+
+
+    Returns:
+        Dict of EosDesignsFacts instances keyed by hostnames.
     """
+    if all_hostvars is None:
+        all_hostvars = {}
+
+    all_devices_data: dict[str, OneDeviceData] = {}
+    all_facts: dict[str, EosDesignsFacts] = {}
+    for hostname, inputs in all_inputs.items():
+        hostvars = all_hostvars.get(hostname, {})
+
+        # Initialize SharedUtils class to be passed to each python_module below.
+        shared_utils = SharedUtils(hostname=hostname, hostvars=hostvars, inputs=inputs, templar=templar, pool_manager=pool_manager, peer_facts=all_facts)
+
+        all_facts[hostname] = EosDesignsFacts()
+
+        # Generate Stage One facts - TODO: evaluate if it is worth doing this with multiprocessing.
+        FactsStageOne(hostvars=hostvars, inputs=inputs, facts=all_facts[hostname], shared_utils=shared_utils).render_facts()
+
+        all_devices_data[hostname] = OneDeviceData(
+            facts=all_facts[hostname],
+            hostvars=hostvars,
+            inputs=inputs,
+            shared_utils=shared_utils,
+        )
+
+    # TODO: Rename things.
+    for device_data in all_devices_data.values():
+        # Generate Stage OneAndAHalf facts - TODO: evaluate if it is worth doing this with multiprocessing.
+        FactsStageOneAndAHalf(
+            hostvars=device_data.hostvars,
+            inputs=device_data.inputs,
+            facts=device_data.facts,
+            shared_utils=device_data.shared_utils,
+            peer_facts=all_facts,
+        ).render_facts()
+
+    for device_data in all_devices_data.values():
+        # Generate Stage Three facts - NOTE: Not possible to do with multiprocessing.
+        FactsStageThree(
+            hostvars=device_data.hostvars,
+            inputs=device_data.inputs,
+            facts=device_data.facts,
+            shared_utils=device_data.shared_utils,
+            peer_facts=all_facts,
+        ).render_facts()
+
+    for device_data in all_devices_data.values():
+        # Generate Stage Two facts - TODO: evaluate if it is worth doing this with multiprocessing.
+        FactsStageTwo(
+            hostvars=device_data.hostvars,
+            inputs=device_data.inputs,
+            facts=device_data.facts,
+            shared_utils=device_data.shared_utils,
+            peer_facts=all_facts,
+        ).render_facts()
+
+    return all_facts

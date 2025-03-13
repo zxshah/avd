@@ -1,0 +1,19 @@
+{
+  "id": 3,
+  "type": "cvxserver",
+  "is_deployed": true,
+  "mgmt_interface": "Management1",
+  "mgmt_ip": "192.168.254.253/23",
+  "mpls_lsr": false,
+  "underlay_routing_protocol": "ebgp",
+  "inband_ztp": false,
+  "dc_name": "OVERLAY_ROUTING_PROTOCOL_CVX_TESTS",
+  "pod": "OVERLAY_ROUTING_PROTOCOL_CVX_TESTS",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "vlans": "",
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
+}

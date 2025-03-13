@@ -8,20 +8,13 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
   "uplink_ipv4_pool": "172.31.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65102",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "192.168.254.0/24",
   "inband_ztp": false,
   "router_id": "192.168.255.4",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "client",
-  "evpn_route_servers": [
-    "AUTO_NODE_TYPE_SPINE01",
-    "AUTO_NODE_TYPE_SPINE02"
-  ],
   "overlay": {
     "peering_address": "192.168.255.4",
     "evpn_mpls": false
@@ -29,39 +22,13 @@
   "vtep_ip": "192.168.254.4",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "AUTO_NODE_TYPE_SPINE01",
-      "peer_interface": "Ethernet2",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65100",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "172.31.255.5",
-      "peer_ip_address": "172.31.255.4",
-      "structured_config": {}
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "AUTO_NODE_TYPE_SPINE02",
-      "peer_interface": "Ethernet2",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65100",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "172.31.255.7",
-      "peer_ip_address": "172.31.255.6",
-      "structured_config": {}
-    }
-  ],
   "uplink_peers": [
     "AUTO_NODE_TYPE_SPINE01",
     "AUTO_NODE_TYPE_SPINE02"
   ],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

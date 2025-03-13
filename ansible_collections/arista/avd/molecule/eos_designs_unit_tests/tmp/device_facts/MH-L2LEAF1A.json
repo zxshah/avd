@@ -23,20 +23,17 @@
   ],
   "port_profile_names": [
     {
-      "profile": "Tenant_X",
-      "parent_profile": null
+      "profile": "Tenant_X"
     },
     {
       "profile": "Tenant_ESI_Auto",
       "parent_profile": "Tenant_X"
     },
     {
-      "profile": "Tenant_X_LT",
-      "parent_profile": null
+      "profile": "Tenant_X_LT"
     },
     {
-      "profile": "Tenant_X_Trunk",
-      "parent_profile": null
+      "profile": "Tenant_X_Trunk"
     },
     {
       "profile": "Tenant_X_Trunk_Auto",
@@ -47,34 +44,14 @@
       "parent_profile": "Tenant_X_Trunk"
     }
   ],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "MH-LEAF2A",
-      "peer_interface": "Ethernet2",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "310",
-      "link_tracking_groups": [
-        {
-          "name": "l2leaf-server02",
-          "direction": "upstream"
-        }
-      ],
-      "structured_config": {},
-      "peer_mlag": false,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "2"
-    }
-  ],
   "uplink_peers": [
     "MH-LEAF2A"
   ],
   "vlans": "310",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

@@ -7,15 +7,12 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.0.255.0/24",
   "uplink_ipv4_pool": "10.255.1.0/24",
-  "downlink_pools": [],
   "bgp_as": "65001",
   "underlay_routing_protocol": "none",
   "inband_ztp": false,
   "group": "GROUP1",
   "router_id": "192.0.255.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "mlag_peer": "bgp-from-network-services-2",
   "mlag_port_channel_id": 10,
   "mlag_interfaces": [
@@ -28,16 +25,18 @@
     "secondary": 2
   },
   "evpn_role": "none",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.0.255.1",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "vrfs": [
+      "default"
+    ],
+    "underlay_multicast": false
+  }
 }

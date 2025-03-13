@@ -5,25 +5,22 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.44.0/24",
-  "downlink_pools": [],
   "bgp_as": "65000",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "router_id": "192.168.44.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.44.1",
     "evpn_mpls": false
   },
   "vtep_ip": "192.168.144.1",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 0,
+  "vlans": "100-101,666",
   "wan_path_groups": [
     {
-      "name": "INET",
-      "id": 101,
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Ethernet1",
           "public_ip": "172.17.7.7",
@@ -36,9 +33,19 @@
           "connected_to_pathfinder": true,
           "wan_circuit_id": "999"
         }
-      ]
+      ],
+      "name": "INET",
+      "id": 101
     },
     {
+      "interfaces": [
+        {
+          "name": "Ethernet2/2",
+          "public_ip": "172.16.0.1",
+          "connected_to_pathfinder": true,
+          "wan_circuit_id": "10000"
+        }
+      ],
       "name": "MPLS",
       "id": 100,
       "ipsec": {
@@ -47,22 +54,14 @@
       },
       "dps_keepalive": {
         "interval": "300"
-      },
-      "_interfaces": [
-        {
-          "name": "Ethernet2/2",
-          "public_ip": "172.16.0.1",
-          "connected_to_pathfinder": true,
-          "wan_circuit_id": "10000"
-        }
-      ]
+      }
     }
   ],
-  "max_parallel_uplinks": 1,
-  "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
-  "vlans": "100-101,666",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "vrfs": [
+      "default"
+    ],
+    "underlay_multicast": false
+  }
 }

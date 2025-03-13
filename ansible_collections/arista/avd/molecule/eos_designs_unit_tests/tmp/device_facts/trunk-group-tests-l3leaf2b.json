@@ -5,7 +5,6 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.250.0/24",
-  "downlink_pools": [],
   "bgp_as": "65002",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "192.168.249.0/24",
@@ -20,7 +19,6 @@
       "description": "Server"
     }
   ],
-  "port_profile_names": [],
   "mlag_peer": "trunk-group-tests-l3leaf2a",
   "mlag_port_channel_id": 3,
   "mlag_interfaces": [
@@ -34,7 +32,6 @@
     "secondary": 4
   },
   "evpn_role": "client",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.250.12",
     "evpn_mpls": false
@@ -42,13 +39,14 @@
   "vtep_ip": "192.168.249.11",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
-  "vlans": "200,210",
-  "endpoint_vlans": "1",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": [
-    "TG_200",
-    "TG_NOT_MATCHING_ANY_VLANS"
+  "vlans": "",
+  "local_endpoint_vlans": "",
+  "endpoint_vlans": "",
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "trunk-group-tests-l2leaf4"
   ]
 }

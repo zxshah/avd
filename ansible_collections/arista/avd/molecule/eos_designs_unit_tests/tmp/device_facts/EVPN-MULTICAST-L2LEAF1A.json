@@ -9,46 +9,15 @@
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "EVPN-MULTICAST-L3LEAF1A",
-      "peer_interface": "Ethernet6",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "1-9,110-111,130-131,136-137,140-141,150,210-211,230-231,240-241,250-252,256-257,260,310-311,330-331,550,4092",
-      "structured_config": {},
-      "peer_node_group": "EVPN_MULTICAST_L3LEAF1",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "6"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "EVPN-MULTICAST-L3LEAF1B",
-      "peer_interface": "Ethernet6",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "1-9,110-111,130-131,136-137,140-141,150,210-211,230-231,240-241,250-252,256-257,260,310-311,330-331,550,4092",
-      "structured_config": {},
-      "peer_node_group": "EVPN_MULTICAST_L3LEAF1",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "6"
-    }
-  ],
   "uplink_peers": [
     "EVPN-MULTICAST-L3LEAF1A",
     "EVPN-MULTICAST-L3LEAF1B"
   ],
   "vlans": "1-9,110-111,130-131,136-137,140-141,150,210-211,230-231,240-241,250-252,256-257,260,310-311,330-331,550,4092",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

@@ -7,26 +7,26 @@
   "mgmt_ip": "192.168.203.11",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "65100",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "group": "AUTO_NODE_TYPE_SPINE",
   "router_id": "192.168.255.2",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "server",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.255.2",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ]
 }

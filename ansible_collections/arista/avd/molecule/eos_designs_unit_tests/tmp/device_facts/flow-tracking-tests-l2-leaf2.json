@@ -13,46 +13,15 @@
   "inband_mgmt_ip": "10.254.254.5/24",
   "inband_mgmt_interface": "Vlan4092",
   "pod": "FLOW_TRACKING_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "flow-tracking-tests-leaf3",
-      "peer_interface": "Ethernet32",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "11,4092",
-      "structured_config": {},
-      "peer_node_group": "flow-tracking-tests-leaf-mlag",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "32"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "flow-tracking-tests-leaf4",
-      "peer_interface": "Ethernet32",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "11,4092",
-      "structured_config": {},
-      "peer_node_group": "flow-tracking-tests-leaf-mlag",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "32"
-    }
-  ],
   "uplink_peers": [
     "flow-tracking-tests-leaf3",
     "flow-tracking-tests-leaf4"
   ],
   "vlans": "11",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

@@ -4,18 +4,16 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import default, get
+from pyavd._utils import Undefined, default, get
 from pyavd.api.interface_descriptions import InterfaceDescriptionData
 from pyavd.api.pool_manager import PoolManager
 from pyavd.j2filters import range_expand
 
 if TYPE_CHECKING:
-    from pyavd._eos_designs.eos_designs_facts import EosDesignsFacts
-
     from . import SharedUtilsProtocol
 
 
@@ -29,13 +27,7 @@ class MiscMixin(Protocol):
 
     @cached_property
     def all_fabric_devices(self: SharedUtilsProtocol) -> list[str]:
-        avd_switch_facts: dict = get(self.hostvars, "avd_switch_facts", required=True)
-        return list(avd_switch_facts.keys())
-
-    @cached_property
-    def hostname(self: SharedUtilsProtocol) -> str:
-        """Hostname set based on inventory_hostname variable. TODO: Get a proper attribute on the class instead of gleaning from the regular inputs."""
-        return get(self.hostvars, "inventory_hostname", required=True)
+        return list(self.peer_facts.keys())
 
     @cached_property
     def id(self: SharedUtilsProtocol) -> int | None:
@@ -54,10 +46,10 @@ class MiscMixin(Protocol):
         If running under eos_designs_facts and pool manager is _not_ activated:
             Use 'self.switch_data_combined.id' which is the ID defined in the node type config or None.
         """
-        # Check if we are running from eos_designs_structured_config ("switch" is a dict)
-        if isinstance(switch := get(self.hostvars, f"avd_switch_facts..{self.hostname}..switch", separator=".."), dict):
-            # Return value of 'self.hostvars.switch.id' or None
-            return switch.get("id")
+        # Check if we are running from eos_designs_structured_config (id is already set)
+        if self.peer_facts[self.hostname]._get_defined_attr("id") is not Undefined:
+            # Return ID or None
+            return self.peer_facts[self.hostname].id
 
         # We are running from eos_designs_facts.
         # Check if pool manager is activated.
@@ -135,7 +127,7 @@ class MiscMixin(Protocol):
         uplink_switch_interfaces = []
         uplink_switch_counter = {}
         for uplink_switch in self.uplink_switches:
-            uplink_switch_facts: EosDesignsFacts = self.get_peer_facts(uplink_switch, required=True)
+            uplink_switch_facts = self.get_peer_facts_cls(uplink_switch)
 
             # Count the number of instances the current switch was processed
             uplink_switch_counter[uplink_switch] = uplink_switch_counter.get(uplink_switch, 0) + 1
@@ -145,8 +137,8 @@ class MiscMixin(Protocol):
             # For max_parallel_uplinks: 2 this would assign downlink interfaces like this:
             # spine1 downlink-interface mapping: [ leaf-id1, leaf-id1, leaf-id2, leaf-id2, leaf-id3, leaf-id3, ... ]
             downlink_index = (self.id - 1) * self.node_config.max_parallel_uplinks + index_of_parallel_uplinks
-            if len(uplink_switch_facts._default_downlink_interfaces) > downlink_index:
-                uplink_switch_interfaces.append(uplink_switch_facts._default_downlink_interfaces[downlink_index])
+            if len(uplink_switch_facts.only_used_for_peer_facts.default_downlink_interfaces) > downlink_index:
+                uplink_switch_interfaces.append(uplink_switch_facts.only_used_for_peer_facts.default_downlink_interfaces[downlink_index])
             else:
                 msg = (
                     f"'uplink_switch_interfaces' is not set on '{self.hostname}' and 'uplink_switch' '{uplink_switch}' "
@@ -200,17 +192,9 @@ class MiscMixin(Protocol):
     def default_interface_mtu(self: SharedUtilsProtocol) -> int | None:
         return default(self.platform_settings.default_interface_mtu, self.inputs.default_interface_mtu)
 
-    def get_switch_fact(self: SharedUtilsProtocol, key: str, required: bool = True) -> Any:
-        """
-        Return facts from EosDesignsFacts.
-
-        We need to go via avd_switch_facts since PyAVD does not expose "switch.*" in get_avdfacts.
-        """
-        return get(self.hostvars, f"avd_switch_facts..{self.hostname}..switch..{key}", required=required, org_key=f"switch.{key}", separator="..")
-
     @cached_property
     def evpn_multicast(self: SharedUtilsProtocol) -> bool:
-        return self.get_switch_fact("evpn_multicast", required=False) is True
+        return self.peer_facts[self.hostname].evpn_multicast is True
 
     def get_ipv4_acl(
         self: SharedUtilsProtocol, name: str, interface_name: str, *, interface_ip: str | None = None, peer_ip: str | None = None

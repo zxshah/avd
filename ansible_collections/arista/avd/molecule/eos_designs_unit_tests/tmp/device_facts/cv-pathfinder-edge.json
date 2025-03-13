@@ -6,45 +6,43 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.42.0/24",
   "uplink_ipv4_pool": "172.17.0.0/16",
-  "downlink_pools": [],
   "bgp_as": "65000",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "group": "Site511",
   "router_id": "192.168.42.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.42.1",
     "evpn_mpls": false
   },
   "vtep_ip": "192.168.142.1",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplink_peers": [
+    "site-ha-disabled-leaf"
+  ],
+  "uplink_switch_vrfs": [
+    "default",
+    "IT",
+    "PROD"
+  ],
+  "vlans": "100-101,666",
   "wan_path_groups": [
     {
-      "name": "INET",
-      "id": 101,
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Ethernet1",
           "public_ip": "dhcp",
           "connected_to_pathfinder": true,
           "wan_circuit_id": "666"
         }
-      ]
+      ],
+      "name": "INET",
+      "id": 101
     },
     {
-      "name": "MPLS",
-      "id": 100,
-      "ipsec": {
-        "dynamic_peers": false,
-        "static_peers": false
-      },
-      "dps_keepalive": {
-        "interval": "300"
-      },
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Ethernet2",
           "public_ip": "172.15.5.5",
@@ -57,85 +55,43 @@
           "connected_to_pathfinder": true,
           "wan_circuit_id": "10555"
         }
-      ]
+      ],
+      "name": "MPLS",
+      "id": 100,
+      "ipsec": {
+        "dynamic_peers": false,
+        "static_peers": false
+      },
+      "dps_keepalive": {
+        "interval": "300"
+      }
     },
     {
-      "name": "LTE",
-      "id": 102,
-      "excluded_from_default_policy": true,
-      "dps_keepalive": {
-        "interval": "100",
-        "failure_threshold": 12
-      },
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Ethernet3",
           "public_ip": "172.20.20.20",
           "connected_to_pathfinder": false,
           "wan_circuit_id": "AF830"
         }
-      ]
+      ],
+      "name": "LTE",
+      "id": 102,
+      "excluded_from_default_policy": true,
+      "dps_keepalive": {
+        "interval": "100",
+        "failure_threshold": 12
+      }
     }
   ],
-  "max_parallel_uplinks": 1,
-  "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet52",
-      "peer": "site-ha-disabled-leaf",
-      "peer_interface": "Ethernet1",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65199",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "172.17.0.1",
-      "peer_ip_address": "172.17.0.0",
-      "structured_config": {},
-      "subinterfaces": [
-        {
-          "interface": "Ethernet52.1000",
-          "peer_interface": "Ethernet1.1000",
-          "vrf": "IT",
-          "encapsulation_dot1q_vlan": 1000,
-          "prefix_length": 31,
-          "ip_address": "172.17.0.1",
-          "peer_ip_address": "172.17.0.0",
-          "structured_config": {}
-        },
-        {
-          "interface": "Ethernet52.142",
-          "peer_interface": "Ethernet1.142",
-          "vrf": "PROD",
-          "encapsulation_dot1q_vlan": 142,
-          "prefix_length": 31,
-          "ip_address": "172.17.0.1",
-          "peer_ip_address": "172.17.0.0",
-          "structured_config": {}
-        },
-        {
-          "interface": "Ethernet52.666",
-          "peer_interface": "Ethernet1.666",
-          "vrf": "ATTRACTED-VRF-FROM-UPLINK",
-          "encapsulation_dot1q_vlan": 666,
-          "prefix_length": 31,
-          "ip_address": "172.17.0.1",
-          "peer_ip_address": "172.17.0.0",
-          "structured_config": {}
-        }
-      ]
-    }
-  ],
-  "uplink_peers": [
-    "site-ha-disabled-leaf"
-  ],
-  "uplink_switch_vrfs": [
-    "ATTRACTED-VRF-FROM-UPLINK",
-    "default",
-    "IT",
-    "PROD"
-  ],
-  "vlans": "100-101,666",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "uplink_type": "p2p-vrfs",
+    "vrfs": [
+      "default",
+      "IT",
+      "PROD"
+    ],
+    "underlay_multicast": false
+  }
 }

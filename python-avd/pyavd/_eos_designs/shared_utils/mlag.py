@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from functools import cached_property
 from re import findall
-from typing import TYPE_CHECKING, Any, Protocol
+from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
@@ -30,6 +30,11 @@ class MlagMixin(Protocol):
     Class should only be used as Mixin to the SharedUtils class.
     Using type-hint on self to get proper type-hints on attributes across all Mixins.
     """
+
+    @cached_property
+    def mlag_peer_facts(self: SharedUtilsProtocol) -> EosDesignsFacts:
+        """EosDesignsFacts for the MLAG peer. Raises if not found."""
+        return self.get_peer_facts_cls(self.mlag_peer)
 
     @cached_property
     def mlag(self: SharedUtilsProtocol) -> bool:
@@ -96,36 +101,24 @@ class MlagMixin(Protocol):
 
     @cached_property
     def mlag_peer_ip(self: SharedUtilsProtocol) -> str:
-        return self.get_mlag_peer_fact("mlag_ip")
+        return self.mlag_peer_facts.mlag_ip
 
     @cached_property
     def mlag_peer_l3_ip(self: SharedUtilsProtocol) -> str | None:
         if self.mlag_peer_l3_vlan is not None:
-            return self.get_mlag_peer_fact("mlag_l3_ip")
+            return self.mlag_peer_facts.mlag_l3_ip
         return None
 
     @cached_property
     def mlag_peer_id(self: SharedUtilsProtocol) -> int:
-        return self.get_mlag_peer_fact("id")
-
-    def get_mlag_peer_fact(self: SharedUtilsProtocol, key: str, required: bool = True) -> Any:
-        return get(self.mlag_peer_facts, key, required=required, org_key=f"avd_switch_facts.({self.mlag_peer}).switch.{key}")
-
-    @cached_property
-    def mlag_peer_facts(self: SharedUtilsProtocol) -> EosDesignsFacts | dict:
-        try:
-            return self.get_peer_facts(self.mlag_peer, required=True)
-        except Exception:
-            raise Exception(self.hostvars["avd_switch_facts"].get(self.mlag_peer)["switch"])
-
-
+        return self.mlag_peer_facts.id
 
     @cached_property
     def mlag_peer_mgmt_ip(self: SharedUtilsProtocol) -> str | None:
-        if (mlag_peer_mgmt_ip := self.get_mlag_peer_fact("mgmt_ip", required=False)) is None:
+        if not self.mlag_peer_facts.mgmt_ip:
             return None
 
-        return get_ip_from_ip_prefix(mlag_peer_mgmt_ip)
+        return get_ip_from_ip_prefix(self.mlag_peer_facts.mgmt_ip)
 
     @cached_property
     def mlag_ip(self: SharedUtilsProtocol) -> str | None:
@@ -148,7 +141,7 @@ class MlagMixin(Protocol):
         return None
 
     @cached_property
-    def mlag_switch_ids(self: SharedUtilsProtocol) -> dict | None:
+    def mlag_switch_ids(self: SharedUtilsProtocol) -> dict[Literal["primary", "secondary"], int] | None:
         """
         Returns the switch id's of both primary and secondary switches for a given node group.
 

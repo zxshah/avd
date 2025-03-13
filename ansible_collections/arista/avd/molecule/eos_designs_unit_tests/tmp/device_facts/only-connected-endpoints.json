@@ -15,16 +15,14 @@
   ],
   "port_profile_names": [
     {
-      "profile": "MY_PROFILE",
-      "parent_profile": null
+      "profile": "MY_PROFILE"
     }
   ],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

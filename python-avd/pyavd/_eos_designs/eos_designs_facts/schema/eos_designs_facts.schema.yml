@@ -182,7 +182,6 @@ keys:
           required: true
         peer_bgp_as:
           type: str
-          required: true
         type:
           type: str
           required: true
@@ -215,15 +214,17 @@ keys:
         peer_ip_address:
           type: str
         link_tracking_groups:
-          type: dict
-          keys:
-            name:
-              type: str
-              required: true
-            direction:
-              type: str
-              required: true
-              valid_values: ["upstream", "downstream"]
+          type: list
+          primary_key: name
+          items:
+            type: dict
+            keys:
+              name:
+                type: str
+              direction:
+                type: str
+                required: true
+                valid_values: ["upstream", "downstream"]
         peer_node_group:
           type: str
         node_group:
@@ -235,6 +236,10 @@ keys:
         peer_channel_group_id:
           type: str # TODO consider int
         trunk_groups:
+          type: list
+          items:
+            type: str
+        peer_trunk_groups:
           type: list
           items:
             type: str
@@ -253,13 +258,17 @@ keys:
           $ref: eos_designs#/$defs/node_type/keys/defaults/keys/uplink_structured_config
         subinterfaces:
           type: list
+          primary_key: interface
+          unique_keys:
+            - vrf
+            - encapsulation_dot1q_vlan
           items:
             type: dict
             keys:
               interface:
                 type: str
                 required: true
-              peer_interfaces:
+              peer_interface:
                 type: str
                 required: true
               vrf:
@@ -291,14 +300,28 @@ keys:
   vlans:
     type: str
     required: true
+    description: |-
+      Compressed list of vlans to be defined on this switch after filtering network services.
+      The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+
+      Ex. "1-100, 201-202"
+
+      This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+      This is to ensure that native vlan is not necessarily permitted on the uplink trunk.
+  local_endpoint_vlans:
+    type: str
+    description: Compressed list of vlans in use by endpoints connected to this switch.
   endpoint_vlans:
     type: str
+    description: Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
   local_endpoint_trunk_groups:
     type: list
+    description: List of trunk_groups in use by endpoints connected to this switch.
     items:
       type: str
   endpoint_trunk_groups:
     type: list
+    description: List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
     items:
       type: str
   wan_path_groups:
@@ -325,3 +348,42 @@ keys:
                 required: true
               wan_circuit_id:
                 type: str
+  local_short_esi:
+    type: str
+  only_used_for_peer_facts:
+    type: dict
+    keys:
+      mlag:
+        type: bool
+        required: true
+      uplink_type:
+        type: str
+        $ref: eos_designs#/$defs/node_type/keys/defaults/keys/uplink_type
+      uplink_switch_port_channel_id:
+        type: int
+      uplink_port_channel_id:
+        type: int
+      vrfs:
+        type: list
+        items:
+          type: str
+      underlay_multicast:
+        type: bool
+      overlay_rd_type_admin_subfield:
+        type: str
+      default_downlink_interfaces:
+        type: list
+        items:
+          type: str
+  downlink_switches:
+    type: list
+    items:
+      type: str
+  evpn_route_server_clients:
+    type: list
+    items:
+      type: str
+  mpls_route_reflector_clients:
+    type: list
+    items:
+      type: str

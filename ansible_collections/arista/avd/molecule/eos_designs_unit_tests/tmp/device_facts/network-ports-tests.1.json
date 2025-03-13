@@ -18,8 +18,7 @@
   ],
   "port_profile_names": [
     {
-      "profile": "common",
-      "parent_profile": null
+      "profile": "common"
     },
     {
       "profile": "ap_with_port_channel",
@@ -30,8 +29,7 @@
       "parent_profile": "common"
     },
     {
-      "profile": "phone_with_pc",
-      "parent_profile": null
+      "profile": "phone_with_pc"
     }
   ],
   "mlag_peer": "network-ports-tests-2",
@@ -44,12 +42,11 @@
     "primary": 1,
     "secondary": 2
   },
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "100,200,300",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  }
 }

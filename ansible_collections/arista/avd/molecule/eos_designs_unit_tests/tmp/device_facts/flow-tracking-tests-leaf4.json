@@ -8,7 +8,6 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "10.254.1.0/27",
   "uplink_ipv4_pool": "10.254.2.0/24",
-  "downlink_pools": [],
   "bgp_as": "65105",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "10.254.11.0/27",
@@ -23,7 +22,6 @@
       "description": "Server"
     }
   ],
-  "port_profile_names": [],
   "mlag_peer": "flow-tracking-tests-leaf3",
   "mlag_port_channel_id": 21,
   "mlag_interfaces": [
@@ -37,10 +35,6 @@
     "secondary": 6
   },
   "evpn_role": "client",
-  "evpn_route_servers": [
-    "flow-tracking-tests-spine1",
-    "flow-tracking-tests-spine2"
-  ],
   "overlay": {
     "peering_address": "10.254.1.6",
     "evpn_mpls": false
@@ -48,39 +42,17 @@
   "vtep_ip": "10.254.11.5",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "flow-tracking-tests-spine1",
-      "peer_interface": "Ethernet7",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65200",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "10.254.2.21",
-      "peer_ip_address": "10.254.2.20",
-      "structured_config": {}
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "flow-tracking-tests-spine2",
-      "peer_interface": "Ethernet8",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65200",
-      "type": "underlay_p2p",
-      "prefix_length": 31,
-      "ip_address": "10.254.2.23",
-      "peer_ip_address": "10.254.2.22",
-      "structured_config": {}
-    }
-  ],
   "uplink_peers": [
     "flow-tracking-tests-spine1",
     "flow-tracking-tests-spine2"
   ],
   "vlans": "11",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "flow-tracking-tests-l2-leaf1",
+    "flow-tracking-tests-l2-leaf2"
+  ]
 }

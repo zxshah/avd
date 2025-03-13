@@ -5,56 +5,45 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.1.0/24",
-  "downlink_pools": [],
   "bgp_as": "65100",
   "underlay_routing_protocol": "none",
   "inband_ztp": false,
   "router_id": "192.168.1.2",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.1.2",
     "evpn_mpls": false
   },
   "vtep_ip": "192.168.2.2",
+  "max_parallel_uplinks": 1,
+  "max_uplink_switches": 1,
+  "uplink_peers": [
+    "uplink_lan_l2leaf"
+  ],
+  "vlans": "10,100-101",
   "wan_path_groups": [
     {
-      "name": "INET",
-      "id": 100,
-      "ipsec": {
-        "static_peers": false
-      },
-      "_interfaces": [
+      "interfaces": [
         {
           "name": "Ethernet1",
           "public_ip": "10.9.9.1",
           "connected_to_pathfinder": true,
           "wan_circuit_id": "999"
         }
-      ]
+      ],
+      "name": "INET",
+      "id": 100,
+      "ipsec": {
+        "static_peers": false
+      }
     }
   ],
-  "max_parallel_uplinks": 1,
-  "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet2",
-      "peer": "uplink_lan_l2leaf",
-      "peer_interface": "Ethernet2",
-      "peer_type": "l2leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "10,100",
-      "peer_spanning_tree_portfast": "edge",
-      "structured_config": {}
-    }
-  ],
-  "uplink_peers": [
-    "uplink_lan_l2leaf"
-  ],
-  "vlans": "10,100-101",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "uplink_type": "lan",
+    "vrfs": [
+      "default"
+    ],
+    "underlay_multicast": false
+  }
 }

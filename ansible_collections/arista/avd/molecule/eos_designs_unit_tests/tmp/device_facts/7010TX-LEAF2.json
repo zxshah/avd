@@ -7,15 +7,12 @@
   "mgmt_ip": "192.168.201.117/24",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "923",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "group": "MLAG_PER_MTU_INTERFACE",
   "router_id": "192.168.255.36",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "mlag_peer": "7010TX-LEAF1",
   "mlag_port_channel_id": 5,
   "mlag_interfaces": [
@@ -29,16 +26,15 @@
     "secondary": 4
   },
   "evpn_role": "client",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.255.36",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  }
 }

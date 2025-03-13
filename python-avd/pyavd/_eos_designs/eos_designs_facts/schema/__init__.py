@@ -10,13 +10,12 @@ from pyavd._schema.coerce_type import coerce_type
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_list import AvdList
 from pyavd._schema.models.avd_model import AvdModel
-from pyavd._schema.models.eos_cli_config_gen_root_model import EosCliConfigGenRootModel
 
 if TYPE_CHECKING:
     from pyavd._utils import Undefined, UndefinedType
 
 
-class EosDesignsFacts(EosCliConfigGenRootModel):
+class EosDesignsFacts(AvdModel):
     """Subclass of AvdModel."""
 
     class DownlinkPoolsItem(AvdModel):
@@ -240,7 +239,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
                     """
 
-        class LinkTrackingGroups(AvdModel):
+        class LinkTrackingGroupsItem(AvdModel):
             """Subclass of AvdModel."""
 
             _fields: ClassVar[dict] = {"name": {"type": str}, "direction": {"type": str}}
@@ -251,7 +250,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
                 def __init__(self, *, name: str | UndefinedType = Undefined, direction: Literal["upstream", "downstream"] | UndefinedType = Undefined) -> None:
                     """
-                    LinkTrackingGroups.
+                    LinkTrackingGroupsItem.
 
 
                     Subclass of AvdModel.
@@ -262,17 +261,29 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
                     """
 
+        class LinkTrackingGroups(AvdIndexedList[str, LinkTrackingGroupsItem]):
+            """Subclass of AvdIndexedList with `LinkTrackingGroupsItem` items. Primary key is `name` (`str`)."""
+
+            _primary_key: ClassVar[str] = "name"
+
+        LinkTrackingGroups._item_type = LinkTrackingGroupsItem
+
         class TrunkGroups(AvdList[str]):
             """Subclass of AvdList with `str` items."""
 
         TrunkGroups._item_type = str
+
+        class PeerTrunkGroups(AvdList[str]):
+            """Subclass of AvdList with `str` items."""
+
+        PeerTrunkGroups._item_type = str
 
         class SubinterfacesItem(AvdModel):
             """Subclass of AvdModel."""
 
             _fields: ClassVar[dict] = {
                 "interface": {"type": str},
-                "peer_interfaces": {"type": str},
+                "peer_interface": {"type": str},
                 "vrf": {"type": str},
                 "encapsulation_dot1q_vlan": {"type": int},
                 "ipv6_enable": {"type": bool},
@@ -282,7 +293,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                 "structured_config": {"type": dict},
             }
             interface: str
-            peer_interfaces: str
+            peer_interface: str
             vrf: str
             encapsulation_dot1q_vlan: int | None
             ipv6_enable: bool | None
@@ -310,7 +321,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                     self,
                     *,
                     interface: str | UndefinedType = Undefined,
-                    peer_interfaces: str | UndefinedType = Undefined,
+                    peer_interface: str | UndefinedType = Undefined,
                     vrf: str | UndefinedType = Undefined,
                     encapsulation_dot1q_vlan: int | None | UndefinedType = Undefined,
                     ipv6_enable: bool | None | UndefinedType = Undefined,
@@ -327,7 +338,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
                     Args:
                         interface: interface
-                        peer_interfaces: peer_interfaces
+                        peer_interface: peer_interface
                         vrf: vrf
                         encapsulation_dot1q_vlan: encapsulation_dot1q_vlan
                         ipv6_enable: ipv6_enable
@@ -349,8 +360,10 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
                     """
 
-        class Subinterfaces(AvdList[SubinterfacesItem]):
-            """Subclass of AvdList with `SubinterfacesItem` items."""
+        class Subinterfaces(AvdIndexedList[str, SubinterfacesItem]):
+            """Subclass of AvdIndexedList with `SubinterfacesItem` items. Primary key is `interface` (`str`)."""
+
+            _primary_key: ClassVar[str] = "interface"
 
         Subinterfaces._item_type = SubinterfacesItem
 
@@ -379,6 +392,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
             "channel_group_id": {"type": str},
             "peer_channel_group_id": {"type": str},
             "trunk_groups": {"type": TrunkGroups},
+            "peer_trunk_groups": {"type": PeerTrunkGroups},
             "vlans": {"type": str},
             "native_vlan": {"type": int},
             "peer_short_esi": {"type": str},
@@ -391,7 +405,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
         peer_interface: str
         peer_type: str
         peer_is_deployed: bool
-        peer_bgp_as: str
+        peer_bgp_as: str | None
         type: Literal["underlay_p2p", "underlay_l2"]
         speed: str | None
         bfd: bool | None
@@ -410,13 +424,15 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
         ip_address: str | None
         peer_ip_address: str | None
         link_tracking_groups: LinkTrackingGroups
-        """Subclass of AvdModel."""
+        """Subclass of AvdIndexedList with `LinkTrackingGroupsItem` items. Primary key is `name` (`str`)."""
         peer_node_group: str | None
         node_group: str | None
         peer_mlag: bool | None
         channel_group_id: str | None
         peer_channel_group_id: str | None
         trunk_groups: TrunkGroups
+        """Subclass of AvdList with `str` items."""
+        peer_trunk_groups: PeerTrunkGroups
         """Subclass of AvdList with `str` items."""
         vlans: str | None
         native_vlan: int | None
@@ -437,7 +453,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
         by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.
         """
         subinterfaces: Subinterfaces
-        """Subclass of AvdList with `SubinterfacesItem` items."""
+        """Subclass of AvdIndexedList with `SubinterfacesItem` items. Primary key is `interface` (`str`)."""
 
         if TYPE_CHECKING:
 
@@ -449,7 +465,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                 peer_interface: str | UndefinedType = Undefined,
                 peer_type: str | UndefinedType = Undefined,
                 peer_is_deployed: bool | UndefinedType = Undefined,
-                peer_bgp_as: str | UndefinedType = Undefined,
+                peer_bgp_as: str | None | UndefinedType = Undefined,
                 type: Literal["underlay_p2p", "underlay_l2"] | UndefinedType = Undefined,
                 speed: str | None | UndefinedType = Undefined,
                 bfd: bool | None | UndefinedType = Undefined,
@@ -468,6 +484,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                 channel_group_id: str | None | UndefinedType = Undefined,
                 peer_channel_group_id: str | None | UndefinedType = Undefined,
                 trunk_groups: TrunkGroups | UndefinedType = Undefined,
+                peer_trunk_groups: PeerTrunkGroups | UndefinedType = Undefined,
                 vlans: str | None | UndefinedType = Undefined,
                 native_vlan: int | None | UndefinedType = Undefined,
                 peer_short_esi: str | None | UndefinedType = Undefined,
@@ -502,13 +519,14 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                     prefix_length: prefix_length
                     ip_address: ip_address
                     peer_ip_address: peer_ip_address
-                    link_tracking_groups: Subclass of AvdModel.
+                    link_tracking_groups: Subclass of AvdIndexedList with `LinkTrackingGroupsItem` items. Primary key is `name` (`str`).
                     peer_node_group: peer_node_group
                     node_group: node_group
                     peer_mlag: peer_mlag
                     channel_group_id: channel_group_id
                     peer_channel_group_id: peer_channel_group_id
                     trunk_groups: Subclass of AvdList with `str` items.
+                    peer_trunk_groups: Subclass of AvdList with `str` items.
                     vlans: vlans
                     native_vlan: native_vlan
                     peer_short_esi: peer_short_esi
@@ -525,7 +543,7 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                        "structured_config" defined on node-level.
                        Note! The content of this dictionary is _not_ validated
                        by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.
-                    subinterfaces: Subclass of AvdList with `SubinterfacesItem` items.
+                    subinterfaces: Subclass of AvdIndexedList with `SubinterfacesItem` items. Primary key is `interface` (`str`).
 
                 """
 
@@ -828,6 +846,95 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
 
     WanPathGroups._item_type = WanPathGroupsItem
 
+    class OnlyUsedForPeerFacts(AvdModel):
+        """Subclass of AvdModel."""
+
+        class Vrfs(AvdList[str]):
+            """Subclass of AvdList with `str` items."""
+
+        Vrfs._item_type = str
+
+        class DefaultDownlinkInterfaces(AvdList[str]):
+            """Subclass of AvdList with `str` items."""
+
+        DefaultDownlinkInterfaces._item_type = str
+
+        _fields: ClassVar[dict] = {
+            "mlag": {"type": bool},
+            "uplink_type": {"type": str},
+            "uplink_switch_port_channel_id": {"type": int},
+            "uplink_port_channel_id": {"type": int},
+            "vrfs": {"type": Vrfs},
+            "underlay_multicast": {"type": bool},
+            "overlay_rd_type_admin_subfield": {"type": str},
+            "default_downlink_interfaces": {"type": DefaultDownlinkInterfaces},
+        }
+        mlag: bool
+        uplink_type: Literal["p2p", "port-channel", "p2p-vrfs", "lan"] | None
+        """
+        Override the default `uplink_type` set at the `node_type_key` level.
+        `uplink_type` must be "p2p" if
+        `vtep` or `underlay_router` is true for the `node_type_key` definition.
+        """
+        uplink_switch_port_channel_id: int | None
+        uplink_port_channel_id: int | None
+        vrfs: Vrfs
+        """Subclass of AvdList with `str` items."""
+        underlay_multicast: bool | None
+        overlay_rd_type_admin_subfield: str | None
+        default_downlink_interfaces: DefaultDownlinkInterfaces
+        """Subclass of AvdList with `str` items."""
+
+        if TYPE_CHECKING:
+
+            def __init__(
+                self,
+                *,
+                mlag: bool | UndefinedType = Undefined,
+                uplink_type: Literal["p2p", "port-channel", "p2p-vrfs", "lan"] | None | UndefinedType = Undefined,
+                uplink_switch_port_channel_id: int | None | UndefinedType = Undefined,
+                uplink_port_channel_id: int | None | UndefinedType = Undefined,
+                vrfs: Vrfs | UndefinedType = Undefined,
+                underlay_multicast: bool | None | UndefinedType = Undefined,
+                overlay_rd_type_admin_subfield: str | None | UndefinedType = Undefined,
+                default_downlink_interfaces: DefaultDownlinkInterfaces | UndefinedType = Undefined,
+            ) -> None:
+                """
+                OnlyUsedForPeerFacts.
+
+
+                Subclass of AvdModel.
+
+                Args:
+                    mlag: mlag
+                    uplink_type:
+                       Override the default `uplink_type` set at the `node_type_key` level.
+                       `uplink_type` must be "p2p" if
+                       `vtep` or `underlay_router` is true for the `node_type_key` definition.
+                    uplink_switch_port_channel_id: uplink_switch_port_channel_id
+                    uplink_port_channel_id: uplink_port_channel_id
+                    vrfs: Subclass of AvdList with `str` items.
+                    underlay_multicast: underlay_multicast
+                    overlay_rd_type_admin_subfield: overlay_rd_type_admin_subfield
+                    default_downlink_interfaces: Subclass of AvdList with `str` items.
+
+                """
+
+    class DownlinkSwitches(AvdList[str]):
+        """Subclass of AvdList with `str` items."""
+
+    DownlinkSwitches._item_type = str
+
+    class EvpnRouteServerClients(AvdList[str]):
+        """Subclass of AvdList with `str` items."""
+
+    EvpnRouteServerClients._item_type = str
+
+    class MplsRouteReflectorClients(AvdList[str]):
+        """Subclass of AvdList with `str` items."""
+
+    MplsRouteReflectorClients._item_type = str
+
     _fields: ClassVar[dict] = {
         "id": {"type": int},
         "type": {"type": str},
@@ -895,10 +1002,16 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
         "uplink_peers": {"type": UplinkPeers},
         "uplink_switch_vrfs": {"type": UplinkSwitchVrfs},
         "vlans": {"type": str},
+        "local_endpoint_vlans": {"type": str},
         "endpoint_vlans": {"type": str},
         "local_endpoint_trunk_groups": {"type": LocalEndpointTrunkGroups},
         "endpoint_trunk_groups": {"type": EndpointTrunkGroups},
         "wan_path_groups": {"type": WanPathGroups},
+        "local_short_esi": {"type": str},
+        "only_used_for_peer_facts": {"type": OnlyUsedForPeerFacts},
+        "downlink_switches": {"type": DownlinkSwitches},
+        "evpn_route_server_clients": {"type": EvpnRouteServerClients},
+        "mpls_route_reflector_clients": {"type": MplsRouteReflectorClients},
     }
     id: int | None
     type: str
@@ -1013,11 +1126,39 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
     uplink_switch_vrfs: UplinkSwitchVrfs
     """Subclass of AvdList with `str` items."""
     vlans: str
+    """
+    Compressed list of vlans to be defined on this switch after filtering network services.
+    The filter
+    is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+
+    Ex. "1-100, 201-202"
+
+    This
+    excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+    This is to
+    ensure that native vlan is not necessarily permitted on the uplink trunk.
+    """
+    local_endpoint_vlans: str | None
+    """Compressed list of vlans in use by endpoints connected to this switch."""
     endpoint_vlans: str | None
+    """
+    Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG
+    peer and it's downstream switches.
+    """
     local_endpoint_trunk_groups: LocalEndpointTrunkGroups
-    """Subclass of AvdList with `str` items."""
+    """
+    List of trunk_groups in use by endpoints connected to this switch.
+
+    Subclass of AvdList with `str`
+    items.
+    """
     endpoint_trunk_groups: EndpointTrunkGroups
-    """Subclass of AvdList with `str` items."""
+    """
+    List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer
+    and it's downstream switches.
+
+    Subclass of AvdList with `str` items.
+    """
     wan_path_groups: WanPathGroups
     """
     List of path-groups used for the WAN configuration.
@@ -1025,6 +1166,15 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
     Subclass of AvdIndexedList with
     `WanPathGroupsItem` items. Primary key is `name` (`str`).
     """
+    local_short_esi: str | None
+    only_used_for_peer_facts: OnlyUsedForPeerFacts
+    """Subclass of AvdModel."""
+    downlink_switches: DownlinkSwitches
+    """Subclass of AvdList with `str` items."""
+    evpn_route_server_clients: EvpnRouteServerClients
+    """Subclass of AvdList with `str` items."""
+    mpls_route_reflector_clients: MplsRouteReflectorClients
+    """Subclass of AvdList with `str` items."""
 
     if TYPE_CHECKING:
 
@@ -1078,10 +1228,16 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
             uplink_peers: UplinkPeers | UndefinedType = Undefined,
             uplink_switch_vrfs: UplinkSwitchVrfs | UndefinedType = Undefined,
             vlans: str | UndefinedType = Undefined,
+            local_endpoint_vlans: str | None | UndefinedType = Undefined,
             endpoint_vlans: str | None | UndefinedType = Undefined,
             local_endpoint_trunk_groups: LocalEndpointTrunkGroups | UndefinedType = Undefined,
             endpoint_trunk_groups: EndpointTrunkGroups | UndefinedType = Undefined,
             wan_path_groups: WanPathGroups | UndefinedType = Undefined,
+            local_short_esi: str | None | UndefinedType = Undefined,
+            only_used_for_peer_facts: OnlyUsedForPeerFacts | UndefinedType = Undefined,
+            downlink_switches: DownlinkSwitches | UndefinedType = Undefined,
+            evpn_route_server_clients: EvpnRouteServerClients | UndefinedType = Undefined,
+            mpls_route_reflector_clients: MplsRouteReflectorClients | UndefinedType = Undefined,
         ) -> None:
             """
             EosDesignsFacts.
@@ -1175,14 +1331,40 @@ class EosDesignsFacts(EosCliConfigGenRootModel):
                    with `UplinksItem` items.
                 uplink_peers: Subclass of AvdList with `str` items.
                 uplink_switch_vrfs: Subclass of AvdList with `str` items.
-                vlans: vlans
-                endpoint_vlans: endpoint_vlans
-                local_endpoint_trunk_groups: Subclass of AvdList with `str` items.
-                endpoint_trunk_groups: Subclass of AvdList with `str` items.
+                vlans:
+                   Compressed list of vlans to be defined on this switch after filtering network services.
+                   The filter
+                   is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+
+                   Ex. "1-100, 201-202"
+
+                   This
+                   excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+                   This is to
+                   ensure that native vlan is not necessarily permitted on the uplink trunk.
+                local_endpoint_vlans: Compressed list of vlans in use by endpoints connected to this switch.
+                endpoint_vlans:
+                   Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG
+                   peer and it's downstream switches.
+                local_endpoint_trunk_groups:
+                   List of trunk_groups in use by endpoints connected to this switch.
+
+                   Subclass of AvdList with `str`
+                   items.
+                endpoint_trunk_groups:
+                   List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer
+                   and it's downstream switches.
+
+                   Subclass of AvdList with `str` items.
                 wan_path_groups:
                    List of path-groups used for the WAN configuration.
 
                    Subclass of AvdIndexedList with
                    `WanPathGroupsItem` items. Primary key is `name` (`str`).
+                local_short_esi: local_short_esi
+                only_used_for_peer_facts: Subclass of AvdModel.
+                downlink_switches: Subclass of AvdList with `str` items.
+                evpn_route_server_clients: Subclass of AvdList with `str` items.
+                mpls_route_reflector_clients: Subclass of AvdList with `str` items.
 
             """

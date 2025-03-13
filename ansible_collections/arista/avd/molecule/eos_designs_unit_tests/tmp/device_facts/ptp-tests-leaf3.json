@@ -6,7 +6,6 @@
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.3.0/24",
   "uplink_ipv4_pool": "192.168.1.0/24",
-  "downlink_pools": [],
   "bgp_as": "65010",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "192.168.2.0/24",
@@ -22,15 +21,10 @@
   ],
   "port_profile_names": [
     {
-      "profile": "PTP-profile-dynamic",
-      "parent_profile": null
+      "profile": "PTP-profile-dynamic"
     }
   ],
   "evpn_role": "client",
-  "evpn_route_servers": [
-    "ptp-tests-spine1",
-    "ptp-tests-spine2"
-  ],
   "overlay": {
     "peering_address": "192.168.3.1",
     "evpn_mpls": false
@@ -38,45 +32,13 @@
   "vtep_ip": "192.168.2.1",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "ptp-tests-spine1",
-      "peer_interface": "Ethernet15",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65200",
-      "type": "underlay_p2p",
-      "ptp": {
-        "enable": true
-      },
-      "prefix_length": 31,
-      "ip_address": "192.168.1.1",
-      "peer_ip_address": "192.168.1.0",
-      "structured_config": {}
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "ptp-tests-spine2",
-      "peer_interface": "Ethernet15",
-      "peer_type": "spine",
-      "peer_is_deployed": true,
-      "peer_bgp_as": "65200",
-      "type": "underlay_p2p",
-      "ptp": {
-        "enable": true
-      },
-      "prefix_length": 31,
-      "ip_address": "192.168.1.3",
-      "peer_ip_address": "192.168.1.2",
-      "structured_config": {}
-    }
-  ],
   "uplink_peers": [
     "ptp-tests-spine1",
     "ptp-tests-spine2"
   ],
   "vlans": "11",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

@@ -9,8 +9,6 @@
   "inband_ztp": false,
   "group": "SL-LEAF1",
   "pod": "SINGLE_LINK_TO_MLAG_PAIR",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "mlag_peer": "SL-LEAF1A",
   "mlag_port_channel_id": 25,
   "mlag_interfaces": [
@@ -22,30 +20,14 @@
     "primary": 3,
     "secondary": 4
   },
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
-  "uplinks": [
-    {
-      "interface": "Ethernet27",
-      "peer": "SL-LEAF0B",
-      "peer_interface": "Ethernet28",
-      "peer_type": "l2leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "vlans": "none",
-      "structured_config": {},
-      "peer_node_group": "SL-LEAF0",
-      "node_group": "SL-LEAF1",
-      "peer_mlag": false,
-      "channel_group_id": "27",
-      "peer_channel_group_id": "27"
-    }
-  ],
   "uplink_peers": [
     "SL-LEAF0B"
   ],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  }
 }

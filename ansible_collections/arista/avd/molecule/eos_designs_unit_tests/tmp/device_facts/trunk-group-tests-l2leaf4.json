@@ -14,61 +14,25 @@
       "description": "Server"
     }
   ],
-  "port_profile_names": [],
-  "evpn_route_servers": [],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
-  "uplinks": [
-    {
-      "interface": "Ethernet1",
-      "peer": "trunk-group-tests-l3leaf2a",
-      "peer_interface": "Ethernet1",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "trunk_groups": [
-        "UPLINK"
-      ],
-      "peer_trunk_groups": [
-        "trunk-group-tests-l2leaf4"
-      ],
-      "vlans": "200,210",
-      "structured_config": {},
-      "peer_node_group": "TRUNK_GROUP_TESTS_L3LEAF2",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "1"
-    },
-    {
-      "interface": "Ethernet2",
-      "peer": "trunk-group-tests-l3leaf2b",
-      "peer_interface": "Ethernet1",
-      "peer_type": "l3leaf",
-      "peer_is_deployed": true,
-      "type": "underlay_l2",
-      "trunk_groups": [
-        "UPLINK"
-      ],
-      "peer_trunk_groups": [
-        "trunk-group-tests-l2leaf4"
-      ],
-      "vlans": "200,210",
-      "structured_config": {},
-      "peer_node_group": "TRUNK_GROUP_TESTS_L3LEAF2",
-      "peer_mlag": true,
-      "channel_group_id": "1",
-      "peer_channel_group_id": "1"
-    }
-  ],
   "uplink_peers": [
     "trunk-group-tests-l3leaf2a",
     "trunk-group-tests-l3leaf2b"
   ],
   "vlans": "200,210",
+  "local_endpoint_vlans": "1",
   "endpoint_vlans": "1",
-  "local_endpoint_trunk_groups": [],
+  "local_endpoint_trunk_groups": [
+    "TG_200",
+    "TG_NOT_MATCHING_ANY_VLANS"
+  ],
   "endpoint_trunk_groups": [
     "TG_200",
     "TG_NOT_MATCHING_ANY_VLANS"
-  ]
+  ],
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false
+  }
 }

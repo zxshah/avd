@@ -97,7 +97,7 @@ def get_structured_config(
     eos_designs_facts = EosDesignsFacts._from_dict(vars["switch"], keep_extra_keys=False)
 
     # Initialize SharedUtils class to be passed to each python_module below.
-    shared_utils = SharedUtils(hostvars=vars, inputs=inputs, templar=templar, schema=input_schema_tools.avdschema)
+    shared_utils = SharedUtils(hostvars=vars, inputs=inputs, templar=templar)
 
     # Single structured config instance which will be in-place updated by each structured config generator.
     structured_config = EosCliConfigGen()

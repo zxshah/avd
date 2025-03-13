@@ -5,25 +5,37 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "10.0.254.0/24",
-  "downlink_pools": [],
   "bgp_as": "64999",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "router_id": "10.0.254.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "server",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "10.0.254.1",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "underlay_multicast": false,
+    "default_downlink_interfaces": [
+      "Ethernet1",
+      "Ethernet2",
+      "Ethernet3",
+      "Ethernet4",
+      "Ethernet5",
+      "Ethernet6",
+      "Ethernet7",
+      "Ethernet8",
+      "Ethernet9",
+      "Ethernet10"
+    ]
+  },
+  "downlink_switches": [
+    "inband-mgmt-parent",
+    "inband-mgmt-parent-vrf"
+  ]
 }

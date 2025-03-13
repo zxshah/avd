@@ -6,25 +6,29 @@
   "mgmt_interface": "Management1",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.42.0/24",
-  "downlink_pools": [],
   "bgp_as": "65000",
   "underlay_routing_protocol": "ebgp",
   "inband_ztp": false,
   "router_id": "192.168.42.2",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "evpn_role": "server",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.42.2",
     "evpn_mpls": false
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": false,
+    "vrfs": [
+      "default",
+      "IT",
+      "PROD"
+    ],
+    "underlay_multicast": false
+  },
+  "downlink_switches": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ]
 }

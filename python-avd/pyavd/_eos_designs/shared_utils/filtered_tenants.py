@@ -118,7 +118,7 @@ class FilteredTenantsMixin(Protocol):
 
         # Picking this up from facts so this would fail if accessed when shared_utils is run before facts
         # TODO: see if this can be optimized
-        endpoint_trunk_groups = set(self.get_switch_fact("endpoint_trunk_groups", required=False) or [])
+        endpoint_trunk_groups = set(self.switch_facts.endpoint_trunk_groups)
         return bool(self.inputs.enable_trunk_groups and vlan.trunk_groups and endpoint_trunk_groups.intersection(vlan.trunk_groups))
 
     @cached_property
@@ -129,7 +129,7 @@ class FilteredTenantsMixin(Protocol):
         For l2 switches return intersection of vlans from this switch and vlans from uplink switches.
         For anything else return the expanded vlans from this switch.
         """
-        switch_vlans = self.get_switch_fact("vlans", required=False)
+        switch_vlans = self.switch_facts.vlans
         if not switch_vlans:
             return []
         switch_vlans_list = range_expand(switch_vlans)
@@ -140,11 +140,10 @@ class FilteredTenantsMixin(Protocol):
         uplink_switches = unique(self.uplink_switches)
         uplink_switches = [uplink_switch for uplink_switch in uplink_switches if uplink_switch in self.all_fabric_devices]
         for uplink_switch in uplink_switches:
-            uplink_switch_facts = self.get_peer_facts(uplink_switch, required=True)
-            uplink_switch_vlans = uplink_switch_facts.get("vlans", [])
-            uplink_switch_vlans_list = range_expand(uplink_switch_vlans)
-            uplink_switch_vlans_list = [int(vlan) for vlan in uplink_switch_vlans_list]
-            accepted_vlans = [vlan for vlan in accepted_vlans if vlan in uplink_switch_vlans_list]
+            uplink_switch_facts = self.get_peer_facts_cls(uplink_switch)
+            uplink_switch_vlans = set(map(int, range_expand(uplink_switch_facts.vlans)))
+
+            accepted_vlans = [vlan for vlan in accepted_vlans if vlan in uplink_switch_vlans]
 
         return accepted_vlans
 
@@ -176,7 +175,7 @@ class FilteredTenantsMixin(Protocol):
         if "all" in self.node_config.filter.always_include_vrfs_in_tenants or tenant_name in self.node_config.filter.always_include_vrfs_in_tenants:
             return True
 
-        return vrf.name in (self.get_switch_fact("uplink_switch_vrfs", required=False) or [])
+        return vrf.name in self.switch_facts.uplink_switch_vrfs
 
     def filtered_vrfs(
         self: SharedUtilsProtocol, tenant: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem
@@ -317,7 +316,7 @@ class FilteredTenantsMixin(Protocol):
 
     @cached_property
     def endpoint_vlans(self: SharedUtilsProtocol) -> list:
-        endpoint_vlans = self.get_switch_fact("endpoint_vlans", required=False)
+        endpoint_vlans = self.switch_facts.endpoint_vlans
         if not endpoint_vlans:
             return []
         return [int(vlan_id) for vlan_id in range_expand(endpoint_vlans)]
@@ -424,7 +423,7 @@ class FilteredTenantsMixin(Protocol):
             [
                 vrf_address_families,
                 vrf.bgp_peers,
-                (self.uplink_type == "p2p-vrfs" and vrf.name in (self.get_switch_fact("uplink_switch_vrfs", required=False) or [])),
+                (self.uplink_type == "p2p-vrfs" and vrf.name in self.switch_facts.uplink_switch_vrfs),
                 self.is_wan_vrf(vrf),
             ]
         )

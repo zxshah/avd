@@ -7,7 +7,6 @@
   "mgmt_ip": "192.168.201.119/24",
   "mpls_lsr": false,
   "loopback_ipv4_pool": "192.168.255.0/24",
-  "downlink_pools": [],
   "bgp_as": "923",
   "underlay_routing_protocol": "ebgp",
   "vtep_loopback_ipv4_pool": "192.168.254.0/24",
@@ -15,8 +14,6 @@
   "group": "MLAG_SAME_SUBNET_L3LEAF2",
   "router_id": "192.168.255.35",
   "pod": "FABRIC_IP_ADDRESSING",
-  "connected_endpoints_keys": [],
-  "port_profile_names": [],
   "mlag_peer": "MLAG_SAME_SUBNET_L3LEAF2A",
   "mlag_port_channel_id": 5,
   "mlag_interfaces": [
@@ -30,7 +27,6 @@
     "secondary": 3
   },
   "evpn_role": "client",
-  "evpn_route_servers": [],
   "overlay": {
     "peering_address": "192.168.255.35",
     "evpn_mpls": false
@@ -38,9 +34,9 @@
   "vtep_ip": "192.168.254.34",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "uplinks": [],
-  "uplink_peers": [],
   "vlans": "10",
-  "local_endpoint_trunk_groups": [],
-  "endpoint_trunk_groups": []
+  "only_used_for_peer_facts": {
+    "mlag": true,
+    "underlay_multicast": false
+  }
 }

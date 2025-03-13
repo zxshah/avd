@@ -25,6 +25,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     @structured_config_contributor
     def application_traffic_recognition(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set structured config for application_traffic_recognition if wan router."""
+
         if not self.shared_utils.is_wan_router:
             return
 
@@ -135,11 +136,11 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         For applications - the existence cannot be verified as there are 4000+ applications built-in in the DPI engine used by EOS.
         """
         # Application profiles first
-
+        atr = EosCliConfigGen.ApplicationTrafficRecognition()
         for policy in self._filtered_wan_policies:
             if policy.get("is_default") and self._wan_control_plane_application_profile_name in self.inputs.application_classification.application_profiles:
                 application_profile_item = self.inputs.application_classification.application_profiles[self._wan_control_plane_application_profile_name]
-                self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
+                atr.application_profiles.append(application_profile_item)
 
             for match in get(policy, "matches", []):
                 application_profile = get(match, "application_profile", required=True)
@@ -155,7 +156,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     )
                     raise AristaAvdInvalidInputsError(msg)
                 application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
-                self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
+                atr.application_profiles.append(application_profile_item)
 
             if (default_match := policy.get("default_match")) is not None:
                 application_profile = get(default_match, "application_profile", default="default")
@@ -168,10 +169,11 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                         raise AristaAvdInvalidInputsError(msg)
 
                     application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
+                    atr.application_profiles.append(application_profile_item)
 
-                    self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
+        self.structured_config.application_traffic_recognition.application_profiles.extend(atr.application_profiles)
 
-        for application_profile in self.structured_config.application_traffic_recognition.application_profiles:
+        for application_profile in atr.application_profiles:
             for category in application_profile.categories:
                 if category.name and category.name not in self.inputs.application_classification.categories:
                     msg = (
@@ -182,22 +184,23 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
                 if category.name:
                     category_item = self.inputs.application_classification.categories[category.name]
-                    self.structured_config.application_traffic_recognition.categories.append(category_item)
+                    atr.categories.append(category_item)
+                    self.structured_config.application_traffic_recognition.categories.extend(atr.categories)
             # Applications in application profiles
             for application in application_profile.applications:
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
                     application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
-                    self.structured_config.application_traffic_recognition.applications.ipv4_applications.append(application_item)
+                    atr.applications.ipv4_applications.append(application_item)
 
         # Applications in categories
-        for category in self.structured_config.application_traffic_recognition.categories:
+        for category in atr.categories:
             for application in category.applications:
                 if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
                     application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
+                    atr.applications.ipv4_applications.append(application_item)
+                    self.structured_config.application_traffic_recognition.applications.ipv4_applications.extend(atr.applications.ipv4_applications)
 
-                    self.structured_config.application_traffic_recognition.applications.ipv4_applications.append(application_item)
-
-        for application in self.structured_config.application_traffic_recognition.applications.ipv4_applications:
+        for application in atr.applications.ipv4_applications:
             for prefix_set_name in (application.src_prefix_set_name, application.dest_prefix_set_name):
                 if prefix_set_name and prefix_set_name not in self.inputs.application_classification.field_sets.ipv4_prefixes:
                     msg = (
@@ -207,8 +210,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     raise AristaAvdInvalidInputsError(msg)
                 if prefix_set_name:
                     ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]
-
-                    self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
+                    atr.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
+                    self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.extend(atr.field_sets.ipv4_prefixes)
 
             for port_set_name in (
                 application.udp_src_port_set_name,
@@ -225,4 +228,5 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
                 if port_set_name:
                     l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]
-                    self.structured_config.application_traffic_recognition.field_sets.l4_ports.append(l4_port)
+                    atr.field_sets.l4_ports.append(l4_port)
+                    self.structured_config.application_traffic_recognition.field_sets.l4_ports.extend(atr.field_sets.l4_ports)

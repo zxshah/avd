@@ -28,6 +28,16 @@ keys:
               - "group tacacs+ local"
               - "group MYGROUP none"
               - "group radius group MYGROUP local"
+          command_api:
+            type: str
+            description: |
+              Command-API authentication method(s) as a string.
+              This feature is not yet visible in EOS.
+
+              Examples:
+              - "group tacacs+ local"
+              - "group MYGROUP none"
+              - "group radius group MYGROUP local"
       enable:
         type: dict
         keys:

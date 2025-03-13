@@ -12,7 +12,7 @@
     | [<samp>&nbsp;&nbsp;protocol_lldp_bypass</samp>](## "dot1x.protocol_lldp_bypass") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;protocol_bpdu_bypass</samp>](## "dot1x.protocol_bpdu_bypass") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;dynamic_authorization</samp>](## "dot1x.dynamic_authorization") | Boolean |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;statistics_packets_dropped</samp>](## "dot1x.statistics_packets_dropped") | Boolean |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;statistics_packets_dropped</samp>](## "dot1x.statistics_packets_dropped") | Boolean |  |  |  | Enable the dot1x dropped counters. |
     | [<samp>&nbsp;&nbsp;mac_based_authentication</samp>](## "dot1x.mac_based_authentication") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;delay</samp>](## "dot1x.mac_based_authentication.delay") | Integer |  |  | Min: 0<br>Max: 300 |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;hold_period</samp>](## "dot1x.mac_based_authentication.hold_period") | Integer |  |  | Min: 1<br>Max: 300 |  |
@@ -41,7 +41,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_only</samp>](## "dot1x.radius_av_pair.dhcp.vendor_class_id.auth_only") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;filter_id</samp>](## "dot1x.radius_av_pair.filter_id") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delimiter_period</samp>](## "dot1x.radius_av_pair.filter_id.delimiter_period") | Boolean |  |  |  | Use period as the delimiter. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv4_ipv6_required</samp>](## "dot1x.radius_av_pair.filter_id.ipv4_ipv6_required") | Boolean |  |  |  | IPv4 filter-id, IPv6 filter-id, Filter-id are required. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv4_ipv6_required</samp>](## "dot1x.radius_av_pair.filter_id.ipv4_ipv6_required") | Boolean |  |  |  | Enable filters for IPv4 and IPv6 traffic. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple</samp>](## "dot1x.radius_av_pair.filter_id.multiple") | Boolean |  |  |  | Multiple attribute |
     | [<samp>&nbsp;&nbsp;aaa</samp>](## "dot1x.aaa") | Dictionary |  |  |  | Configure AAA parameters. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;unresponsive</samp>](## "dot1x.aaa.unresponsive") | Dictionary |  |  |  | Configure AAA timeout options. |
@@ -91,6 +91,8 @@
       protocol_lldp_bypass: <bool>
       protocol_bpdu_bypass: <bool>
       dynamic_authorization: <bool>
+
+      # Enable the dot1x dropped counters.
       statistics_packets_dropped: <bool>
       mac_based_authentication:
         delay: <int; 0-300>
@@ -139,7 +141,7 @@
           # Use period as the delimiter.
           delimiter_period: <bool>
 
-          # IPv4 filter-id, IPv6 filter-id, Filter-id are required.
+          # Enable filters for IPv4 and IPv6 traffic.
           ipv4_ipv6_required: <bool>
 
           # Multiple attribute

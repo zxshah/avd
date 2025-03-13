@@ -4395,7 +4395,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 delimiter_period: bool | None
                 """Use period as the delimiter."""
                 ipv4_ipv6_required: bool | None
-                """IPv4 filter-id, IPv6 filter-id, Filter-id are required."""
+                """Enable filters for IPv4 and IPv6 traffic."""
                 multiple: bool | None
                 """Multiple attribute"""
 
@@ -4416,7 +4416,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         Args:
                             delimiter_period: Use period as the delimiter.
-                            ipv4_ipv6_required: IPv4 filter-id, IPv6 filter-id, Filter-id are required.
+                            ipv4_ipv6_required: Enable filters for IPv4 and IPv6 traffic.
                             multiple: Multiple attribute
 
                         """
@@ -4944,6 +4944,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         protocol_bpdu_bypass: bool | None
         dynamic_authorization: bool | None
         statistics_packets_dropped: bool | None
+        """Enable the dot1x dropped counters."""
         mac_based_authentication: MacBasedAuthentication
         """Subclass of AvdModel."""
         radius_av_pair_username_format: RadiusAvPairUsernameFormat
@@ -5001,7 +5002,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     protocol_lldp_bypass: protocol_lldp_bypass
                     protocol_bpdu_bypass: protocol_bpdu_bypass
                     dynamic_authorization: dynamic_authorization
-                    statistics_packets_dropped: statistics_packets_dropped
+                    statistics_packets_dropped: Enable the dot1x dropped counters.
                     mac_based_authentication: Subclass of AvdModel.
                     radius_av_pair_username_format:
                        RADIUS AV-pair username settings.

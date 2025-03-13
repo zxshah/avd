@@ -4393,7 +4393,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                 _fields: ClassVar[dict] = {"delimiter_period": {"type": bool}, "ipv4_ipv6_required": {"type": bool}, "multiple": {"type": bool}}
                 delimiter_period: bool | None
-                """Delimiter to use, Period as delimiter."""
+                """Use period as the delimiter."""
                 ipv4_ipv6_required: bool | None
                 """IPv4 filter-id, IPv6 filter-id, Filter-id are required."""
                 multiple: bool | None
@@ -4415,7 +4415,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Subclass of AvdModel.
 
                         Args:
-                            delimiter_period: Delimiter to use, Period as delimiter.
+                            delimiter_period: Use period as the delimiter.
                             ipv4_ipv6_required: IPv4 filter-id, IPv6 filter-id, Filter-id are required.
                             multiple: Multiple attribute
 

@@ -40,7 +40,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "dot1x.radius_av_pair.dhcp.vendor_class_id.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;auth_only</samp>](## "dot1x.radius_av_pair.dhcp.vendor_class_id.auth_only") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;filter_id</samp>](## "dot1x.radius_av_pair.filter_id") | Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delimiter_period</samp>](## "dot1x.radius_av_pair.filter_id.delimiter_period") | Boolean |  |  |  | Delimiter to use, Period as delimiter. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delimiter_period</samp>](## "dot1x.radius_av_pair.filter_id.delimiter_period") | Boolean |  |  |  | Use period as the delimiter. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv4_ipv6_required</samp>](## "dot1x.radius_av_pair.filter_id.ipv4_ipv6_required") | Boolean |  |  |  | IPv4 filter-id, IPv6 filter-id, Filter-id are required. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple</samp>](## "dot1x.radius_av_pair.filter_id.multiple") | Boolean |  |  |  | Multiple attribute |
     | [<samp>&nbsp;&nbsp;aaa</samp>](## "dot1x.aaa") | Dictionary |  |  |  | Configure AAA parameters. |
@@ -136,7 +136,7 @@
             auth_only: <bool>
         filter_id:
 
-          # Delimiter to use, Period as delimiter.
+          # Use period as the delimiter.
           delimiter_period: <bool>
 
           # IPv4 filter-id, IPv6 filter-id, Filter-id are required.

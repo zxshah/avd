@@ -122,7 +122,7 @@ keys:
             keys:
               delimiter_period:
                 type: bool
-                description: Delimiter to use, Period as delimiter.
+                description: Use period as the delimiter.
               ipv4_ipv6_required:
                 type: bool
                 description: IPv4 filter-id, IPv6 filter-id, Filter-id are required.

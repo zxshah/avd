@@ -9,8 +9,7 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import default, short_esi_to_route_target
-from pyavd.api.interface_descriptions import InterfaceDescriptionData
+from pyavd._utils import default, get_ip_from_ip_prefix, short_esi_to_route_target
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
@@ -56,6 +55,9 @@ class PortChannelInterfacesMixin(Protocol):
 
                     interface_name = l3_port_channel.name
                     is_subinterface = "." in interface_name
+                    interface_ip = l3_port_channel.ip_address
+                    if interface_ip and "/" in interface_ip:
+                        interface_ip = get_ip_from_ip_prefix(interface_ip)
 
                     if not is_subinterface:
                         # This is a regular Port-Channel (not sub-interface)
@@ -78,11 +80,19 @@ class PortChannelInterfacesMixin(Protocol):
                             msg = f"L3 Port-Channel sub-interface '{interface_name}' has 'mtu' set. This is not a valid setting."
                             raise AristaAvdInvalidInputsError(msg)
 
+                    interface_description = l3_port_channel.description
+                    if not interface_description:
+                        elems = [l3_port_channel.peer, l3_port_channel.peer_port_channel]
+                        if elems:
+                            interface_description = "_".join([elem for elem in elems if elem])
+
                     # Generate their structured config for the l3_port_channels.
                     port_channel_interface = EosCliConfigGen.PortChannelInterfacesItem(
                         name=l3_port_channel.name,
                         peer=l3_port_channel.peer,
                         mtu=l3_port_channel.mtu if self.shared_utils.platform_settings.feature_support.per_interface_mtu else None,
+                        description=interface_description or None,
+                        ip_address=l3_port_channel.ip_address,
                         shutdown=not l3_port_channel.enabled,
                         eos_cli=l3_port_channel.raw_eos_cli,
                         flow_tracker=self.shared_utils.new_get_flow_tracker(
@@ -92,13 +102,25 @@ class PortChannelInterfacesMixin(Protocol):
                         peer_type="l3_port_channel",
                         peer_interface=l3_port_channel.peer_port_channel if l3_port_channel.peer_port_channel else None,
                     )
-
                     if l3_port_channel.ipv4_acl_in:
-                        port_channel_interface._update(access_group_in=l3_port_channel.ipv4_acl_in)
-                    if l3_port_channel.ipv4_acl_out:
-                        port_channel_interface._update(access_group_out=l3_port_channel.ipv4_acl_out)
+                        acl = self.shared_utils.get_ipv4_acl(
+                            name=l3_port_channel.ipv4_acl_in,
+                            interface_name=interface_name,
+                            interface_ip=interface_ip,
+                        )
+                        port_channel_interface.access_group_in = acl.name
+                        self._set_ipv4_acl(acl)
 
-                    if "." not in l3_port_channel.name:
+                    if l3_port_channel.ipv4_acl_out:
+                        acl = self.shared_utils.get_ipv4_acl(
+                            name=l3_port_channel.ipv4_acl_out,
+                            interface_name=interface_name,
+                            interface_ip=interface_ip,
+                        )
+                        port_channel_interface.access_group_out = acl.name
+                        self._set_ipv4_acl(acl)
+
+                    if not is_subinterface:
                         port_channel_interface.switchport.enabled = False
 
                     if l3_port_channel.ospf.enabled and vrf.ospf.enabled:
@@ -122,34 +144,14 @@ class PortChannelInterfacesMixin(Protocol):
                             if port_channel_interface.ospf_message_digest_keys:
                                 port_channel_interface.ospf_authentication = ospf_authentication
 
-                    ip_address = None
-                    if l3_port_channel.ip_address:
-                        ip_address = l3_port_channel.ip_address
-                    if ip_address:
-                        port_channel_interface.ip_address = ip_address
-
-                    if "." in l3_port_channel.name:
+                    if is_subinterface:
                         port_channel_interface.encapsulation_dot1q.vlan = default(
                             l3_port_channel.encapsulation_dot1q_vlan, int(l3_port_channel.name.split(".", maxsplit=1)[-1])
                         )
-                        if not ip_address:
+                        if not l3_port_channel.ip_address:
                             msg = f"{self.shared_utils.node_type_key_data.key}.nodes[name={self.shared_utils.hostname}].{node_type_in_schema}"
                             msg += f"[name={l3_port_channel.name}].ip_address"
                             raise AristaAvdMissingVariableError(msg)
-
-                    interface_description = None
-                    if l3_port_channel.description:
-                        interface_description = l3_port_channel.description
-                    if not interface_description:
-                        interface_description = self.shared_utils.interface_descriptions.underlay_port_channel_interface(
-                            InterfaceDescriptionData(
-                                shared_utils=self.shared_utils,
-                                interface=l3_port_channel.name,
-                                peer=l3_port_channel.peer,
-                                peer_interface=l3_port_channel.peer_port_channel,
-                            ),
-                        )
-                    port_channel_interface.description = interface_description
 
                     if l3_port_channel.structured_config:
                         self.custom_structured_configs.nested.port_channel_interfaces.obtain(l3_port_channel.name)._deepmerge(

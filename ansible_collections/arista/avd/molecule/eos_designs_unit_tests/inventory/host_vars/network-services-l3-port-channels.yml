@@ -1,5 +1,20 @@
 ---
 # This yml file is being used to test the various supported schema attributes for L3 Port-Channel
+ipv4_acls:
+  - name: inACL
+    entries:
+      - sequence: 10
+        action: deny
+        protocol: ip
+        source: any
+        destination: any
+  - name: outACL
+    entries:
+      - sequence: 10
+        action: deny
+        protocol: ip
+        source: any
+        destination: any
 
 flow_tracking_settings:
   trackers:
@@ -37,7 +52,6 @@ tenants:
         l3_port_channels:
           - name: Port-Channel11
             mode: active
-            peer: inet-cloud
             peer_port_channel: Po11
             enabled: true
             node: network-services-l3-port-channels
@@ -46,13 +60,17 @@ tenants:
                 peer_interface: Ethernet10
                 peer: inet-cloud
               - name: Ethernet11
-                peer_interface: Ethernet11
-                peer: inet-cloud
           - name: Port-Channel11.100
             peer: inet-cloud-sub100
             peer_port_channel: Po11.100
             enabled: true
             ip_address: 10.10.10.2/29
+            node: network-services-l3-port-channels
+          - name: Port-Channel11.1111
+            peer: inet-cloud-sub1111
+            peer_port_channel: Po11.111
+            enabled: false
+            ip_address: 10.10.10.11/29
             node: network-services-l3-port-channels
           - name: Port-Channel22
             mode: active
@@ -65,7 +83,18 @@ tenants:
                 peer_interface: Ethernet20
                 peer: inet-cloud
               - name: Ethernet21
-                peer_interface: Ethernet21
+          - name: Port-Channel23
+            mode: "on"
+            peer: inet-cloud
+            peer_port_channel: Po23
+            enabled: true
+            node: network-services-l3-port-channels
+            member_interfaces:
+              - name: Ethernet23
+                peer_interface: Ethernet23
+                peer: inet-cloud
+              - name: Ethernet24
+                peer_interface: Ethernet24
                 peer: inet-cloud
       - name: TESTING
         vrf_id: 2
@@ -116,6 +145,10 @@ tenants:
                 event:
                   link_status: true
                   storm_control_discards: true
+          - name: Port-Channel1111.199
+            enabled: true
+            ip_address: 1.1.1.40/29
+            node: network-services-l3-port-channels
           - name: Port-Channel1111.200
             peer: inet-cloud
             peer_port_channel: Po1111.200

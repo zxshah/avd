@@ -14,13 +14,10 @@ ethernet_interfaces:
   peer_interface: Ethernet10
   peer_type: l3_port_channel_member
 - name: Ethernet11
-  description: inet-cloud_Ethernet11
   shutdown: false
   channel_group:
     id: 11
     mode: active
-  peer: inet-cloud
-  peer_interface: Ethernet11
   peer_type: l3_port_channel_member
 - name: Ethernet20
   description: inet-cloud_Ethernet20
@@ -32,13 +29,30 @@ ethernet_interfaces:
   peer_interface: Ethernet20
   peer_type: l3_port_channel_member
 - name: Ethernet21
-  description: inet-cloud_Ethernet21
+  description: inet-cloud
   shutdown: false
   channel_group:
     id: 22
     mode: active
   peer: inet-cloud
-  peer_interface: Ethernet21
+  peer_type: l3_port_channel_member
+- name: Ethernet23
+  description: inet-cloud_Ethernet23
+  shutdown: false
+  channel_group:
+    id: 23
+    mode: 'on'
+  peer: inet-cloud
+  peer_interface: Ethernet23
+  peer_type: l3_port_channel_member
+- name: Ethernet24
+  description: inet-cloud_Ethernet24
+  shutdown: false
+  channel_group:
+    id: 23
+    mode: 'on'
+  peer: inet-cloud
+  peer_interface: Ethernet24
   peer_type: l3_port_channel_member
 - name: Ethernet4
   description: man descr inet-clout eth8
@@ -88,6 +102,21 @@ flow_tracking:
         template_interval: 3600000
     shutdown: false
 hostname: network-services-l3-port-channels
+ip_access_lists:
+- name: inACL
+  entries:
+  - sequence: 10
+    action: deny
+    protocol: ip
+    source: any
+    destination: any
+- name: outACL
+  entries:
+  - sequence: 10
+    action: deny
+    protocol: ip
+    source: any
+    destination: any
 ip_igmp_snooping:
   globally_enabled: true
 ip_routing: true
@@ -110,9 +139,8 @@ metadata:
   fabric_name: EOS_DESIGNS_UNIT_TESTS
 port_channel_interfaces:
 - name: Port-Channel11
-  description: inet-cloud_Po11
+  description: Po11
   shutdown: false
-  peer: inet-cloud
   peer_interface: Po11
   peer_type: l3_port_channel
   switchport:
@@ -126,11 +154,28 @@ port_channel_interfaces:
   peer: inet-cloud-sub100
   peer_interface: Po11.100
   peer_type: l3_port_channel
+- name: Port-Channel11.1111
+  description: inet-cloud-sub1111_Po11.111
+  shutdown: true
+  encapsulation_dot1q:
+    vlan: 1111
+  ip_address: 10.10.10.11/29
+  peer: inet-cloud-sub1111
+  peer_interface: Po11.111
+  peer_type: l3_port_channel
 - name: Port-Channel22
   description: inet-cloud_Po22
   shutdown: false
   peer: inet-cloud
   peer_interface: Po22
+  peer_type: l3_port_channel
+  switchport:
+    enabled: false
+- name: Port-Channel23
+  description: inet-cloud_Po23
+  shutdown: false
+  peer: inet-cloud
+  peer_interface: Po23
   peer_type: l3_port_channel
   switchport:
     enabled: false
@@ -164,6 +209,13 @@ port_channel_interfaces:
     sampled: FT_Test
   peer: inet-cloud-sub100
   peer_interface: Po1111.100
+  peer_type: l3_port_channel
+- name: Port-Channel1111.199
+  shutdown: false
+  encapsulation_dot1q:
+    vlan: 199
+  vrf: TESTING
+  ip_address: 1.1.1.40/29
   peer_type: l3_port_channel
 - name: Port-Channel1111.200
   description: inet-cloud_Po1111.200

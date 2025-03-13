@@ -38683,11 +38683,11 @@ class EosDesigns(EosDesignsRootModel):
                     l3_port_channels: L3PortChannels
                     """
                     List of L3 Port-Channels.
-                    This will create IP routed Port-Channel inside VRF.
+                    This will create IP routed Port-Channels inside the VRF.
 
 
-                    Subclass of AvdList
-                    with `L3PortChannelsItem` items.
+                    Subclass of
+                    AvdList with `L3PortChannelsItem` items.
                     """
                     loopbacks: Loopbacks
                     """
@@ -38930,11 +38930,11 @@ class EosDesigns(EosDesignsRootModel):
                                    Subclass of AvdList with `L3InterfacesItem` items.
                                 l3_port_channels:
                                    List of L3 Port-Channels.
-                                   This will create IP routed Port-Channel inside VRF.
+                                   This will create IP routed Port-Channels inside the VRF.
 
 
-                                   Subclass of AvdList
-                                   with `L3PortChannelsItem` items.
+                                   Subclass of
+                                   AvdList with `L3PortChannelsItem` items.
                                 loopbacks:
                                    List of Loopback interfaces.
                                    This will create Loopback interfaces inside the VRF.

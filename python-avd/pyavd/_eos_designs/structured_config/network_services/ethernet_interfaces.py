@@ -10,7 +10,6 @@ from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
 from pyavd._utils import get_ip_from_ip_prefix
-from pyavd.api.interface_descriptions import InterfaceDescriptionData
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
@@ -80,21 +79,16 @@ class EthernetInterfacesMixin(Protocol):
                 # if not defined explicitly for member interface
                 peer = member_intf.peer if member_intf.peer else l3_port_channel.peer
                 if not interface_description:
-                    interface_description = self.shared_utils.interface_descriptions.underlay_ethernet_interface(
-                        InterfaceDescriptionData(
-                            shared_utils=self.shared_utils,
-                            interface=member_intf.name,
-                            peer=peer,
-                            peer_interface=member_intf.peer_interface,
-                        ),
-                    )
+                    elems = [peer, member_intf.peer_interface]
+                    if elems:
+                        interface_description = "_".join([elem for elem in elems if elem])
 
                 ethernet_interface = EosCliConfigGen.EthernetInterfacesItem(
                     name=member_intf.name,
                     description=interface_description or None,
                     peer_type="l3_port_channel_member",
-                    peer=peer,
-                    peer_interface=member_intf.peer_interface,
+                    peer=peer or None,
+                    peer_interface=member_intf.peer_interface or None,
                     shutdown=not l3_port_channel.enabled,
                     speed=member_intf.speed if member_intf.speed else None,
                 )

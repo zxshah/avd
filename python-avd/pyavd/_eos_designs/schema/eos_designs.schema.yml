@@ -7060,7 +7060,7 @@ $defs:
                 type: list
                 description: 'List of L3 Port-Channels.
 
-                  This will create IP routed Port-Channel inside VRF.
+                  This will create IP routed Port-Channels inside the VRF.
 
                   '
                 items:

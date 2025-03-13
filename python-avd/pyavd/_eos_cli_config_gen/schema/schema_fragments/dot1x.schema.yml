@@ -125,7 +125,7 @@ keys:
                 description: Use period as the delimiter.
               ipv4_ipv6_required:
                 type: bool
-                description: IPv4 filter-id, IPv6 filter-id, Filter-id are required.
+                description: Enable filters for IPv4 and IPv6 traffic.
               multiple:
                 type: bool
                 description: Multiple attribute

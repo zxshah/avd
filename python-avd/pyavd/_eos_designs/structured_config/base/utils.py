@@ -54,7 +54,7 @@ class UtilsMixin(Protocol):
 
             # mgmt_interface is always set (defaults to "Management1") so no need for error handling missing interface.
             source_interfaces.append_new(
-                name=self.shared_utils.mgmt_interface, vrf=self.inputs.mgmt_interface_vrf if self.inputs.mgmt_interface_vrf not in [None, "default"] else None
+                name=self.shared_utils.mgmt_interface, vrf=self.inputs.mgmt_interface_vrf if self.inputs.mgmt_interface_vrf != "default" else None
             )
 
         if include_inband_mgmt_interface:
@@ -72,14 +72,14 @@ class UtilsMixin(Protocol):
 
             source_interfaces.append_new(
                 name=self.shared_utils.inband_mgmt_interface,
-                vrf=self.shared_utils.inband_mgmt_vrf if self.shared_utils.inband_mgmt_vrf not in [None, "default"] else None,
+                vrf=self.shared_utils.inband_mgmt_vrf if self.shared_utils.inband_mgmt_vrf != "default" else None,
             )
 
         return source_interfaces
 
     @cached_property
     def _router_bgp_redistribute_routes(self: AvdStructuredConfigBaseProtocol) -> EosCliConfigGen.RouterBgp.Redistribute | None:
-        """Return structured config for router_bgp.redistribute."""
+        """Return redistribute route settings for router bgp."""
         if not (self.shared_utils.underlay_bgp or self.shared_utils.is_wan_router or self.shared_utils.l3_bgp_neighbors):
             return None
 

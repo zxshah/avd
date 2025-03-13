@@ -25,7 +25,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     @structured_config_contributor
     def application_traffic_recognition(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """Set structured config for application_traffic_recognition if wan router."""
-
         if not self.shared_utils.is_wan_router:
             return
 

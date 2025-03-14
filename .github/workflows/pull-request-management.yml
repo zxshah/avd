@@ -96,8 +96,8 @@ jobs:
               - 'ansible_collections/arista/avd/roles/anta_runner/**/*'
               - 'python-avd/pyavd/_anta/*'
               - 'python-avd/pyavd/_anta/**/*'
-              - 'python-avd/pyavd/api/anta/*'
-              - 'python-avd/pyavd/api/anta/**/*'
+              - 'python-avd/pyavd/api/_anta/*'
+              - 'python-avd/pyavd/api/_anta/**/*'
               - 'python-avd/pyavd/get_device_anta_catalog.py'
 
   # ----------------------------------- #

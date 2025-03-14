@@ -65,7 +65,7 @@ class UtilsMixin(Protocol):
         Return list of merged "port_profiles" where "parent_profile" has been applied.
 
         Leverages a dict of resolved profiles as a cache.
-        
+
         Args:
             profile_name: The name of the port_profile to apply.
             context: A string representing the adapter under which the profile should be applied.

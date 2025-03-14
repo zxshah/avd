@@ -8,7 +8,7 @@ title: Ansible Collection Role anta_runner
   ~ that can be found in the LICENSE file.
   -->
 
-# anta_runner - Preview Integration
+# Preview - anta_runner
 
 !!! warning
     `anta_runner` is in preview. Everything is subject to change and **not officially supported for production environments**.

@@ -254,7 +254,7 @@ anta.tests.vxlan:
       import_role:
         name: arista.avd.anta_runner
       vars:
-        anta_runner_filters:
+        avd_catalogs_filters:
           # Skip VerifyNTP for all devices in the DC1 Ansible inventory group
           - device_list: "{{ groups['DC1'] }}"
             skip_tests: [ VerifyNTP ]

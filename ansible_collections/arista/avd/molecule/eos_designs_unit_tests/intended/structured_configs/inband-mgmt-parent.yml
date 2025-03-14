@@ -34,39 +34,6 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
-- name: Ethernet23
-  description: INBAND-MGMT-IP_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 23
-    mode: active
-  peer: inband-mgmt-ip
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet101
-  description: INBAND-MGMT-MLAG-A_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 101
-    mode: active
-  peer: inband-mgmt-mlag-a
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 101
-- name: Ethernet102
-  description: INBAND-MGMT-MLAG-B_Ethernet1
-  shutdown: false
-  peer: inband-mgmt-mlag-b
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '101'
 - name: Ethernet21
   description: INBAND-MGMT-SUBNET_Ethernet1
   shutdown: false
@@ -93,6 +60,41 @@ ethernet_interfaces:
     enabled: true
     mode: access
     access_vlan: 102
+- name: Ethernet23
+  description: INBAND-MGMT-IP_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 23
+    mode: active
+  peer: inband-mgmt-ip
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet101
+  description: INBAND-MGMT-MLAG-A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 101
+    mode: active
+  peer: inband-mgmt-mlag-a
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 101
+- name: Ethernet102
+  description: INBAND-MGMT-MLAG-B_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 101
+    mode: active
+  peer: inband-mgmt-mlag-b
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 101
 hostname: inband-mgmt-parent
 ip_igmp_snooping:
   globally_enabled: true
@@ -125,20 +127,6 @@ ntp:
     preferred: true
   - name: pool.ntp.org
 port_channel_interfaces:
-- name: Port-Channel23
-  description: INBAND-MGMT-IP_Po1
-  shutdown: false
-  switchport:
-    enabled: true
-    mode: trunk
-- name: Port-Channel101
-  description: inband-mgmt-mlag-test_Po1
-  shutdown: false
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
 - name: Port-Channel21
   description: INBAND-MGMT-SUBNET_Po1
   shutdown: false
@@ -147,6 +135,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '101'
 - name: Port-Channel22
   description: INBAND-MGMT-SUBNET-VRF_Po1
   shutdown: false
@@ -155,6 +145,26 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '102'
+- name: Port-Channel23
+  description: INBAND-MGMT-IP_Po1
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '103'
+- name: Port-Channel101
+  description: inband-mgmt-mlag-test_Po1
+  shutdown: false
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '101'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

@@ -219,6 +219,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '11'
 - name: Port-Channel12
   description: L2_ptp-tests-l2leaf2-ptp-enabled_Port-Channel1
   shutdown: false
@@ -235,6 +237,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '11'
 - name: Port-Channel14
   description: L2_ptp-tests-l2leaf2-ptp-enabled-uplink-disabled_Port-Channel1
   shutdown: false
@@ -242,6 +246,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '11'
 - name: Port-Channel6
   description: SERVER_Endpoint-with-mpass
   shutdown: false

@@ -139,6 +139,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-122,130-131,140-141,150,160-161,210-211,250,310-311,350
 service_routing_protocols_model: multi-agent
 snmp_server:
   contact: example@example.com

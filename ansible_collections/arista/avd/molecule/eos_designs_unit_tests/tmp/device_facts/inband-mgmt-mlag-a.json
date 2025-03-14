@@ -72,6 +72,8 @@
   "endpoint_vlans": "101",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "uplink_switch_port_channel_id": 101,
+    "uplink_port_channel_id": 1,
     "underlay_multicast": false,
     "default_downlink_interfaces": [
       "Ethernet21",

@@ -65,6 +65,8 @@
   "vlans": "11",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "uplink_switch_port_channel_id": 12,
+    "uplink_port_channel_id": 1,
     "underlay_multicast": false
   }
 }

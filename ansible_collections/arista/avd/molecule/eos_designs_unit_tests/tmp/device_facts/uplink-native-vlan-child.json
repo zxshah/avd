@@ -31,6 +31,8 @@
   "vlans": "100",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "uplink_switch_port_channel_id": 2,
+    "uplink_port_channel_id": 2,
     "underlay_multicast": false
   }
 }

@@ -147,25 +147,21 @@ ethernet_interfaces:
 - name: Ethernet1
   description: INBAND-MGMT-PARENT_Ethernet102
   shutdown: false
+  channel_group:
+    id: 1
+    mode: active
   peer: inband-mgmt-parent
   peer_interface: Ethernet102
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '101'
 - name: Ethernet2
   description: INBAND-MGMT-PARENT-VRF_Ethernet102
   shutdown: false
+  channel_group:
+    id: 1
+    mode: active
   peer: inband-mgmt-parent-vrf
   peer_interface: Ethernet102
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: '101'
 hostname: inband-mgmt-mlag-b
 ip_igmp_snooping:
   globally_enabled: true
@@ -205,6 +201,15 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel1
+  description: INBAND-MGMT-PARENT_Po101
+  shutdown: false
+  mlag: 1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '101'
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

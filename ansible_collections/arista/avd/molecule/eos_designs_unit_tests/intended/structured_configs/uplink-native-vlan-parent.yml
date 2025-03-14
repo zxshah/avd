@@ -40,6 +40,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
+      allowed_vlan: '100'
       native_vlan: 100
 - name: Port-Channel2
   description: L2_uplink-native-vlan-child_Port-Channel2
@@ -48,6 +49,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
+      allowed_vlan: '100'
       native_vlan: 200
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true

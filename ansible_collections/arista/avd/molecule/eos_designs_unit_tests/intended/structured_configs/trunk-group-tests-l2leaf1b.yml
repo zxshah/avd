@@ -25,25 +25,21 @@ ethernet_interfaces:
 - name: Ethernet1
   description: L2_trunk-group-tests-l3leaf1a_Ethernet2
   shutdown: false
+  channel_group:
+    id: 1
+    mode: active
   peer: trunk-group-tests-l3leaf1a
   peer_interface: Ethernet2
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 100,110,200,210,300,310,398-399
 - name: Ethernet2
   description: L2_trunk-group-tests-l3leaf1b_Ethernet2
   shutdown: false
+  channel_group:
+    id: 1
+    mode: active
   peer: trunk-group-tests-l3leaf1b
   peer_interface: Ethernet2
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 100,110,200,210,300,310,398-399
 - name: Ethernet12
   description: SERVER_server_with_tg_200_Nic1
   shutdown: false
@@ -94,6 +90,16 @@ port_channel_interfaces:
     trunk:
       groups:
       - CUSTOM_MLAG_TG_NAME
+- name: Port-Channel1
+  description: L2_TRUNK_GROUP_TESTS_L3LEAF1_Port-Channel1
+  shutdown: false
+  mlag: 1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      groups:
+      - UPLINK
 - name: Port-Channel13
   description: portchannel
   shutdown: false

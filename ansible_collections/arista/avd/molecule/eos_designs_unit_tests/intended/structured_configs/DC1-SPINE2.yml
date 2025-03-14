@@ -14,72 +14,6 @@ daemon_terminattr:
 enable_password:
   disabled: true
 ethernet_interfaces:
-- name: Ethernet22
-  description: P2P_LINK_TO_DC1-BL1A_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.254.162/31
-  peer: DC1-BL1A
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet23
-  description: P2P_LINK_TO_DC1-BL1B_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.254.194/31
-  peer: DC1-BL1B
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet24
-  description: P2P_LINK_TO_DC1-BL2A_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.254.226/31
-  peer: DC1-BL2A
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet25
-  description: P2P_LINK_TO_DC1-BL2B_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.255.2/31
-  peer: DC1-BL2B
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet26
-  description: P2P_LINK_TO_DC1-CL1A_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.255.34/31
-  peer: DC1-CL1A
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
-- name: Ethernet27
-  description: P2P_LINK_TO_DC1-CL1B_Ethernet2
-  shutdown: false
-  speed: forced 100gfull
-  mtu: 1500
-  ip_address: 172.31.255.66/31
-  peer: DC1-CL1B
-  peer_interface: Ethernet2
-  peer_type: l3leaf
-  switchport:
-    enabled: false
 - name: Ethernet1/1/1
   description: P2P_LINK_TO_DC1-LEAF1A_Ethernet28
   shutdown: false
@@ -154,6 +88,72 @@ ethernet_interfaces:
   ip_address: 172.31.254.130/31
   peer: DC1-SVC3B
   peer_interface: Ethernet50/1
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet22
+  description: P2P_LINK_TO_DC1-BL1A_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.254.162/31
+  peer: DC1-BL1A
+  peer_interface: Ethernet2
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet23
+  description: P2P_LINK_TO_DC1-BL1B_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.254.194/31
+  peer: DC1-BL1B
+  peer_interface: Ethernet2
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet24
+  description: P2P_LINK_TO_DC1-BL2A_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.254.226/31
+  peer: DC1-BL2A
+  peer_interface: Ethernet2
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet25
+  description: P2P_LINK_TO_DC1-BL2B_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.255.2/31
+  peer: DC1-BL2B
+  peer_interface: Ethernet2
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet26
+  description: P2P_LINK_TO_DC1-CL1A_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.255.34/31
+  peer: DC1-CL1A
+  peer_interface: Ethernet2
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet27
+  description: P2P_LINK_TO_DC1-CL1B_Ethernet2
+  shutdown: false
+  speed: forced 100gfull
+  mtu: 1500
+  ip_address: 172.31.255.66/31
+  peer: DC1-CL1B
+  peer_interface: Ethernet2
   peer_type: l3leaf
   switchport:
     enabled: false
@@ -286,36 +286,6 @@ router_bgp:
     send_community: all
     maximum_routes: 0
   neighbors:
-  - ip_address: 172.31.254.163
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65104'
-    peer: DC1-BL1A
-    description: DC1-BL1A_Ethernet2
-  - ip_address: 172.31.254.195
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65105'
-    peer: DC1-BL1B
-    description: DC1-BL1B_Ethernet2
-  - ip_address: 172.31.254.227
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65106'
-    peer: DC1-BL2A
-    description: DC1-BL2A_Ethernet2
-  - ip_address: 172.31.255.3
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65107'
-    peer: DC1-BL2B
-    description: DC1-BL2B_Ethernet2
-  - ip_address: 172.31.255.35
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65108'
-    peer: DC1-CL1A
-    description: DC1-CL1A_Ethernet2
-  - ip_address: 172.31.255.67
-    peer_group: UNDERLAY-PEERS
-    remote_as: '65109'
-    peer: DC1-CL1B
-    description: DC1-CL1B_Ethernet2
   - ip_address: 172.31.254.3
     peer_group: UNDERLAY-PEERS
     remote_as: '65101'
@@ -351,6 +321,36 @@ router_bgp:
     remote_as: '65103'
     peer: DC1-SVC3B
     description: DC1-SVC3B_Ethernet50/1
+  - ip_address: 172.31.254.163
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65104'
+    peer: DC1-BL1A
+    description: DC1-BL1A_Ethernet2
+  - ip_address: 172.31.254.195
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65105'
+    peer: DC1-BL1B
+    description: DC1-BL1B_Ethernet2
+  - ip_address: 172.31.254.227
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65106'
+    peer: DC1-BL2A
+    description: DC1-BL2A_Ethernet2
+  - ip_address: 172.31.255.3
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65107'
+    peer: DC1-BL2B
+    description: DC1-BL2B_Ethernet2
+  - ip_address: 172.31.255.35
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65108'
+    peer: DC1-CL1A
+    description: DC1-CL1A_Ethernet2
+  - ip_address: 172.31.255.67
+    peer_group: UNDERLAY-PEERS
+    remote_as: '65109'
+    peer: DC1-CL1B
+    description: DC1-CL1B_Ethernet2
   - ip_address: 172.31.255.131
     peer_group: UNDERLAY-PEERS
     remote_as: '65110'

@@ -154,9 +154,9 @@ class EthernetInterfacesMixin(Protocol):
                     ethernet_interface._deepmerge(main_interface)
                     self.structured_config.ethernet_interfaces.extend(ethernet_subinterfaces)
 
-                elif (channel_group_id := link.channel_group_id) is not None:
+                elif link.channel_group_id is not None:
                     # Render port-channel member
-                    ethernet_interface.channel_group._update(id=int(channel_group_id), mode="active")
+                    ethernet_interface.channel_group._update(id=link.channel_group_id, mode="active")
                     if link.inband_ztp_vlan:
                         ethernet_interface.switchport._update(enabled=True, mode="access", access_vlan=link.inband_ztp_vlan)
                 else:
@@ -171,12 +171,11 @@ class EthernetInterfacesMixin(Protocol):
                         spanning_tree_portfast=link.spanning_tree_portfast,
                         flow_tracker=self.shared_utils.new_get_flow_tracker(link.flow_tracking, output_type=EosCliConfigGen.EthernetInterfacesItem.FlowTracker),
                     )
-                    if link_tracking_groups := link.link_tracking_groups:
-                        for link_tracking_group in link_tracking_groups:
-                            ethernet_interface.link_tracking_groups.append_new(
-                                name=link_tracking_group.name,
-                                direction=link_tracking_group.direction,
-                            )
+                    for link_tracking_group in link.link_tracking_groups:
+                        ethernet_interface.link_tracking_groups.append_new(
+                            name=link_tracking_group.name,
+                            direction=link_tracking_group.direction,
+                        )
 
                 self.structured_config.ethernet_interfaces.append(ethernet_interface)
 

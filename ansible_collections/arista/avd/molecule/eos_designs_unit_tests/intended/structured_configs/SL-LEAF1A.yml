@@ -75,6 +75,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: none
 - name: Port-Channel28
   description: L2_SL-MLEAF1_Port-Channel16
   shutdown: false
@@ -82,6 +84,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: none
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

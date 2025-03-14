@@ -64,10 +64,10 @@ class PortChannelInterfacesMixin(Protocol):
             port_channel_interface.switchport._update(enabled=True, mode="trunk")
             port_channel_interface.switchport.trunk.native_vlan = link.native_vlan
 
-            if (trunk_groups := link.trunk_groups) is not None:
-                port_channel_interface.switchport.trunk.groups.extend(trunk_groups)
-            elif (vlans := link.vlans) is not None:
-                port_channel_interface.switchport.trunk.allowed_vlan = vlans
+            if link.trunk_groups:
+                port_channel_interface.switchport.trunk.groups.extend(link.trunk_groups)
+            elif link.vlans is not None:
+                port_channel_interface.switchport.trunk.allowed_vlan = link.vlans
 
             port_channel_interface.sflow.enable = link.sflow_enabled
 

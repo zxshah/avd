@@ -38,26 +38,22 @@ ethernet_interfaces:
   description: DC1-LEAF2A_Ethernet8
   shutdown: false
   speed: forced 10000
+  channel_group:
+    id: 1
+    mode: active
   peer: DC1-LEAF2A
   peer_interface: Ethernet8
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Ethernet2
   description: DC1-LEAF2B_Ethernet8
   shutdown: false
   speed: forced 10000
+  channel_group:
+    id: 1
+    mode: active
   peer: DC1-LEAF2B
   peer_interface: Ethernet8
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Ethernet5
   description: server03_ESI_L2LEAF_Eth2
   shutdown: false
@@ -142,6 +138,15 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel1
+  description: DC1_LEAF2_Po7
+  shutdown: false
+  mlag: 1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel5
   description: server03_ESI_L2LEAF_PortChanne1
   shutdown: false

@@ -104,6 +104,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '66'
 router_bgp:
   as: '65000'
   router_id: 192.168.42.3

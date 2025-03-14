@@ -33,6 +33,8 @@
       "peer_node_group": "SL-LEAF0",
       "node_group": "SL-LEAF1",
       "peer_mlag": false,
+      "channel_group_id": 27,
+      "peer_channel_group_id": 27,
       "vlans": "none",
       "structured_config": {}
     }
@@ -43,6 +45,8 @@
   "vlans": "",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "uplink_switch_port_channel_id": 28,
+    "uplink_port_channel_id": 27,
     "underlay_multicast": false
   }
 }

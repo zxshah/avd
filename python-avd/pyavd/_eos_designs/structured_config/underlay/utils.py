@@ -54,8 +54,6 @@ class UtilsMixin(Protocol):
         downlinks_flow_tracking = (
             # Cast as uplink model since that is used in the facts' uplink which we reuse below model
             self.inputs.fabric_flow_tracking.downlinks._cast_as(EosDesigns.FabricFlowTracking.Uplinks)
-            if self.inputs.fabric_flow_tracking.downlinks.enabled
-            else None
         )
 
         for peer in self._avd_peers:
@@ -112,7 +110,7 @@ class UtilsMixin(Protocol):
                             downlink.subinterfaces.append(downlink_subinterface)
                     underlay_links.append(downlink)
 
-        return underlay_links
+        return underlay_links._natural_sorted()
 
     @cached_property
     def _underlay_vlan_trunk_groups(self: AvdStructuredConfigUnderlayProtocol) -> list:

@@ -3,7 +3,6 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-import re
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
@@ -36,31 +35,20 @@ class UplinksMixin(Protocol):
 
         For MLAG primary validate that the port-channel id falls within 1-2000 since we also use this ID as MLAG ID.
         """
-        uplink_port_channel_id = self.shared_utils.node_config.uplink_port_channel_id
+        if self.shared_utils.mlag_role != "secondary":
+            # MLAG Primary or not MLAG.
+            return self.facts.only_used_for_peer_facts.uplink_port_channel_id
 
-        if self.shared_utils.mlag_role == "secondary":
-            # MLAG Secondary
-            peer_uplink_port_channel_id = self.shared_utils.mlag_peer_facts.only_used_for_peer_facts.uplink_port_channel_id
-            # check that port-channel IDs are the same as on primary
-            if uplink_port_channel_id is not None and uplink_port_channel_id != peer_uplink_port_channel_id:
-                msg = (
-                    f"'uplink_port_channel_id' is set to {uplink_port_channel_id} and is not matching {peer_uplink_port_channel_id} set on MLAG peer."
-                    " The 'uplink_port_channel_id' must be matching on MLAG peers."
-                )
-                raise AristaAvdError(msg)
-            return peer_uplink_port_channel_id
-
-        # MLAG Primary or not MLAG.
-        if uplink_port_channel_id is None:
-            # Overwriting uplink_port_channel_id
-            uplink_port_channel_id = int("".join(re.findall(r"\d", self.shared_utils.uplink_interfaces[0])))
-
-        # produce an error if the switch is MLAG and port-channel ID is above 2000
-        if self.shared_utils.mlag and not 1 <= uplink_port_channel_id <= 2000:
-            msg = f"'uplink_port_channel_id' must be between 1 and 2000 for MLAG switches. Got '{uplink_port_channel_id}'."
+        # MLAG Secondary
+        peer_uplink_port_channel_id = self.shared_utils.mlag_peer_facts.only_used_for_peer_facts.uplink_port_channel_id
+        # Check that port-channel IDs are the same as on primary when set manually.
+        if (uplink_port_channel_id := self.shared_utils.node_config.uplink_port_channel_id) and uplink_port_channel_id != peer_uplink_port_channel_id:
+            msg = (
+                f"'uplink_port_channel_id' is set to {uplink_port_channel_id} and is not matching {peer_uplink_port_channel_id} set on MLAG peer."
+                " The 'uplink_port_channel_id' must be matching on MLAG peers."
+            )
             raise AristaAvdError(msg)
-
-        return uplink_port_channel_id
+        return peer_uplink_port_channel_id
 
     @cached_property
     def _uplink_switch_port_channel_id(self: FactsStageTwoProtocol) -> int | None:
@@ -75,32 +63,22 @@ class UplinksMixin(Protocol):
         If the *uplink_switch* is in MLAG,  validate that the port-channel id falls within 1-2000
         since we also use this ID as MLAG ID on the *uplink switch*.
         """
-        uplink_switch_port_channel_id = self.shared_utils.node_config.uplink_switch_port_channel_id
+        if self.shared_utils.mlag_role != "secondary":
+            # MLAG Primary or not MLAG.
+            return self.facts.only_used_for_peer_facts.uplink_switch_port_channel_id
 
-        if self.shared_utils.mlag_role == "secondary":
-            # MLAG Secondary
-            peer_uplink_switch_port_channel_id = self.shared_utils.mlag_peer_facts.only_used_for_peer_facts.uplink_switch_port_channel_id
-            # check that port-channel IDs are the same as on primary
-            if uplink_switch_port_channel_id is not None and uplink_switch_port_channel_id != peer_uplink_switch_port_channel_id:
-                msg = (
-                    f"'uplink_switch_port_channel_id' is set to {uplink_switch_port_channel_id} and is not matching {peer_uplink_switch_port_channel_id} "
-                    "set on MLAG peer. The 'uplink_switch_port_channel_id' must be matching on MLAG peers."
-                )
-                raise AristaAvdError(msg)
-            return peer_uplink_switch_port_channel_id
-
-        # MLAG Primary or not MLAG.
-        if uplink_switch_port_channel_id is None:
-            # Overwriting uplink_switch_port_channel_id
-            uplink_switch_port_channel_id = int("".join(re.findall(r"\d", self.shared_utils.uplink_switch_interfaces[0])))
-
-        # produce an error if the uplink switch is MLAG and port-channel ID is above 2000
-        uplink_switch_facts = self.shared_utils.get_peer_facts(self.shared_utils.uplink_switches[0])
-        if uplink_switch_facts.only_used_for_peer_facts.mlag and not 1 <= uplink_switch_port_channel_id <= 2000:
-            msg = f"'uplink_switch_port_channel_id' must be between 1 and 2000 for MLAG switches. Got '{uplink_switch_port_channel_id}'."
+        # MLAG Secondary
+        peer_uplink_switch_port_channel_id = self.shared_utils.mlag_peer_facts.only_used_for_peer_facts.uplink_switch_port_channel_id
+        # Check that port-channel IDs are the same as on primary when set manually.
+        if (
+            uplink_switch_port_channel_id := self.shared_utils.node_config.uplink_switch_port_channel_id
+        ) is not None and uplink_switch_port_channel_id != peer_uplink_switch_port_channel_id:
+            msg = (
+                f"'uplink_switch_port_channel_id' is set to {uplink_switch_port_channel_id} and is not matching {peer_uplink_switch_port_channel_id} "
+                "set on MLAG peer. The 'uplink_switch_port_channel_id' must be matching on MLAG peers."
+            )
             raise AristaAvdError(msg)
-
-        return uplink_switch_port_channel_id
+        return peer_uplink_switch_port_channel_id
 
     @facts_contributor
     def uplinks(self: FactsStageTwoProtocol) -> None:

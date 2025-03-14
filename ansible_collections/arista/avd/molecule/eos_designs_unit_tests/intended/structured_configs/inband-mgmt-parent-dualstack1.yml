@@ -104,19 +104,6 @@ ethernet_interfaces:
   peer: inband-mgmt-parent-dualstack2
   peer_interface: Ethernet20
   peer_type: mlag_peer
-- name: Ethernet25
-  description: INBAND-MGMT-DUALSTACK-IPS_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 25
-    mode: active
-  peer: inband-mgmt-dualstack-ips
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 105
 - name: Ethernet24
   description: INBAND-MGMT-DUALSTACK-SUBNETS_Ethernet1
   shutdown: false
@@ -130,6 +117,19 @@ ethernet_interfaces:
     enabled: true
     mode: access
     access_vlan: 104
+- name: Ethernet25
+  description: INBAND-MGMT-DUALSTACK-IPS_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 25
+    mode: active
+  peer: inband-mgmt-dualstack-ips
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 105
 hostname: inband-mgmt-parent-dualstack1
 ip_igmp_snooping:
   globally_enabled: true
@@ -183,15 +183,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel25
-  description: INBAND-MGMT-DUALSTACK-IPS_Po1
-  shutdown: false
-  mlag: 25
-  lacp_fallback_timeout: 30
-  lacp_fallback_mode: individual
-  switchport:
-    enabled: true
-    mode: trunk
 - name: Port-Channel24
   description: INBAND-MGMT-DUALSTACK-SUBNETS_Po1
   shutdown: false
@@ -201,6 +192,19 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: '104'
+- name: Port-Channel25
+  description: INBAND-MGMT-DUALSTACK-IPS_Po1
+  shutdown: false
+  mlag: 25
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '105'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

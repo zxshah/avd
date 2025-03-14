@@ -14,6 +14,71 @@ daemon_terminattr:
 enable_password:
   disabled: true
 ethernet_interfaces:
+- name: Ethernet7
+  description: DC1-L2LEAF1A_Ethernet1
+  shutdown: false
+  speed: forced 10000
+  channel_group:
+    id: 7
+    mode: active
+  peer: DC1-L2LEAF1A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet8
+  description: DC1-L2LEAF1B_Ethernet1
+  shutdown: false
+  speed: forced 10000
+  channel_group:
+    id: 7
+    mode: active
+  peer: DC1-L2LEAF1B
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet9
+  description: DC1-L2LEAF3A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 9
+    mode: active
+  peer: DC1-L2LEAF3A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet13
+  description: DC1-L2LEAF4A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 1013
+    mode: active
+  peer: DC1-L2LEAF4A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet14/1
+  description: DC1.L2LEAF5A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 141
+    mode: active
+  peer: DC1.L2LEAF5A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet15/1
+  description: DC1.L2LEAF5B_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 141
+    mode: active
+  peer: DC1.L2LEAF5B
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet30
+  description: DC1.L2LEAF6A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 30
+    mode: active
+  peer: DC1.L2LEAF6A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
 - name: Ethernet49/1
   description: P2P_LINK_TO_DC1-SPINE1_Ethernet3/1
   shutdown: false
@@ -102,75 +167,6 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
-- name: Ethernet7
-  description: DC1-L2LEAF1A_Ethernet1
-  shutdown: false
-  speed: forced 10000
-  channel_group:
-    id: 7
-    mode: active
-  peer: DC1-L2LEAF1A
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet8
-  description: DC1-L2LEAF1B_Ethernet1
-  shutdown: false
-  speed: forced 10000
-  peer: DC1-L2LEAF1B
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 110-112,120-121,130-131,160-161
-- name: Ethernet9
-  description: DC1-L2LEAF3A_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 9
-    mode: active
-  peer: DC1-L2LEAF3A
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet13
-  description: DC1-L2LEAF4A_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 1013
-    mode: active
-  peer: DC1-L2LEAF4A
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet14/1
-  description: DC1.L2LEAF5A_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 141
-    mode: active
-  peer: DC1.L2LEAF5A
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-- name: Ethernet15/1
-  description: DC1.L2LEAF5B_Ethernet1
-  shutdown: false
-  peer: DC1.L2LEAF5B
-  peer_interface: Ethernet1
-  peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 110-112,120-121,130-131,160-161
-- name: Ethernet30
-  description: DC1.L2LEAF6A_Ethernet1
-  shutdown: false
-  channel_group:
-    id: 30
-    mode: active
-  peer: DC1.L2LEAF6A
-  peer_interface: Ethernet1
-  peer_type: l2leaf
 - name: Ethernet22
   shutdown: false
   vrf: Tenant_A_OSPF
@@ -433,6 +429,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel9
   description: DC1-L2LEAF3A_Po1
   shutdown: false
@@ -443,6 +441,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel1013
   description: DC1-L2LEAF4A_Po1001
   shutdown: false
@@ -453,6 +453,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel141
   description: DC1_L2LEAF5_Po1
   shutdown: false
@@ -463,6 +465,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel30
   description: DC1_L2LEAF6_Po1
   shutdown: false
@@ -473,6 +477,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,140-141,160-161,210-211,310-311,410-413,450-452
 - name: Port-Channel10
   description: server01_MLAG_PortChanne1
   shutdown: false

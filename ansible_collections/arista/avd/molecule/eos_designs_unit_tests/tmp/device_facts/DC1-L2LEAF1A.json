@@ -128,6 +128,8 @@
   "local_short_esi": "0808:0707:0606",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "uplink_switch_port_channel_id": 7,
+    "uplink_port_channel_id": 1,
     "underlay_multicast": false
   }
 }

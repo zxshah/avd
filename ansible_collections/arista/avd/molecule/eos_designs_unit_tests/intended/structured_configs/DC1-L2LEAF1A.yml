@@ -145,6 +145,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,160-161
 - name: Port-Channel5
   description: server03_ESI_L2LEAF_PortChanne1
   shutdown: false

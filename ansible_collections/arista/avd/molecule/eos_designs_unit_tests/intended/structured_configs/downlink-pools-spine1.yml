@@ -34,16 +34,6 @@ ethernet_interfaces:
   peer_type: l3leaf
   switchport:
     enabled: false
-- name: Ethernet15
-  description: P2P_downlink-pools-l3leaf3_Ethernet3
-  shutdown: false
-  mtu: 9214
-  ip_address: 10.0.3.0/31
-  peer: downlink-pools-l3leaf3
-  peer_interface: Ethernet3
-  peer_type: l3leaf
-  switchport:
-    enabled: false
 - name: Ethernet6
   description: P2P_downlink-pools-l3leaf4_Ethernet1
   shutdown: false
@@ -51,6 +41,16 @@ ethernet_interfaces:
   ip_address: 10.0.1.6/31
   peer: downlink-pools-l3leaf4
   peer_interface: Ethernet1
+  peer_type: l3leaf
+  switchport:
+    enabled: false
+- name: Ethernet15
+  description: P2P_downlink-pools-l3leaf3_Ethernet3
+  shutdown: false
+  mtu: 9214
+  ip_address: 10.0.3.0/31
+  peer: downlink-pools-l3leaf3
+  peer_interface: Ethernet3
   peer_type: l3leaf
   switchport:
     enabled: false
@@ -135,16 +135,16 @@ router_bgp:
     remote_as: '65029'
     peer: downlink-pools-l3leaf3
     description: downlink-pools-l3leaf3_Ethernet1
-  - ip_address: 10.0.3.1
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65029'
-    peer: downlink-pools-l3leaf3
-    description: downlink-pools-l3leaf3_Ethernet3
   - ip_address: 10.0.1.7
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65039'
     peer: downlink-pools-l3leaf4
     description: downlink-pools-l3leaf4_Ethernet1
+  - ip_address: 10.0.3.1
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65029'
+    peer: downlink-pools-l3leaf3
+    description: downlink-pools-l3leaf3_Ethernet3
   - ip_address: 10.0.3.19
     peer_group: IPv4-UNDERLAY-PEERS
     remote_as: '65039'

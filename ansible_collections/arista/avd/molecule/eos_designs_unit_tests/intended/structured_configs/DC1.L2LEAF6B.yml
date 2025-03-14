@@ -35,14 +35,12 @@ ethernet_interfaces:
 - name: Ethernet1
   description: DC1-LEAF2B_Ethernet31
   shutdown: false
+  channel_group:
+    id: 1
+    mode: active
   peer: DC1-LEAF2B
   peer_interface: Ethernet31
   peer_type: l3leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 110-112,120-121,130-131,140-141,160-161,210-211,310-311,410-413,450-452
 hostname: DC1.L2LEAF6B
 ip_igmp_snooping:
   globally_enabled: true
@@ -119,6 +117,15 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel1
+  description: DC1_LEAF2_Po30
+  shutdown: false
+  mlag: 1
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 110-112,120-121,130-131,140-141,160-161,210-211,310-311,410-413,450-452
 service_routing_protocols_model: multi-agent
 snmp_server:
   contact: example@example.com

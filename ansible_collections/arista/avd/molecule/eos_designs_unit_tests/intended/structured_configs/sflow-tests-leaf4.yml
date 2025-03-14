@@ -143,6 +143,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 11,4092
 - name: Port-Channel17
   description: L2_sflow-tests-l2-leaf2_Port-Channel1
   shutdown: false
@@ -152,6 +154,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 11,4092
 - name: Port-Channel13
   description: SERVER_port-channel-interface-false
   shutdown: false

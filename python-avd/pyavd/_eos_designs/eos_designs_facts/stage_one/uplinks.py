@@ -43,13 +43,3 @@ class UplinksMixin(Protocol):
     def uplink_type(self: FactsStageOneProtocol) -> None:
         """Exposed in avd_switch_facts."""
         self.facts.only_used_for_peer_facts.uplink_type = self.shared_utils.node_config.uplink_type
-
-    @facts_contributor
-    def uplink_switch_port_channel_id(self: FactsStageOneProtocol) -> None:
-        """Exposed in avd_switch_facts."""
-        self.facts.only_used_for_peer_facts.uplink_switch_port_channel_id = self.shared_utils.node_config.uplink_switch_port_channel_id
-
-    @facts_contributor
-    def uplink_port_channel_id(self: FactsStageOneProtocol) -> None:
-        """Exposed in avd_switch_facts."""
-        self.facts.only_used_for_peer_facts.uplink_port_channel_id = self.shared_utils.node_config.uplink_port_channel_id

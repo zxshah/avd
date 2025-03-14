@@ -34,14 +34,12 @@ ethernet_interfaces:
 - name: Ethernet28
   description: L2_SL-LEAF1B_Ethernet27
   shutdown: false
+  channel_group:
+    id: 27
+    mode: active
   peer: SL-LEAF1B
   peer_interface: Ethernet27
   peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
 - name: Ethernet41
   description: L2_SL-LEAF2A_Ethernet41
   shutdown: false
@@ -63,25 +61,21 @@ ethernet_interfaces:
 - name: Ethernet43
   description: L2_SL-LEAF2B_Ethernet41
   shutdown: false
+  channel_group:
+    id: 41
+    mode: active
   peer: SL-LEAF2B
   peer_interface: Ethernet41
   peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
 - name: Ethernet44
   description: L2_SL-LEAF2B_Ethernet42
   shutdown: false
+  channel_group:
+    id: 41
+    mode: active
   peer: SL-LEAF2B
   peer_interface: Ethernet42
   peer_type: l2leaf
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
 hostname: SL-LEAF0B
 ip_igmp_snooping:
   globally_enabled: true
@@ -117,6 +111,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: none
 - name: Port-Channel41
   description: L2_SL-LEAF2_Port-Channel41
   shutdown: false
@@ -124,6 +120,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: none
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

@@ -8,6 +8,7 @@ from hashlib import sha256
 from typing import TYPE_CHECKING
 
 from pyavd._eos_designs.eos_designs_facts.facts_generator import FactsGenerator, facts_contributor
+from pyavd._errors import AristaAvdError
 from pyavd._utils import default
 from pyavd.j2filters import natural_sort
 
@@ -65,6 +66,50 @@ class FactsStageOneAndAHalf(FactsGenerator):
         """Exposed in avd_switch_facts."""
         if self.shared_utils.underlay_router is True:
             self.facts.bgp_as = self.shared_utils.bgp_as
+
+    @facts_contributor
+    def uplink_switch_port_channel_id(self: FactsStageOneAndAHalf) -> None:
+        """Exposed in avd_switch_facts."""
+        if self.shared_utils.uplink_type != "port-channel":
+            return
+
+        uplink_switch_port_channel_id = self.shared_utils.node_config.uplink_switch_port_channel_id
+        if uplink_switch_port_channel_id is None:
+            if not self.shared_utils.uplink_switch_interfaces:
+                # Did not find an uplink_switch_interface, so this device probably doesn't have any uplinks.
+                return
+            # Overwriting uplink_switch_port_channel_id
+            uplink_switch_port_channel_id = int("".join(re.findall(r"\d", self.shared_utils.uplink_switch_interfaces[0])))
+
+        # produce an error if the uplink switch is MLAG and port-channel ID is above 2000
+        if not 1 <= uplink_switch_port_channel_id <= 2000:
+            uplink_switch_facts = self.shared_utils.get_peer_facts(self.shared_utils.uplink_switches[0])
+            if uplink_switch_facts.only_used_for_peer_facts.mlag:
+                msg = f"'uplink_switch_port_channel_id' must be between 1 and 2000 for MLAG switches. Got '{uplink_switch_port_channel_id}'."
+                raise AristaAvdError(msg)
+
+        self.facts.only_used_for_peer_facts.uplink_switch_port_channel_id = uplink_switch_port_channel_id
+
+    @facts_contributor
+    def uplink_port_channel_id(self: FactsStageOneAndAHalf) -> None:
+        """Exposed in avd_switch_facts."""
+        if self.shared_utils.uplink_type != "port-channel":
+            return
+
+        uplink_port_channel_id = self.shared_utils.node_config.uplink_port_channel_id
+        if uplink_port_channel_id is None:
+            if not self.shared_utils.uplink_interfaces:
+                # Did not find an uplink_interface, so this device probably doesn't have any uplinks.
+                return
+            # Overwriting uplink_port_channel_id
+            uplink_port_channel_id = int("".join(re.findall(r"\d", self.shared_utils.uplink_interfaces[0])))
+
+        # produce an error if the switch is MLAG and port-channel ID is above 2000
+        if self.shared_utils.mlag and not 1 <= uplink_port_channel_id <= 2000:
+            msg = f"'uplink_port_channel_id' must be between 1 and 2000 for MLAG switches. Got '{uplink_port_channel_id}'."
+            raise AristaAvdError(msg)
+
+        self.facts.only_used_for_peer_facts.uplink_port_channel_id = uplink_port_channel_id
 
     def __init__(
         self, hostvars: Mapping, inputs: EosDesigns, facts: EosDesignsFacts, shared_utils: SharedUtilsProtocol, peer_facts: dict[str, EosDesignsFacts]

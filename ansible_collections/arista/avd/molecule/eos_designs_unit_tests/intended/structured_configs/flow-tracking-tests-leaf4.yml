@@ -171,6 +171,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 11,4092
 - name: Port-Channel32
   description: L2_flow-tracking-tests-l2-leaf2_Port-Channel1
   shutdown: false
@@ -178,6 +180,8 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
+    trunk:
+      allowed_vlan: 11,4092
 - name: Port-Channel14
   description: SERVER_port-channel-interface-true
   shutdown: false

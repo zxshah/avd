@@ -43,6 +43,8 @@
       "type": "underlay_l2",
       "node_group": "inband-mgmt-mlag-test",
       "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 101,
       "vlans": "101",
       "structured_config": {}
     },
@@ -55,6 +57,8 @@
       "type": "underlay_l2",
       "node_group": "inband-mgmt-mlag-test",
       "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 101,
       "vlans": "101",
       "structured_config": {}
     }
@@ -68,6 +72,8 @@
   "endpoint_vlans": "101",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "uplink_switch_port_channel_id": 102,
+    "uplink_port_channel_id": 1,
     "underlay_multicast": false,
     "default_downlink_interfaces": [
       "Ethernet21",

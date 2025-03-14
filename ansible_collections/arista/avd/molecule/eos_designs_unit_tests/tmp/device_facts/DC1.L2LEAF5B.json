@@ -95,6 +95,8 @@
       "peer_node_group": "DC1_LEAF2",
       "node_group": "DC1_L2LEAF5",
       "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 141,
       "vlans": "110-112,120-121,130-131,160-161",
       "peer_short_esi": "fa91:ce62:ce95",
       "structured_config": {}
@@ -109,6 +111,8 @@
       "peer_node_group": "DC1_LEAF2",
       "node_group": "DC1_L2LEAF5",
       "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 141,
       "vlans": "110-112,120-121,130-131,160-161",
       "peer_short_esi": "fa91:ce62:ce95",
       "structured_config": {}
@@ -122,6 +126,8 @@
   "local_short_esi": "4738:c516:b289",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "uplink_switch_port_channel_id": 151,
+    "uplink_port_channel_id": 1,
     "underlay_multicast": false
   }
 }

@@ -298,9 +298,9 @@ class EosDesignsFacts(AvdModel):
             vrf: str
             encapsulation_dot1q_vlan: int
             ipv6_enable: bool | None
-            prefix_length: int
-            ip_address: str
-            peer_ip_address: str
+            prefix_length: int | None
+            ip_address: str | None
+            peer_ip_address: str | None
             structured_config: dict
             """
             Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
@@ -326,9 +326,9 @@ class EosDesignsFacts(AvdModel):
                     vrf: str | UndefinedType = Undefined,
                     encapsulation_dot1q_vlan: int | UndefinedType = Undefined,
                     ipv6_enable: bool | None | UndefinedType = Undefined,
-                    prefix_length: int | UndefinedType = Undefined,
-                    ip_address: str | UndefinedType = Undefined,
-                    peer_ip_address: str | UndefinedType = Undefined,
+                    prefix_length: int | None | UndefinedType = Undefined,
+                    ip_address: str | None | UndefinedType = Undefined,
+                    peer_ip_address: str | None | UndefinedType = Undefined,
                     structured_config: dict | UndefinedType = Undefined,
                 ) -> None:
                     """

@@ -15,6 +15,7 @@
   "mgmt_gateway": "192.168.200.5",
   "mgmt_interface_vrf": "MGMT",
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

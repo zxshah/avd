@@ -5,6 +5,7 @@
   "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
   "type": "l2leaf",
   "underlay_rfc5549": true,
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

@@ -24,6 +24,7 @@
   },
   "type": "l2leaf",
   "underlay_multicast": true,
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

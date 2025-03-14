@@ -141,6 +141,16 @@ ethernet_interfaces:
   peer_type: l3_interface
   switchport:
     enabled: false
+- name: Ethernet4000
+  description: My test
+  shutdown: false
+  mtu: 1500
+  ip_address: 10.3.2.1/21
+  peer: MY-own-peer
+  peer_interface: Ethernet123
+  peer_type: my_precious
+  switchport:
+    enabled: false
 event_handlers:
 - name: evpn-blacklist-recovery
   actions:
@@ -205,6 +215,8 @@ ip_name_servers:
   vrf: MGMT
 - ip_address: 2001:db8::2
   vrf: MGMT
+- ip_address: 1.1.1.1
+  vrf: MGMT
 ip_routing: true
 ip_virtual_router_mac_address: 00:dc:00:00:00:0a
 is_deployed: true
@@ -262,16 +274,7 @@ metadata:
       value: leaf
     - name: topology_hint_rack
       value: DC1_BL1
-ntp:
-  local_interface:
-    name: Management99
-    vrf: MGMT
-  servers:
-  - name: 192.168.200.5
-    preferred: true
-    vrf: MGMT
-  - name: 2001:db8::3
-    vrf: MGMT
+ntp: null
 platform:
   sand:
     lag:
@@ -667,7 +670,7 @@ sflow:
     destinations:
     - destination: 192.168.200.10
     - destination: 10.0.200.90
-    source_interface: Management0
+    source_interface: Management99
 snmp_server:
   contact: example@example.com
   location: EOS_DESIGNS_UNIT_TESTS DC1-BL1A

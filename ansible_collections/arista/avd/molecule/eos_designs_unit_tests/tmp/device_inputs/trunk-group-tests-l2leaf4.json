@@ -7,6 +7,7 @@
   "mgmt_gateway": "1.1.1.1",
   "pod_name": "TRUNK_GROUP_TESTS",
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

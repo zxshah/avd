@@ -150,7 +150,7 @@ class ActionModule(ActionBase):
                 continue
 
             # Load input vars into the EosDesigns data class.
-            host_inputs = EosDesigns._from_dict(host_hostvars, load_custom_structured_config=False)
+            host_inputs = EosDesigns._from_dict(host_hostvars)
 
             # Save the validated and coerced inputs
             write_file(

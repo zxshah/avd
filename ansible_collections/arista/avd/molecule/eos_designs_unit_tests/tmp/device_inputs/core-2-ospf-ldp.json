@@ -418,6 +418,7 @@
   "underlay_ospf_process_id": 101,
   "underlay_routing_protocol": "ospf-ldp",
   "use_router_general_for_router_id": true,
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

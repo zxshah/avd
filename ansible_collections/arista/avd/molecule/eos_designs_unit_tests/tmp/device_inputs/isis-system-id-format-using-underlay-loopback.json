@@ -10,6 +10,7 @@
   "overlay_routing_protocol": "ibgp",
   "type": "pe",
   "underlay_routing_protocol": "isis-sr",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

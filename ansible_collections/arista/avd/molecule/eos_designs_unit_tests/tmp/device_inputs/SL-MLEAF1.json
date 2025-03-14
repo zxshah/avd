@@ -5,6 +5,7 @@
   "fabric_name": "SINGLE_LINK_TO_MLAG_PAIR",
   "mlag_on_orphan_port_channel_downlink": true,
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

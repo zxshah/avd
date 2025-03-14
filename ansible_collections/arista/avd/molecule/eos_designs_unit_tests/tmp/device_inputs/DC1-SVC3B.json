@@ -700,6 +700,7 @@
   "type": "l3leaf",
   "underlay_l2_ethernet_description": "{peer!u}_{peer_interface}",
   "underlay_l2_port_channel_description": "{peer_node_group_or_uppercase_peer}_Po{peer_port_channel_id}",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

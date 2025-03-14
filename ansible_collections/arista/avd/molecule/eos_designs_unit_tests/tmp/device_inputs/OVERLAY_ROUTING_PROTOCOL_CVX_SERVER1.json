@@ -44,6 +44,7 @@
     "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER3"
   ],
   "overlay_routing_protocol": "cvx",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

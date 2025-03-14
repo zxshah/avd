@@ -12,6 +12,7 @@
     "admin_subfield": "id"
   },
   "type": "l3leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

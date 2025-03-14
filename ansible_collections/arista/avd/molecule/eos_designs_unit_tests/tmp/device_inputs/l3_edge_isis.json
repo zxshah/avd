@@ -88,6 +88,7 @@
   "underlay_isis_authentication_mode": "text",
   "underlay_isis_bfd": true,
   "underlay_routing_protocol": "isis",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

@@ -5,6 +5,7 @@
   "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
   "mgmt_gateway": "10.0.0.1",
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

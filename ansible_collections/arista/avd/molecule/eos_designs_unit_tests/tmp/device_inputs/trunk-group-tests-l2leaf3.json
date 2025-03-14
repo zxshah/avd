@@ -8,6 +8,7 @@
   "only_local_vlan_trunk_groups": true,
   "pod_name": "TRUNK_GROUP_TESTS",
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

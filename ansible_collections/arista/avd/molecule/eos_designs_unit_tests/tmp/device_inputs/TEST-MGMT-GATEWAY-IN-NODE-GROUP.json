@@ -13,6 +13,7 @@
   "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
   "ipv6_mgmt_gateway": "2000::1",
   "mgmt_gateway": "192.168.201.250",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

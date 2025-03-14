@@ -4,6 +4,20 @@
   },
   "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
   "type": "l2leaf",
+  "_custom_structured_configurations": [
+    {
+      "key": "custom_structured_configuration_aaa_accounting",
+      "value": {
+        "aaa_accounting": {
+          "exec": {
+            "console": {
+              "type": "start-stop"
+            }
+          }
+        }
+      }
+    }
+  ],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

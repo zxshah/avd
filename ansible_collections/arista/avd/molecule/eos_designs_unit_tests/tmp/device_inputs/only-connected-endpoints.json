@@ -34,6 +34,7 @@
     }
   ],
   "type": "device",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

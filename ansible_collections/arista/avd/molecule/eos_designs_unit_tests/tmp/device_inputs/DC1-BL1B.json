@@ -704,6 +704,58 @@
   "type": "l3leaf",
   "underlay_l2_ethernet_description": "{peer!u}_{peer_interface}",
   "underlay_l2_port_channel_description": "{peer_node_group_or_uppercase_peer}_Po{peer_port_channel_id}",
+  "_custom_structured_configurations": [
+    {
+      "key": "my_dci_ethernet_interfaces",
+      "value": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet4000",
+            "description": "My test",
+            "shutdown": false,
+            "mtu": 1500,
+            "ip_address": "10.1.2.3/12",
+            "peer": "MY-own-peer",
+            "peer_interface": "Ethernet123",
+            "peer_type": "my_precious",
+            "switchport": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "my_special_dci_ethernet_interfaces",
+      "value": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet4000",
+            "description": "My second test"
+          }
+        ]
+      }
+    },
+    {
+      "key": "override_ntp",
+      "value": {
+        "ntp": null
+      }
+    },
+    {
+      "key": "override_sflow",
+      "value": {
+        "sflow": {
+          "vrfs": [
+            {
+              "name": "OOB",
+              "source_interface": "Management99"
+            }
+          ]
+        }
+      }
+    }
+  ],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

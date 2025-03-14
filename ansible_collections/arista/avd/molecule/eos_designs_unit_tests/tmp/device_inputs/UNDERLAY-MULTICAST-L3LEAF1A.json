@@ -68,6 +68,7 @@
       "access_list_name": "RP_ACL_5"
     }
   ],
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

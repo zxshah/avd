@@ -17,6 +17,7 @@
     "enable": false
   },
   "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

@@ -746,6 +746,69 @@
   },
   "use_router_general_for_router_id": true,
   "vtep_vvtep_ip": "192.168.255.255/32",
+  "_custom_structured_configurations": [
+    {
+      "key": "my_dci_ethernet_interfaces",
+      "value": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet4000",
+            "description": "My test",
+            "shutdown": false,
+            "mtu": 1500,
+            "ip_address": "10.1.2.3/12",
+            "peer": "MY-own-peer",
+            "peer_interface": "Ethernet123",
+            "peer_type": "my_precious",
+            "switchport": {
+              "enabled": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "my_special_dci_ethernet_interfaces",
+      "value": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet4000",
+            "ip_address": "10.3.2.1/21"
+          }
+        ]
+      }
+    },
+    {
+      "key": "override_ntp",
+      "value": {
+        "ntp": null
+      }
+    },
+    {
+      "key": "override_sflow",
+      "value": {
+        "sflow": {
+          "vrfs": [
+            {
+              "name": "OOB",
+              "source_interface": "Management99"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "key": "override_ip_name_servers",
+      "value": {
+        "ip_name_servers": [
+          {
+            "ip_address": "1.1.1.1",
+            "vrf": "MGMT"
+          }
+        ]
+      }
+    }
+  ],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

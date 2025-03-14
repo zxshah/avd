@@ -114,6 +114,7 @@
     "enabled": true
   },
   "type": "spine",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

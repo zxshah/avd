@@ -323,6 +323,21 @@
     }
   ],
   "type": "l2leaf",
+  "_custom_structured_configurations": [
+    {
+      "key": "custom_structured_configuration_ethernet_interfaces",
+      "value": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet51",
+            "switchport": {
+              "access_vlan": 123
+            }
+          }
+        ]
+      }
+    }
+  ],
   "_dynamic_keys": {
     "connected_endpoints": [
       {

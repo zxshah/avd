@@ -45,6 +45,7 @@
   },
   "system_mac_address": "66:66:66:66:66:66",
   "type": "l2leaf",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

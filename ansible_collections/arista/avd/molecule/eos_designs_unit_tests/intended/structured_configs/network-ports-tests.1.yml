@@ -682,6 +682,7 @@ ethernet_interfaces:
   peer_type: network_port
   switchport:
     enabled: true
+    access_vlan: 123
 - name: Ethernet52
   shutdown: true
   peer_type: network_port

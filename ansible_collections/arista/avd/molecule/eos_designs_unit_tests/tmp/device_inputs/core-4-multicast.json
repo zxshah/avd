@@ -417,6 +417,7 @@
   "underlay_ospf_bfd_enable": true,
   "underlay_ospf_max_lsa": 12000,
   "underlay_ospf_process_id": 101,
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

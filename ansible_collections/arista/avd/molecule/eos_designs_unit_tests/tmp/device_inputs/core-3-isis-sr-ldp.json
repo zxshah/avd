@@ -417,6 +417,7 @@
   "underlay_ospf_max_lsa": 12000,
   "underlay_ospf_process_id": 101,
   "underlay_routing_protocol": "isis-sr-ldp",
+  "_custom_structured_configurations": [],
   "_dynamic_keys": {
     "connected_endpoints": [],
     "custom_node_types": [],

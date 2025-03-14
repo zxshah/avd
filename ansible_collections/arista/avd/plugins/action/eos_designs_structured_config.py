@@ -69,8 +69,12 @@ class ActionModule(ActionBase):
         template_output = self._task.args.get("template_output", False)
         validation_mode = self._task.args.get("validation_mode")
 
+        groups = task_vars.get("groups", {})
+        fabric_name = self._templar.template(task_vars.get("fabric_name", ""))
+        fabric_hosts = groups.get(fabric_name, [])
+
         # Initialise defaultdict that loads facts from json files on demand.
-        all_facts = AvdSwitchFactsDefaultDict(tmp_path)
+        all_facts = AvdSwitchFactsDefaultDict(tmp_path, fabric_hosts)
 
         # Load validated and coerced inputs from json file.
         host_inputs = EosDesigns._from_dumped_dict(read_json_file(tmp_path / "device_inputs" / f"{hostname}.json", f"AVD device inputs for {hostname}"))
@@ -202,7 +206,8 @@ def read_json_file(file: Path, file_context: str) -> dict:
 class AvdSwitchFactsDefaultDict(defaultdict):
     tmp_path: Path
 
-    def __init__(self, tmp_path: Path) -> None:
+    def __init__(self, tmp_path: Path, fabric_hosts: list[str]) -> None:
+        self.fabric_hosts = fabric_hosts
         self.tmp_path = tmp_path
 
     def __contains__(self, key: object) -> bool:
@@ -222,3 +227,6 @@ class AvdSwitchFactsDefaultDict(defaultdict):
         LOGGER.debug("Loading facts for %s", key)
         self[key] = EosDesignsFacts._from_dict(read_json_file(self.tmp_path / "device_facts" / f"{key}.json", f"AVD device facts for {key}"))
         return self[key]
+
+    def keys(self) -> list[str]:
+        return self.fabric_hosts

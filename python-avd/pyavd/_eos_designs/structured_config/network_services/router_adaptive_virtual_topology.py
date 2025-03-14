@@ -93,7 +93,7 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
         for policy in self._filtered_wan_policies:
             for match in policy.get("matches", []):
                 profile = EosCliConfigGen.RouterAdaptiveVirtualTopology.ProfilesItem(
-                    name=match["avt_profile"], load_balance_policy=match["load_balance_policy"]["name"]
+                    name=match["avt_profile"], load_balance_policy=match["load_balance_policy"].name
                 )
 
                 if (internet_exit_policy_name := match["internet_exit_policy_name"]) is not None and internet_exit_policy_name in [
@@ -104,7 +104,7 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
 
             if (default_match := policy.get("default_match")) is not None:
                 profile = EosCliConfigGen.RouterAdaptiveVirtualTopology.ProfilesItem(
-                    name=default_match["avt_profile"], load_balance_policy=default_match["load_balance_policy"]["name"]
+                    name=default_match["avt_profile"], load_balance_policy=default_match["load_balance_policy"].name
                 )
 
                 if (internet_exit_policy_name := default_match["internet_exit_policy_name"]) is not None and internet_exit_policy_name in [

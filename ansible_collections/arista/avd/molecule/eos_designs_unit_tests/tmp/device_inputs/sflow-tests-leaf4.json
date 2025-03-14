@@ -1,0 +1,372 @@
+{
+  "core_interfaces": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet9",
+          "Ethernet9"
+        ],
+        "include_in_underlay_protocol": false,
+        "sflow": true
+      },
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet10",
+          "Ethernet10"
+        ],
+        "include_in_underlay_protocol": false,
+        "sflow": false
+      },
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet11",
+          "Ethernet11"
+        ],
+        "include_in_underlay_protocol": false
+      }
+    ]
+  },
+  "default_mgmt_method": "oob",
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "SFLOW_TESTS",
+  "fabric_sflow": {
+    "uplinks": true,
+    "downlinks": true,
+    "endpoints": true,
+    "l3_edge": true,
+    "core_interfaces": true,
+    "mlag_interfaces": true
+  },
+  "l3_edge": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet12",
+          "Ethernet12"
+        ],
+        "include_in_underlay_protocol": false,
+        "sflow": true
+      },
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet13",
+          "Ethernet13"
+        ],
+        "include_in_underlay_protocol": false,
+        "sflow": false
+      },
+      {
+        "nodes": [
+          "sflow-tests-spine1",
+          "sflow-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet14",
+          "Ethernet14"
+        ],
+        "include_in_underlay_protocol": false
+      }
+    ]
+  },
+  "mgmt_gateway": "192.168.0.1",
+  "sflow_settings": {
+    "destinations": [
+      {
+        "destination": "10.10.10.10",
+        "vrf": "use_mgmt_interface_vrf"
+      },
+      {
+        "destination": "10.10.10.11"
+      },
+      {
+        "destination": "10.10.10.12",
+        "port": 1234,
+        "vrf": "sflowvrf"
+      }
+    ],
+    "vrfs": [
+      {
+        "name": "sflowvrf",
+        "source_interface": "Loopback321"
+      }
+    ]
+  },
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "single-interface-true",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10"
+                ],
+                "switches": [
+                  "sflow-tests-leaf1"
+                ],
+                "endpoint_ports": [
+                  "eth1"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "sflow": true
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-true",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet11",
+                  "Ethernet11"
+                ],
+                "switches": [
+                  "sflow-tests-leaf3",
+                  "sflow-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI1",
+                  "PCI2"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "sflow": true,
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          },
+          {
+            "name": "single-interface-false",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12"
+                ],
+                "switches": [
+                  "sflow-tests-leaf1"
+                ],
+                "endpoint_ports": [
+                  "eth11"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "sflow": false
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-false",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet13",
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "sflow-tests-leaf3",
+                  "sflow-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI11",
+                  "PCI12"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "sflow": false,
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          },
+          {
+            "name": "single-interface-no-definition",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet14"
+                ],
+                "switches": [
+                  "sflow-tests-leaf1"
+                ],
+                "endpoint_ports": [
+                  "eth12"
+                ],
+                "mode": "access",
+                "vlans": "11"
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-no-definition",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet15",
+                  "Ethernet15"
+                ],
+                "switches": [
+                  "sflow-tests-leaf3",
+                  "sflow-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI13",
+                  "PCI14"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "SFLOW",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_vni": 1,
+                "svis": [
+                  {
+                    "id": 11,
+                    "name": "VLAN11",
+                    "nodes": [
+                      {
+                        "node": "sflow-tests-leaf1",
+                        "ip_address": "172.16.11.1/24"
+                      },
+                      {
+                        "node": "sflow-tests-leaf2",
+                        "ip_address": "172.17.11.1/24"
+                      }
+                    ],
+                    "enabled": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-lab",
+            "uplink_ipv4_pool": "10.254.2.0/24",
+            "uplink_interfaces": [
+              "Ethernet1",
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "sflow-tests-spine1",
+              "sflow-tests-spine1"
+            ],
+            "loopback_ipv4_pool": "10.254.1.0/27",
+            "vtep_loopback_ipv4_pool": "10.254.11.0/27",
+            "mlag_interfaces": [
+              "Ethernet11",
+              "Ethernet12"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.254.1.96/27",
+            "mlag_peer_ipv4_pool": "10.254.1.64/27",
+            "spanning_tree_mode": "mstp",
+            "spanning_tree_priority": 4096,
+            "virtual_router_mac_address": "00:11:22:33:44:55"
+          },
+          "node_groups": [
+            {
+              "group": "sflow-tests-leaf-mlag",
+              "nodes": [
+                {
+                  "name": "sflow-tests-leaf3",
+                  "id": 5,
+                  "mgmt_ip": "192.168.0.103/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet5",
+                    "Ethernet6"
+                  ]
+                },
+                {
+                  "name": "sflow-tests-leaf4",
+                  "id": 6,
+                  "mgmt_ip": "192.168.0.104/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet7",
+                    "Ethernet8"
+                  ]
+                }
+              ],
+              "bgp_as": "65105"
+            }
+          ],
+          "nodes": [
+            {
+              "name": "sflow-tests-leaf1",
+              "id": 1,
+              "mgmt_ip": "192.168.0.101/24",
+              "uplink_switch_interfaces": [
+                "Ethernet1",
+                "Ethernet2"
+              ],
+              "bgp_as": "65101"
+            },
+            {
+              "name": "sflow-tests-leaf2",
+              "id": 2,
+              "mgmt_ip": "192.168.0.102/24",
+              "uplink_switch_interfaces": [
+                "Ethernet3",
+                "Ethernet4"
+              ],
+              "bgp_as": "65102"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

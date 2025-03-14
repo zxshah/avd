@@ -45,8 +45,6 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
-    trunk:
-      allowed_vlan: '66'
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true
 vlan_internal_order:

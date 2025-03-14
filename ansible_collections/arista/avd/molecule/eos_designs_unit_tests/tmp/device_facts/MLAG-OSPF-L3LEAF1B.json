@@ -27,6 +27,9 @@
     "secondary": 5
   },
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "DC1-SPINE1"
+  ],
   "overlay": {
     "peering_address": "192.168.255.37",
     "evpn_mpls": false
@@ -34,6 +37,23 @@
   "vtep_ip": "192.168.254.36",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "DC1-SPINE1",
+      "peer_interface": "Ethernet220",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 40gfull",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "10.10.101.9",
+      "peer_ip_address": "10.10.101.8",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "DC1-SPINE1"
   ],

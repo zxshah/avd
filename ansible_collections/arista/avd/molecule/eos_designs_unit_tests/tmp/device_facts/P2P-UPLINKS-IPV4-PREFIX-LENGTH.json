@@ -18,6 +18,36 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "MLAG_ODD_ID_L3LEAF1A",
+      "peer_interface": "Ethernet10",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "923",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 30,
+      "ip_address": "10.254.255.250",
+      "peer_ip_address": "10.254.255.249",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "MLAG_ODD_ID_L3LEAF1B",
+      "peer_interface": "Ethernet10",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "923",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 30,
+      "ip_address": "10.254.255.254",
+      "peer_ip_address": "10.254.255.253",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "MLAG_ODD_ID_L3LEAF1A",
     "MLAG_ODD_ID_L3LEAF1B"

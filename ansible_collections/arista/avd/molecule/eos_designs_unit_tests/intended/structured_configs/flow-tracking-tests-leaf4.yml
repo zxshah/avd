@@ -46,6 +46,24 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet31
+  description: L2_flow-tracking-tests-l2-leaf1_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 31
+    mode: active
+  peer: flow-tracking-tests-l2-leaf1
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+- name: Ethernet32
+  description: L2_flow-tracking-tests-l2-leaf2_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 32
+    mode: active
+  peer: flow-tracking-tests-l2-leaf2
+  peer_interface: Ethernet2
+  peer_type: l2leaf
 - name: Ethernet14
   description: SERVER_port-channel-interface-true_PCI2
   shutdown: false
@@ -146,6 +164,20 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel31
+  description: L2_flow-tracking-tests-l2-leaf1_Port-Channel1
+  shutdown: false
+  mlag: 31
+  switchport:
+    enabled: true
+    mode: trunk
+- name: Port-Channel32
+  description: L2_flow-tracking-tests-l2-leaf2_Port-Channel1
+  shutdown: false
+  mlag: 32
+  switchport:
+    enabled: true
+    mode: trunk
 - name: Port-Channel14
   description: SERVER_port-channel-interface-true
   shutdown: false
@@ -188,6 +220,10 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 10.254.1.104/31
+- name: PL-L2LEAF-INBAND-MGMT
+  sequence_numbers:
+  - sequence: 10
+    action: permit 10.254.254.0/24
 route_maps:
 - name: RM-MLAG-PEER-IN
   sequence_numbers:
@@ -202,6 +238,10 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+  - sequence: 20
+    type: permit
+    match:
+    - ip address prefix-list PL-L2LEAF-INBAND-MGMT
 - name: RM-CONN-2-BGP-VRFS
   sequence_numbers:
   - sequence: 10
@@ -270,6 +310,8 @@ router_bgp:
     peer: flow-tracking-tests-spine2
     description: flow-tracking-tests-spine2_Loopback0
   redistribute:
+    attached_host:
+      enabled: true
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
@@ -352,6 +394,16 @@ vlan_interfaces:
   mtu: 9214
   tenant: FLOW_TRACKING
   type: underlay_peering
+- name: Vlan4092
+  description: Inband Management
+  shutdown: false
+  ip_address: 10.254.254.3/24
+  ip_virtual_router_addresses:
+  - 10.254.254.1
+  mtu: 1500
+  ip_attached_host_route_export:
+    enabled: true
+    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -376,6 +428,9 @@ vlans:
   trunk_groups:
   - MLAG
   tenant: FLOW_TRACKING
+- id: 4092
+  name: INBAND_MGMT
+  tenant: system
 vrfs:
 - name: MGMT
   ip_routing: false

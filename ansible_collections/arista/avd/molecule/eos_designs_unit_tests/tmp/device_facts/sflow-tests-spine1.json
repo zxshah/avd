@@ -36,5 +36,11 @@
     "sflow-tests-leaf2",
     "sflow-tests-leaf3",
     "sflow-tests-leaf4"
+  ],
+  "evpn_route_server_clients": [
+    "sflow-tests-leaf1",
+    "sflow-tests-leaf2",
+    "sflow-tests-leaf3",
+    "sflow-tests-leaf4"
   ]
 }

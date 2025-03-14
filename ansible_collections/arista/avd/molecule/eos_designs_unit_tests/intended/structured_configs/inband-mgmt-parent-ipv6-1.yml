@@ -104,6 +104,32 @@ ethernet_interfaces:
   peer: inband-mgmt-parent-ipv6-2
   peer_interface: Ethernet20
   peer_type: mlag_peer
+- name: Ethernet26
+  description: INBAND-MGMT-IPV6-ONLY_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 26
+    mode: active
+  peer: inband-mgmt-ipv6-only
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 106
+- name: Ethernet27
+  description: INBAND-MGMT-IPV6-ONLY-VRF_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 27
+    mode: active
+  peer: inband-mgmt-ipv6-only-vrf
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 107
 hostname: inband-mgmt-parent-ipv6-1
 ip_igmp_snooping:
   globally_enabled: true
@@ -114,6 +140,13 @@ ip_name_servers:
   vrf: MGMT
 ip_routing: true
 ip_virtual_router_mac_address: 00:1c:73:00:dc:01
+ipv6_prefix_lists:
+- name: IPv6-PL-L2LEAF-INBAND-MGMT
+  sequence_numbers:
+  - sequence: 10
+    action: permit 2a00:106::/64
+  - sequence: 20
+    action: permit 2a00:107::/64
 is_deployed: true
 loopback_interfaces:
 - name: Loopback0
@@ -152,6 +185,24 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel26
+  description: INBAND-MGMT-IPV6-ONLY_Po1
+  shutdown: false
+  mlag: 26
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+- name: Port-Channel27
+  description: INBAND-MGMT-IPV6-ONLY-VRF_Po1
+  shutdown: false
+  mlag: 27
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -173,6 +224,10 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+  - sequence: 60
+    type: permit
+    match:
+    - ipv6 address prefix-list IPv6-PL-L2LEAF-INBAND-MGMT
 router_bfd:
   multihop:
     interval: 300
@@ -215,6 +270,8 @@ router_bgp:
     peer: inband-mgmt-parent-ipv6-2
     description: inband-mgmt-parent-ipv6-2_Vlan4093
   redistribute:
+    attached_host:
+      enabled: true
     connected:
       enabled: true
       route_map: RM-CONN-2-BGP
@@ -246,6 +303,28 @@ vlan_interfaces:
   ip_address: 100.64.0.8/31
   mtu: 9214
   no_autostate: true
+- name: Vlan106
+  description: Inband Management
+  shutdown: false
+  ipv6_enable: true
+  ipv6_address: 2a00:106::2/64
+  ipv6_virtual_router_addresses:
+  - 2a00:106::1
+  mtu: 1500
+  ipv6_attached_host_route_export:
+    enabled: true
+    distance: 19
+- name: Vlan107
+  description: Inband Management
+  shutdown: false
+  ipv6_enable: true
+  ipv6_address: 2a00:107::2/64
+  ipv6_virtual_router_addresses:
+  - 2a00:107::1
+  mtu: 1500
+  ipv6_attached_host_route_export:
+    enabled: true
+    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
@@ -261,6 +340,12 @@ vlans:
   name: MLAG
   trunk_groups:
   - MLAG
+  tenant: system
+- id: 106
+  name: INBAND_MGMT
+  tenant: system
+- id: 107
+  name: INBAND_MGMT
   tenant: system
 vrfs:
 - name: MGMT

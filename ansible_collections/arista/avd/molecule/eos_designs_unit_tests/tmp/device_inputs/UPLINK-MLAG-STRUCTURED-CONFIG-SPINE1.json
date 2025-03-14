@@ -1,0 +1,32 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "192.168.200.5",
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "bgp_as": "65001"
+          },
+          "nodes": [
+            {
+              "name": "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1",
+              "id": 1,
+              "mgmt_ip": "192.168.200.101/24"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

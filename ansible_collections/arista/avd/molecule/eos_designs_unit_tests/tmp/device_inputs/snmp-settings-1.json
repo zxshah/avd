@@ -1,0 +1,186 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "10.10.10.1",
+  "mgmt_interface_vrf": "MGMT",
+  "snmp_settings": {
+    "contact": "example@example.com",
+    "location": false,
+    "vrfs": [
+      {
+        "name": "default",
+        "enable": false
+      }
+    ],
+    "enable_mgmt_interface_vrf": true,
+    "enable_inband_mgmt_vrf": true,
+    "users": [
+      {
+        "name": "usertest-auth-priv",
+        "group": "usergroup",
+        "version": "v3",
+        "auth": "sha",
+        "auth_passphrase": "clearauth",
+        "priv": "aes192",
+        "priv_passphrase": "clearpriv"
+      }
+    ],
+    "hosts": [
+      {
+        "host": "10.6.75.121",
+        "vrf": "SNMPVRF",
+        "version": "1",
+        "community": "SNMP-COMMUNITY-1"
+      },
+      {
+        "host": "10.6.75.123",
+        "vrf": "SNMPVRF",
+        "use_mgmt_interface_vrf": true,
+        "version": "2c",
+        "community": "SNMP-COMMUNITY-2"
+      },
+      {
+        "host": "10.6.75.124",
+        "use_mgmt_interface_vrf": true,
+        "version": "3",
+        "users": [
+          {
+            "username": "USER-WRITE",
+            "authentication_level": "auth"
+          }
+        ]
+      },
+      {
+        "host": "10.6.75.125",
+        "vrf": "SNMPVRF",
+        "use_inband_mgmt_vrf": true,
+        "version": "2c",
+        "community": "SNMP-COMMUNITY-2"
+      },
+      {
+        "host": "10.6.75.126",
+        "use_inband_mgmt_vrf": true,
+        "version": "3",
+        "users": [
+          {
+            "username": "USER-WRITE",
+            "authentication_level": "auth"
+          }
+        ]
+      },
+      {
+        "host": "10.6.75.127",
+        "vrf": "SNMPVRF",
+        "use_mgmt_interface_vrf": true,
+        "use_inband_mgmt_vrf": true,
+        "version": "2c",
+        "community": "SNMP-COMMUNITY-2"
+      },
+      {
+        "host": "10.6.75.128",
+        "use_mgmt_interface_vrf": true,
+        "use_inband_mgmt_vrf": true,
+        "version": "3",
+        "users": [
+          {
+            "username": "USER-WRITE",
+            "authentication_level": "auth"
+          }
+        ]
+      }
+    ],
+    "communities": [
+      {
+        "name": "SNMP-COMMUNITY-1",
+        "access": "ro",
+        "access_list_ipv4": {
+          "name": "onur"
+        }
+      },
+      {
+        "name": "SNMP-COMMUNITY-2",
+        "access": "rw",
+        "access_list_ipv4": {
+          "name": "SNMP-MGMT"
+        },
+        "access_list_ipv6": {
+          "name": "SNMP-MGMT"
+        },
+        "view": "VW-READ"
+      },
+      {
+        "name": "SNMP-COMMUNITY-3"
+      }
+    ],
+    "ipv4_acls": [
+      {
+        "name": "SNMP-MGMT",
+        "vrf": "MGMT"
+      },
+      {
+        "name": "onur"
+      }
+    ],
+    "ipv6_acls": [
+      {
+        "name": "SNMP-MGMT",
+        "vrf": "MGMT"
+      },
+      {
+        "name": "onur_v6"
+      }
+    ],
+    "views": [
+      {
+        "name": "VW-WRITE",
+        "mib_family_name": "iso",
+        "included": true
+      },
+      {
+        "name": "VW-READ",
+        "mib_family_name": "iso",
+        "included": true
+      }
+    ],
+    "groups": [
+      {
+        "name": "GRP-READ-ONLY",
+        "version": "v3",
+        "authentication": "priv",
+        "read": "v3read"
+      },
+      {
+        "name": "GRP-READ-WRITE",
+        "version": "v3",
+        "authentication": "auth",
+        "read": "v3read",
+        "write": "v3write"
+      }
+    ],
+    "traps": {
+      "enable": true
+    }
+  },
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "snmp-settings-1",
+              "id": 43,
+              "mgmt_ip": "10.10.10.43/26"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

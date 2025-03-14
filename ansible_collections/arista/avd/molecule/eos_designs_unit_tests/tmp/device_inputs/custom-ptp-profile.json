@@ -1,0 +1,100 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "l3_edge": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "custom-ptp-profile",
+          "not-in-this-fabric"
+        ],
+        "interfaces": [
+          "Ethernet8",
+          "Ethernet8"
+        ],
+        "include_in_underlay_protocol": false,
+        "ptp": {
+          "enabled": true,
+          "profile": "my-custom-ptp-profile"
+        }
+      }
+    ]
+  },
+  "ptp_profiles": [
+    {
+      "profile": "my-custom-ptp-profile",
+      "announce": {
+        "interval": 4,
+        "timeout": 3
+      },
+      "delay_req": -6,
+      "sync_message": {
+        "interval": -7
+      },
+      "transport": "ipv4"
+    }
+  ],
+  "ptp_settings": {
+    "enabled": true
+  },
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "PTP",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_vni": 1,
+                "svis": [
+                  {
+                    "id": 11,
+                    "name": "VLAN11",
+                    "nodes": [
+                      {
+                        "node": "custom-ptp-profile",
+                        "ip_address": "172.16.11.1/24"
+                      }
+                    ],
+                    "enabled": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "10.10.10.0/24",
+            "vtep_loopback_ipv4_pool": "10.10.10.0/24",
+            "bgp_as": "65042"
+          },
+          "nodes": [
+            {
+              "name": "custom-ptp-profile",
+              "id": 12,
+              "loopback_ipv4_address": "10.42.42.42/32",
+              "vtep_loopback_ipv4_address": "10.42.42.42/32",
+              "ptp": {
+                "profile": "my-custom-ptp-profile"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

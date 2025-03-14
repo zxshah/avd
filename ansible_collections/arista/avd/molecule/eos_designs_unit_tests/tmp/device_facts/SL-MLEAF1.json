@@ -11,6 +11,22 @@
   "pod": "SINGLE_LINK_TO_MLAG_PAIR",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet16",
+      "peer": "SL-LEAF1A",
+      "peer_interface": "Ethernet28",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "SL-LEAF1",
+      "peer_mlag": false,
+      "channel_group_id": 16,
+      "peer_channel_group_id": 28,
+      "vlans": "none",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "SL-LEAF1A"
   ],

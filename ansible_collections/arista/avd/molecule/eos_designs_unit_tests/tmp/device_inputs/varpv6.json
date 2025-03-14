@@ -1,0 +1,106 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TENANT1",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_id": 1,
+                "svis": [
+                  {
+                    "id": 100,
+                    "name": "VARPv6_configured_1",
+                    "nodes": [
+                      {
+                        "node": "varpv6",
+                        "ipv6_address": "2001:db8::2/64"
+                      }
+                    ],
+                    "enabled": true,
+                    "ipv6_virtual_router_addresses": [
+                      "fe80::1"
+                    ]
+                  },
+                  {
+                    "id": 200,
+                    "name": "VARPv6_not_configured_1",
+                    "enabled": true,
+                    "ipv6_virtual_router_addresses": [
+                      "fe80::1"
+                    ]
+                  },
+                  {
+                    "id": 300,
+                    "name": "VARPv6_configured_2",
+                    "enabled": true,
+                    "ipv6_enable": true,
+                    "ipv6_virtual_router_addresses": [
+                      "fe80::1"
+                    ]
+                  },
+                  {
+                    "id": 400,
+                    "name": "VARPv6_not_configured_2",
+                    "enabled": true,
+                    "ipv6_enable": false,
+                    "ipv6_virtual_router_addresses": [
+                      "fe80::1"
+                    ]
+                  },
+                  {
+                    "id": 500,
+                    "name": "VARPv6_not_configured_3",
+                    "enabled": true,
+                    "ipv6_enable": false,
+                    "ipv6_address_virtuals": [
+                      "2001:db8::1/64"
+                    ],
+                    "ipv6_virtual_router_addresses": [
+                      "fe80::1"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "virtual_router_mac_address": "00:dc:00:00:00:0a"
+          },
+          "nodes": [
+            {
+              "name": "varpv6",
+              "id": 101,
+              "bgp_as": "101",
+              "filter": {
+                "tenants": [
+                  "TENANT1"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

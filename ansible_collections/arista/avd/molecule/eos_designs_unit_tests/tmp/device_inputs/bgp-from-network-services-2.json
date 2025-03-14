@@ -1,0 +1,103 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l3spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TEST",
+            "vrfs": [
+              {
+                "name": "default",
+                "address_families": [],
+                "vrf_id": 100,
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet47"
+                    ],
+                    "ip_addresses": [
+                      "10.10.1.1/30"
+                    ],
+                    "nodes": [
+                      "bgp-from-network-services-1"
+                    ]
+                  }
+                ],
+                "static_routes": [
+                  {
+                    "destination_address_prefix": "0.0.0.0",
+                    "gateway": "10.10.1.1",
+                    "nodes": [
+                      "bgp-from-network-services-1"
+                    ]
+                  }
+                ],
+                "bgp_peers": [
+                  {
+                    "ip_address": "10.10.1.2",
+                    "peer_group": "MYPEERGROUP",
+                    "nodes": [
+                      "bgp-from-network-services-1",
+                      "bgp-from-network-services-2"
+                    ]
+                  }
+                ],
+                "bgp_peer_groups": [
+                  {
+                    "name": "MYPEERGROUP",
+                    "remote_as": "65991",
+                    "bfd": true,
+                    "next_hop_self": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "uplink_ipv4_pool": "10.255.1.0/24",
+            "loopback_ipv4_pool": "192.0.255.0/24",
+            "bgp_as": "65001",
+            "mlag_interfaces": [
+              "Ethernet10"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.10.20.0/24",
+            "mlag_peer_ipv4_pool": "10.10.10.0/24",
+            "spanning_tree_mode": "none"
+          },
+          "node_groups": [
+            {
+              "group": "GROUP1",
+              "nodes": [
+                {
+                  "name": "bgp-from-network-services-1",
+                  "id": 1,
+                  "mgmt_ip": "10.1.1.1/24"
+                },
+                {
+                  "name": "bgp-from-network-services-2",
+                  "id": 2,
+                  "mgmt_ip": "10.1.1.2/24"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

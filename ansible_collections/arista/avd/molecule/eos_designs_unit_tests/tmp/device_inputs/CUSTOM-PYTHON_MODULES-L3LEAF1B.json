@@ -1,0 +1,199 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "192.168.200.1",
+  "custom_node_type_keys": [
+    {
+      "key": "custom_spine",
+      "type": "custom_spine",
+      "default_evpn_role": "server",
+      "interface_descriptions": {
+        "python_module": "custom_interface_descriptions_with_data",
+        "python_class_name": "CustomAvdInterfaceDescriptions"
+      }
+    },
+    {
+      "key": "l3leaf",
+      "type": "l3leaf",
+      "connected_endpoints": true,
+      "default_evpn_role": "client",
+      "mlag_support": true,
+      "network_services": {
+        "l2": true,
+        "l3": true
+      },
+      "vtep": true,
+      "ip_addressing": {
+        "python_module": "custom_ip_addressing",
+        "python_class_name": "CustomAvdIpAddressing"
+      },
+      "interface_descriptions": {
+        "python_module": "custom_interface_descriptions_with_data",
+        "python_class_name": "CustomAvdInterfaceDescriptions"
+      }
+    }
+  ],
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [
+      {
+        "key": "l3leaf",
+        "custom_node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "uplink_ipv4_pool": "172.31.255.0/24",
+            "uplink_interfaces": [
+              "Ethernet1"
+            ],
+            "uplink_switches": [
+              "CUSTOM-PYTHON_MODULES-SPINE1"
+            ],
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "mlag_interfaces": [
+              "Ethernet3",
+              "Ethernet4"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.255.251.0/24",
+            "mlag_peer_ipv4_pool": "10.255.252.0/24",
+            "virtual_router_mac_address": "00:dc:00:00:00:0a"
+          },
+          "node_groups": [
+            {
+              "group": "CUSTOM_PYTHON_MODULES_L3LEAF1",
+              "nodes": [
+                {
+                  "name": "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+                  "id": 1,
+                  "mgmt_ip": "192.168.200.101/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet1"
+                  ]
+                },
+                {
+                  "name": "CUSTOM-PYTHON_MODULES-L3LEAF1B",
+                  "id": 2,
+                  "mgmt_ip": "192.168.200.102/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet2"
+                  ]
+                }
+              ],
+              "bgp_as": "65101"
+            }
+          ],
+          "nodes": [
+            {
+              "name": "CUSTOM-PYTHON_MODULES-L3LEAF2",
+              "id": 3,
+              "uplink_type": "p2p-vrfs",
+              "uplink_switch_interfaces": [
+                "Ethernet3"
+              ],
+              "uplink_switches": [
+                "CUSTOM-PYTHON_MODULES-L3LEAF1A"
+              ],
+              "bgp_as": "65103"
+            }
+          ]
+        }
+      }
+    ],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "CUSTOM_PYTHON_MODULES_TENANT",
+            "mac_vrf_vni_base": 11000,
+            "vrfs": [
+              {
+                "name": "TEST_VRF",
+                "vrf_id": 1,
+                "mlag_ibgp_peering_ipv4_pool": "10.255.240.0/24",
+                "svis": [
+                  {
+                    "id": 110,
+                    "name": "Tenant_A_OP_Zone_1",
+                    "tags": [
+                      "opzone"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.10.1/24"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "uplink_ipv4_pool": "172.31.255.0/24",
+            "uplink_interfaces": [
+              "Ethernet1"
+            ],
+            "uplink_switches": [
+              "CUSTOM-PYTHON_MODULES-SPINE1"
+            ],
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "mlag_interfaces": [
+              "Ethernet3",
+              "Ethernet4"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.255.251.0/24",
+            "mlag_peer_ipv4_pool": "10.255.252.0/24",
+            "virtual_router_mac_address": "00:dc:00:00:00:0a"
+          },
+          "node_groups": [
+            {
+              "group": "CUSTOM_PYTHON_MODULES_L3LEAF1",
+              "nodes": [
+                {
+                  "name": "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+                  "id": 1,
+                  "mgmt_ip": "192.168.200.101/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet1"
+                  ]
+                },
+                {
+                  "name": "CUSTOM-PYTHON_MODULES-L3LEAF1B",
+                  "id": 2,
+                  "mgmt_ip": "192.168.200.102/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet2"
+                  ]
+                }
+              ],
+              "bgp_as": "65101"
+            }
+          ],
+          "nodes": [
+            {
+              "name": "CUSTOM-PYTHON_MODULES-L3LEAF2",
+              "id": 3,
+              "uplink_type": "p2p-vrfs",
+              "uplink_switch_interfaces": [
+                "Ethernet3"
+              ],
+              "uplink_switches": [
+                "CUSTOM-PYTHON_MODULES-L3LEAF1A"
+              ],
+              "bgp_as": "65103"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

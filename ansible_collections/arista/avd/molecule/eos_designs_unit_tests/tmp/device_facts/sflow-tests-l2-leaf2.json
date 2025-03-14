@@ -22,6 +22,36 @@
   ],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "sflow-tests-leaf3",
+      "peer_interface": "Ethernet17",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "sflow-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 17,
+      "vlans": "11,4092",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "sflow-tests-leaf4",
+      "peer_interface": "Ethernet17",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "sflow-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 17,
+      "vlans": "11,4092",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "sflow-tests-leaf3",
     "sflow-tests-leaf4"

@@ -123,7 +123,7 @@ class UtilsMixin(Protocol):
         """
         uplink_switch_interface = self.shared_utils.uplink_switch_interfaces[uplink_switch_index]
         uplink_switch = self.shared_utils.uplink_switches[uplink_switch_index]
-        peer_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+        peer_facts = self.shared_utils.get_peer_facts(uplink_switch)
         downlink_pools = peer_facts.downlink_pools
         if not downlink_pools:
             return (None, None)

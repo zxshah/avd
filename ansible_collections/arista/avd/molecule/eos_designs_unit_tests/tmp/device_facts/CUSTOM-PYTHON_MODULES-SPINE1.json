@@ -27,5 +27,9 @@
   "downlink_switches": [
     "CUSTOM-PYTHON_MODULES-L3LEAF1A",
     "CUSTOM-PYTHON_MODULES-L3LEAF1B"
+  ],
+  "evpn_route_server_clients": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+    "CUSTOM-PYTHON_MODULES-L3LEAF1B"
   ]
 }

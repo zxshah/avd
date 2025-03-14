@@ -9,6 +9,22 @@
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet2",
+      "peer": "uplink-native-vlan-parent",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_mlag": false,
+      "channel_group_id": 2,
+      "peer_channel_group_id": 2,
+      "vlans": "100",
+      "native_vlan": 200,
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "uplink-native-vlan-parent"
   ],

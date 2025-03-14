@@ -1,0 +1,944 @@
+{
+  "application_classification": {
+    "categories": [
+      {
+        "name": "NOT-IN-ANY-PROFILE"
+      },
+      {
+        "name": "VIDEO1",
+        "applications": [
+          {
+            "name": "CUSTOM-APPLICATION-2"
+          },
+          {
+            "name": "CUSTOM-DSCP-APPLICATION"
+          },
+          {
+            "name": "microsoft-teams"
+          }
+        ]
+      }
+    ],
+    "field_sets": {
+      "l4_ports": [
+        {
+          "name": "NOT-IN-ANY-APPLICATION"
+        },
+        {
+          "name": "TCP-SRC-2",
+          "port_values": [
+            "42"
+          ]
+        },
+        {
+          "name": "TCP-DEST-2",
+          "port_values": [
+            "666",
+            "777"
+          ]
+        },
+        {
+          "name": "UDP-SRC-VOICE",
+          "port_values": [
+            "42000-42999"
+          ]
+        },
+        {
+          "name": "UDP-DEST-VOICE",
+          "port_values": [
+            "30000-30100",
+            "31000-31100"
+          ]
+        }
+      ],
+      "ipv4_prefixes": [
+        {
+          "name": "NOT-IN-ANY-APPLICATION"
+        },
+        {
+          "name": "CUSTOM-SRC-PREFIX-1",
+          "prefix_values": [
+            "42.42.42.0/24"
+          ]
+        },
+        {
+          "name": "CUSTOM-DEST-PREFIX-1",
+          "prefix_values": [
+            "6.6.6.0/24"
+          ]
+        }
+      ]
+    },
+    "applications": {
+      "ipv4_applications": [
+        {
+          "name": "NOT-IN-ANY-PROFILE-NOR-CATEGORY"
+        },
+        {
+          "name": "CUSTOM-APPLICATION-1",
+          "src_prefix_set_name": "CUSTOM-SRC-PREFIX-1",
+          "dest_prefix_set_name": "CUSTOM-DEST-PREFIX-1",
+          "protocols": [
+            "tcp"
+          ]
+        },
+        {
+          "name": "CUSTOM-APPLICATION-2",
+          "protocols": [
+            "tcp"
+          ],
+          "tcp_src_port_set_name": "TCP-SRC-2",
+          "tcp_dest_port_set_name": "TCP-DEST-2"
+        },
+        {
+          "name": "CUSTOM-voice-APPLICATION",
+          "protocols": [
+            "udp"
+          ],
+          "udp_src_port_set_name": "UDP-SRC-VOICE",
+          "udp_dest_port_set_name": "UDP-DEST-VOICE"
+        },
+        {
+          "name": "CUSTOM-DSCP-APPLICATION",
+          "dscp_ranges": [
+            "ef",
+            "12-14",
+            "cs6",
+            "42"
+          ]
+        }
+      ]
+    },
+    "application_profiles": [
+      {
+        "name": "VIDEO",
+        "applications": [
+          {
+            "name": "CUSTOM-APPLICATION-1"
+          },
+          {
+            "name": "skype"
+          }
+        ],
+        "application_transports": [
+          "rtp"
+        ],
+        "categories": [
+          {
+            "name": "VIDEO1"
+          }
+        ]
+      },
+      {
+        "name": "IT"
+      },
+      {
+        "name": "MPLS-ONLY"
+      },
+      {
+        "name": "VOICE",
+        "applications": [
+          {
+            "name": "CUSTOM-VOICE-APPLICATION"
+          }
+        ]
+      },
+      {
+        "name": "NOT-IN-ANY-POLICY"
+      }
+    ]
+  },
+  "bgp_as": "65000",
+  "bgp_peer_groups": {
+    "wan_overlay_peers": {
+      "password": "htm4AZe9mIQOO1uiMuGgYQ==",
+      "listen_range_prefixes": [
+        "192.168.142.0/24",
+        "192.168.143.0/24"
+      ]
+    }
+  },
+  "cv_pathfinder_global_sites": [
+    {
+      "name": "Global-pathfinder-site",
+      "location": "Somewhere under the rainbow"
+    }
+  ],
+  "cv_pathfinder_internet_exit_policies": [
+    {
+      "name": "ZSCALER-EXIT-POLICY-1",
+      "type": "zscaler",
+      "zscaler": {
+        "ipsec_key_salt": "THIS_SHOULD_BE_VAULTED",
+        "domain_name": "test.local"
+      }
+    },
+    {
+      "name": "ZSCALER-EXIT-POLICY-2",
+      "type": "zscaler",
+      "fallback_to_system_default": false,
+      "zscaler": {
+        "ipsec_key_salt": "THIS_SHOULD_BE_VAULTED",
+        "domain_name": "test.local"
+      }
+    },
+    {
+      "name": "DIRECT-EXIT-POLICY-1",
+      "type": "direct",
+      "fallback_to_system_default": false
+    },
+    {
+      "name": "DIRECT-EXIT-POLICY-2",
+      "type": "direct"
+    }
+  ],
+  "cv_pathfinder_regions": [
+    {
+      "name": "AVD_Land_West",
+      "description": "AVD Region",
+      "id": 42,
+      "sites": [
+        {
+          "name": "Site404",
+          "id": 404,
+          "location": "Atlantis"
+        },
+        {
+          "name": "Site405",
+          "id": 405,
+          "location": "El Dorado"
+        },
+        {
+          "name": "Site422",
+          "id": 422,
+          "location": "Somewhere"
+        },
+        {
+          "name": "Site423",
+          "id": 423,
+          "location": "Somewhere-warm"
+        },
+        {
+          "name": "Site12",
+          "id": 12,
+          "location": "12 Downing Street, London"
+        }
+      ]
+    },
+    {
+      "name": "AVD_Land_East",
+      "description": "AVD Region",
+      "id": 43,
+      "sites": [
+        {
+          "name": "Site511",
+          "id": 511,
+          "location": "Miami"
+        }
+      ]
+    }
+  ],
+  "default_node_types": [
+    {
+      "node_type": "wan_rr",
+      "match_hostnames": [
+        "cv-pathfinder-pathfinder.*"
+      ]
+    },
+    {
+      "node_type": "wan_router",
+      "match_hostnames": [
+        "cv-pathfinder-edge.*",
+        "cv-pathfinder-transit.*"
+      ]
+    },
+    {
+      "node_type": "l3leaf",
+      "match_hostnames": [
+        ".*leaf.*"
+      ]
+    }
+  ],
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_ip_addressing": {
+    "wan_ha": {
+      "ipv4_prefix_length": 24
+    }
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "ipv4_acls": [
+    {
+      "name": "TEST-IPV4-ACL-WITH-IP-FIELDS-IN",
+      "entries": [
+        {
+          "source": "any",
+          "destination": "interface_ip",
+          "sequence": 15,
+          "action": "deny",
+          "protocol": "ip"
+        },
+        {
+          "source": "peer_ip",
+          "destination": "interface_ip",
+          "action": "permit",
+          "protocol": "ip"
+        }
+      ]
+    }
+  ],
+  "ipv4_prefix_list_catalog": [
+    {
+      "name": "ALLOW-DEFAULT",
+      "sequence_numbers": [
+        {
+          "sequence": 10,
+          "action": "permit 0.0.0.0/0"
+        }
+      ]
+    },
+    {
+      "name": "PL2",
+      "sequence_numbers": [
+        {
+          "sequence": 10,
+          "action": "permit 5.0.0.0/0"
+        },
+        {
+          "sequence": 20,
+          "action": "deny 10.0.0.0/24"
+        }
+      ]
+    }
+  ],
+  "overlay_routing_protocol": "none",
+  "underlay_routing_protocol": "ebgp",
+  "wan_carriers": [
+    {
+      "name": "Comcast",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "ATT",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "Bouygues_Telecom",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "SFR",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "Orange",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "Another-ISP",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "Colt",
+      "path_group": "MPLS",
+      "trusted": true
+    },
+    {
+      "name": "ATT-MPLS",
+      "path_group": "MPLS",
+      "trusted": true
+    },
+    {
+      "name": "Comcast-5G",
+      "path_group": "LTE",
+      "trusted": true
+    },
+    {
+      "name": "Inmrasat",
+      "path_group": "Satellite"
+    },
+    {
+      "name": "AWS-1",
+      "path_group": "AWS",
+      "trusted": true
+    }
+  ],
+  "wan_ipsec_profiles": {
+    "control_plane": {
+      "shared_key": "ABCDEF1234567890"
+    },
+    "data_plane": {
+      "shared_key": "ABCDEF1234567890666"
+    }
+  },
+  "wan_mode": "cv-pathfinder",
+  "wan_path_groups": [
+    {
+      "name": "MPLS",
+      "id": 100,
+      "ipsec": {
+        "dynamic_peers": false,
+        "static_peers": false
+      },
+      "dps_keepalive": {
+        "interval": "300"
+      }
+    },
+    {
+      "name": "INET",
+      "id": 101
+    },
+    {
+      "name": "LTE",
+      "id": 102,
+      "excluded_from_default_policy": true,
+      "dps_keepalive": {
+        "interval": "100",
+        "failure_threshold": 12
+      }
+    },
+    {
+      "name": "Equinix",
+      "id": 103,
+      "default_preference": "alternate"
+    },
+    {
+      "name": "Satellite",
+      "id": 104,
+      "default_preference": "alternate",
+      "dps_keepalive": {
+        "interval": "auto"
+      }
+    },
+    {
+      "name": "AWS",
+      "id": 105
+    }
+  ],
+  "wan_route_servers": [
+    {
+      "hostname": "cv-pathfinder-pathfinder"
+    }
+  ],
+  "wan_stun_dtls_profile_name": "profileA",
+  "wan_use_evpn_node_settings_for_lan": true,
+  "wan_virtual_topologies": {
+    "vrfs": [
+      {
+        "name": "default",
+        "policy": "DEFAULT-AVT-POLICY",
+        "wan_vni": 1
+      },
+      {
+        "name": "PROD",
+        "policy": "PROD-AVT-POLICY",
+        "wan_vni": 42
+      },
+      {
+        "name": "IT",
+        "policy": "DEFAULT-AVT-POLICY",
+        "wan_vni": 100
+      },
+      {
+        "name": "TRANSIT",
+        "policy": "TRANSIT-AVT-POLICY",
+        "wan_vni": 66
+      },
+      {
+        "name": "ATTRACTED-VRF-FROM-UPLINK",
+        "wan_vni": 166
+      },
+      {
+        "name": "WAN-VRF-NO-AF",
+        "policy": "PROD-AVT-POLICY",
+        "wan_vni": 200
+      }
+    ],
+    "policies": [
+      {
+        "name": "PROD-AVT-POLICY",
+        "application_virtual_topologies": [
+          {
+            "application_profile": "VOICE",
+            "id": 2,
+            "lowest_hop_count": true,
+            "constraints": {
+              "jitter": 42
+            },
+            "path_groups": [
+              {
+                "names": [
+                  "MPLS"
+                ],
+                "preference": "preferred"
+              },
+              {
+                "names": [
+                  "INET"
+                ],
+                "preference": "alternate"
+              }
+            ],
+            "internet_exit": {
+              "policy": "ZSCALER-EXIT-POLICY-1"
+            }
+          },
+          {
+            "application_profile": "VIDEO",
+            "id": 4,
+            "constraints": {
+              "loss_rate": "42.0"
+            },
+            "path_groups": [
+              {
+                "names": [
+                  "MPLS",
+                  "LTE"
+                ],
+                "preference": "preferred"
+              },
+              {
+                "names": [
+                  "INET"
+                ],
+                "preference": "alternate"
+              }
+            ],
+            "internet_exit": {
+              "policy": "ZSCALER-EXIT-POLICY-2"
+            }
+          },
+          {
+            "application_profile": "MPLS-ONLY",
+            "id": 5,
+            "path_groups": [
+              {
+                "names": [
+                  "MPLS"
+                ],
+                "preference": "preferred"
+              }
+            ]
+          }
+        ],
+        "default_virtual_topology": {
+          "path_groups": [
+            {
+              "names": [
+                "INET"
+              ],
+              "preference": "preferred"
+            },
+            {
+              "names": [
+                "MPLS"
+              ],
+              "preference": "alternate"
+            }
+          ]
+        }
+      },
+      {
+        "name": "DEFAULT-AVT-POLICY",
+        "application_virtual_topologies": [
+          {
+            "application_profile": "VIDEO",
+            "id": 3,
+            "path_groups": [
+              {
+                "names": [
+                  "MPLS",
+                  "INET",
+                  "Equinix"
+                ],
+                "preference": "preferred"
+              }
+            ],
+            "internet_exit": {
+              "policy": "DIRECT-EXIT-POLICY-1"
+            }
+          }
+        ],
+        "default_virtual_topology": {
+          "path_groups": [
+            {
+              "names": [
+                "INET",
+                "Equinix"
+              ]
+            },
+            {
+              "names": [
+                "MPLS"
+              ],
+              "preference": "4223"
+            }
+          ]
+        }
+      },
+      {
+        "name": "TRANSIT-AVT-POLICY",
+        "application_virtual_topologies": [
+          {
+            "application_profile": "VOICE",
+            "name": "CUSTOM-VOICE-PROFILE-NAME",
+            "id": 42,
+            "path_groups": [
+              {
+                "names": [
+                  "MPLS"
+                ],
+                "preference": "preferred"
+              },
+              {
+                "names": [
+                  "INET"
+                ],
+                "preference": "alternate"
+              }
+            ],
+            "internet_exit": {
+              "policy": "DIRECT-EXIT-POLICY-2"
+            }
+          }
+        ],
+        "default_virtual_topology": {
+          "path_groups": [
+            {
+              "names": [
+                "INET"
+              ],
+              "preference": "preferred"
+            },
+            {
+              "names": [
+                "MPLS"
+              ],
+              "preference": "alternate"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "zscaler_endpoints": {
+    "primary": {
+      "ip_address": "10.37.121.1",
+      "datacenter": "FMT1",
+      "city": "Fremont, CA",
+      "country": "United States",
+      "region": "us-west1",
+      "latitude": "37",
+      "longitude": "-121"
+    },
+    "secondary": {
+      "ip_address": "10.39.77.1",
+      "datacenter": "WAS1",
+      "city": "Washington, DC",
+      "country": "United States",
+      "region": "us-east1",
+      "latitude": "39",
+      "longitude": "-77"
+    },
+    "tertiary": {
+      "ip_address": "10.50.9.1",
+      "datacenter": "FRA4",
+      "city": "Frankfurt",
+      "country": "Germany",
+      "region": "eu-west1",
+      "latitude": "50",
+      "longitude": "9"
+    },
+    "cloud_name": "zscalerbeta",
+    "device_location": {
+      "city": "Santa Clara, CA",
+      "country": "United States"
+    }
+  },
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TenantA",
+            "mac_vrf_vni_base": 1000,
+            "vrfs": [
+              {
+                "name": "default",
+                "vrf_id": 1,
+                "static_routes": [
+                  {
+                    "destination_address_prefix": "66.66.66.0/24",
+                    "gateway": "172.17.0.0",
+                    "nodes": [
+                      "cv-pathfinder-edge"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "PROD",
+                "vrf_id": 142,
+                "svis": [
+                  {
+                    "id": 100,
+                    "name": "VLAN100",
+                    "ip_address_virtual": "10.0.100.1/24"
+                  }
+                ]
+              },
+              {
+                "name": "IT",
+                "vrf_id": 1000
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 101,
+                "name": "VLAN101"
+              }
+            ]
+          },
+          {
+            "name": "TenantB",
+            "vrfs": [
+              {
+                "name": "default",
+                "vrf_id": 1
+              },
+              {
+                "name": "TRANSIT",
+                "vrf_id": 66
+              },
+              {
+                "name": "NOT-WAN-VRF",
+                "address_families": [],
+                "vrf_id": 13,
+                "bgp": {
+                  "enabled": true
+                }
+              }
+            ]
+          },
+          {
+            "name": "TenantC",
+            "mac_vrf_vni_base": 1000,
+            "vrfs": [
+              {
+                "name": "ATTRACTED-VRF-FROM-UPLINK",
+                "vrf_id": 666,
+                "svis": [
+                  {
+                    "id": 666,
+                    "name": "VLAN666",
+                    "nodes": [
+                      {
+                        "node": "site-ha-disabled-leaf",
+                        "ip_address": "10.66.66.1"
+                      }
+                    ],
+                    "ip_address_virtual": "10.66.66.66/24"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "TenantD",
+            "mac_vrf_vni_base": 1000,
+            "vrfs": [
+              {
+                "name": "WAN-VRF-NO-AF",
+                "address_families": [],
+                "vrf_id": 200
+              },
+              {
+                "name": "VRF-NO-WAN",
+                "vrf_id": 300
+              },
+              {
+                "name": "VRF-NO-WAN-NO-AF",
+                "address_families": [],
+                "vrf_id": 400
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.45.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.255.0/24",
+            "bgp_as": "65199",
+            "filter": {
+              "always_include_vrfs_in_tenants": [
+                "TenantA"
+              ]
+            },
+            "virtual_router_mac_address": "00:1c:73:00:00:01"
+          },
+          "nodes": [
+            {
+              "name": "site-ha-enabled-leaf1",
+              "id": 1
+            },
+            {
+              "name": "site-ha-enabled-leaf2A",
+              "id": 2
+            },
+            {
+              "name": "site-ha-enabled-leaf2B",
+              "id": 3
+            },
+            {
+              "name": "site-ha-disabled-leaf",
+              "id": 4
+            }
+          ]
+        }
+      },
+      {
+        "key": "wan_router",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.42.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.142.0/24",
+            "filter": {
+              "deny_vrfs": [
+                "IT"
+              ],
+              "always_include_vrfs_in_tenants": [
+                "TenantA",
+                "TenantD"
+              ]
+            }
+          },
+          "nodes": [
+            {
+              "name": "cv-pathfinder-edge-wan-use-evpn-on-lan-no-overlay-on-lan",
+              "id": 14,
+              "uplink_type": "p2p",
+              "uplink_ipv4_pool": "172.18.0.0/24",
+              "uplink_interfaces": [
+                "Ethernet52"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet2"
+              ],
+              "uplink_switches": [
+                "leaf-wan-use-evpn-on-lan"
+              ],
+              "evpn_role": "client",
+              "cv_pathfinder_region": "AVD_Land_West",
+              "cv_pathfinder_site": "Site12",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "dhcp",
+                  "dhcp_accept_default_route": true,
+                  "wan_carrier": "ATT",
+                  "wan_circuit_id": "666"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "key": "wan_rr",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.44.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.144.0/24",
+            "bgp_as": "65000",
+            "data_plane_cpu_allocation_max": 1
+          },
+          "nodes": [
+            {
+              "name": "cv-pathfinder-pathfinder",
+              "id": 1,
+              "cv_pathfinder_site": "Global-pathfinder-site",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "10.7.7.7/31",
+                  "public_ip": "172.17.7.7",
+                  "peer_ip": "10.7.7.6",
+                  "static_routes": [
+                    {
+                      "prefix": "0.0.0.0/0"
+                    }
+                  ],
+                  "wan_carrier": "Bouygues_Telecom",
+                  "wan_circuit_id": "777"
+                },
+                {
+                  "name": "Ethernet2/2",
+                  "ip_address": "172.16.0.1/31",
+                  "wan_carrier": "Colt",
+                  "wan_circuit_id": "10000"
+                },
+                {
+                  "name": "Ethernet3",
+                  "ip_address": "10.9.9.9/31",
+                  "wan_carrier": "Another-ISP",
+                  "wan_circuit_id": "999"
+                }
+              ]
+            },
+            {
+              "name": "cv-pathfinder-pathfinder1",
+              "id": 2,
+              "cv_pathfinder_region": "AVD_Land_West",
+              "cv_pathfinder_site": "Site423",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "10.8.8.8/31",
+                  "wan_carrier": "Orange",
+                  "wan_circuit_id": "888"
+                }
+              ],
+              "data_plane_cpu_allocation_max": 3
+            },
+            {
+              "name": "cv-pathfinder-pathfinder2",
+              "id": 3,
+              "cv_pathfinder_region": "AVD_Land_East",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "10.9.9.9/31",
+                  "wan_carrier": "SFR",
+                  "wan_circuit_id": "999"
+                },
+                {
+                  "name": "Ethernet2",
+                  "ip_address": "172.19.9.9/31",
+                  "public_ip": "10.37.37.7",
+                  "wan_carrier": "ATT-MPLS",
+                  "wan_circuit_id": "10999"
+                }
+              ],
+              "data_plane_cpu_allocation_max": 3
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

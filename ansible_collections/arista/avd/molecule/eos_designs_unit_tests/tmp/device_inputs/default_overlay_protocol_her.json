@@ -1,0 +1,36 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "node_type_keys": [
+    {
+      "key": "spine",
+      "type": "spine",
+      "default_overlay_routing_protocol": "her"
+    }
+  ],
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.0.0/24",
+            "bgp_as": "65000"
+          },
+          "nodes": [
+            {
+              "name": "default_overlay_protocol_her",
+              "id": 42
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

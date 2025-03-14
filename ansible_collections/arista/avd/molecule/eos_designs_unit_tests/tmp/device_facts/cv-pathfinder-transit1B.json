@@ -19,6 +19,44 @@
   "vtep_ip": "192.168.143.2",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet52",
+      "peer": "site-ha-enabled-leaf1",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65199",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.17.0.3",
+      "peer_ip_address": "172.17.0.2",
+      "structured_config": {},
+      "subinterfaces": [
+        {
+          "interface": "Ethernet52.1000",
+          "peer_interface": "Ethernet2.1000",
+          "vrf": "IT",
+          "encapsulation_dot1q_vlan": 1000,
+          "prefix_length": 31,
+          "ip_address": "172.17.0.3",
+          "peer_ip_address": "172.17.0.2",
+          "structured_config": {}
+        },
+        {
+          "interface": "Ethernet52.142",
+          "peer_interface": "Ethernet2.142",
+          "vrf": "PROD",
+          "encapsulation_dot1q_vlan": 142,
+          "prefix_length": 31,
+          "ip_address": "172.17.0.3",
+          "peer_ip_address": "172.17.0.2",
+          "structured_config": {}
+        }
+      ]
+    }
+  ],
   "uplink_peers": [
     "site-ha-enabled-leaf1"
   ],

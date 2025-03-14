@@ -78,6 +78,26 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet7
+  description: DC1-L2LEAF2A_Ethernet2
+  shutdown: false
+  speed: 100g-2
+  channel_group:
+    id: 1007
+    mode: active
+  peer: DC1-L2LEAF2A
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+- name: Ethernet8
+  description: DC1-L2LEAF2B_Ethernet2
+  shutdown: false
+  speed: 100g-2
+  channel_group:
+    id: 1007
+    mode: active
+  peer: DC1-L2LEAF2B
+  peer_interface: Ethernet2
+  peer_type: l2leaf
 - name: Ethernet11
   description: server04_inherit_all_from_profile_Eth2
   shutdown: false
@@ -546,6 +566,13 @@ port_channel_interfaces:
       groups:
       - MLAG
       - LEAF_PEER_L3
+- name: Port-Channel1007
+  description: DC1_L2LEAF2_Po1001
+  shutdown: false
+  mlag: 1007
+  switchport:
+    enabled: true
+    mode: trunk
 - name: Port-Channel14
   description: server07_inherit_all_from_profile_port_channel_ALL_WITH_SECURITY_PORT_CHANNEL
   shutdown: false

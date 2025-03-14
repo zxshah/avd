@@ -40,5 +40,10 @@
     "ptp-tests-leaf3",
     "ptp-tests-leaf4",
     "ptp-tests-leaf5"
+  ],
+  "evpn_route_server_clients": [
+    "ptp-tests-leaf3",
+    "ptp-tests-leaf4",
+    "ptp-tests-leaf5"
   ]
 }

@@ -1,0 +1,54 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "ntp_settings": {
+    "server_vrf": "default",
+    "servers": [
+      {
+        "name": "10.10.10.1"
+      },
+      {
+        "name": "10.10.10.2",
+        "burst": true,
+        "iburst": true,
+        "key": 1,
+        "maxpoll": 5,
+        "minpoll": 3,
+        "version": 4
+      }
+    ],
+    "authenticate": true,
+    "authenticate_servers_only": true,
+    "authentication_keys": [
+      {
+        "id": 1,
+        "hash_algorithm": "sha1",
+        "key": "someobfuscatedkey",
+        "key_type": "7"
+      }
+    ],
+    "trusted_keys": "1"
+  },
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "ntp-settings-1",
+              "mgmt_ip": "192.168.0.2/24"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

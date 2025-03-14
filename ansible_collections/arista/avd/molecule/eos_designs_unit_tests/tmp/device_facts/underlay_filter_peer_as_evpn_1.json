@@ -13,6 +13,10 @@
   "router_id": "192.168.255.1",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "underlay_filter_peer_as_evpn_2",
+    "underlay_filter_peer_as_evpn_3"
+  ],
   "overlay": {
     "peering_address": "192.168.255.1",
     "evpn_mpls": false
@@ -20,6 +24,36 @@
   "vtep_ip": "192.168.254.1",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "underlay_filter_peer_as_evpn_2",
+      "peer_interface": "Ethernet1",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "64513",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "192.168.153.1",
+      "peer_ip_address": "192.168.153.0",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "underlay_filter_peer_as_evpn_3",
+      "peer_interface": "Ethernet1",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "64513",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "192.168.153.3",
+      "peer_ip_address": "192.168.153.2",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "underlay_filter_peer_as_evpn_2",
     "underlay_filter_peer_as_evpn_3"

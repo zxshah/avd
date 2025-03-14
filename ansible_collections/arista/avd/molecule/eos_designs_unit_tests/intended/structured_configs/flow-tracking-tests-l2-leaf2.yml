@@ -65,8 +65,6 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
-    trunk:
-      allowed_vlan: 11,4092
 service_routing_protocols_model: multi-agent
 static_routes:
 - vrf: MGMT

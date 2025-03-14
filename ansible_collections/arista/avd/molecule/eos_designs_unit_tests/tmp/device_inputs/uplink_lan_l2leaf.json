@@ -1,0 +1,235 @@
+{
+  "bgp_peer_groups": {
+    "wan_overlay_peers": {
+      "listen_range_prefixes": [
+        "0.0.0.0/0"
+      ]
+    }
+  },
+  "cv_pathfinder_regions": [
+    {
+      "name": "region1",
+      "id": 1,
+      "sites": [
+        {
+          "name": "site1",
+          "id": 1
+        },
+        {
+          "name": "site2",
+          "id": 2
+        }
+      ]
+    }
+  ],
+  "default_node_types": [
+    {
+      "node_type": "l2leaf",
+      "match_hostnames": [
+        ".*l2leaf"
+      ]
+    },
+    {
+      "node_type": "wan_router",
+      "match_hostnames": [
+        ".*wan_router\\d"
+      ]
+    }
+  ],
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_flow_tracking": {
+    "uplinks": {
+      "enabled": true
+    },
+    "downlinks": {
+      "enabled": true
+    }
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "p2p_uplinks_mtu": 9214,
+  "platform_settings": [
+    {
+      "platforms": [
+        "default"
+      ],
+      "p2p_uplinks_mtu": 9218
+    }
+  ],
+  "wan_carriers": [
+    {
+      "name": "Comcast",
+      "path_group": "INET",
+      "trusted": true
+    }
+  ],
+  "wan_ipsec_profiles": {
+    "control_plane": {
+      "shared_key": "test"
+    }
+  },
+  "wan_mode": "cv-pathfinder",
+  "wan_path_groups": [
+    {
+      "name": "INET",
+      "id": 100,
+      "ipsec": {
+        "static_peers": false
+      }
+    }
+  ],
+  "wan_route_servers": [],
+  "wan_virtual_topologies": {
+    "vrfs": [
+      {
+        "name": "VRF1",
+        "wan_vni": 123
+      }
+    ]
+  },
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TEST",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_id": 123,
+                "svis": [
+                  {
+                    "id": 10,
+                    "name": "VLAN10_NATIVE",
+                    "tags": [
+                      "wan_router",
+                      "l2leaf"
+                    ],
+                    "enabled": true,
+                    "ip_address": "10.0.10.1/24",
+                    "mtu": 9218
+                  },
+                  {
+                    "id": 100,
+                    "name": "VLAN100",
+                    "tags": [
+                      "wan_router",
+                      "l2leaf"
+                    ],
+                    "enabled": true,
+                    "description": "My vlan 100",
+                    "ip_address": "10.0.100.1/24",
+                    "ipv6_address": "cafe::cafe/64",
+                    "ipv6_enable": true,
+                    "raw_eos_cli": "comment yo",
+                    "structured_config": {
+                      "_custom_key": "custom_value"
+                    }
+                  },
+                  {
+                    "id": 101,
+                    "name": "VLAN101",
+                    "tags": [
+                      "wan_router"
+                    ],
+                    "enabled": true,
+                    "ip_address": "10.0.101.1/24"
+                  },
+                  {
+                    "id": 102,
+                    "name": "VLAN102",
+                    "tags": [
+                      "l2leaf"
+                    ],
+                    "enabled": true,
+                    "ip_address": "10.0.102.1/24"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "id": 1,
+            "filter": {
+              "tags": [
+                "l2leaf"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "key": "wan_router",
+        "node_type_keys_key": {
+          "defaults": {
+            "id": 1,
+            "uplink_type": "lan",
+            "uplink_interfaces": [
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "uplink_lan_l2leaf"
+            ],
+            "loopback_ipv4_pool": "192.168.1.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.2.0/24",
+            "bgp_as": "65100",
+            "filter": {
+              "tags": [
+                "wan_router"
+              ]
+            }
+          },
+          "nodes": [
+            {
+              "name": "uplink_lan_wan_router1",
+              "id": 1,
+              "uplink_switch_interfaces": [
+                "Ethernet1"
+              ],
+              "uplink_native_vlan": 10,
+              "cv_pathfinder_region": "region1",
+              "cv_pathfinder_site": "site1",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "10.9.9.9/31",
+                  "wan_carrier": "Comcast",
+                  "wan_circuit_id": "999"
+                }
+              ]
+            },
+            {
+              "name": "uplink_lan_wan_router2",
+              "id": 2,
+              "uplink_switch_interfaces": [
+                "Ethernet2"
+              ],
+              "cv_pathfinder_region": "region1",
+              "cv_pathfinder_site": "site2",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "ip_address": "10.9.9.1/31",
+                  "wan_carrier": "Comcast",
+                  "wan_circuit_id": "999"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

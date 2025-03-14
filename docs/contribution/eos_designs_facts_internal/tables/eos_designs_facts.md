@@ -90,27 +90,37 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;direction</samp>](## "uplinks.[].link_tracking_groups.[].direction") | String | Required |  | Valid Values:<br>- <code>upstream</code><br>- <code>downstream</code> |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_node_group</samp>](## "uplinks.[].peer_node_group") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;node_group</samp>](## "uplinks.[].node_group") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;mlag</samp>](## "uplinks.[].mlag") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_mlag</samp>](## "uplinks.[].peer_mlag") | Boolean |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;channel_group_id</samp>](## "uplinks.[].channel_group_id") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_channel_group_id</samp>](## "uplinks.[].peer_channel_group_id") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;channel_group_id</samp>](## "uplinks.[].channel_group_id") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_channel_group_id</samp>](## "uplinks.[].peer_channel_group_id") | Integer |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;trunk_groups</samp>](## "uplinks.[].trunk_groups") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplinks.[].trunk_groups.[]") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_trunk_groups</samp>](## "uplinks.[].peer_trunk_groups") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplinks.[].peer_trunk_groups.[]") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;vlans</samp>](## "uplinks.[].vlans") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;native_vlan</samp>](## "uplinks.[].native_vlan") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;short_esi</samp>](## "uplinks.[].short_esi") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_short_esi</samp>](## "uplinks.[].peer_short_esi") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_spanning_tree_portfast</samp>](## "uplinks.[].peer_spanning_tree_portfast") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;spanning_tree_portfast</samp>](## "uplinks.[].spanning_tree_portfast") | String |  |  | Valid Values:<br>- <code>edge</code><br>- <code>network</code> |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;peer_spanning_tree_portfast</samp>](## "uplinks.[].peer_spanning_tree_portfast") | String |  |  | Valid Values:<br>- <code>edge</code><br>- <code>network</code> |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;sflow_enabled</samp>](## "uplinks.[].sflow_enabled") | Boolean |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "uplinks.[].flow_tracking") | Dictionary |  |  |  | Enable flow-tracking on all fabric uplinks. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "uplinks.[].flow_tracking.enabled") | Boolean |  | `False` |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "uplinks.[].flow_tracking.name") | String |  | `FLOW-TRACKER` |  | Flow tracker name as defined in flow_tracking_settings. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;inband_ztp_vlan</samp>](## "uplinks.[].inband_ztp_vlan") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;inband_ztp_lacp_fallback_delay</samp>](## "uplinks.[].inband_ztp_lacp_fallback_delay") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;dhcp_server</samp>](## "uplinks.[].dhcp_server") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "uplinks.[].structured_config") | Dictionary |  |  |  | Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".<br>When uplink_type == "p2p", custom structured config added under ethernet_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the ethernet interface level.<br>When uplink_type == "port-channel", custom structured config added under port_channel_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the port-channel interface level.<br>"uplink_structured_config" is applied after "structured_config", so it can override "structured_config" defined on node-level.<br>Note! The content of this dictionary is _not_ validated by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;subinterfaces</samp>](## "uplinks.[].subinterfaces") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;interface</samp>](## "uplinks.[].subinterfaces.[].interface") | String | Required, Unique |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer_interface</samp>](## "uplinks.[].subinterfaces.[].peer_interface") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "uplinks.[].subinterfaces.[].vrf") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encapsulation_dot1q_vlan</samp>](## "uplinks.[].subinterfaces.[].encapsulation_dot1q_vlan") | Integer |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;encapsulation_dot1q_vlan</samp>](## "uplinks.[].subinterfaces.[].encapsulation_dot1q_vlan") | Integer | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_enable</samp>](## "uplinks.[].subinterfaces.[].ipv6_enable") | Boolean |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix_length</samp>](## "uplinks.[].subinterfaces.[].prefix_length") | Integer |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_address</samp>](## "uplinks.[].subinterfaces.[].ip_address") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer_ip_address</samp>](## "uplinks.[].subinterfaces.[].peer_ip_address") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prefix_length</samp>](## "uplinks.[].subinterfaces.[].prefix_length") | Integer | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ip_address</samp>](## "uplinks.[].subinterfaces.[].ip_address") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;peer_ip_address</samp>](## "uplinks.[].subinterfaces.[].peer_ip_address") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "uplinks.[].subinterfaces.[].structured_config") | Dictionary |  |  |  | Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".<br>When uplink_type == "p2p", custom structured config added under ethernet_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the ethernet interface level.<br>When uplink_type == "port-channel", custom structured config added under port_channel_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the port-channel interface level.<br>"uplink_structured_config" is applied after "structured_config", so it can override "structured_config" defined on node-level.<br>Note! The content of this dictionary is _not_ validated by the schema, since it can be either ethernet_interfaces or port_channel_interfaces.<br> |
     | [<samp>uplink_peers</samp>](## "uplink_peers") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplink_peers.[]") | String |  |  |  |  |
@@ -289,17 +299,31 @@
             direction: <str; "upstream" | "downstream"; required>
         peer_node_group: <str>
         node_group: <str>
+        mlag: <bool>
         peer_mlag: <bool>
-        channel_group_id: <str>
-        peer_channel_group_id: <str>
+        channel_group_id: <int>
+        peer_channel_group_id: <int>
         trunk_groups:
           - <str>
         peer_trunk_groups:
           - <str>
         vlans: <str>
         native_vlan: <int>
+        short_esi: <str>
         peer_short_esi: <str>
-        peer_spanning_tree_portfast: <str>
+        spanning_tree_portfast: <str; "edge" | "network">
+        peer_spanning_tree_portfast: <str; "edge" | "network">
+        sflow_enabled: <bool>
+
+        # Enable flow-tracking on all fabric uplinks.
+        flow_tracking:
+          enabled: <bool; default=False>
+
+          # Flow tracker name as defined in flow_tracking_settings.
+          name: <str; default="FLOW-TRACKER">
+        inband_ztp_vlan: <int>
+        inband_ztp_lacp_fallback_delay: <int>
+        dhcp_server: <bool>
 
         # Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
         # When uplink_type == "p2p", custom structured config added under ethernet_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the ethernet interface level.
@@ -311,11 +335,11 @@
           - interface: <str; required; unique>
             peer_interface: <str; required>
             vrf: <str; required>
-            encapsulation_dot1q_vlan: <int>
+            encapsulation_dot1q_vlan: <int; required>
             ipv6_enable: <bool>
-            prefix_length: <int>
-            ip_address: <str>
-            peer_ip_address: <str>
+            prefix_length: <int; required>
+            ip_address: <str; required>
+            peer_ip_address: <str; required>
 
             # Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
             # When uplink_type == "p2p", custom structured config added under ethernet_interfaces.[name=<interface>] for eos_cli_config_gen overrides the settings on the ethernet interface level.

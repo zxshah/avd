@@ -36,5 +36,8 @@
   },
   "downlink_switches": [
     "inband-mgmt-parent"
+  ],
+  "evpn_route_server_clients": [
+    "inband-mgmt-parent"
   ]
 }

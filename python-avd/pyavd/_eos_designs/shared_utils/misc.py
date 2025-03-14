@@ -75,7 +75,7 @@ class MiscMixin(Protocol):
         return node_id
 
     @cached_property
-    def filter_tags(self: SharedUtilsProtocol) -> list:
+    def filter_tags(self: SharedUtilsProtocol) -> EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.Filter.Tags:
         """Return filter.tags + group if defined."""
         filter_tags = self.node_config.filter.tags
         if self.group is not None:
@@ -127,7 +127,7 @@ class MiscMixin(Protocol):
         uplink_switch_interfaces = []
         uplink_switch_counter = {}
         for uplink_switch in self.uplink_switches:
-            uplink_switch_facts = self.get_peer_facts_cls(uplink_switch)
+            uplink_switch_facts = self.get_peer_facts(uplink_switch)
 
             # Count the number of instances the current switch was processed
             uplink_switch_counter[uplink_switch] = uplink_switch_counter.get(uplink_switch, 0) + 1

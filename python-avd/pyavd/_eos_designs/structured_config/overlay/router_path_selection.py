@@ -142,7 +142,7 @@ class RouterPathSelectionMixin(Protocol):
         return metric_interfaces
 
     def _wan_ha_peer_vtep_ip(self: AvdStructuredConfigOverlayProtocol) -> str:
-        peer_facts = self.shared_utils.get_peer_facts_cls(self.shared_utils.wan_ha_peer)
+        peer_facts = self.shared_utils.get_peer_facts(self.shared_utils.wan_ha_peer)
         if not peer_facts.vtep_ip:
             msg = f"'vtep_ip' is required but was not found for host '{self.shared_utils.wan_ha_peer}'"
             raise AristaAvdInvalidInputsError(msg)

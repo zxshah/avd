@@ -1,0 +1,1044 @@
+{
+  "bgp_peer_groups": {
+    "mlag_ipv4_vrfs_peer": {
+      "name": "MLAG-IPv4-VRFS-PEER"
+    }
+  },
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "evpn_multicast": false,
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "fabric_sflow": {
+    "l3_interfaces": true
+  },
+  "mgmt_gateway": "192.168.200.1",
+  "sflow_settings": {
+    "destinations": [
+      {
+        "destination": "10.10.10.12",
+        "port": 1234,
+        "vrf": "sflow_vrf"
+      }
+    ]
+  },
+  "type": "l3leaf",
+  "underlay_multicast": true,
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "Tenant_A",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l2_multicast": {
+              "enabled": true,
+              "underlay_l2_multicast_group_ipv4_pool": "232.0.0.0/20",
+              "fast_leave": true
+            },
+            "vrfs": [
+              {
+                "name": "MULTICAST_ENABLED_110_111",
+                "description": "MULTICAST_ENABLED_110_111",
+                "vrf_vni": 11,
+                "svis": [
+                  {
+                    "id": 110,
+                    "name": "MULTICAST_ENABLED_110",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.10.1/24"
+                  },
+                  {
+                    "id": 111,
+                    "name": "MULTICAST_ENABLED_111",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.11.1/24"
+                  }
+                ]
+              },
+              {
+                "name": "MULTICAST_ENABLED_210_DISABLED_211",
+                "description": "MULTICAST_ENABLED_210_DISABLED_211",
+                "vrf_vni": 12,
+                "svis": [
+                  {
+                    "id": 210,
+                    "name": "MULTICAST_ENABLED_210",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.10.1/24"
+                  },
+                  {
+                    "id": 211,
+                    "name": "MULTICAST_DISABLED_211",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.11.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": false
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "MULTICAST_DISABLED_310_311",
+                "description": "MULTICAST_DISABLED_310_311",
+                "vrf_vni": 13,
+                "svis": [
+                  {
+                    "id": 310,
+                    "name": "MULTICAST_DISABLED_310",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.10.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "id": 311,
+                    "name": "MULTICAST_DISABLED_311",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.11.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": false
+                    }
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 256,
+                "name": "MULTICAST_DISABLED_256",
+                "tags": [
+                  "test_l2"
+                ],
+                "evpn_l2_multicast": {
+                  "enabled": false
+                }
+              },
+              {
+                "id": 257,
+                "name": "MULTICAST_ENABLED_257",
+                "tags": [
+                  "test_l2"
+                ]
+              },
+              {
+                "id": 4092,
+                "name": "MULTICAST_ENABLED_4092",
+                "tags": [
+                  "test_l2"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Tenant_B",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l2_multicast": {
+              "enabled": false,
+              "underlay_l2_multicast_group_ipv4_pool": "232.0.16.0/31, 232.0.16.2-232.0.19.255, 232.0.20.0/22, 232.0.24.0-232.0.31.255",
+              "underlay_l2_multicast_group_ipv4_pool_offset": 1
+            },
+            "igmp_snooping_querier": {
+              "source_address": "1.1.1.1",
+              "version": 3
+            },
+            "vrfs": [
+              {
+                "name": "MULTICAST_ENABLED_1_2",
+                "description": "MULTICAST_ENABLED_1_2",
+                "vrf_vni": 21,
+                "svis": [
+                  {
+                    "id": 1,
+                    "name": "MULTICAST_ENABLED_1",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.1.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": true
+                    },
+                    "igmp_snooping_querier": {
+                      "fast_leave": true
+                    }
+                  },
+                  {
+                    "id": 2,
+                    "name": "MULTICAST_ENABLED_2",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.2.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "MULTICAST_ENABLED_3_DISABLED_4",
+                "description": "MULTICAST_ENABLED_3_DISABLED_4",
+                "vrf_vni": 22,
+                "svis": [
+                  {
+                    "id": 3,
+                    "name": "MULTICAST_ENABLED_3",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.3.1/24",
+                    "evpn_l2_multicast": {
+                      "enabled": true
+                    },
+                    "igmp_snooping_querier": {
+                      "source_address": "2.2.2.2",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "id": 4,
+                    "name": "MULTICAST_DISABLED_4",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.4.1/24"
+                  }
+                ]
+              },
+              {
+                "name": "MULTICAST_DISABLED_5_6",
+                "description": "MULTICAST_DISABLED_5_6",
+                "vrf_vni": 23,
+                "svis": [
+                  {
+                    "id": 5,
+                    "name": "MULTICAST_DISABLED_5",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.5.1/24"
+                  },
+                  {
+                    "id": 6,
+                    "name": "MULTICAST_DISABLED_6",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.6.1/24"
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 7,
+                "name": "MULTICAST_DISABLED_7",
+                "tags": [
+                  "test_l2"
+                ]
+              },
+              {
+                "id": 8,
+                "name": "MULTICAST_ENABLED_8",
+                "tags": [
+                  "test_l2"
+                ],
+                "evpn_l2_multicast": {
+                  "enabled": true
+                }
+              },
+              {
+                "id": 9,
+                "name": "MULTICAST_ENABLED_9",
+                "tags": [
+                  "test_l2"
+                ],
+                "evpn_l2_multicast": {
+                  "enabled": true
+                },
+                "igmp_snooping_querier": {
+                  "source_address": "2.2.2.2",
+                  "version": 1
+                }
+              }
+            ]
+          },
+          {
+            "name": "Tenant_C",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l2_multicast": {
+              "enabled": false,
+              "underlay_l2_multicast_group_ipv4_pool": "236.0.0.0/20"
+            },
+            "evpn_l3_multicast": {
+              "enabled": true,
+              "evpn_underlay_l3_multicast_group_ipv4_pool": "232.0.32.0/24, 232.0.33.0-232.0.31.255",
+              "evpn_underlay_l3_multicast_group_ipv4_pool_offset": 1
+            },
+            "vrfs": [
+              {
+                "name": "TEN_C_L3_MULTICAST_ENABLED_130_131",
+                "description": "L3_MULTICAST_ENABLED_130_131",
+                "vrf_vni": 31,
+                "vrf_id": 66,
+                "vtep_diagnostic": {
+                  "loopback": 31,
+                  "loopback_ip_range": "10.255.1.0/24"
+                },
+                "svis": [
+                  {
+                    "id": 130,
+                    "name": "L3_MULTICAST_ENABLED_130",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.13.1/24"
+                  },
+                  {
+                    "id": 131,
+                    "name": "L3_MULTICAST_ENABLED_131",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "nodes": [
+                      {
+                        "node": "EVPN-MULTICAST-L3LEAF1A",
+                        "ip_address": "10.1.14.2/24"
+                      },
+                      {
+                        "node": "EVPN-MULTICAST-L3LEAF1B",
+                        "ip_address": "10.1.14.3/24"
+                      },
+                      {
+                        "node": "EVPN-MULTICAST-L3LEAF2A",
+                        "ip_address": "10.1.14.4/24"
+                      },
+                      {
+                        "node": "EVPN-MULTICAST-L3LEAF3A",
+                        "ip_address": "10.1.14.5/24"
+                      },
+                      {
+                        "node": "EVPN-MULTICAST-L3LEAF3B",
+                        "ip_address": "10.1.14.6/24"
+                      }
+                    ],
+                    "enabled": true,
+                    "ip_virtual_router_addresses": [
+                      "10.1.14.1"
+                    ]
+                  },
+                  {
+                    "id": 136,
+                    "name": "L3_L2_MULTICAST_ENABLED_136",
+                    "enabled": true,
+                    "evpn_l2_multicast": {
+                      "enabled": true,
+                      "always_redistribute_igmp": true
+                    }
+                  },
+                  {
+                    "id": 137,
+                    "name": "L3_L2_MULTICAST_ENABLED_137",
+                    "enabled": true,
+                    "evpn_l2_multicast": {
+                      "enabled": true,
+                      "always_redistribute_igmp": false
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_C_L3_MULTICAST_ENABLED_230_DISABLED_231",
+                "description": "L3_MULTICAST_ENABLED_230_DISABLED_231",
+                "vrf_vni": 32,
+                "vtep_diagnostic": {
+                  "loopback": 32,
+                  "loopback_ip_range": "10.255.2.0/24"
+                },
+                "svis": [
+                  {
+                    "id": 230,
+                    "name": "L3_MULTICAST_ENABLED_230",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.23.1/24",
+                    "igmp_snooping_querier": {
+                      "enabled": true,
+                      "fast_leave": true
+                    }
+                  },
+                  {
+                    "id": 231,
+                    "name": "L3_MULTICAST_DISABLED_231",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.24.1/24",
+                    "evpn_l3_multicast": {
+                      "enabled": false
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_C_L3_MULTICAST_DISABLED_330_331",
+                "description": "L3_MULTICAST_DISABLED_330_331",
+                "vrf_vni": 33,
+                "vtep_diagnostic": {
+                  "loopback": 33,
+                  "loopback_ip_range": "10.255.3.0/24"
+                },
+                "evpn_l3_multicast": {
+                  "enabled": false
+                },
+                "svis": [
+                  {
+                    "id": 330,
+                    "name": "L3_MULTICAST_DISABLED_330",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.33.1/24"
+                  },
+                  {
+                    "id": 331,
+                    "name": "L3_MULTICAST_DISABLED_331",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.34.1/24"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Tenant_D",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l3_multicast": {
+              "enabled": false,
+              "evpn_underlay_l3_multicast_group_ipv4_pool": "232.0.64.0/20"
+            },
+            "vrfs": [
+              {
+                "name": "TEN_D_L3_MULTICAST_ENABLED_140_DISABLED_141",
+                "description": "L3_MULTICAST_ENABLED_140_DISABLED_141",
+                "vrf_vni": 41,
+                "vtep_diagnostic": {
+                  "loopback": 41,
+                  "loopback_ip_range": "10.255.41.0/24"
+                },
+                "evpn_l3_multicast": {
+                  "enabled": true,
+                  "evpn_underlay_l3_multicast_group": "232.0.64.2"
+                },
+                "svis": [
+                  {
+                    "id": 140,
+                    "name": "L3_MULTICAST_ENABLED_140",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.14.1/24"
+                  },
+                  {
+                    "id": 141,
+                    "name": "L3_MULTICAST_DISABLED_141",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.15.1/24",
+                    "evpn_l3_multicast": {
+                      "enabled": false
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_D_L3_MULTICAST_DISABLED_240_241",
+                "description": "L3_MULTICAST_DISABLED_240_241",
+                "vrf_vni": 42,
+                "vtep_diagnostic": {
+                  "loopback": 42,
+                  "loopback_ip_range": "10.255.42.0/24"
+                },
+                "svis": [
+                  {
+                    "id": 240,
+                    "name": "L3_MULTICAST_DISABLED_240",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.24.1/24"
+                  },
+                  {
+                    "id": 241,
+                    "name": "L3_MULTICAST_DISABLED_241",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.25.1/24"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Tenant_E",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l3_multicast": {
+              "enabled": true,
+              "evpn_underlay_l3_multicast_group_ipv4_pool": "232.0.96.0/20",
+              "evpn_peg": [
+                {
+                  "nodes": [
+                    "EVPN-MULTICAST-L3LEAF3A",
+                    "EVPN-MULTICAST-L3LEAF3B"
+                  ],
+                  "transit": false
+                }
+              ]
+            },
+            "pim_rp_addresses": [
+              {
+                "rps": [
+                  "10.1.51.129",
+                  "10.1.52.129"
+                ],
+                "nodes": [
+                  "EVPN-MULTICAST-L3LEAF3A",
+                  "EVPN-MULTICAST-L3LEAF3B"
+                ],
+                "groups": [
+                  "232.0.104.0/21",
+                  "232.0.96.0/21"
+                ]
+              },
+              {
+                "rps": [
+                  "10.1.50.100"
+                ],
+                "groups": [
+                  "232.0.112.0/21"
+                ]
+              },
+              {
+                "rps": [
+                  "10.1.51.130",
+                  "10.1.52.130"
+                ],
+                "nodes": [
+                  "EVPN-MULTICAST-L3LEAF1A",
+                  "EVPN-MULTICAST-L3LEAF1B"
+                ]
+              },
+              {
+                "rps": [
+                  "10.1.51.140",
+                  "10.1.52.140"
+                ],
+                "nodes": [
+                  "EVPN-MULTICAST-L3LEAF1A",
+                  "EVPN-MULTICAST-L3LEAF1B"
+                ],
+                "groups": [
+                  "232.0.120.0/21",
+                  "232.0.128.0/21"
+                ],
+                "access_list_name": "RPS_ACL_VRF_Tenant_E_1"
+              },
+              {
+                "rps": [
+                  "10.1.50.150"
+                ],
+                "groups": [
+                  "232.0.136.0/21"
+                ],
+                "access_list_name": "RPS_ACL_VRF_Tenant_E_2"
+              }
+            ],
+            "vrfs": [
+              {
+                "name": "TEN_E_PEG_L3_MULTICAST_ENABLED",
+                "description": "PEG_L3_MULTICAST_ENABLED in Tenant E",
+                "vrf_vni": 51,
+                "enable_mlag_ibgp_peering_vrfs": false,
+                "vtep_diagnostic": {
+                  "loopback": 51,
+                  "loopback_ip_range": "10.255.51.0/24"
+                },
+                "svis": [
+                  {
+                    "id": 150,
+                    "name": "L3_MULTICAST_ENABLED_150",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.15.1/24"
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet7",
+                      "Ethernet7"
+                    ],
+                    "ip_addresses": [
+                      "10.1.51.0/31",
+                      "10.1.51.2/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet7.10",
+                      "Ethernet7.10"
+                    ],
+                    "ip_addresses": [
+                      "10.1.51.4/31",
+                      "10.1.51.6/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF3A",
+                      "EVPN-MULTICAST-L3LEAF3B"
+                    ],
+                    "enabled": true
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet8",
+                      "Ethernet8"
+                    ],
+                    "ip_addresses": [
+                      "10.1.51.4/31",
+                      "10.1.51.6/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF3A",
+                      "EVPN-MULTICAST-L3LEAF3B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_E_L3_MULTICAST_ENABLED_PEG_OVERRIDE",
+                "description": "L3_MULTICAST_ENABLED_PEG_OVERRIDE",
+                "vrf_vni": 55,
+                "vtep_diagnostic": {
+                  "loopback": 55,
+                  "loopback_ip_range": "10.255.55.0/24"
+                },
+                "evpn_l3_multicast": {
+                  "enabled": true
+                },
+                "pim_rp_addresses": [
+                  {
+                    "rps": [
+                      "10.20.20.20"
+                    ],
+                    "groups": [
+                      "232.0.0.0/21"
+                    ]
+                  },
+                  {
+                    "rps": [
+                      "10.40.40.40"
+                    ]
+                  },
+                  {
+                    "rps": [
+                      "10.20.20.30"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ],
+                    "groups": [
+                      "232.1.0.0/21"
+                    ],
+                    "access_list_name": "RP_ACL_VRF_OVERRIDE"
+                  }
+                ],
+                "svis": [
+                  {
+                    "id": 550,
+                    "name": "L3_MULTICAST_ENABLED_550",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.56.1/24"
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet8",
+                      "Ethernet8"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_E_L3_MULTICAST_TRANSIT",
+                "description": "L3_MULTICAST_TRANSIT",
+                "vrf_vni": 52,
+                "vtep_diagnostic": {
+                  "loopback": 52,
+                  "loopback_ip_range": "10.255.52.0/24"
+                },
+                "evpn_l3_multicast": {
+                  "enabled": true,
+                  "evpn_peg": [
+                    {
+                      "nodes": [
+                        "EVPN-MULTICAST-L3LEAF1A",
+                        "EVPN-MULTICAST-L3LEAF1B"
+                      ],
+                      "transit": true
+                    },
+                    {
+                      "nodes": [
+                        "EVPN-MULTICAST-L3LEAF3A",
+                        "EVPN-MULTICAST-L3LEAF3B"
+                      ],
+                      "transit": true
+                    }
+                  ]
+                },
+                "pim_rp_addresses": [
+                  {
+                    "rps": [
+                      "10.30.30.30"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ]
+                  },
+                  {
+                    "rps": [
+                      "10.60.60.60"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF3A",
+                      "EVPN-MULTICAST-L3LEAF3B"
+                    ]
+                  }
+                ],
+                "svis": [
+                  {
+                    "id": 250,
+                    "name": "L3_MULTICAST_ENABLED_250",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.15.1/24"
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet9",
+                      "Ethernet9"
+                    ],
+                    "ip_addresses": [
+                      "10.1.52.0/31",
+                      "10.1.52.2/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet9",
+                      "Ethernet9"
+                    ],
+                    "ip_addresses": [
+                      "10.2.52.0/31",
+                      "10.2.52.2/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF3A",
+                      "EVPN-MULTICAST-L3LEAF3B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TEN_E_L3_MULTICAST_EVPN_PEG_RP_NODES",
+                "description": "L3_MULTICAST_TRANSIT",
+                "vrf_vni": 60,
+                "vtep_diagnostic": {
+                  "loopback": 60,
+                  "loopback_ip_range": "10.255.60.0/24"
+                },
+                "evpn_l3_multicast": {
+                  "enabled": true,
+                  "evpn_peg": [
+                    {
+                      "transit": true
+                    }
+                  ]
+                },
+                "pim_rp_addresses": [
+                  {
+                    "rps": [
+                      "10.30.30.30"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ]
+                  },
+                  {
+                    "rps": [
+                      "10.60.60.60"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF3A",
+                      "EVPN-MULTICAST-L3LEAF3B"
+                    ]
+                  }
+                ],
+                "svis": [
+                  {
+                    "id": 260,
+                    "name": "L3_MULTICAST_ENABLED_260",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.26.1/24"
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet10",
+                      "Ethernet10"
+                    ],
+                    "ip_addresses": [
+                      "10.1.60.0/31",
+                      "10.1.60.2/31"
+                    ],
+                    "nodes": [
+                      "EVPN-MULTICAST-L3LEAF1A",
+                      "EVPN-MULTICAST-L3LEAF1B"
+                    ],
+                    "enabled": true,
+                    "pim": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Tenant_F",
+            "mac_vrf_vni_base": 10000,
+            "evpn_l2_multicast": {
+              "enabled": true,
+              "underlay_l2_multicast_group_ipv4_pool": "232.0.0.0/20",
+              "fast_leave": true
+            },
+            "l2vlans": [
+              {
+                "id": 251,
+                "name": "MULTICAST_DISABLED_251",
+                "tags": [
+                  "test_l2"
+                ],
+                "evpn_l2_multicast": {
+                  "enabled": false
+                }
+              },
+              {
+                "id": 252,
+                "name": "MULTICAST_ENABLED_252",
+                "tags": [
+                  "test_l2"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "uplink_ipv4_pool": "172.31.255.0/24",
+            "uplink_interfaces": [
+              "Ethernet1"
+            ],
+            "uplink_switches": [
+              "EVPN-MULTICAST-SPINE1"
+            ],
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "loopback_ipv4_offset": 2,
+            "bgp_as": "65101-65106",
+            "mlag_interfaces": [
+              "Ethernet3",
+              "Ethernet4"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.255.251.0/24",
+            "mlag_peer_ipv4_pool": "10.255.252.0/24",
+            "virtual_router_mac_address": "00:dc:00:00:00:0a"
+          },
+          "node_groups": [
+            {
+              "group": "EVPN_MULTICAST_L3LEAF1",
+              "nodes": [
+                {
+                  "name": "EVPN-MULTICAST-L3LEAF1A",
+                  "id": 1,
+                  "mgmt_ip": "192.168.200.105/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet1"
+                  ]
+                },
+                {
+                  "name": "EVPN-MULTICAST-L3LEAF1B",
+                  "id": 2,
+                  "mgmt_ip": "192.168.200.106/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet2"
+                  ]
+                }
+              ]
+            },
+            {
+              "group": "EVPN-MULTICAST-L3LEAF2",
+              "nodes": [
+                {
+                  "name": "EVPN-MULTICAST-L3LEAF2A",
+                  "id": 3,
+                  "mgmt_ip": "192.168.200.107/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet3"
+                  ]
+                }
+              ],
+              "platform": "7050X3"
+            },
+            {
+              "group": "EVPN_MULTICAST_L3LEAF3",
+              "nodes": [
+                {
+                  "name": "EVPN-MULTICAST-L3LEAF3A",
+                  "id": 4,
+                  "mgmt_ip": "192.168.200.108/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet4"
+                  ]
+                },
+                {
+                  "name": "EVPN-MULTICAST-L3LEAF3B",
+                  "id": 5,
+                  "mgmt_ip": "192.168.200.109/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet5"
+                  ]
+                }
+              ],
+              "mlag": false
+            },
+            {
+              "group": "EVPN_MULTICAST_DISABLED",
+              "nodes": [
+                {
+                  "name": "EVPN-MULTICAST-DISABLED",
+                  "id": 6,
+                  "mgmt_ip": "192.168.200.108/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet6"
+                  ]
+                }
+              ],
+              "mlag": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

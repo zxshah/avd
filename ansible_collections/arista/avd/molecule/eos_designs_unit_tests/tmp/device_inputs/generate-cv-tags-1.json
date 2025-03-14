@@ -1,0 +1,78 @@
+{
+  "dc_name": "DC23",
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "generate_cv_tags": {
+    "topology_hints": true,
+    "interface_tags": [
+      {
+        "name": "static-interface-tag",
+        "value": "myinterfacevalue"
+      },
+      {
+        "name": "dynamic_interface_tag",
+        "data_path": "peer"
+      },
+      {
+        "name": "nonexisting_dynamic_interface_tag",
+        "data_path": "some.key.that.we.do.not.have"
+      },
+      {
+        "name": "UPPERCASE_INTERFACE_TAG",
+        "value": "something else with spaces"
+      }
+    ],
+    "device_tags": [
+      {
+        "name": "static-device-tag",
+        "value": "myvalue"
+      },
+      {
+        "name": "dynamic_device_tag",
+        "data_path": "router_bgp.as"
+      },
+      {
+        "name": "nonexisting_dynamic_device_tag",
+        "data_path": "some.key.that.we.do.not.have"
+      },
+      {
+        "name": "UPPERCASE_DEVICE_TAG",
+        "value": "something with spaces"
+      }
+    ]
+  },
+  "pod_name": "POD1",
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "generate-cv-tags-1",
+              "id": 1,
+              "rack": "ABC567",
+              "loopback_ipv4_pool": "10.10.255.0/24",
+              "bgp_as": "65000",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet1",
+                  "description": "Test interface",
+                  "ip_address": "10.20.30.40/24",
+                  "peer": "Someotherdevice",
+                  "peer_ip": "10.20.30.50/24"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

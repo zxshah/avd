@@ -10,6 +10,34 @@
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UPLINK_P2P_VRFS_TESTS_LEAF1",
+      "peer_interface": "Ethernet51",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_mlag": false,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 51,
+      "vlans": "66",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "UPLINK_P2P_VRFS_TESTS_LEAF1",
+      "peer_interface": "Ethernet52",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_mlag": false,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 51,
+      "vlans": "66",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "UPLINK_P2P_VRFS_TESTS_LEAF1"
   ],

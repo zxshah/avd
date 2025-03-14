@@ -35,6 +35,26 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet5
+  description: L2_UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 5
+    mode: active
+  peer: UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+- name: Ethernet6
+  description: L2_UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1B_Ethernet1
+  shutdown: false
+  peer: UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1B
+  peer_interface: Ethernet1
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: none
 hostname: UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A
 ip_igmp_snooping:
   globally_enabled: true
@@ -81,6 +101,20 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel5
+  description: L2_UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1_Port-Channel1
+  shutdown: false
+  mlag: 5
+  storm_control:
+    broadcast:
+      level: '25'
+    unknown_unicast:
+      level: '25'
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      native_vlan_tag: true
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

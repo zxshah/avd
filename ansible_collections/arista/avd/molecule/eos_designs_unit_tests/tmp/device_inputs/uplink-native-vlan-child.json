@@ -1,0 +1,68 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "test",
+            "l2vlans": [
+              {
+                "id": 100,
+                "name": "NETWORK_SERVICES_VLAN"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "uplink-native-vlan-grandparent",
+              "id": 1
+            },
+            {
+              "name": "uplink-native-vlan-parent",
+              "id": 2,
+              "uplink_interfaces": [
+                "Ethernet1"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet1"
+              ],
+              "uplink_switches": [
+                "uplink-native-vlan-grandparent"
+              ],
+              "uplink_native_vlan": 100
+            },
+            {
+              "name": "uplink-native-vlan-child",
+              "id": 3,
+              "uplink_interfaces": [
+                "Ethernet2"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet2"
+              ],
+              "uplink_switches": [
+                "uplink-native-vlan-parent"
+              ],
+              "uplink_native_vlan": 200
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -13,6 +13,9 @@
   "router_id": "192.168.42.14",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "leaf-wan-use-evpn-on-lan"
+  ],
   "overlay": {
     "peering_address": "192.168.42.14",
     "evpn_mpls": false
@@ -20,6 +23,22 @@
   "vtep_ip": "192.168.142.14",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet52",
+      "peer": "leaf-wan-use-evpn-on-lan",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65042",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.18.0.27",
+      "peer_ip_address": "172.18.0.26",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "leaf-wan-use-evpn-on-lan"
   ],

@@ -1,0 +1,67 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "spine",
+  "underlay_filter_peer_as": true,
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "bgp_as": "65000",
+            "evpn_role": "none"
+          },
+          "nodes": [
+            {
+              "name": "UNDERLAY_FILTER_PEER_AS_SPINE1",
+              "id": 1
+            },
+            {
+              "name": "UNDERLAY_FILTER_PEER_AS_SPINE2",
+              "id": 2
+            }
+          ]
+        }
+      },
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "evpn_role": "none"
+          },
+          "nodes": [
+            {
+              "name": "UNDERLAY_FILTER_PEER_AS_L3LEAF1",
+              "id": 1,
+              "uplink_ipv4_pool": "192.168.0.0/24",
+              "uplink_interfaces": [
+                "Ethernet1",
+                "Ethernet2"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet1",
+                "Ethernet1"
+              ],
+              "uplink_switches": [
+                "UNDERLAY_FILTER_PEER_AS_SPINE1",
+                "UNDERLAY_FILTER_PEER_AS_SPINE2"
+              ],
+              "loopback_ipv4_pool": "192.168.255.0/24",
+              "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+              "loopback_ipv4_offset": 2,
+              "bgp_as": "65001",
+              "virtual_router_mac_address": "00:11:22:33:44:55"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

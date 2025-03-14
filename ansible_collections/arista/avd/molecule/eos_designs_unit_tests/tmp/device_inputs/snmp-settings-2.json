@@ -1,0 +1,77 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "snmp_settings": {
+    "vrfs": [
+      {
+        "name": "SNMPVRF",
+        "enable": true
+      }
+    ],
+    "enable_mgmt_interface_vrf": true,
+    "enable_inband_mgmt_vrf": true,
+    "hosts": [
+      {
+        "host": "10.6.75.125",
+        "vrf": "SNMPVRF",
+        "use_inband_mgmt_vrf": true,
+        "version": "2c",
+        "community": "SNMP-COMMUNITY-2"
+      },
+      {
+        "host": "10.6.75.126",
+        "use_inband_mgmt_vrf": true,
+        "version": "3",
+        "users": [
+          {
+            "username": "USER-WRITE",
+            "authentication_level": "auth"
+          }
+        ]
+      },
+      {
+        "host": "10.6.75.127",
+        "vrf": "SNMPVRF",
+        "use_mgmt_interface_vrf": true,
+        "use_inband_mgmt_vrf": true,
+        "version": "2c",
+        "community": "SNMP-COMMUNITY-2"
+      },
+      {
+        "host": "10.6.75.128",
+        "use_mgmt_interface_vrf": true,
+        "use_inband_mgmt_vrf": true,
+        "version": "3",
+        "users": [
+          {
+            "username": "USER-WRITE",
+            "authentication_level": "auth"
+          }
+        ]
+      }
+    ]
+  },
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "snmp-settings-2",
+              "id": 43,
+              "inband_mgmt_interface": "Vlan123",
+              "inband_mgmt_ip": "192.168.0.1/24"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

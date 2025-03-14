@@ -84,6 +84,22 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "DC1-LEAF2B",
+      "peer_interface": "Ethernet31",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "DC1_LEAF2",
+      "node_group": "DC1_L2LEAF6",
+      "peer_mlag": true,
+      "vlans": "110-112,120-121,130-131,140-141,160-161,210-211,310-311,410-413,450-452",
+      "peer_short_esi": "a8be:743c:0a1a",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "DC1-LEAF2B"
   ],

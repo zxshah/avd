@@ -1,0 +1,43 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.42.0/24"
+          },
+          "nodes": [
+            {
+              "name": "override_uplink_type-u",
+              "id": 1,
+              "bgp_as": "65002"
+            },
+            {
+              "name": "override_uplink_type-d",
+              "id": 2,
+              "uplink_type": "port-channel",
+              "uplink_interfaces": [
+                "Ethernet1"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet1"
+              ],
+              "uplink_switches": [
+                "override_uplink_type-u"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

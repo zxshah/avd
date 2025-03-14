@@ -1,0 +1,236 @@
+{
+  "bgp_peer_groups": {
+    "wan_overlay_peers": {
+      "password": "htm4AZe9mIQOO1uiMuGgYQ==",
+      "listen_range_prefixes": [
+        "192.168.142.0/24",
+        "192.168.143.0/24"
+      ]
+    }
+  },
+  "cv_pathfinder_regions": [
+    {
+      "name": "AVD_Land_East",
+      "description": "AVD Region",
+      "id": 43,
+      "sites": [
+        {
+          "name": "Site511",
+          "id": 511,
+          "location": "Miami"
+        }
+      ]
+    }
+  ],
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "wan_router",
+  "wan_carriers": [
+    {
+      "name": "Cybercast",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "StreamFast",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "ExtremeCable",
+      "path_group": "INET",
+      "trusted": true
+    },
+    {
+      "name": "BlizzardFast",
+      "path_group": "INET",
+      "trusted": true
+    }
+  ],
+  "wan_ipsec_profiles": {
+    "control_plane": {
+      "shared_key": "ABCDEF1234567890"
+    },
+    "data_plane": {
+      "shared_key": "ABCDEF1234567890666"
+    }
+  },
+  "wan_path_groups": [
+    {
+      "name": "INET",
+      "id": 101
+    }
+  ],
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "wan_router",
+        "node_type_keys_key": {
+          "node_groups": [
+            {
+              "group": "Site511",
+              "nodes": [
+                {
+                  "name": "node-type-l3-port-channels",
+                  "id": 1,
+                  "loopback_ipv4_pool": "192.168.255.0/24",
+                  "vtep_loopback_ipv4_pool": "192.168.142.0/24",
+                  "bgp_as": "65005",
+                  "l3_port_channels": [
+                    {
+                      "name": "Port-Channel2",
+                      "mode": "active",
+                      "member_interfaces": [
+                        {
+                          "name": "Ethernet1",
+                          "peer": "peerDevice1",
+                          "peer_interface": "Ethernet11",
+                          "speed": "forced 10000full"
+                        },
+                        {
+                          "name": "Ethernet2",
+                          "speed": "forced 10000full"
+                        },
+                        {
+                          "name": "Ethernet3",
+                          "description": "Custom eth3 description"
+                        }
+                      ],
+                      "ip_address": "192.168.1.102/31",
+                      "peer": "peer1",
+                      "peer_port_channel": "Port-Channel10",
+                      "peer_ip": "192.168.1.103",
+                      "static_routes": [
+                        {
+                          "prefix": "0.0.0.0/0"
+                        }
+                      ],
+                      "qos_profile": "TEST-QOS-PROFILE1",
+                      "wan_carrier": "Cybercast",
+                      "wan_circuit_id": "101",
+                      "flow_tracking": {
+                        "enabled": true
+                      }
+                    },
+                    {
+                      "name": "Port-Channel5",
+                      "mode": "passive",
+                      "member_interfaces": [
+                        {
+                          "name": "Ethernet1/4",
+                          "peer": "peerDevice2",
+                          "peer_interface": "Ethernet1/12",
+                          "speed": "forced 10000full"
+                        },
+                        {
+                          "name": "Ethernet1/5",
+                          "speed": "forced 10000full"
+                        }
+                      ],
+                      "ip_address": "192.168.1.105/31",
+                      "peer": "peer2",
+                      "peer_port_channel": "Port-Channel15",
+                      "peer_ip": "192.168.1.104",
+                      "qos_profile": "TEST-QOS-PROFILE1",
+                      "wan_carrier": "StreamFast",
+                      "wan_circuit_id": "102",
+                      "raw_eos_cli": "! TEST RAW_EOS_CLI\n",
+                      "flow_tracking": {
+                        "enabled": false
+                      },
+                      "structured_config": {
+                        "service_policy": {
+                          "qos": {
+                            "input": "TEST_POLICY"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "name": "Port-Channel5.100",
+                      "ip_address": "192.168.100.115/31",
+                      "encapsulation_dot1q_vlan": 108,
+                      "peer": "peer2",
+                      "peer_port_channel": "Port-Channel15",
+                      "peer_ip": "192.168.100.114",
+                      "qos_profile": "TEST-QOS-PROFILE2",
+                      "wan_carrier": "ExtremeCable",
+                      "wan_circuit_id": "105",
+                      "flow_tracking": {
+                        "enabled": true
+                      }
+                    },
+                    {
+                      "name": "Port-Channel5.105",
+                      "ip_address": "192.168.100.116/31",
+                      "peer": "peer2",
+                      "peer_port_channel": "Port-Channel16",
+                      "peer_ip": "192.168.100.117",
+                      "qos_profile": "TEST-QOS-PROFILE2",
+                      "flow_tracking": {
+                        "enabled": true
+                      }
+                    },
+                    {
+                      "name": "Port-Channel8",
+                      "mode": "on",
+                      "member_interfaces": [
+                        {
+                          "name": "Ethernet1/10",
+                          "peer": "peerDevice3",
+                          "peer_interface": "Ethernet1/10",
+                          "structured_config": {
+                            "speed": "forced 1000full"
+                          }
+                        }
+                      ],
+                      "ip_address": "dhcp",
+                      "dhcp_ip": "10.15.16.17",
+                      "dhcp_accept_default_route": true,
+                      "peer": "peerDevice3",
+                      "peer_port_channel": "Port-Channel18",
+                      "peer_ip": "192.168.1.18",
+                      "qos_profile": "TEST-QOS-PROFILE3",
+                      "wan_carrier": "BlizzardFast",
+                      "raw_eos_cli": "! TEST RAW_EOS_CLI 123\n",
+                      "flow_tracking": {
+                        "enabled": true
+                      }
+                    },
+                    {
+                      "name": "Port-Channel19",
+                      "member_interfaces": [
+                        {
+                          "name": "Ethernet1/19",
+                          "peer_interface": "Ethernet1/19"
+                        },
+                        {
+                          "name": "Ethernet1/20",
+                          "peer_interface": "Ethernet1/20"
+                        }
+                      ],
+                      "ip_address": "192.168.1.19/31",
+                      "enabled": false,
+                      "peer": "peerDevice4",
+                      "peer_port_channel": "Port-Channel20",
+                      "peer_ip": "192.168.1.18",
+                      "wan_carrier": "BlizzardFast"
+                    }
+                  ]
+                }
+              ],
+              "uplink_type": "p2p-vrfs",
+              "cv_pathfinder_region": "AVD_Land_East",
+              "cv_pathfinder_site": "Site511"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

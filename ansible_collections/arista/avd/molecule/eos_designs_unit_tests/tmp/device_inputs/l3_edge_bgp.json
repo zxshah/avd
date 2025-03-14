@@ -1,0 +1,196 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "l3_edge": {
+    "p2p_links_ip_pools": [
+      {
+        "name": "pool1",
+        "ipv4_pool": "192.168.0.0/24"
+      }
+    ],
+    "p2p_links_profiles": [
+      {
+        "name": "profile1",
+        "speed": "forced 10000full",
+        "ip_pool": "pool1",
+        "mtu": 2000,
+        "bfd": true,
+        "ptp": {
+          "enabled": true
+        },
+        "qos_profile": "TEST-QOS-PROFILE",
+        "macsec_profile": "TEST-MACSEC-PROFILE",
+        "raw_eos_cli": "! TEST RAW_EOS_CLI\n",
+        "structured_config": {
+          "service_policy": {
+            "qos": {
+              "input": "TEST_POLICY"
+            }
+          }
+        }
+      }
+    ],
+    "p2p_links": [
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer1"
+        ],
+        "profile": "profile1",
+        "id": 1,
+        "interfaces": [
+          "ethernet1",
+          "ethernet1"
+        ],
+        "include_in_underlay_protocol": false
+      },
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer2"
+        ],
+        "ip": [
+          "192.168.0.2/31",
+          "192.168.0.3/31"
+        ],
+        "ipv6_enable": true,
+        "interfaces": [
+          "ethernet2",
+          "ethernet2"
+        ],
+        "as": [
+          "65000",
+          "65002"
+        ]
+      },
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer3"
+        ],
+        "subnet": "192.168.0.4/31",
+        "interfaces": [
+          "ethernet3",
+          "ethernet3"
+        ],
+        "as": [
+          "65000",
+          "65003"
+        ]
+      },
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer4"
+        ],
+        "id": 4,
+        "ip_pool": "pool1",
+        "interfaces": [
+          "ethernet4",
+          "ethernet4"
+        ],
+        "as": [
+          "65000",
+          "65004"
+        ],
+        "descriptions": [
+          "Custom description on l3_edge_bgp eth4",
+          "Custom description on peer4 eth4"
+        ]
+      },
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer5"
+        ],
+        "ip": [
+          "192.168.0.8/31",
+          "192.168.0.9/31"
+        ],
+        "as": [
+          "65000",
+          "65005"
+        ],
+        "include_in_underlay_protocol": true,
+        "port_channel": {
+          "mode": "active",
+          "nodes_child_interfaces": [
+            {
+              "node": "l3_edge_bgp",
+              "interfaces": [
+                "Ethernet5",
+                "Ethernet6"
+              ]
+            },
+            {
+              "node": "peer5",
+              "interfaces": [
+                "Ethernet5",
+                "Ethernet6"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "nodes": [
+          "l3_edge_bgp",
+          "peer6"
+        ],
+        "id": 6,
+        "ip_pool": "pool1",
+        "as": [
+          "65000",
+          "65006"
+        ],
+        "include_in_underlay_protocol": true,
+        "port_channel": {
+          "mode": "active",
+          "nodes_child_interfaces": [
+            {
+              "node": "l3_edge_bgp",
+              "interfaces": [
+                "Ethernet7",
+                "Ethernet8"
+              ]
+            },
+            {
+              "node": "peer6",
+              "interfaces": [
+                "Ethernet7",
+                "Ethernet8"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "l3_edge_bgp",
+              "id": 1,
+              "loopback_ipv4_pool": "1.2.3.4/24",
+              "bgp_as": "65000",
+              "evpn_role": "none",
+              "ptp": {
+                "enabled": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

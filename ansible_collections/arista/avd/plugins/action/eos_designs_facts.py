@@ -1,7 +1,7 @@
 # Copyright (c) 2023-2025 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
-
+from __future__ import annotations
 
 import cProfile
 import json
@@ -9,7 +9,7 @@ import logging
 import pstats
 from collections import ChainMap
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from ansible.errors import AnsibleActionFail
 from ansible.parsing.yaml.dumper import AnsibleDumper
@@ -19,16 +19,19 @@ from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import R
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschematools import AvdSchemaTools
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import get_templar, get_tmp_path, write_file
 
+if TYPE_CHECKING:
+    from ansible.template import Templar
+    from ansible.vars.hostvars import HostVars
+
 PLUGIN_NAME = "arista.avd.eos_designs_facts"
 
 try:
-    from pyavd._eos_designs.eos_designs_facts import EosDesignsFacts, get_facts
+    from pyavd._eos_designs.eos_designs_facts import get_facts
     from pyavd._eos_designs.schema import EosDesigns
-    from pyavd._eos_designs.shared_utils import SharedUtils
     from pyavd._errors import AristaAvdError
     from pyavd.api.pool_manager import PoolManager
 except ImportError as e:
-    EosDesignsFacts = get_facts = EosDesigns = SharedUtils = PoolManager = RaiseOnUse(
+    get_facts = EosDesigns = SharedUtils = PoolManager = RaiseOnUse(
         AnsibleActionFail(
             f"The '{PLUGIN_NAME}' plugin requires the 'pyavd' Python library. Got import error",
             orig_exc=e,
@@ -75,44 +78,19 @@ class ActionModule(ActionBase):
             raise AnsibleActionFail(msg)
 
         # This is not all the hostvars, but just the Ansible Hostvars Manager object where we can retrieve hostvars for each host on-demand.
-        hostvars = task_vars["hostvars"]
+        hostvars: HostVars = task_vars["hostvars"]
 
         # Get updated templar instance to be passed along to our simplified "templater"
         templar = get_templar(self, task_vars)
 
         pool_manager = PoolManager(Path(output_dir))
 
-        all_inputs, all_hostvars = self.parse_inputs(sorted(fabric_hosts), hostvars, result)
+        all_inputs, all_hostvars = self.parse_and_save_inputs(sorted(fabric_hosts), hostvars, result, tmp_path)
         if result.get("failed"):
             # Stop here if any of the devices failed input data validation
             return result
 
-        try:
-            all_facts = get_facts(all_inputs=all_inputs, pool_manager=pool_manager, all_hostvars=all_hostvars, templar=templar)
-        except AristaAvdError as e:
-            # message = f"{str(e).removesuffix('.')} for host '{host}'."
-            raise AnsibleActionFail(message=str(e)) from e
-
-        for host, facts in all_facts.items():
-            facts._strip_empties()
-            facts_dict = facts._as_dict()
-
-            # If the argument 'template_output' is set, run the output data through jinja2 rendering.
-            # This is to resolve any input values with inline jinja using variables/facts set by eos_designs_facts.
-            if self.template_output:
-                available_variables = ChainMap({"switch": facts_dict}, all_hostvars[host])
-                with self._templar.set_temporary_context(available_variables=available_variables):
-                    facts_dict = self._templar.template(facts_dict, fail_on_undefined=False)
-
-            changed = (
-                write_file(
-                    content=json.dumps(facts_dict, indent=2),
-                    filename=str(tmp_path / "device_facts" / f"{host}.json"),
-                    file_mode="0o600",
-                    dir_mode="0o700",
-                )
-                or changed
-            )
+        changed = self.render_and_save_facts(all_inputs=all_inputs, all_hostvars=all_hostvars, pool_manager=pool_manager, templar=templar, tmp_path=tmp_path)
 
         # Save any updated pools.
         changed = pool_manager.save_updated_pools(dumper_cls=AnsibleDumper) or changed
@@ -126,7 +104,7 @@ class ActionModule(ActionBase):
 
         return result
 
-    def parse_inputs(self, fabric_hosts: list, hostvars: object, result: dict) -> tuple[dict[str, EosDesigns], dict[str, dict]]:
+    def parse_and_save_inputs(self, fabric_hosts: list, hostvars: HostVars, result: dict, tmp_path: Path) -> tuple[dict[str, EosDesigns], dict[str, dict]]:
         """
         Fetch hostvars for all hosts and perform data conversion & validation.
 
@@ -137,6 +115,7 @@ class ActionModule(ActionBase):
             fabric_hosts: List of hostnames
             hostvars: Ansible "hostvars" object
             result: Ansible Action result dict which is inplace updated.
+            tmp_path: Path where to store the validated inputs.
 
         Returns:
             Tuple of
@@ -171,8 +150,18 @@ class ActionModule(ActionBase):
                 continue
 
             # Load input vars into the EosDesigns data class.
-            all_inputs[host] = EosDesigns._from_dict(host_hostvars, load_custom_structured_config=False)
+            host_inputs = EosDesigns._from_dict(host_hostvars, load_custom_structured_config=False)
 
+            # Save the validated and coerced inputs
+            write_file(
+                content=json.dumps(host_inputs._as_dict(), indent=2),
+                filename=str(tmp_path / "device_inputs" / f"{host}.json"),
+                file_mode="0o600",
+                dir_mode="0o700",
+                track_changes=False,
+            )
+
+            all_inputs[host] = host_inputs
             all_hostvars[host] = host_hostvars
 
         # Build result message
@@ -180,28 +169,34 @@ class ActionModule(ActionBase):
 
         return all_inputs, all_hostvars
 
-    def render_avd_switch_facts(self, avd_switch_facts_instances: dict) -> dict:
-        """
-        Run the render method on each EosDesignsFacts object.
+    def render_and_save_facts(
+        self, all_inputs: dict[str, EosDesigns], pool_manager: PoolManager, all_hostvars: dict[str, dict], templar: Templar, tmp_path: Path
+    ) -> bool:
+        """Render facts, reraising errors as AnsibleActionFail. Then write as files to tmp_path."""
+        try:
+            all_facts = get_facts(all_inputs=all_inputs, pool_manager=pool_manager, all_hostvars=all_hostvars, templar=templar)
+        except AristaAvdError as e:
+            raise AnsibleActionFail(message=str(e)) from e
 
-        Parameters
-        ----------
-        avd_switch_facts_instances : dict of EosDesignsFacts
+        changed = False
+        for host, facts in all_facts.items():
+            facts._strip_empties()
+            facts_dict = facts._as_dict()
 
-        Returns:
-        -------
-        dict
-            hostname1 : dict
-                switch : < switch.* facts >
-            hostname2 : dict
-                switch : < switch.* facts >
-        """
-        rendered_facts = {}
-        for host in avd_switch_facts_instances:
-            try:
-                rendered_facts[host] = {"switch": avd_switch_facts_instances[host]["switch"].render()}
-            except AristaAvdError as e:
-                message = f"{str(e).removesuffix('.')} for host '{host}'."
-                raise AnsibleActionFail(message=message) from e
+            # If the argument 'template_output' is set, run the output data through jinja2 rendering.
+            # This is to resolve any input values with inline jinja using variables/facts set by eos_designs_facts.
+            if self.template_output:
+                available_variables = ChainMap({"switch": facts_dict}, all_hostvars[host])
+                with self._templar.set_temporary_context(available_variables=available_variables):
+                    facts_dict = self._templar.template(facts_dict, fail_on_undefined=False)
 
-        return rendered_facts
+            changed = (
+                write_file(
+                    content=json.dumps(facts_dict, indent=2),
+                    filename=str(tmp_path / "device_facts" / f"{host}.json"),
+                    file_mode="0o600",
+                    dir_mode="0o700",
+                )
+                or changed
+            )
+        return changed

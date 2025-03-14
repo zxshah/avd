@@ -14,6 +14,9 @@
   "router_id": "192.168.255.23",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "CUSTOM-PYTHON_MODULES-L3LEAF1A"
+  ],
   "overlay": {
     "peering_address": "192.168.255.23",
     "evpn_mpls": false
@@ -21,6 +24,22 @@
   "vtep_ip": "192.168.254.23",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "CUSTOM-PYTHON_MODULES-L3LEAF1A",
+      "peer_interface": "Ethernet3",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65101",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.255.25",
+      "peer_ip_address": "172.31.255.24",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "CUSTOM-PYTHON_MODULES-L3LEAF1A"
   ],

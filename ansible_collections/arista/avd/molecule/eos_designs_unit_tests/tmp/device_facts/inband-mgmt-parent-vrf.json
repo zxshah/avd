@@ -15,6 +15,9 @@
   "router_id": "10.0.255.2",
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "inband-mgmt-spine1-ztp"
+  ],
   "overlay": {
     "peering_address": "10.0.255.2",
     "evpn_mpls": false
@@ -22,6 +25,22 @@
   "vtep_ip": "10.0.254.2",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "inband-mgmt-spine1-ztp",
+      "peer_interface": "Ethernet2",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "64999",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.16.255.3",
+      "peer_ip_address": "172.16.255.2",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "inband-mgmt-spine1-ztp"
   ],

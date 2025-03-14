@@ -22,6 +22,42 @@
   ],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "ptp-tests-leaf1",
+      "peer_interface": "Ethernet14",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "ptp": {
+        "enable": false
+      },
+      "peer_node_group": "ptp-test-leaf",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 14,
+      "vlans": "11",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "ptp-tests-leaf2",
+      "peer_interface": "Ethernet14",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "ptp": {
+        "enable": false
+      },
+      "peer_node_group": "ptp-test-leaf",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 14,
+      "vlans": "11",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "ptp-tests-leaf1",
     "ptp-tests-leaf2"

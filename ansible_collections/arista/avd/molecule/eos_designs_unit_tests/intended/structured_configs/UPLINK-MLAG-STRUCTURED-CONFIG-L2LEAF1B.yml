@@ -25,21 +25,25 @@ ethernet_interfaces:
 - name: Ethernet1
   description: L2_UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A_Ethernet6
   shutdown: false
-  channel_group:
-    id: 1
-    mode: active
   peer: UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A
   peer_interface: Ethernet6
   peer_type: l3leaf
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: none
 - name: Ethernet2
   description: L2_UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B_Ethernet6
   shutdown: false
-  channel_group:
-    id: 1
-    mode: active
   peer: UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B
   peer_interface: Ethernet6
   peer_type: l3leaf
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: none
 hostname: UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1B
 ip_igmp_snooping:
   globally_enabled: true
@@ -82,21 +86,6 @@ port_channel_interfaces:
       native_vlan_tag: true
       groups:
       - MLAG
-- name: Port-Channel1
-  description: L2_DC1_LEAF1_Port-Channel5
-  shutdown: false
-  mlag: 1
-  storm_control:
-    broadcast:
-      level: '25'
-    unknown_unicast:
-      level: '25'
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
-      native_vlan_tag: true
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: mstp

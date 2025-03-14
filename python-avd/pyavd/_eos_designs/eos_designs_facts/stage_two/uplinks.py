@@ -25,7 +25,7 @@ class UplinksMixin(Protocol):
     """
 
     @cached_property
-    def _uplink_port_channel_id(self: FactsStageTwoProtocol) -> int:
+    def _uplink_port_channel_id(self: FactsStageTwoProtocol) -> int | None:
         """
         For MLAG secondary get the uplink_port_channel_id from the peer's facts.
 
@@ -63,7 +63,7 @@ class UplinksMixin(Protocol):
         return uplink_port_channel_id
 
     @cached_property
-    def _uplink_switch_port_channel_id(self: FactsStageTwoProtocol) -> int:
+    def _uplink_switch_port_channel_id(self: FactsStageTwoProtocol) -> int | None:
         """
         For MLAG secondary get the uplink_switch_port_channel_id from the peer's facts.
 
@@ -95,7 +95,7 @@ class UplinksMixin(Protocol):
             uplink_switch_port_channel_id = int("".join(re.findall(r"\d", self.shared_utils.uplink_switch_interfaces[0])))
 
         # produce an error if the uplink switch is MLAG and port-channel ID is above 2000
-        uplink_switch_facts = self.shared_utils.get_peer_facts_cls(self.shared_utils.uplink_switches[0])
+        uplink_switch_facts = self.shared_utils.get_peer_facts(self.shared_utils.uplink_switches[0])
         if uplink_switch_facts.only_used_for_peer_facts.mlag and not 1 <= uplink_switch_port_channel_id <= 2000:
             msg = f"'uplink_switch_port_channel_id' must be between 1 and 2000 for MLAG switches. Got '{uplink_switch_port_channel_id}'."
             raise AristaAvdError(msg)
@@ -149,13 +149,13 @@ class UplinksMixin(Protocol):
                 # Invalid uplink_switch. Skipping.
                 continue
 
-            get_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface)
+            self.facts.uplinks.append(get_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface))
 
     def _get_p2p_uplink(
         self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type p2p."""
-        uplink_switch_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+        uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
         uplink = EosDesignsFacts.UplinksItem(
             interface=uplink_interface,
             peer=uplink_switch,
@@ -165,7 +165,7 @@ class UplinksMixin(Protocol):
             peer_bgp_as=uplink_switch_facts.bgp_as,
             type="underlay_p2p",
             speed=self.shared_utils.uplink_interface_speed,
-            bfd=self.shared_utils.node_config.uplink_bfd,
+            bfd=self.shared_utils.node_config.uplink_bfd or None,
             peer_speed=self.shared_utils.uplink_switch_interface_speed,
             underlay_multicast=(self.shared_utils.underlay_multicast and uplink_switch_facts.only_used_for_peer_facts.underlay_multicast is True),
             structured_config=self.shared_utils.node_config.uplink_structured_config,
@@ -196,7 +196,7 @@ class UplinksMixin(Protocol):
         self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type port-channel."""
-        uplink_switch_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+        uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
 
         # Reusing get_l2_uplink
         uplink = self._get_l2_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface)
@@ -217,8 +217,8 @@ class UplinksMixin(Protocol):
         # Only enable mlag for this port-channel on the uplink switch if there are multiple unique uplink switches
         uplink.peer_mlag = len(unique_uplink_switches) > 1
 
-        uplink.channel_group_id = str(self._uplink_port_channel_id)
-        uplink.peer_channel_group_id = str(self._uplink_switch_port_channel_id)
+        uplink.channel_group_id = self._uplink_port_channel_id
+        uplink.peer_channel_group_id = self._uplink_switch_port_channel_id
 
         return uplink
 
@@ -230,7 +230,7 @@ class UplinksMixin(Protocol):
         uplink_switch_interface: str,
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for an L2 uplink. Reused for both uplink_type port-channel, lan and TODO: lan-port-channel."""
-        uplink_switch_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+        uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
         uplink = EosDesignsFacts.UplinksItem(
             interface=uplink_interface,
             peer=uplink_switch,
@@ -280,7 +280,7 @@ class UplinksMixin(Protocol):
         self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type p2p-vrfs."""
-        uplink_switch_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+        uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
 
         # Reusing regular p2p logic for main interface.
         uplink = self._get_p2p_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface)
@@ -293,7 +293,7 @@ class UplinksMixin(Protocol):
                 if vrf.name == "default" or vrf.name not in uplink_switch_vrfs:
                     continue
 
-                vrf_id = self.shared_utils.get_vrf_id(vrf)
+                vrf_id: int = self.shared_utils.get_vrf_id(vrf)
                 subinterface = EosDesignsFacts.UplinksItem.SubinterfacesItem(
                     interface=f"{uplink_interface}.{vrf_id}",
                     peer_interface=f"{uplink_switch_interface}.{vrf_id}",
@@ -327,7 +327,7 @@ class UplinksMixin(Protocol):
 
         vrfs = set()
         for uplink_switch in self.facts.uplink_peers:
-            uplink_switch_facts = self.shared_utils.get_peer_facts_cls(uplink_switch)
+            uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
             vrfs.update(uplink_switch_facts.only_used_for_peer_facts.vrfs)
 
         self.facts.uplink_switch_vrfs.extend(natural_sort(vrfs))

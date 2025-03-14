@@ -29,5 +29,11 @@
     "flow-tracking-tests-leaf2",
     "flow-tracking-tests-leaf3",
     "flow-tracking-tests-leaf4"
+  ],
+  "evpn_route_server_clients": [
+    "flow-tracking-tests-leaf1",
+    "flow-tracking-tests-leaf2",
+    "flow-tracking-tests-leaf3",
+    "flow-tracking-tests-leaf4"
   ]
 }

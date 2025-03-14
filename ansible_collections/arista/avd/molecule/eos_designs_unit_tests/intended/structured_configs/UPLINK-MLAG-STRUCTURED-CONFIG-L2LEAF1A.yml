@@ -95,7 +95,6 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: none
       native_vlan_tag: true
 service_routing_protocols_model: multi-agent
 spanning_tree:

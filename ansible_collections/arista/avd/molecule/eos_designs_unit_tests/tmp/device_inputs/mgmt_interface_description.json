@@ -1,0 +1,31 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "1.1.1.1",
+  "mgmt_interface_description": "Custom Management Interface Description",
+  "mgmt_interface_vrf": "MGMT",
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "mgmt_interface_description",
+              "id": 102,
+              "mgmt_ip": "1.1.1.2/24",
+              "mgmt_gateway": "1.1.1.254"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

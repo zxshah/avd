@@ -1,0 +1,324 @@
+{
+  "core_interfaces": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet9",
+          "Ethernet9"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": true
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet10",
+          "Ethernet10"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": true,
+          "name": "FLOW-TRACKER-1"
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet11",
+          "Ethernet11"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": false
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet12",
+          "Ethernet12"
+        ],
+        "include_in_underlay_protocol": false
+      }
+    ]
+  },
+  "default_mgmt_method": "oob",
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_flow_tracking": {
+    "uplinks": {
+      "enabled": true
+    },
+    "downlinks": {
+      "enabled": true
+    },
+    "endpoints": {
+      "enabled": true
+    },
+    "l3_edge": {
+      "enabled": true
+    },
+    "core_interfaces": {
+      "enabled": true
+    },
+    "mlag_interfaces": {
+      "enabled": true
+    }
+  },
+  "fabric_name": "FLOW_TRACKING_TESTS",
+  "flow_tracking_settings": {
+    "trackers": [
+      {
+        "name": "FLOW-TRACKER-1",
+        "sampled": {
+          "table_size": 4331,
+          "record_export": {
+            "mpls": true
+          }
+        },
+        "record_export": {
+          "on_inactive_timeout": 50000,
+          "on_interval": 300331
+        },
+        "exporters": [
+          {
+            "name": "ayush_exporter",
+            "collector": {
+              "host": "127.0.0.1"
+            },
+            "local_interface": "Loopback0",
+            "template_interval": 40000
+          }
+        ]
+      },
+      {
+        "name": "FLOW-TRACKER",
+        "record_export": {
+          "on_inactive_timeout": 50001,
+          "on_interval": 300332
+        },
+        "exporters": [
+          {
+            "name": "ayush_exporter",
+            "collector": {
+              "host": "127.0.0.2"
+            },
+            "local_interface": "Loopback0",
+            "template_interval": 40002
+          }
+        ]
+      }
+    ]
+  },
+  "l3_edge": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet13",
+          "Ethernet13"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": true
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet14",
+          "Ethernet14"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": true,
+          "name": "FLOW-TRACKER-1"
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet15",
+          "Ethernet15"
+        ],
+        "include_in_underlay_protocol": false,
+        "flow_tracking": {
+          "enabled": false
+        }
+      },
+      {
+        "nodes": [
+          "flow-tracking-tests-spine1",
+          "flow-tracking-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet16",
+          "Ethernet16"
+        ],
+        "include_in_underlay_protocol": false
+      }
+    ]
+  },
+  "mgmt_gateway": "192.168.0.1",
+  "type": "spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "FLOW_TRACKING",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_vni": 1,
+                "svis": [
+                  {
+                    "id": 11,
+                    "name": "VLAN11",
+                    "nodes": [
+                      {
+                        "node": "flow-tracking-tests-leaf1",
+                        "ip_address": "172.16.11.1/24"
+                      },
+                      {
+                        "node": "flow-tracking-tests-leaf2",
+                        "ip_address": "172.17.11.1/24"
+                      }
+                    ],
+                    "enabled": true
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet81",
+                      "Ethernet81"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": true,
+                      "name": "FLOW-TRACKER-3"
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet82",
+                      "Ethernet82"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet83",
+                      "Ethernet83"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet84",
+                      "Ethernet84"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "loopback_ipv4_pool": "10.255.0.0/27",
+            "bgp_as": "65200"
+          },
+          "nodes": [
+            {
+              "name": "flow-tracking-tests-spine1",
+              "id": 1,
+              "mgmt_ip": "192.168.0.11/24"
+            },
+            {
+              "name": "flow-tracking-tests-spine2",
+              "id": 2,
+              "mgmt_ip": "192.168.0.21/24",
+              "flow_tracker_type": "hardware"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

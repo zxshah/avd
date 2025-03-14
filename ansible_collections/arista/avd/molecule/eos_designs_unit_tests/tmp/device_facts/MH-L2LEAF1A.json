@@ -46,6 +46,27 @@
   ],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "MH-LEAF2A",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "link_tracking_groups": [
+        {
+          "name": "l2leaf-server02",
+          "direction": "upstream"
+        }
+      ],
+      "peer_mlag": false,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 2,
+      "vlans": "310",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "MH-LEAF2A"
   ],

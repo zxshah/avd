@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Literal, Protocol, overload
 
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
@@ -140,7 +140,7 @@ class FilteredTenantsMixin(Protocol):
         uplink_switches = unique(self.uplink_switches)
         uplink_switches = [uplink_switch for uplink_switch in uplink_switches if uplink_switch in self.all_fabric_devices]
         for uplink_switch in uplink_switches:
-            uplink_switch_facts = self.get_peer_facts_cls(uplink_switch)
+            uplink_switch_facts = self.get_peer_facts(uplink_switch)
             uplink_switch_vlans = set(map(int, range_expand(uplink_switch_facts.vlans)))
 
             accepted_vlans = [vlan for vlan in accepted_vlans if vlan in uplink_switch_vlans]
@@ -320,6 +320,14 @@ class FilteredTenantsMixin(Protocol):
         if not endpoint_vlans:
             return []
         return [int(vlan_id) for vlan_id in range_expand(endpoint_vlans)]
+
+    @overload
+    @staticmethod
+    def get_vrf_id(vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem, required: Literal[True] = True) -> int: ...
+
+    @overload
+    @staticmethod
+    def get_vrf_id(vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem, required: Literal[False]) -> int | None: ...
 
     @staticmethod
     def get_vrf_id(vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem, required: bool = True) -> int | None:

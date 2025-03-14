@@ -1,0 +1,48 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "platform_settings": [
+    {
+      "platforms": [
+        "default"
+      ],
+      "security_entropy_sources": {
+        "hardware": true,
+        "haveged": true,
+        "cpu_jitter": true,
+        "hardware_exclusive": true
+      },
+      "structured_config": {
+        "ethernet_interfaces": [
+          {
+            "name": "Ethernet12",
+            "description": "Interface Created from platform_settings.structured_config",
+            "switchport": {
+              "enabled": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "platform_settings"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

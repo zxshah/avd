@@ -1,0 +1,45 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_ip_addressing": {
+    "p2p_uplinks": {
+      "ipv4_prefix_length": 30
+    }
+  },
+  "fabric_name": "FABRIC_IP_ADDRESSING",
+  "type": "overlay-controller",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "overlay_controller",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "P2P-UPLINKS-IPV4-PREFIX-LENGTH",
+              "id": 32,
+              "uplink_ipv4_pool": "10.254.255.0/24",
+              "uplink_interfaces": [
+                "Ethernet1",
+                "Ethernet2"
+              ],
+              "uplink_switch_interfaces": [
+                "Ethernet10",
+                "Ethernet10"
+              ],
+              "uplink_switches": [
+                "MLAG_ODD_ID_L3LEAF1A",
+                "MLAG_ODD_ID_L3LEAF1B"
+              ],
+              "loopback_ipv4_pool": "10.254.254.0/24",
+              "bgp_as": "65123"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

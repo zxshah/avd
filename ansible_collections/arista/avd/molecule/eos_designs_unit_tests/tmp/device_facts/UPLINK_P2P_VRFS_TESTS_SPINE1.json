@@ -29,5 +29,8 @@
   },
   "downlink_switches": [
     "UPLINK_P2P_VRFS_TESTS_LEAF1"
+  ],
+  "evpn_route_server_clients": [
+    "UPLINK_P2P_VRFS_TESTS_LEAF1"
   ]
 }

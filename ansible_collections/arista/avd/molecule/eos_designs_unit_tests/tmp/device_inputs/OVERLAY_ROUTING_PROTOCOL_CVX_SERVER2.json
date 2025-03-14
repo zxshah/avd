@@ -1,0 +1,128 @@
+{
+  "dc_name": "OVERLAY_ROUTING_PROTOCOL_CVX_TESTS",
+  "default_node_types": [
+    {
+      "node_type": "cvxserver",
+      "match_hostnames": [
+        "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER.*"
+      ]
+    },
+    {
+      "node_type": "l3leaf",
+      "match_hostnames": [
+        "OVERLAY_ROUTING_PROTOCOL_CVX_L3LEAF.*"
+      ]
+    }
+  ],
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "node_type_keys": [
+    {
+      "key": "cvxserver",
+      "type": "cvxserver",
+      "underlay_router": false
+    },
+    {
+      "key": "l3leaf",
+      "type": "l3leaf",
+      "connected_endpoints": true,
+      "default_evpn_role": "client",
+      "default_ptp_priority1": 30,
+      "mlag_support": true,
+      "network_services": {
+        "l2": true,
+        "l3": true
+      },
+      "vtep": true
+    }
+  ],
+  "overlay_cvx_servers": [
+    "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER1",
+    "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER2",
+    "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER3"
+  ],
+  "overlay_routing_protocol": "cvx",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TEST",
+            "mac_vrf_vni_base": 11000,
+            "vrfs": [
+              {
+                "name": "TEST",
+                "svis": [
+                  {
+                    "id": 3910,
+                    "name": "SVI_3910"
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 2910,
+                "name": "L2VLAN_2910"
+              },
+              {
+                "id": 2911,
+                "name": "L2VLAN_2911"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "cvxserver",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER1",
+              "id": 1,
+              "mgmt_ip": "192.168.254.254/23"
+            },
+            {
+              "name": "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER2",
+              "id": 2,
+              "mgmt_ip": "192.168.254.255/23"
+            },
+            {
+              "name": "OVERLAY_ROUTING_PROTOCOL_CVX_SERVER3",
+              "id": 3,
+              "mgmt_ip": "192.168.254.253/23"
+            }
+          ]
+        }
+      },
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "192.168.254.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.253.0/24"
+          },
+          "nodes": [
+            {
+              "name": "OVERLAY_ROUTING_PROTOCOL_CVX_L3LEAF1",
+              "id": 1,
+              "bgp_as": "65001"
+            },
+            {
+              "name": "OVERLAY_ROUTING_PROTOCOL_CVX_L3LEAF2",
+              "id": 2,
+              "bgp_as": "65002"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

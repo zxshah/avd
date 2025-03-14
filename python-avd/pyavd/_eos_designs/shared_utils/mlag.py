@@ -34,7 +34,7 @@ class MlagMixin(Protocol):
     @cached_property
     def mlag_peer_facts(self: SharedUtilsProtocol) -> EosDesignsFacts:
         """EosDesignsFacts for the MLAG peer. Raises if not found."""
-        return self.get_peer_facts_cls(self.mlag_peer)
+        return self.get_peer_facts(self.mlag_peer)
 
     @cached_property
     def mlag(self: SharedUtilsProtocol) -> bool:
@@ -169,11 +169,11 @@ class MlagMixin(Protocol):
 
     @cached_property
     def mlag_peer_port_channel_id(self: SharedUtilsProtocol) -> int:
-        return get(self.mlag_peer_facts, "mlag_port_channel_id", default=self.mlag_port_channel_id)
+        return default(self.mlag_peer_facts.mlag_port_channel_id, self.mlag_port_channel_id)
 
     @cached_property
     def mlag_peer_interfaces(self: SharedUtilsProtocol) -> list:
-        return get(self.mlag_peer_facts, "mlag_interfaces", default=self.mlag_interfaces)
+        return default(self.mlag_peer_facts.mlag_interfaces._as_list(), self.mlag_interfaces)
 
     @cached_property
     def mlag_ibgp_ip(self: SharedUtilsProtocol) -> str:

@@ -27,6 +27,9 @@
     "secondary": 5
   },
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "MLAG-ISIS-SPINE"
+  ],
   "overlay": {
     "peering_address": "192.168.255.36",
     "evpn_mpls": false
@@ -34,6 +37,22 @@
   "vtep_ip": "192.168.254.36",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "MLAG-ISIS-SPINE",
+      "peer_interface": "Ethernet30",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65000",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "10.10.101.7",
+      "peer_ip_address": "10.10.101.6",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "MLAG-ISIS-SPINE"
   ],

@@ -1,0 +1,30 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "spine",
+  "underlay_isis_authentication_key": "$1c$sTNAlR6rKSw=",
+  "underlay_isis_authentication_mode": "md5",
+  "underlay_routing_protocol": "isis",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "MLAG-ISIS-SPINE",
+              "id": 1,
+              "loopback_ipv4_pool": "10.10.10.0/24",
+              "bgp_as": "65000"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

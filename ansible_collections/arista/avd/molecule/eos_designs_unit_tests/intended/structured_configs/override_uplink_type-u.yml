@@ -3,6 +3,16 @@ aaa_root:
 config_end: true
 enable_password:
   disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: L2_override_uplink_type-d_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+  peer: override_uplink_type-d
+  peer_interface: Ethernet1
+  peer_type: spine
 hostname: override_uplink_type-u
 ip_routing: true
 is_deployed: true
@@ -17,6 +27,14 @@ management_api_http:
   - name: MGMT
 metadata:
   fabric_name: EOS_DESIGNS_UNIT_TESTS
+port_channel_interfaces:
+- name: Port-Channel1
+  description: L2_override_uplink_type-d_Port-Channel1
+  shutdown: false
+  spanning_tree_portfast: edge
+  switchport:
+    enabled: true
+    mode: trunk
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

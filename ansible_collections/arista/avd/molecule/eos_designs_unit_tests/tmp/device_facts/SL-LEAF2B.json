@@ -22,6 +22,34 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet41",
+      "peer": "SL-LEAF0B",
+      "peer_interface": "Ethernet43",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "SL-LEAF0",
+      "node_group": "SL-LEAF2",
+      "peer_mlag": false,
+      "vlans": "none",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet42",
+      "peer": "SL-LEAF0B",
+      "peer_interface": "Ethernet44",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "SL-LEAF0",
+      "node_group": "SL-LEAF2",
+      "peer_mlag": false,
+      "vlans": "none",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "SL-LEAF0B"
   ],

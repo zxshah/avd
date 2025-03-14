@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import TYPE_CHECKING, Protocol, cast
+from typing import TYPE_CHECKING, Literal, Protocol, overload
 
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
 from pyavd._utils import template_var
@@ -35,7 +35,13 @@ class UtilsMixin(Protocol):
 
     @cached_property
     def switch_facts(self: SharedUtilsProtocol) -> EosDesignsFacts:
-        return self.get_peer_facts_cls(self.hostname)
+        return self.get_peer_facts(self.hostname)
+
+    @overload
+    def get_peer_facts(self: SharedUtilsProtocol, peer_name: str, required: Literal[True] = True) -> EosDesignsFacts: ...
+
+    @overload
+    def get_peer_facts(self: SharedUtilsProtocol, peer_name: str, required: Literal[False]) -> EosDesignsFacts | None: ...
 
     def get_peer_facts(self: SharedUtilsProtocol, peer_name: str, required: bool = True) -> EosDesignsFacts | None:
         """
@@ -55,10 +61,6 @@ class UtilsMixin(Protocol):
             )
             raise AristaAvdInvalidInputsError(msg)
         return self.peer_facts[peer_name]
-
-    def get_peer_facts_cls(self: SharedUtilsProtocol, peer_name: str) -> EosDesignsFacts:
-        """Returns an instance of EosDesignsFacts for the peer. Raise if not found."""
-        return cast("EosDesignsFacts", self.get_peer_facts(peer_name))
 
     def template_var(self: SharedUtilsProtocol, template_file: str, template_vars: dict) -> str:
         """Run the simplified templater using the passed Ansible "templar" engine."""

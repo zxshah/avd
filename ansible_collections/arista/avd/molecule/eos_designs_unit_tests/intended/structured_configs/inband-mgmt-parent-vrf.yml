@@ -24,6 +24,65 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet23
+  description: INBAND-MGMT-IP_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 23
+    mode: active
+  peer: inband-mgmt-ip
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+- name: Ethernet101
+  description: INBAND-MGMT-MLAG-A_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 101
+    mode: active
+  peer: inband-mgmt-mlag-a
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 101
+- name: Ethernet102
+  description: INBAND-MGMT-MLAG-B_Ethernet2
+  shutdown: false
+  peer: inband-mgmt-mlag-b
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '101'
+- name: Ethernet21
+  description: INBAND-MGMT-SUBNET_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 21
+    mode: active
+  peer: inband-mgmt-subnet
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 101
+- name: Ethernet22
+  description: INBAND-MGMT-SUBNET-VRF_Ethernet2
+  shutdown: false
+  channel_group:
+    id: 22
+    mode: active
+  peer: inband-mgmt-subnet-vrf
+  peer_interface: Ethernet2
+  peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 102
 hostname: inband-mgmt-parent-vrf
 ip_igmp_snooping:
   globally_enabled: true
@@ -55,6 +114,37 @@ ntp:
   - name: 2.2.2.55
     preferred: true
   - name: pool.ntp.org
+port_channel_interfaces:
+- name: Port-Channel23
+  description: INBAND-MGMT-IP_Po1
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+- name: Port-Channel101
+  description: inband-mgmt-mlag-test_Po1
+  shutdown: false
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+- name: Port-Channel21
+  description: INBAND-MGMT-SUBNET_Po1
+  shutdown: false
+  lacp_fallback_timeout: 30
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
+- name: Port-Channel22
+  description: INBAND-MGMT-SUBNET-VRF_Po1
+  shutdown: false
+  lacp_fallback_timeout: 90
+  lacp_fallback_mode: individual
+  switchport:
+    enabled: true
+    mode: trunk
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -122,52 +212,50 @@ router_bgp:
       activate: true
     - name: EVPN-OVERLAY-PEERS
       activate: false
-  vrfs:
-  - name: INBANDMGMT
-    rd: 10.0.255.2:1
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
-      export:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
-    router_id: 10.0.255.2
-    redistribute:
-      connected:
-        enabled: true
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:
-- name: Vlan103
-  description: Inband management vlan
-  shutdown: true
+- name: Vlan101
+  description: Inband Management
+  shutdown: false
   vrf: INBANDMGMT
-  ip_address: 192.168.103.1/24
-  tenant: INBAND_MGMT_TESTS
+  ip_address: 192.168.101.2/24
+  ip_virtual_router_addresses:
+  - 192.168.101.1
+  mtu: 1500
+  ip_attached_host_route_export:
+    enabled: true
+    distance: 19
+- name: Vlan102
+  description: Inband Management
+  shutdown: false
+  vrf: INBANDMGMT
+  ip_address: 192.168.102.2/24
+  ip_virtual_router_addresses:
+  - 192.168.102.1
+  mtu: 1500
+  ip_attached_host_route_export:
+    enabled: true
+    distance: 19
 vlan_internal_order:
   allocation: ascending
   range:
     beginning: 1006
     ending: 1199
 vlans:
-- id: 103
-  name: Inband management vlan
-  tenant: INBAND_MGMT_TESTS
+- id: 101
+  name: INBAND_MGMT
+  tenant: system
+- id: 102
+  name: INBAND_MGMT
+  tenant: system
 vrfs:
 - name: MGMT
   ip_routing: false
 - name: INBANDMGMT
-  ip_routing: true
-  tenant: INBAND_MGMT_TESTS
 vxlan_interface:
   vxlan1:
     description: inband-mgmt-parent-vrf_VTEP
     vxlan:
       source_interface: Loopback1
       udp_port: 4789
-      vrfs:
-      - name: INBANDMGMT
-        vni: 1

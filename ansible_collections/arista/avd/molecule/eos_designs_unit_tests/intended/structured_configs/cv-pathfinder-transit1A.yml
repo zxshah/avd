@@ -116,17 +116,6 @@ ethernet_interfaces:
   peer: site-ha-enabled-leaf1
   peer_interface: Ethernet1.142
   peer_type: l3leaf
-- name: Ethernet52.666
-  description: P2P_site-ha-enabled-leaf1_Ethernet1.666_VRF_ATTRACTED-VRF-FROM-UPLINK
-  shutdown: false
-  mtu: 9214
-  vrf: ATTRACTED-VRF-FROM-UPLINK
-  encapsulation_dot1q:
-    vlan: 666
-  ip_address: 172.17.0.1/31
-  peer: site-ha-enabled-leaf1
-  peer_interface: Ethernet1.666
-  peer_type: l3leaf
 - name: Ethernet1.42
   description: Comcast
   shutdown: false
@@ -272,10 +261,6 @@ metadata:
       - name: Type
         value: lan
     - interface: Ethernet52.142
-      tags:
-      - name: Type
-        value: lan
-    - interface: Ethernet52.666
       tags:
       - name: Type
         value: lan
@@ -456,8 +441,6 @@ router_adaptive_virtual_topology:
     internet_exit_policy: DIRECT-EXIT-POLICY-2
   - name: TRANSIT-AVT-POLICY-DEFAULT
     load_balance_policy: LB-TRANSIT-AVT-POLICY-DEFAULT
-  - name: DEFAULT-POLICY-DEFAULT
-    load_balance_policy: LB-DEFAULT-POLICY-DEFAULT
   policies:
   - name: DEFAULT-AVT-POLICY-WITH-CP
     matches:
@@ -489,10 +472,6 @@ router_adaptive_virtual_topology:
       avt_profile: CUSTOM-VOICE-PROFILE-NAME
     - application_profile: default
       avt_profile: TRANSIT-AVT-POLICY-DEFAULT
-  - name: DEFAULT-POLICY
-    matches:
-    - application_profile: default
-      avt_profile: DEFAULT-POLICY-DEFAULT
   vrfs:
   - name: default
     policy: DEFAULT-AVT-POLICY-WITH-CP
@@ -527,11 +506,6 @@ router_adaptive_virtual_topology:
     - name: CUSTOM-VOICE-PROFILE-NAME
       id: 42
     - name: TRANSIT-AVT-POLICY-DEFAULT
-      id: 1
-  - name: ATTRACTED-VRF-FROM-UPLINK
-    policy: DEFAULT-POLICY
-    profiles:
-    - name: DEFAULT-POLICY-DEFAULT
       id: 1
 router_bfd:
   multihop:
@@ -671,26 +645,6 @@ router_bgp:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: '65199'
       description: site-ha-enabled-leaf1_Ethernet1.142_vrf_PROD
-    redistribute:
-      connected:
-        enabled: true
-  - name: ATTRACTED-VRF-FROM-UPLINK
-    rd: 192.168.43.1:666
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - 666:666
-      export:
-      - address_family: evpn
-        route_targets:
-        - 666:666
-    router_id: 192.168.43.1
-    neighbors:
-    - ip_address: 172.17.0.0
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65199'
-      description: site-ha-enabled-leaf1_Ethernet1.666_vrf_ATTRACTED-VRF-FROM-UPLINK
     redistribute:
       connected:
         enabled: true
@@ -837,11 +791,6 @@ router_path_selection:
     - name: MPLS
       priority: 2
     - name: LAN_HA
-  - name: LB-DEFAULT-POLICY-DEFAULT
-    path_groups:
-    - name: INET
-    - name: MPLS
-    - name: LAN_HA
   tcp_mss_ceiling:
     ipv4_segment_size: auto
 router_service_insertion:
@@ -885,9 +834,6 @@ vrfs:
 - name: TRANSIT
   ip_routing: true
   tenant: TenantB
-- name: ATTRACTED-VRF-FROM-UPLINK
-  ip_routing: true
-  tenant: TenantC
 vxlan_interface:
   vxlan1:
     description: cv-pathfinder-transit1A_VTEP
@@ -903,5 +849,3 @@ vxlan_interface:
         vni: 42
       - name: TRANSIT
         vni: 66
-      - name: ATTRACTED-VRF-FROM-UPLINK
-        vni: 166

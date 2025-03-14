@@ -28,5 +28,9 @@
   "downlink_switches": [
     "AUTO_NODE_TYPE_LEAF01",
     "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
+  ],
+  "evpn_route_server_clients": [
+    "AUTO_NODE_TYPE_LEAF01",
+    "AUTO_NODE_TYPE_UNGROUPED_LEAF02"
   ]
 }

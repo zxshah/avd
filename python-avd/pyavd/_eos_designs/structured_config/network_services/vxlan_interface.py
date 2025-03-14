@@ -233,12 +233,12 @@ class VxlanInterfaceMixin(Protocol):
             if peer == self.shared_utils.hostname:
                 continue
 
-            peer_facts = self.shared_utils.get_peer_facts(peer, required=True)
+            peer_facts = self.shared_utils.get_peer_facts(peer)
 
-            if overlay_her_flood_list_scope == "dc" and peer_facts.get("dc_name") != self.inputs.dc_name:
+            if overlay_her_flood_list_scope == "dc" and peer_facts.dc_name != self.inputs.dc_name:
                 continue
 
-            if (vtep_ip := peer_facts.get("vtep_ip")) is None:
+            if (vtep_ip := peer_facts.vtep_ip) is None:
                 continue
 
             if not self.inputs.overlay_her_flood_list_per_vni:
@@ -247,7 +247,7 @@ class VxlanInterfaceMixin(Protocol):
                 continue
 
             # Use flood lists per vlan
-            peer_vlans = peer_facts.get("vlans", [])
+            peer_vlans = peer_facts.vlans
             peer_vlans_list = range_expand(peer_vlans)
             for vlan in peer_vlans_list:
                 overlay_her_flood_lists.setdefault(int(vlan), []).append(vtep_ip)

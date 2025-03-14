@@ -1,0 +1,30 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "ipv6_mgmt_gateway": "0200::1",
+  "mgmt_interface_vrf": "MGMT",
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "mgmt_interface_ipv6",
+              "id": 103,
+              "ipv6_mgmt_ip": "0200::105/64",
+              "ipv6_mgmt_gateway": "0200::2"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

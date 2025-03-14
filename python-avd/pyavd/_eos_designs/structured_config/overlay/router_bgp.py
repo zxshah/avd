@@ -496,9 +496,9 @@ class RouterBgpMixin(Protocol):
         if remote_as is not None:
             neighbor["remote_as"] = remote_as
 
-        if self.inputs.shutdown_bgp_towards_undeployed_peers and name in self._avd_overlay_peers:
+        if self.inputs.shutdown_bgp_towards_undeployed_peers and name in self._evpn_route_server_clients:
             peer_facts = self.shared_utils.get_peer_facts(name)
-            if peer_facts["is_deployed"] is False:
+            if not peer_facts.is_deployed:
                 neighbor["shutdown"] = True
 
         return neighbor

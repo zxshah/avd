@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import get
 from pyavd.j2filters import natural_sort, range_expand
 
 if TYPE_CHECKING:
@@ -44,9 +43,9 @@ class VlansMixin(Protocol):
         self.structured_config.vlans.extend(vlans)
 
         # Add configuration for uplink or peer's uplink_native_vlan if it is not defined as part of network services
-        switch_vlans = range_expand(self.facts.vlans)
+        switch_vlans = set(map(int, range_expand(self.facts.vlans)))
         uplink_native_vlans = natural_sort(
-            {link["native_vlan"] for link in self._underlay_links if "native_vlan" in link and str(link["native_vlan"]) not in switch_vlans},
+            {link.native_vlan for link in self._underlay_links if link.native_vlan and link.native_vlan not in switch_vlans},
         )
         for peer_uplink_native_vlan in uplink_native_vlans:
             self.structured_config.vlans.append_new(id=int(peer_uplink_native_vlan), name="NATIVE", state="suspend")

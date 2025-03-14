@@ -130,16 +130,6 @@ ethernet_interfaces:
   peer_type: l3_interface
   switchport:
     enabled: false
-- name: Ethernet4000
-  description: My second test
-  shutdown: false
-  mtu: 1500
-  ip_address: 10.1.2.3/12
-  peer: MY-own-peer
-  peer_interface: Ethernet123
-  peer_type: my_precious
-  switchport:
-    enabled: false
 hardware:
   speed_groups:
   - speed_group: '1'
@@ -235,7 +225,16 @@ management_interfaces:
 metadata:
   platform: 7280R
   fabric_name: EOS_DESIGNS_UNIT_TESTS
-ntp: null
+ntp:
+  local_interface:
+    name: Management99
+    vrf: MGMT
+  servers:
+  - name: 192.168.200.5
+    preferred: true
+    vrf: MGMT
+  - name: 2001:db8::3
+    vrf: MGMT
 platform:
   sand:
     lag:
@@ -623,7 +622,7 @@ sflow:
     destinations:
     - destination: 192.168.200.10
     - destination: 10.0.200.90
-    source_interface: Management99
+    source_interface: Management0
 snmp_server:
   contact: example@example.com
   location: EOS_DESIGNS_UNIT_TESTS DC1-BL1B

@@ -35,6 +35,15 @@ ethernet_interfaces:
   peer_type: spine
   switchport:
     enabled: false
+- name: Ethernet6
+  description: L2_EVPN-MULTICAST-L2LEAF1A_Ethernet1
+  shutdown: false
+  channel_group:
+    id: 6
+    mode: active
+  peer: EVPN-MULTICAST-L2LEAF1A
+  peer_interface: Ethernet1
+  peer_type: l2leaf
 - name: Ethernet8
   shutdown: false
   vrf: TEN_E_L3_MULTICAST_ENABLED_PEG_OVERRIDE
@@ -244,6 +253,13 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel6
+  description: L2_EVPN-MULTICAST-L2LEAF1A_Port-Channel1
+  shutdown: false
+  mlag: 6
+  switchport:
+    enabled: true
+    mode: trunk
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

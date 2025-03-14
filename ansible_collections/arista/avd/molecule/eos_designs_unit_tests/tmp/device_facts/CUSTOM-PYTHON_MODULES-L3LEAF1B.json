@@ -28,6 +28,9 @@
     "secondary": 2
   },
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "CUSTOM-PYTHON_MODULES-SPINE1"
+  ],
   "overlay": {
     "peering_address": "192.168.255.22",
     "evpn_mpls": false
@@ -35,6 +38,22 @@
   "vtep_ip": "192.168.254.21",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "CUSTOM-PYTHON_MODULES-SPINE1",
+      "peer_interface": "Ethernet2",
+      "peer_type": "custom_spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.255.23",
+      "peer_ip_address": "172.31.255.22",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "CUSTOM-PYTHON_MODULES-SPINE1"
   ],

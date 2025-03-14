@@ -1,0 +1,88 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "10.0.0.1",
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "testserver",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet1"
+                ],
+                "switches": [
+                  "filter.only_vlans_in_use"
+                ],
+                "endpoint_ports": [
+                  "Nic1"
+                ],
+                "mode": "trunk",
+                "vlans": "1-2"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "test",
+            "vrfs": [
+              {
+                "name": "testvrf",
+                "svis": [
+                  {
+                    "id": 2,
+                    "name": "vlan2",
+                    "ip_address_virtual": "10.10.10.1/24"
+                  },
+                  {
+                    "id": 4,
+                    "name": "this_svi_will_not_be_configured_because_it_is_not_in_use"
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 1,
+                "name": "vlan1"
+              },
+              {
+                "id": 3,
+                "name": "this_vlan_will_not_be_configured_because_it_is_not_in_use"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "filter.only_vlans_in_use",
+              "id": 1,
+              "filter": {
+                "only_vlans_in_use": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

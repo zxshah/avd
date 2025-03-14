@@ -17,6 +17,19 @@
   "vtep_ip": "192.168.2.2",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet2",
+      "peer": "uplink_lan_l2leaf",
+      "peer_interface": "Ethernet2",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "vlans": "10,100",
+      "peer_spanning_tree_portfast": "edge",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "uplink_lan_l2leaf"
   ],

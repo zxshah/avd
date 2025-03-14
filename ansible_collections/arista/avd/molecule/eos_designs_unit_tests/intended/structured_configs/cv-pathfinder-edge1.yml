@@ -110,17 +110,6 @@ ethernet_interfaces:
   peer: site-ha-disabled-leaf
   peer_interface: Ethernet2.142
   peer_type: l3leaf
-- name: Ethernet52.666
-  description: P2P_site-ha-disabled-leaf_Ethernet2.666_VRF_ATTRACTED-VRF-FROM-UPLINK
-  shutdown: false
-  mtu: 9214
-  vrf: ATTRACTED-VRF-FROM-UPLINK
-  encapsulation_dot1q:
-    vlan: 666
-  ip_address: 172.17.0.3/31
-  peer: site-ha-disabled-leaf
-  peer_interface: Ethernet2.666
-  peer_type: l3leaf
 - name: Ethernet1/49.3
   description: Inmrasat_S511
   shutdown: false
@@ -433,10 +422,6 @@ metadata:
       - name: Type
         value: lan
     - interface: Ethernet52.142
-      tags:
-      - name: Type
-        value: lan
-    - interface: Ethernet52.666
       tags:
       - name: Type
         value: lan
@@ -833,8 +818,6 @@ router_adaptive_virtual_topology:
     internet_exit_policy: ZSCALER-EXIT-POLICY-2
   - name: PROD-AVT-POLICY-DEFAULT
     load_balance_policy: LB-PROD-AVT-POLICY-DEFAULT
-  - name: DEFAULT-POLICY-DEFAULT
-    load_balance_policy: LB-DEFAULT-POLICY-DEFAULT
   policies:
   - name: DEFAULT-AVT-POLICY-WITH-CP
     matches:
@@ -858,10 +841,6 @@ router_adaptive_virtual_topology:
       avt_profile: DEFAULT-AVT-POLICY-VIDEO
     - application_profile: default
       avt_profile: DEFAULT-AVT-POLICY-DEFAULT
-  - name: DEFAULT-POLICY
-    matches:
-    - application_profile: default
-      avt_profile: DEFAULT-POLICY-DEFAULT
   vrfs:
   - name: default
     policy: DEFAULT-AVT-POLICY-WITH-CP
@@ -887,11 +866,6 @@ router_adaptive_virtual_topology:
     - name: DEFAULT-AVT-POLICY-VIDEO
       id: 3
     - name: DEFAULT-AVT-POLICY-DEFAULT
-      id: 1
-  - name: ATTRACTED-VRF-FROM-UPLINK
-    policy: DEFAULT-POLICY
-    profiles:
-    - name: DEFAULT-POLICY-DEFAULT
       id: 1
 router_bfd:
   multihop:
@@ -1044,26 +1018,6 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
-  - name: ATTRACTED-VRF-FROM-UPLINK
-    rd: 192.168.42.2:666
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - 666:666
-      export:
-      - address_family: evpn
-        route_targets:
-        - 666:666
-    router_id: 192.168.42.2
-    neighbors:
-    - ip_address: 172.17.0.2
-      peer_group: IPv4-UNDERLAY-PEERS
-      remote_as: '65199'
-      description: site-ha-disabled-leaf_Ethernet2.666_vrf_ATTRACTED-VRF-FROM-UPLINK
-    redistribute:
-      connected:
-        enabled: true
   - name: default
     rd: 192.168.42.2:1
     route_targets:
@@ -1193,12 +1147,6 @@ router_path_selection:
   - name: LB-PROD-AVT-POLICY-DEFAULT
     path_groups:
     - name: INET
-  - name: LB-DEFAULT-POLICY-DEFAULT
-    path_groups:
-    - name: AWS
-    - name: INET
-    - name: Satellite
-      priority: 2
   tcp_mss_ceiling:
     ipv4_segment_size: auto
   interfaces:
@@ -1333,9 +1281,6 @@ vrfs:
 - name: PROD
   ip_routing: true
   tenant: TenantA
-- name: ATTRACTED-VRF-FROM-UPLINK
-  ip_routing: true
-  tenant: TenantC
 vxlan_interface:
   vxlan1:
     description: cv-pathfinder-edge1_VTEP
@@ -1349,5 +1294,3 @@ vxlan_interface:
         vni: 100
       - name: PROD
         vni: 42
-      - name: ATTRACTED-VRF-FROM-UPLINK
-        vni: 166

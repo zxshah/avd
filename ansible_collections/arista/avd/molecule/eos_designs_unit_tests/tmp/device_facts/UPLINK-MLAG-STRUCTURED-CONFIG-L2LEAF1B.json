@@ -23,6 +23,62 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
+      "peer_interface": "Ethernet6",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "DC1_LEAF1",
+      "node_group": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1",
+      "peer_mlag": true,
+      "vlans": "none",
+      "structured_config": {
+        "switchport": {
+          "trunk": {
+            "native_vlan_tag": true
+          }
+        },
+        "storm_control": {
+          "broadcast": {
+            "level": 25
+          },
+          "unknown_unicast": {
+            "level": 25
+          }
+        }
+      }
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B",
+      "peer_interface": "Ethernet6",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "DC1_LEAF1",
+      "node_group": "UPLINK-MLAG-STRUCTURED-CONFIG-L2LEAF1",
+      "peer_mlag": true,
+      "vlans": "none",
+      "structured_config": {
+        "switchport": {
+          "trunk": {
+            "native_vlan_tag": true
+          }
+        },
+        "storm_control": {
+          "broadcast": {
+            "level": 25
+          },
+          "unknown_unicast": {
+            "level": 25
+          }
+        }
+      }
+    }
+  ],
   "uplink_peers": [
     "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1A",
     "UPLINK-MLAG-STRUCTURED-CONFIG-L3LEAF1B"

@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Literal
 
+from pyavd._eos_designs.schema import EosDesigns
 from pyavd._schema.coerce_type import coerce_type
 from pyavd._schema.models.avd_indexed_list import AvdIndexedList
 from pyavd._schema.models.avd_list import AvdList
@@ -295,11 +296,11 @@ class EosDesignsFacts(AvdModel):
             interface: str
             peer_interface: str
             vrf: str
-            encapsulation_dot1q_vlan: int | None
+            encapsulation_dot1q_vlan: int
             ipv6_enable: bool | None
-            prefix_length: int | None
-            ip_address: str | None
-            peer_ip_address: str | None
+            prefix_length: int
+            ip_address: str
+            peer_ip_address: str
             structured_config: dict
             """
             Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
@@ -323,11 +324,11 @@ class EosDesignsFacts(AvdModel):
                     interface: str | UndefinedType = Undefined,
                     peer_interface: str | UndefinedType = Undefined,
                     vrf: str | UndefinedType = Undefined,
-                    encapsulation_dot1q_vlan: int | None | UndefinedType = Undefined,
+                    encapsulation_dot1q_vlan: int | UndefinedType = Undefined,
                     ipv6_enable: bool | None | UndefinedType = Undefined,
-                    prefix_length: int | None | UndefinedType = Undefined,
-                    ip_address: str | None | UndefinedType = Undefined,
-                    peer_ip_address: str | None | UndefinedType = Undefined,
+                    prefix_length: int | UndefinedType = Undefined,
+                    ip_address: str | UndefinedType = Undefined,
+                    peer_ip_address: str | UndefinedType = Undefined,
                     structured_config: dict | UndefinedType = Undefined,
                 ) -> None:
                     """
@@ -388,15 +389,23 @@ class EosDesignsFacts(AvdModel):
             "link_tracking_groups": {"type": LinkTrackingGroups},
             "peer_node_group": {"type": str},
             "node_group": {"type": str},
+            "mlag": {"type": bool},
             "peer_mlag": {"type": bool},
-            "channel_group_id": {"type": str},
-            "peer_channel_group_id": {"type": str},
+            "channel_group_id": {"type": int},
+            "peer_channel_group_id": {"type": int},
             "trunk_groups": {"type": TrunkGroups},
             "peer_trunk_groups": {"type": PeerTrunkGroups},
             "vlans": {"type": str},
             "native_vlan": {"type": int},
+            "short_esi": {"type": str},
             "peer_short_esi": {"type": str},
+            "spanning_tree_portfast": {"type": str},
             "peer_spanning_tree_portfast": {"type": str},
+            "sflow_enabled": {"type": bool},
+            "flow_tracking": {"type": EosDesigns.FabricFlowTracking.Uplinks},
+            "inband_ztp_vlan": {"type": int},
+            "inband_ztp_lacp_fallback_delay": {"type": int},
+            "dhcp_server": {"type": bool},
             "structured_config": {"type": dict},
             "subinterfaces": {"type": Subinterfaces},
         }
@@ -427,17 +436,26 @@ class EosDesignsFacts(AvdModel):
         """Subclass of AvdIndexedList with `LinkTrackingGroupsItem` items. Primary key is `name` (`str`)."""
         peer_node_group: str | None
         node_group: str | None
+        mlag: bool | None
         peer_mlag: bool | None
-        channel_group_id: str | None
-        peer_channel_group_id: str | None
+        channel_group_id: int | None
+        peer_channel_group_id: int | None
         trunk_groups: TrunkGroups
         """Subclass of AvdList with `str` items."""
         peer_trunk_groups: PeerTrunkGroups
         """Subclass of AvdList with `str` items."""
         vlans: str | None
         native_vlan: int | None
+        short_esi: str | None
         peer_short_esi: str | None
-        peer_spanning_tree_portfast: str | None
+        spanning_tree_portfast: Literal["edge", "network"] | None
+        peer_spanning_tree_portfast: Literal["edge", "network"] | None
+        sflow_enabled: bool | None
+        flow_tracking: EosDesigns.FabricFlowTracking.Uplinks
+        """Enable flow-tracking on all fabric uplinks."""
+        inband_ztp_vlan: int | None
+        inband_ztp_lacp_fallback_delay: int | None
+        dhcp_server: bool | None
         structured_config: dict
         """
         Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
@@ -480,15 +498,23 @@ class EosDesignsFacts(AvdModel):
                 link_tracking_groups: LinkTrackingGroups | UndefinedType = Undefined,
                 peer_node_group: str | None | UndefinedType = Undefined,
                 node_group: str | None | UndefinedType = Undefined,
+                mlag: bool | None | UndefinedType = Undefined,
                 peer_mlag: bool | None | UndefinedType = Undefined,
-                channel_group_id: str | None | UndefinedType = Undefined,
-                peer_channel_group_id: str | None | UndefinedType = Undefined,
+                channel_group_id: int | None | UndefinedType = Undefined,
+                peer_channel_group_id: int | None | UndefinedType = Undefined,
                 trunk_groups: TrunkGroups | UndefinedType = Undefined,
                 peer_trunk_groups: PeerTrunkGroups | UndefinedType = Undefined,
                 vlans: str | None | UndefinedType = Undefined,
                 native_vlan: int | None | UndefinedType = Undefined,
+                short_esi: str | None | UndefinedType = Undefined,
                 peer_short_esi: str | None | UndefinedType = Undefined,
-                peer_spanning_tree_portfast: str | None | UndefinedType = Undefined,
+                spanning_tree_portfast: Literal["edge", "network"] | None | UndefinedType = Undefined,
+                peer_spanning_tree_portfast: Literal["edge", "network"] | None | UndefinedType = Undefined,
+                sflow_enabled: bool | None | UndefinedType = Undefined,
+                flow_tracking: EosDesigns.FabricFlowTracking.Uplinks | UndefinedType = Undefined,
+                inband_ztp_vlan: int | None | UndefinedType = Undefined,
+                inband_ztp_lacp_fallback_delay: int | None | UndefinedType = Undefined,
+                dhcp_server: bool | None | UndefinedType = Undefined,
                 structured_config: dict | UndefinedType = Undefined,
                 subinterfaces: Subinterfaces | UndefinedType = Undefined,
             ) -> None:
@@ -522,6 +548,7 @@ class EosDesignsFacts(AvdModel):
                     link_tracking_groups: Subclass of AvdIndexedList with `LinkTrackingGroupsItem` items. Primary key is `name` (`str`).
                     peer_node_group: peer_node_group
                     node_group: node_group
+                    mlag: mlag
                     peer_mlag: peer_mlag
                     channel_group_id: channel_group_id
                     peer_channel_group_id: peer_channel_group_id
@@ -529,8 +556,15 @@ class EosDesignsFacts(AvdModel):
                     peer_trunk_groups: Subclass of AvdList with `str` items.
                     vlans: vlans
                     native_vlan: native_vlan
+                    short_esi: short_esi
                     peer_short_esi: peer_short_esi
+                    spanning_tree_portfast: spanning_tree_portfast
                     peer_spanning_tree_portfast: peer_spanning_tree_portfast
+                    sflow_enabled: sflow_enabled
+                    flow_tracking: Enable flow-tracking on all fabric uplinks.
+                    inband_ztp_vlan: inband_ztp_vlan
+                    inband_ztp_lacp_fallback_delay: inband_ztp_lacp_fallback_delay
+                    dhcp_server: dhcp_server
                     structured_config:
                        Custom structured config applied to "uplink_interfaces", and "uplink_switch_interfaces".
                        When

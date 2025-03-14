@@ -229,12 +229,14 @@ keys:
           type: str
         node_group:
           type: str
+        mlag:
+          type: bool
         peer_mlag:
           type: bool
         channel_group_id:
-          type: str # TODO consider int
+          type: int
         peer_channel_group_id:
-          type: str # TODO consider int
+          type: int
         trunk_groups:
           type: list
           items:
@@ -247,10 +249,33 @@ keys:
           type: str
         native_vlan:
           type: int
+        short_esi:
+          type: str
         peer_short_esi:
           type: str
+        spanning_tree_portfast:
+          type: str
+          valid_values:
+            - edge
+            - network
         peer_spanning_tree_portfast:
           type: str
+          valid_values:
+            - edge
+            - network
+        sflow_enabled:
+          type: bool
+        flow_tracking:
+          type: dict
+          documentation_options:
+            table: eos_designs_facts
+          $ref: eos_designs#/keys/fabric_flow_tracking/keys/uplinks
+        inband_ztp_vlan:
+          type: int
+        inband_ztp_lacp_fallback_delay:
+          type: int
+        dhcp_server:
+          type: bool
         structured_config:
           type: dict
           documentation_options:
@@ -275,6 +300,7 @@ keys:
                 type: str
                 required: true
               encapsulation_dot1q_vlan:
+                required: true
                 type: int
               ipv6_enable:
                 type: bool

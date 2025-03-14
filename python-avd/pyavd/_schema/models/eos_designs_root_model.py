@@ -57,6 +57,19 @@ class EosDesignsRootModel(AvdModel):
         return super()._from_dict(ChainMap(root_data, data), keep_extra_keys=keep_extra_keys)
 
     @classmethod
+    def _from_dumped_dict(cls: type[T], data: Mapping) -> T:
+        """
+        Returns a new instance loaded with the data from the given dict.
+
+        The given dict is expected to be a dump of the same class, where all dynamic keys and custom_structured_configuration_ keys
+        have already been moved to _dynamic_keys and _custom_structured_configurations.
+
+        Args:
+            data: A mapping containing the EosDesigns input data to be loaded.
+        """
+        return super()._from_dict(data)
+
+    @classmethod
     def _get_csc_items(cls, data: Mapping) -> Iterator[EosDesigns._CustomStructuredConfigurationsItem]:
         """
         Returns a list of _CustomStructuredConfigurationsItem objects containing each custom structured configuration extracted from the inputs.

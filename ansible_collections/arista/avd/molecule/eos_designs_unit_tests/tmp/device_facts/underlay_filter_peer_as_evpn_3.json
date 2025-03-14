@@ -27,5 +27,8 @@
   },
   "downlink_switches": [
     "underlay_filter_peer_as_evpn_1"
+  ],
+  "evpn_route_server_clients": [
+    "underlay_filter_peer_as_evpn_1"
   ]
 }

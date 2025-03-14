@@ -7,11 +7,13 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-from pyavd._errors import AristaAvdError
-from pyavd._utils import get, strip_empties_from_dict
+from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
+from pyavd._utils import strip_empties_from_dict
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
+    from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
+
     from . import AvdStructuredConfigOverlayProtocol
 
 
@@ -23,14 +25,14 @@ class UtilsMixin(Protocol):
     """
 
     @cached_property
-    def _avd_overlay_peers(self: AvdStructuredConfigOverlayProtocol) -> list:
+    def _evpn_route_server_clients(self: AvdStructuredConfigOverlayProtocol) -> list:
         """
         Returns a list of overlay peers for the device.
 
         This cannot be loaded in shared_utils since it will not be calculated until EosDesignsFacts has been rendered
         and shared_utils are shared between EosDesignsFacts and AvdStructuredConfig classes like this one.
         """
-        return get(self._hostvars, f"avd_overlay_peers..{self.shared_utils.hostname}", separator="..", default=[])
+        return self.facts.evpn_route_server_clients._as_list()
 
     @cached_property
     def _evpn_gateway_remote_peers(self: AvdStructuredConfigOverlayProtocol) -> dict:
@@ -77,11 +79,11 @@ class UtilsMixin(Protocol):
 
         evpn_route_clients = {}
 
-        for avd_peer in self._avd_overlay_peers:
-            peer_facts = self.shared_utils.get_peer_facts(avd_peer, required=True)
+        for avd_peer in self._evpn_route_server_clients:
+            peer_facts = self.shared_utils.get_peer_facts(avd_peer)
             if (
-                self.shared_utils.hostname in peer_facts.get("evpn_route_servers", [])
-                and peer_facts.get("evpn_role") in ["server", "client"]
+                self.shared_utils.hostname in peer_facts.evpn_route_servers
+                and peer_facts.evpn_role in ["server", "client"]
                 and avd_peer not in self._evpn_route_servers
             ):
                 self._append_peer(evpn_route_clients, avd_peer, peer_facts)
@@ -95,9 +97,9 @@ class UtilsMixin(Protocol):
 
         evpn_route_servers = {}
 
-        for route_server in natural_sort(get(self._hostvars, "switch.evpn_route_servers", default=[])):
-            peer_facts = self.shared_utils.get_peer_facts(route_server, required=True)
-            if peer_facts.get("evpn_role") != "server":
+        for route_server in natural_sort(self.facts.evpn_route_servers):
+            peer_facts = self.shared_utils.get_peer_facts(route_server)
+            if peer_facts.evpn_role != "server":
                 continue
 
             self._append_peer(evpn_route_servers, route_server, peer_facts)
@@ -113,11 +115,11 @@ class UtilsMixin(Protocol):
     def _is_mpls_server(self: AvdStructuredConfigOverlayProtocol) -> bool:
         return self.shared_utils.mpls_overlay_role == "server" or (self.shared_utils.evpn_role == "server" and self.shared_utils.overlay_evpn_mpls)
 
-    def _is_peer_mpls_client(self: AvdStructuredConfigOverlayProtocol, peer_facts: dict) -> bool:
-        return peer_facts.get("mpls_overlay_role") == "client" or (peer_facts.get("evpn_role") == "client" and get(peer_facts, "overlay.evpn_mpls") is True)
+    def _is_peer_mpls_client(self: AvdStructuredConfigOverlayProtocol, peer_facts: EosDesignsFacts) -> bool:
+        return peer_facts.mpls_overlay_role == "client" or (peer_facts.evpn_role == "client" and peer_facts.overlay.evpn_mpls)
 
-    def _is_peer_mpls_server(self: AvdStructuredConfigOverlayProtocol, peer_facts: dict) -> bool:
-        return peer_facts.get("mpls_overlay_role") == "server" or (peer_facts.get("evpn_role") == "server" and get(peer_facts, "overlay.evpn_mpls") is True)
+    def _is_peer_mpls_server(self: AvdStructuredConfigOverlayProtocol, peer_facts: EosDesignsFacts) -> bool:
+        return peer_facts.mpls_overlay_role == "server" or (peer_facts.evpn_role == "server" and peer_facts.overlay.evpn_mpls)
 
     @cached_property
     def _ipvpn_gateway_remote_peers(self: AvdStructuredConfigOverlayProtocol) -> dict:
@@ -146,12 +148,12 @@ class UtilsMixin(Protocol):
 
         mpls_route_clients = {}
 
-        for avd_peer in self._avd_overlay_peers:
-            peer_facts = self.shared_utils.get_peer_facts(avd_peer, required=True)
+        for avd_peer in self._evpn_route_server_clients:
+            peer_facts = self.shared_utils.get_peer_facts(avd_peer)
             if self._is_peer_mpls_client(peer_facts) is not True:
                 continue
 
-            if self.shared_utils.hostname in peer_facts.get("mpls_route_reflectors", []) and avd_peer not in self._mpls_route_reflectors:
+            if self.shared_utils.hostname in peer_facts.mpls_route_reflectors and avd_peer not in self._mpls_route_reflectors:
                 self._append_peer(mpls_route_clients, avd_peer, peer_facts)
 
         return mpls_route_clients
@@ -168,8 +170,8 @@ class UtilsMixin(Protocol):
             if fabric_switch == self.shared_utils.hostname:
                 continue
 
-            peer_facts = self.shared_utils.get_peer_facts(fabric_switch, required=True)
-            if self._is_peer_mpls_client(peer_facts) is not True:
+            peer_facts = self.shared_utils.get_peer_facts(fabric_switch)
+            if not self._is_peer_mpls_client(peer_facts):
                 continue
 
             self._append_peer(mpls_mesh_pe, fabric_switch, peer_facts)
@@ -183,12 +185,12 @@ class UtilsMixin(Protocol):
 
         mpls_route_reflectors = {}
 
-        for route_reflector in natural_sort(get(self._hostvars, "switch.mpls_route_reflectors", default=[])):
+        for route_reflector in natural_sort(self.facts.mpls_route_reflectors):
             if route_reflector == self.shared_utils.hostname:
                 continue
 
-            peer_facts = self.shared_utils.get_peer_facts(route_reflector, required=True)
-            if self._is_peer_mpls_server(peer_facts) is not True:
+            peer_facts = self.shared_utils.get_peer_facts(route_reflector)
+            if not self._is_peer_mpls_server(peer_facts):
                 continue
 
             self._append_peer(mpls_route_reflectors, route_reflector, peer_facts)
@@ -202,31 +204,27 @@ class UtilsMixin(Protocol):
 
         mpls_rr_peers = {}
 
-        for route_reflector in natural_sort(get(self._hostvars, "switch.mpls_route_reflectors", default=[])):
+        for route_reflector in natural_sort(self.facts.mpls_route_reflectors):
             if route_reflector == self.shared_utils.hostname:
                 continue
 
-            peer_facts = self.shared_utils.get_peer_facts(route_reflector, required=True)
+            peer_facts = self.shared_utils.get_peer_facts(route_reflector)
             if self._is_peer_mpls_server(peer_facts) is not True:
                 continue
 
             self._append_peer(mpls_rr_peers, route_reflector, peer_facts)
 
-        for avd_peer in self._avd_overlay_peers:
-            peer_facts = self.shared_utils.get_peer_facts(avd_peer, required=True)
+        for avd_peer in self._evpn_route_server_clients:
+            peer_facts = self.shared_utils.get_peer_facts(avd_peer)
             if self._is_peer_mpls_server(peer_facts) is not True:
                 continue
 
-            if self.shared_utils.hostname in peer_facts.get("mpls_route_reflectors", []) and avd_peer not in get(
-                self._hostvars,
-                "switch.mpls_route_reflectors",
-                default=[],
-            ):
+            if self.shared_utils.hostname in peer_facts.mpls_route_reflectors and avd_peer not in self.facts.mpls_route_reflectors:
                 self._append_peer(mpls_rr_peers, avd_peer, peer_facts)
 
         return mpls_rr_peers
 
-    def _append_peer(self: AvdStructuredConfigOverlayProtocol, peers_dict: dict, peer_name: str, peer_facts: dict) -> None:
+    def _append_peer(self: AvdStructuredConfigOverlayProtocol, peers_dict: dict, peer_name: str, peer_facts: EosDesignsFacts) -> None:
         """
         Retrieve bgp_as and "overlay.peering_address" from peer_facts and append a new peer to peers_dict.
 
@@ -238,15 +236,13 @@ class UtilsMixin(Protocol):
             }
         }.
         """
-        bgp_as = peer_facts.get("bgp_as")
+        bgp_as = peer_facts.bgp_as
+        if not (ip_address := peer_facts.overlay.peering_address):
+            msg = f"switch.overlay.peering_address for {peer_name} is required."
+            raise AristaAvdInvalidInputsError(msg)
         peers_dict[peer_name] = {
             "bgp_as": str(bgp_as) if bgp_as is not None else None,
-            "ip_address": get(
-                peer_facts,
-                "overlay.peering_address",
-                required=True,
-                custom_error_msg=f"switch.overlay.peering_address for {peer_name} is required.",
-            ),
+            "ip_address": ip_address,
             "overlay_peering_interface": "Loopback0",
         }
 
@@ -281,5 +277,8 @@ class UtilsMixin(Protocol):
         return stun_server_profiles
 
     def _wan_ha_peer_vtep_ip(self: AvdStructuredConfigOverlayProtocol) -> str:
-        peer_facts = self.shared_utils.get_peer_facts(self.shared_utils.wan_ha_peer, required=True)
-        return get(peer_facts, "vtep_ip", required=True)
+        peer_facts = self.shared_utils.get_peer_facts(self.shared_utils.wan_ha_peer)
+        if not (vtep_ip := peer_facts.vtep_ip):
+            msg = f"'vtep_ip' for host {self.shared_utils.wan_ha_peer}"
+            raise AristaAvdMissingVariableError(msg)
+        return vtep_ip

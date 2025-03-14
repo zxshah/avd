@@ -42,5 +42,10 @@
     "downlink-pools-l3leaf1",
     "downlink-pools-l3leaf3",
     "downlink-pools-l3leaf4"
+  ],
+  "evpn_route_server_clients": [
+    "downlink-pools-l3leaf1",
+    "downlink-pools-l3leaf3",
+    "downlink-pools-l3leaf4"
   ]
 }

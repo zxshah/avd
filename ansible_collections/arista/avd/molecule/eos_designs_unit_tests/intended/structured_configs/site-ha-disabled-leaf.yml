@@ -3,6 +3,71 @@ aaa_root:
 config_end: true
 enable_password:
   disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: P2P_cv-pathfinder-edge_Ethernet52
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.17.0.0/31
+  peer: cv-pathfinder-edge
+  peer_interface: Ethernet52
+  peer_type: wan_router
+  switchport:
+    enabled: false
+- name: Ethernet1.1000
+  description: P2P_cv-pathfinder-edge_Ethernet52.1000_VRF_IT
+  shutdown: false
+  mtu: 9214
+  vrf: IT
+  encapsulation_dot1q:
+    vlan: 1000
+  ip_address: 172.17.0.0/31
+  peer: cv-pathfinder-edge
+  peer_interface: Ethernet52.1000
+  peer_type: wan_router
+- name: Ethernet1.142
+  description: P2P_cv-pathfinder-edge_Ethernet52.142_VRF_PROD
+  shutdown: false
+  mtu: 9214
+  vrf: PROD
+  encapsulation_dot1q:
+    vlan: 142
+  ip_address: 172.17.0.0/31
+  peer: cv-pathfinder-edge
+  peer_interface: Ethernet52.142
+  peer_type: wan_router
+- name: Ethernet2
+  description: P2P_cv-pathfinder-edge1_Ethernet52
+  shutdown: false
+  mtu: 9214
+  ip_address: 172.17.0.2/31
+  peer: cv-pathfinder-edge1
+  peer_interface: Ethernet52
+  peer_type: wan_router
+  switchport:
+    enabled: false
+- name: Ethernet2.1000
+  description: P2P_cv-pathfinder-edge1_Ethernet52.1000_VRF_IT
+  shutdown: false
+  mtu: 9214
+  vrf: IT
+  encapsulation_dot1q:
+    vlan: 1000
+  ip_address: 172.17.0.2/31
+  peer: cv-pathfinder-edge1
+  peer_interface: Ethernet52.1000
+  peer_type: wan_router
+- name: Ethernet2.142
+  description: P2P_cv-pathfinder-edge1_Ethernet52.142_VRF_PROD
+  shutdown: false
+  mtu: 9214
+  vrf: PROD
+  encapsulation_dot1q:
+    vlan: 142
+  ip_address: 172.17.0.2/31
+  peer: cv-pathfinder-edge1
+  peer_interface: Ethernet52.142
+  peer_type: wan_router
 hostname: site-ha-disabled-leaf
 ip_igmp_snooping:
   globally_enabled: true
@@ -66,6 +131,17 @@ router_bgp:
     ebgp_multihop: 3
     send_community: all
     maximum_routes: 0
+  neighbors:
+  - ip_address: 172.17.0.1
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000'
+    peer: cv-pathfinder-edge
+    description: cv-pathfinder-edge_Ethernet52
+  - ip_address: 172.17.0.3
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65000'
+    peer: cv-pathfinder-edge1
+    description: cv-pathfinder-edge1_Ethernet52
   redistribute:
     connected:
       enabled: true
@@ -106,17 +182,6 @@ router_bgp:
     - name: EVPN-OVERLAY-PEERS
       activate: false
   vrfs:
-  - name: default
-    rd: 192.168.45.4:1
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
-      export:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
   - name: IT
     rd: 192.168.45.4:1000
     route_targets:
@@ -129,6 +194,15 @@ router_bgp:
         route_targets:
         - 1000:1000
     router_id: 192.168.45.4
+    neighbors:
+    - ip_address: 172.17.0.1
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge_Ethernet52.1000_vrf_IT
+    - ip_address: 172.17.0.3
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge1_Ethernet52.1000_vrf_IT
     redistribute:
       connected:
         enabled: true
@@ -144,9 +218,29 @@ router_bgp:
         route_targets:
         - 142:142
     router_id: 192.168.45.4
+    neighbors:
+    - ip_address: 172.17.0.1
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge_Ethernet52.142_vrf_PROD
+    - ip_address: 172.17.0.3
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge1_Ethernet52.142_vrf_PROD
     redistribute:
       connected:
         enabled: true
+  - name: default
+    rd: 192.168.45.4:1
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '1:1'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '1:1'
   - name: ATTRACTED-VRF-FROM-UPLINK
     rd: 192.168.45.4:666
     route_targets:

@@ -40,8 +40,6 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
-    trunk:
-      allowed_vlan: '11'
 ptp:
   mode: boundary
   clock_identity: 00:1C:73:7f:00:03

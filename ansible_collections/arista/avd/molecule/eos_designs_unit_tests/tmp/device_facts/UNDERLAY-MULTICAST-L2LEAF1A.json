@@ -12,6 +12,22 @@
   "pod": "EOS_DESIGNS_UNIT_TESTS",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UNDERLAY-MULTICAST-L3LEAF1A",
+      "peer_interface": "Ethernet6",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "DC1_LEAF1",
+      "peer_mlag": false,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 6,
+      "vlans": "none",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "UNDERLAY-MULTICAST-L3LEAF1A"
   ],

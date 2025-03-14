@@ -40,6 +40,10 @@
     "secondary": 2
   },
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "ptp-tests-spine1",
+    "ptp-tests-spine1"
+  ],
   "overlay": {
     "peering_address": "10.254.1.1",
     "evpn_mpls": false
@@ -47,6 +51,42 @@
   "vtep_ip": "10.254.11.1",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "ptp-tests-spine1",
+      "peer_interface": "Ethernet1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "ptp": {
+        "enable": true
+      },
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "10.254.2.1",
+      "peer_ip_address": "10.254.2.0",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "ptp-tests-spine1",
+      "peer_interface": "Ethernet2",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "ptp": {
+        "enable": true
+      },
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "10.254.2.3",
+      "peer_ip_address": "10.254.2.2",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "ptp-tests-spine1"
   ],

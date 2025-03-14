@@ -35,5 +35,9 @@
   "downlink_switches": [
     "cv-pathfinder-edge-wan-use-evpn-on-lan",
     "cv-pathfinder-edge-wan-use-evpn-on-lan-no-overlay-on-lan"
+  ],
+  "evpn_route_server_clients": [
+    "cv-pathfinder-edge-wan-use-evpn-on-lan",
+    "cv-pathfinder-edge-wan-use-evpn-on-lan-no-overlay-on-lan"
   ]
 }

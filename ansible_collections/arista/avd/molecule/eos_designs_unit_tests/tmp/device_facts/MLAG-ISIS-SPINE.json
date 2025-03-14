@@ -25,5 +25,9 @@
   "downlink_switches": [
     "MLAG-ISIS-L3LEAF1A",
     "MLAG-ISIS-L3LEAF1B"
+  ],
+  "evpn_route_server_clients": [
+    "MLAG-ISIS-L3LEAF1A",
+    "MLAG-ISIS-L3LEAF1B"
   ]
 }

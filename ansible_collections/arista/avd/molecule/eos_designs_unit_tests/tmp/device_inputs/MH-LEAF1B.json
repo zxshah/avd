@@ -1,0 +1,1284 @@
+{
+  "bfd_multihop": {
+    "interval": 1200,
+    "min_rx": 1200,
+    "multiplier": 3
+  },
+  "bgp_peer_groups": {
+    "ipv4_underlay_peers": {
+      "name": "UNDERLAY-PEERS",
+      "password": "0nsCUm70mvSTxVO0ldytrg=="
+    },
+    "mlag_ipv4_vrfs_peer": {
+      "name": "MLAG-PEERS",
+      "bfd": false,
+      "structured_config": {
+        "description": "Description for mlag_ipv4_vrfs_peer via structured_config"
+      }
+    },
+    "mlag_ipv4_underlay_peer": {
+      "name": "MLAG-PEERS",
+      "password": "15AwQNBEJ1nyF/kBEtoAGw=="
+    },
+    "evpn_overlay_peers": {
+      "password": "q+VNViP5i4rVjW1cxFv2wA=="
+    },
+    "ipvpn_gateway_peers": {
+      "name": "IPVPN-INTERWORKING-PEERS",
+      "password": "nWwwZQLPI34O1AhoANg77g=="
+    }
+  },
+  "custom_structured_configuration_prefix": [
+    "my_dci_",
+    "my_special_dci_",
+    "override_"
+  ],
+  "cvp_ingestauth_key": "telarista",
+  "cvp_instance_ips": [
+    "192.168.200.11"
+  ],
+  "default_connected_endpoints_description": "{endpoint}{endpoint_port?<_}",
+  "default_connected_endpoints_port_channel_description": "{adapter_description_or_endpoint}{endpoint_port_channel?<_}",
+  "default_interfaces": [
+    {
+      "types": [
+        "spine"
+      ],
+      "platforms": [
+        "7280R3",
+        "default"
+      ],
+      "uplink_interfaces": [
+        "Ethernet49-54/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet55-56/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1-32/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "spine"
+      ],
+      "platforms": [
+        "7[58]00R3",
+        "7500R"
+      ],
+      "uplink_interfaces": [
+        "Ethernet1/31-34/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet1/35-36/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1/1-30/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "spine",
+        "l3leaf"
+      ],
+      "platforms": [
+        "7050[SC]X3"
+      ],
+      "uplink_interfaces": [
+        "Ethernet49-52/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet53-54/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1-30/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "l3leaf",
+        "spine"
+      ],
+      "platforms": [
+        "VEOS",
+        "vEOS",
+        "vEOS.*",
+        "VEOS.*"
+      ],
+      "uplink_interfaces": [
+        "Ethernet27-34"
+      ],
+      "mlag_interfaces": [
+        "Ethernet35-36"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1-26"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "l3leaf"
+      ],
+      "platforms": [
+        "default"
+      ],
+      "uplink_interfaces": [
+        "Ethernet49-52/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet53-54/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1-30/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "l3leaf"
+      ],
+      "platforms": [
+        "7280R",
+        "7280R2",
+        "my_custom_platform"
+      ],
+      "uplink_interfaces": [
+        "Ethernet49-56/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet57-58/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1-30/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "l3leaf"
+      ],
+      "platforms": [
+        "7368.*"
+      ],
+      "uplink_interfaces": [
+        "Ethernet1/9-14/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet1/15-16/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1/1-8/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    },
+    {
+      "types": [
+        "l3leaf"
+      ],
+      "platforms": [
+        "7300X3"
+      ],
+      "uplink_interfaces": [
+        "Ethernet1/27-30/1"
+      ],
+      "mlag_interfaces": [
+        "Ethernet1/31-32/1"
+      ],
+      "downlink_interfaces": [
+        "Ethernet1/1-26/1"
+      ],
+      "uplink_interface_speed": "forced 40gfull"
+    }
+  ],
+  "default_network_ports_description": "",
+  "default_network_ports_port_channel_description": "{adapter_description_or_endpoint?}{endpoint_port_channel?<_}",
+  "default_underlay_p2p_ethernet_description": "P2P_LINK_TO_{peer!u}_{peer_interface}{vrf?<_vrf_}",
+  "default_underlay_p2p_port_channel_description": "P2P_LINK_TO_{peer}_{peer_interface}",
+  "default_vrf_diag_loopback_description": "{vrf}_VTEP_DIAGNOSTICS",
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "evpn_hostflap_detection": {
+    "expiry_timeout": 10
+  },
+  "evpn_vlan_aware_bundles": true,
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "local_users": [
+    {
+      "name": "admin",
+      "disabled": true,
+      "privilege": 15,
+      "role": "network-admin",
+      "no_password": true
+    },
+    {
+      "name": "cvpadmin",
+      "privilege": 15,
+      "role": "network-admin",
+      "sha512_password": "$6$rZKcbIZ7iWGAWTUM$TCgDn1KcavS0s.OV8lacMTUkxTByfzcGlFlYUWroxYuU7M/9bIodhRO7nXGzMweUxvbk8mJmQl8Bh44cRktUj.",
+      "ssh_key": "ssh-rsa AAAAB3NzaC1yc2EAA82spi2mkxp4FgaLi4CjWkpnL1A/MD7WhrSNgqXToF7QCb9Lidagy9IHafQxfu7LwkFdyQIMu8XNwDZIycuf29wHbDdz1N+YNVK8zwyNAbMOeKMqblsEm2YIorgjzQX1m9+/rJeFBKz77PSgeMp/Rc3txFVuSmFmeTy3aMkU= cvpadmin@hostmachine.local",
+      "secondary_ssh_key": "ssh-rsa AAAAB3NzaC1yc2EAA82spi2mkxp4FgaLi4CjWkpnL1A/MD7WhrSNgqXToF7QCb9Lidagy9IHafQxfu7LwkFdyQIMu8XNwDZIycuf29wHbDdz1N+YNVK8zwyNAbMOeKMqblsEm2YIorgjzQX1m9+/rJeFBKz77PSgeMp/Rc3txFVuSmFmeTy3aMkz= cvpadmin@hostmachine.local"
+    }
+  ],
+  "management_eapi": {
+    "enable_https": true,
+    "default_services": false
+  },
+  "mgmt_gateway": "192.168.200.5",
+  "mlag_bgp_peer_description": "{mlag_peer}",
+  "mlag_bgp_peer_group_description": "MLAG_PEER_{mlag_peer}",
+  "mlag_member_description": "MLAG_PEER_{mlag_peer}_{interface}",
+  "mlag_peer_l3_svi_description": "MLAG_PEER_L3_PEERING",
+  "mlag_peer_l3_vlan_name": "LEAF_PEER_L3",
+  "mlag_peer_l3_vrf_svi_description": "MLAG_PEER_L3_iBGP: vrf {vrf}",
+  "mlag_peer_l3_vrf_vlan_name": "MLAG_iBGP_{vrf}",
+  "mlag_peer_svi_description": "MLAG_PEER",
+  "mlag_peer_vlan_name": "MLAG_PEER",
+  "mlag_port_channel_description": "MLAG_PEER_{mlag_peer}_Po{mlag_port_channel_id}",
+  "name_servers": [
+    "192.168.200.5",
+    "8.8.8.8",
+    "2001:db8::1",
+    "2001:db8::2"
+  ],
+  "ntp_settings": {
+    "server_vrf": "use_mgmt_interface_vrf",
+    "servers": [
+      {
+        "name": "192.168.200.5"
+      },
+      {
+        "name": "2001:db8::3"
+      }
+    ]
+  },
+  "overlay_bgp_peer_description": "{peer}",
+  "p2p_uplinks_mtu": 1500,
+  "custom_platform_settings": [
+    {
+      "platforms": [
+        "my_custom_platform"
+      ],
+      "reload_delay": {
+        "mlag": 900,
+        "non_mlag": 1020
+      },
+      "tcam_profile": "vxlan-routing",
+      "lag_hardware_only": true,
+      "feature_support": {
+        "queue_monitor_length_notify": false,
+        "interface_storm_control": false,
+        "bgp_update_wait_install": true,
+        "bgp_update_wait_for_convergence": true
+      },
+      "management_interface": "Management42"
+    },
+    {
+      "platforms": [
+        "7280R"
+      ],
+      "reload_delay": {
+        "mlag": 900,
+        "non_mlag": 1020
+      },
+      "tcam_profile": "vxlan-routing",
+      "lag_hardware_only": true,
+      "management_interface": "Management99"
+    }
+  ],
+  "platform_speed_groups": [
+    {
+      "platform": "7280R",
+      "speeds": [
+        {
+          "speed": "25G",
+          "speed_groups": [
+            "3",
+            "2",
+            "5/1"
+          ]
+        },
+        {
+          "speed": "10G",
+          "speed_groups": [
+            "1",
+            "2",
+            "4"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "my_custom_platform",
+      "speeds": [
+        {
+          "speed": "10G",
+          "speed_groups": [
+            "3",
+            "2",
+            "5/1"
+          ]
+        },
+        {
+          "speed": "25G",
+          "speed_groups": [
+            "1",
+            "2",
+            "4"
+          ]
+        }
+      ]
+    }
+  ],
+  "port_profiles": [
+    {
+      "profile": "Tenant_X",
+      "mode": "access",
+      "vlans": "310",
+      "link_tracking": {
+        "enabled": true
+      }
+    },
+    {
+      "profile": "Tenant_ESI_Auto",
+      "parent_profile": "Tenant_X",
+      "ethernet_segment": {
+        "short_esi": "auto"
+      }
+    },
+    {
+      "profile": "Tenant_X_LT",
+      "mode": "access",
+      "vlans": "310",
+      "link_tracking": {
+        "enabled": true,
+        "name": "Eth-conn-to-router"
+      }
+    },
+    {
+      "profile": "Tenant_X_Trunk",
+      "mode": "trunk",
+      "vlans": "310"
+    },
+    {
+      "profile": "Tenant_X_Trunk_Auto",
+      "parent_profile": "Tenant_X_Trunk",
+      "ethernet_segment": {
+        "short_esi": "auto",
+        "redundancy": "single-active",
+        "designated_forwarder_algorithm": "auto"
+      },
+      "port_channel": {
+        "mode": "active"
+      }
+    },
+    {
+      "profile": "Tenant_X_Trunk_Auto_Eth",
+      "parent_profile": "Tenant_X_Trunk",
+      "ethernet_segment": {
+        "short_esi": "auto"
+      }
+    }
+  ],
+  "shutdown_bgp_towards_undeployed_peers": true,
+  "shutdown_interfaces_towards_undeployed_peers": true,
+  "snmp_settings": {
+    "contact": "example@example.com",
+    "location": true
+  },
+  "terminattr_disable_aaa": false,
+  "trunk_groups": {
+    "mlag_l3": {
+      "name": "LEAF_PEER_L3"
+    }
+  },
+  "type": "l3leaf",
+  "underlay_l2_ethernet_description": "{peer!u}_{peer_interface}",
+  "underlay_l2_port_channel_description": "{peer_node_group_or_uppercase_peer}_Po{peer_port_channel_id}",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "server01_ES1",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10",
+                  "Ethernet10"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X",
+                "ethernet_segment": {
+                  "short_esi": "0001:1010:1010"
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "PortChanne1"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server02",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10"
+                ],
+                "switches": [
+                  "MH-L2LEAF1A"
+                ],
+                "endpoint_ports": [
+                  "Eth1"
+                ],
+                "link_tracking": {
+                  "enabled": true,
+                  "name": "l2leaf-server02"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server03_AUTO_ESI",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12",
+                  "Ethernet12"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X",
+                "ethernet_segment": {
+                  "short_esi": "auto"
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Auto-ESI PortChannel"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server04_AUTO_ESI_Profile",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet13",
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_ESI_Auto",
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Auto-ESI PortChannel from profile"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server05_AUTO_ESI_Profile_Override",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet14",
+                  "Ethernet14"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_ESI_Auto",
+                "ethernet_segment": {
+                  "short_esi": "010a:010a:010a"
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Auto-ESI PortChannel overridden on server"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server06_Single_Active_Port_Channel",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet15",
+                  "Ethernet15"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk_Auto",
+                "port_channel": {
+                  "endpoint_port_channel": "Single-Active ESI"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server07_Single_Active_Port_Channel_Manual_DF",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet16",
+                  "Ethernet16"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "preference",
+                  "designated_forwarder_preferences": [
+                    250,
+                    200
+                  ]
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Single-Active ESI with Manual DF"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server08_Single_Active_Ethernet",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet17",
+                  "Ethernet17"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk_Auto_Eth"
+              }
+            ]
+          },
+          {
+            "name": "server09_All_Active_Ethernet",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet18",
+                  "Ethernet18"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "00dd:00dd:00dd",
+                  "redundancy": "all-active",
+                  "designated_forwarder_algorithm": "modulus"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server10_Single_Active_Ethernet_Manual_DF",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet19",
+                  "Ethernet19"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "preference",
+                  "designated_forwarder_preferences": [
+                    500,
+                    250
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "server11_Single_Active_Port_Channel_Manual_DF_Dont_Preempt",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet20",
+                  "Ethernet20"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "preference",
+                  "designated_forwarder_preferences": [
+                    100,
+                    0
+                  ],
+                  "dont_preempt": true
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Single-Active ESI with Manual DF"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server12_Single_Active_Ethernet_Manual_DF_Dont_Preempt",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet21",
+                  "Ethernet21"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "preference",
+                  "designated_forwarder_preferences": [
+                    500,
+                    250
+                  ],
+                  "dont_preempt": true
+                }
+              }
+            ]
+          },
+          {
+            "name": "server13_Single_Active_Port_Channel_Manual_DF_Dont_Preempt_modulus",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet22",
+                  "Ethernet22"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "modulus",
+                  "dont_preempt": true
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Single-Active ESI with Manual DF"
+                }
+              }
+            ]
+          },
+          {
+            "name": "server14_Single_Active_Ethernet_Manual_DF_Dont_Preempt_modulus",
+            "rack": "RackA",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet23",
+                  "Ethernet23"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "profile": "Tenant_X_Trunk",
+                "ethernet_segment": {
+                  "short_esi": "auto",
+                  "redundancy": "single-active",
+                  "designated_forwarder_algorithm": "modulus",
+                  "dont_preempt": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "routers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "ROUTER01",
+            "rack": "RackB",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10"
+                ],
+                "switches": [
+                  "MH-LEAF2A"
+                ],
+                "endpoint_ports": [
+                  "Eth1"
+                ],
+                "profile": "Tenant_X_LT"
+              }
+            ]
+          },
+          {
+            "name": "ROUTER02_WITH_SUBIF",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet11",
+                  "Ethernet11"
+                ],
+                "switches": [
+                  "MH-LEAF1A",
+                  "MH-LEAF1B"
+                ],
+                "endpoint_ports": [
+                  "Eth1",
+                  "Eth2"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "Testing L2 subinterfaces",
+                  "subinterfaces": [
+                    {
+                      "number": 101,
+                      "short_esi": "0000:0000:0101",
+                      "encapsulation_vlan": null
+                    },
+                    {
+                      "number": 102,
+                      "short_esi": "0000:0000:0102",
+                      "vlan_id": 1102,
+                      "encapsulation_vlan": {
+                        "client_dot1q": 2102
+                      }
+                    },
+                    {
+                      "number": 103,
+                      "short_esi": "auto",
+                      "vlan_id": 1103,
+                      "encapsulation_vlan": {
+                        "client_dot1q": 2103
+                      }
+                    },
+                    {
+                      "number": 104,
+                      "short_esi": "auto",
+                      "vlan_id": 1104,
+                      "encapsulation_vlan": {
+                        "client_dot1q": 2104
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "Tenant_X",
+            "mac_vrf_vni_base": 11000,
+            "vrfs": [
+              {
+                "name": "Tenant_X_OP_Zone",
+                "vrf_id": 20,
+                "vtep_diagnostic": {
+                  "loopback": 100,
+                  "loopback_ip_range": "10.255.1.0/24",
+                  "loopback_ipv6_range": "2001:db8:1::/48"
+                },
+                "svis": [
+                  {
+                    "id": 310,
+                    "name": "Tenant_X_OP_Zone_1",
+                    "tags": [
+                      "opzone"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.10.1/24"
+                  }
+                ],
+                "bgp": {
+                  "router_id": "diagnostic_loopback"
+                }
+              },
+              {
+                "name": "default",
+                "vrf_id": 21,
+                "svis": [
+                  {
+                    "id": 311,
+                    "name": "Tenant_default_vrf",
+                    "tags": [
+                      "default_vrf"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.10.1/24"
+                  }
+                ],
+                "static_routes": [
+                  {
+                    "destination_address_prefix": "10.0.0.0/8",
+                    "gateway": "10.2.10.100"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "7050SX3",
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "bgp_as": "65001",
+            "bgp_defaults": [
+              "distance bgp 20 200 200"
+            ]
+          },
+          "nodes": [
+            {
+              "name": "DC1-SPINE1",
+              "id": 1,
+              "mac_address": "0c:1d:c0:1d:62:01",
+              "mgmt_ip": "192.168.200.101/24"
+            },
+            {
+              "name": "DC1-SPINE2",
+              "id": 2,
+              "platform": "7500R",
+              "mac_address": "0c:1d:c0:1d:62:01",
+              "mgmt_ip": "192.168.200.102/24"
+            },
+            {
+              "name": "DC1-SPINE3",
+              "id": 3,
+              "platform": "7800R3",
+              "mac_address": "0c:1d:c0:1d:62:01",
+              "mgmt_ip": "192.168.200.103/24"
+            },
+            {
+              "name": "DC1-SPINE4",
+              "id": 4,
+              "platform": "7280R3",
+              "mac_address": "0c:1d:c0:1d:62:01",
+              "mgmt_ip": "192.168.200.104/24"
+            }
+          ]
+        }
+      },
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "uplink_ipv4_pool": "10.10.101.0/24",
+            "uplink_interfaces": [
+              "Ethernet1"
+            ],
+            "uplink_switches": [
+              "DC1-SPINE1"
+            ],
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "loopback_ipv4_offset": 32,
+            "mlag": false,
+            "virtual_router_mac_address": "00:1c:73:00:DC:01"
+          },
+          "node_groups": [
+            {
+              "group": "MH_L3LEAF1",
+              "nodes": [
+                {
+                  "name": "MH-LEAF1A",
+                  "id": 1,
+                  "mgmt_ip": "192.168.201.104/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet19"
+                  ],
+                  "bgp_as": "65151"
+                },
+                {
+                  "name": "MH-LEAF1B",
+                  "id": 2,
+                  "mgmt_ip": "192.168.201.105/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet20"
+                  ],
+                  "bgp_as": "65152"
+                }
+              ],
+              "link_tracking": {
+                "enabled": true
+              },
+              "lacp_port_id_range": {
+                "enabled": true
+              },
+              "filter": {
+                "tags": [
+                  "opzone"
+                ]
+              }
+            },
+            {
+              "group": "MH_L3LEAF2",
+              "nodes": [
+                {
+                  "name": "MH-LEAF2A",
+                  "id": 3,
+                  "mgmt_ip": "192.168.201.106/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet21"
+                  ],
+                  "bgp_as": "65153"
+                }
+              ],
+              "link_tracking": {
+                "enabled": true,
+                "groups": [
+                  {
+                    "name": "Eth-conn-to-router",
+                    "recovery_delay": 520
+                  }
+                ]
+              },
+              "lacp_port_id_range": {
+                "enabled": true,
+                "size": 512,
+                "offset": 256
+              }
+            }
+          ]
+        }
+      },
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "rack": "rackE",
+            "uplink_interfaces": [
+              "Ethernet1",
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "DC1-SVC3A",
+              "DC1-SVC3B"
+            ],
+            "mlag": true,
+            "mlag_interfaces": [
+              "Ethernet3",
+              "Ethernet4"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.255.251.0/24",
+            "mlag_peer_vlan": 4091,
+            "mlag_peer_ipv4_pool": "10.255.252.0/24",
+            "spanning_tree_mode": "mstp",
+            "spanning_tree_priority": 16384
+          },
+          "node_groups": [
+            {
+              "group": "DC1_L2LEAF1",
+              "nodes": [
+                {
+                  "name": "DC1-L2LEAF1A",
+                  "id": 8,
+                  "mac_address": "0c:1d:c0:1d:62:01",
+                  "mgmt_ip": "192.168.200.112/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet7",
+                    "Ethernet7"
+                  ],
+                  "uplink_mtu": 1498
+                },
+                {
+                  "name": "DC1-L2LEAF1B",
+                  "id": 11,
+                  "mac_address": "0c:1d:c0:1d:62:02",
+                  "mgmt_ip": "192.168.200.115/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet8",
+                    "Ethernet8"
+                  ]
+                }
+              ],
+              "uplink_switches": [
+                "DC1-LEAF2A",
+                "DC1-LEAF2B"
+              ],
+              "uplink_interface_speed": "forced 10000",
+              "uplink_mtu": 1499,
+              "short_esi": "0808:0707:0606",
+              "filter": {
+                "tenants": [
+                  "Tenant_A"
+                ],
+                "tags": [
+                  "opzone",
+                  "web",
+                  "app"
+                ]
+              },
+              "mlag_interfaces_speed": "forced 40gfull"
+            },
+            {
+              "group": "DC1_L2LEAF2",
+              "nodes": [
+                {
+                  "name": "DC1-L2LEAF2A",
+                  "id": 9,
+                  "mac_address": "0c:1d:c0:1d:62:01",
+                  "mgmt_ip": "192.168.200.113/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet7",
+                    "Ethernet7"
+                  ]
+                },
+                {
+                  "name": "DC1-L2LEAF2B",
+                  "id": 10,
+                  "mac_address": "0c:1d:c0:1d:62:01",
+                  "mgmt_ip": "192.168.200.114/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet8",
+                    "Ethernet8"
+                  ]
+                }
+              ],
+              "uplink_interface_speed": "forced 100gfull",
+              "uplink_switch_interface_speed": "100g-2",
+              "uplink_port_channel_id": 1001,
+              "uplink_switch_port_channel_id": 1007,
+              "mlag_dual_primary_detection": true
+            },
+            {
+              "group": "DC1_L2LEAF3",
+              "nodes": [
+                {
+                  "name": "DC1-L2LEAF3A",
+                  "mac_address": "0c:1d:c0:1d:62:01",
+                  "mgmt_ip": "192.168.200.116/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet9",
+                    "Ethernet9"
+                  ]
+                }
+              ],
+              "uplink_switches": [
+                "DC1-LEAF2A",
+                "DC1-LEAF2B"
+              ],
+              "short_esi": "0606:0707:0808",
+              "filter": {
+                "tenants": [
+                  "Tenant_A"
+                ],
+                "tags": [
+                  "opzone",
+                  "web",
+                  "app"
+                ]
+              }
+            },
+            {
+              "group": "DC1_L2LEAF4",
+              "nodes": [
+                {
+                  "name": "DC1-L2LEAF4A",
+                  "id": 13,
+                  "mgmt_ip": "192.168.200.119/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet13",
+                    "Ethernet13"
+                  ],
+                  "uplink_port_channel_id": 1001,
+                  "uplink_switch_port_channel_id": 1013
+                }
+              ],
+              "uplink_switches": [
+                "DC1-LEAF2A",
+                "DC1-LEAF2B"
+              ],
+              "short_esi": "auto",
+              "filter": {
+                "tenants": [
+                  "Tenant_A"
+                ],
+                "tags": [
+                  "opzone",
+                  "web",
+                  "app"
+                ]
+              }
+            },
+            {
+              "group": "DC1_L2LEAF5",
+              "nodes": [
+                {
+                  "name": "DC1.L2LEAF5A",
+                  "id": 14,
+                  "mgmt_ip": "192.168.200.120/24"
+                },
+                {
+                  "name": "DC1.L2LEAF5B",
+                  "id": 15,
+                  "mgmt_ip": "192.168.200.121/24"
+                }
+              ],
+              "uplink_switches": [
+                "DC1-LEAF2A",
+                "DC1-LEAF2B"
+              ],
+              "short_esi": "auto",
+              "filter": {
+                "tenants": [
+                  "Tenant_A"
+                ],
+                "tags": [
+                  "opzone",
+                  "web",
+                  "app"
+                ]
+              }
+            },
+            {
+              "group": "DC1_L2LEAF6",
+              "nodes": [
+                {
+                  "name": "DC1.L2LEAF6A",
+                  "id": 16,
+                  "mgmt_ip": "192.168.200.122/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet30"
+                  ],
+                  "uplink_switches": [
+                    "DC1-LEAF2A"
+                  ]
+                },
+                {
+                  "name": "DC1.L2LEAF6B",
+                  "id": 17,
+                  "mgmt_ip": "192.168.200.123/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet31"
+                  ],
+                  "uplink_switches": [
+                    "DC1-LEAF2B"
+                  ]
+                }
+              ],
+              "short_esi": "auto"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

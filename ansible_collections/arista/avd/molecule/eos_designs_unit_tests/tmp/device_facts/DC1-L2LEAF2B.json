@@ -84,6 +84,42 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "DC1-SVC3A",
+      "peer_interface": "Ethernet8",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "speed": "forced 100gfull",
+      "peer_speed": "100g-2",
+      "peer_node_group": "DC1_SVC3",
+      "node_group": "DC1_L2LEAF2",
+      "peer_mlag": true,
+      "channel_group_id": 1001,
+      "peer_channel_group_id": 1007,
+      "vlans": "110-112,120-122,130-131,140-141,150,160-161,210-211,250,310-311,350",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "DC1-SVC3B",
+      "peer_interface": "Ethernet8",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "speed": "forced 100gfull",
+      "peer_speed": "100g-2",
+      "peer_node_group": "DC1_SVC3",
+      "node_group": "DC1_L2LEAF2",
+      "peer_mlag": true,
+      "channel_group_id": 1001,
+      "peer_channel_group_id": 1007,
+      "vlans": "110-112,120-122,130-131,140-141,150,160-161,210-211,250,310-311,350",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "DC1-SVC3A",
     "DC1-SVC3B"

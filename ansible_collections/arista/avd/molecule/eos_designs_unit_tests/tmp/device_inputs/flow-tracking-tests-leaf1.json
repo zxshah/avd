@@ -1,0 +1,463 @@
+{
+  "default_mgmt_method": "oob",
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_flow_tracking": {
+    "uplinks": {
+      "enabled": true
+    },
+    "endpoints": {
+      "enabled": true
+    },
+    "mlag_interfaces": {
+      "enabled": true
+    },
+    "l3_interfaces": {
+      "enabled": true
+    }
+  },
+  "fabric_name": "FLOW_TRACKING_TESTS",
+  "flow_tracking_settings": {
+    "sampled": {
+      "encapsulation": {
+        "mpls": true
+      },
+      "sample": 50000,
+      "hardware_offload": {
+        "ipv4": true,
+        "ipv6": true,
+        "threshold_minimum": 1332
+      }
+    },
+    "trackers": [
+      {
+        "name": "FLOW-TRACKER-4",
+        "record_export": {
+          "on_inactive_timeout": 50020,
+          "on_interval": 300321
+        },
+        "exporters": [
+          {
+            "name": "ayush_exporter",
+            "collector": {
+              "host": "127.0.2.1"
+            },
+            "local_interface": "Loopback0",
+            "template_interval": 40020
+          }
+        ]
+      },
+      {
+        "name": "FLOW-TRACKER-3",
+        "record_export": {
+          "on_inactive_timeout": 50000,
+          "on_interval": 300331
+        },
+        "exporters": [
+          {
+            "name": "ayush_exporter",
+            "collector": {
+              "host": "127.0.0.1"
+            },
+            "local_interface": "Loopback0",
+            "template_interval": 40000
+          }
+        ]
+      },
+      {
+        "name": "FLOW-TRACKER",
+        "record_export": {
+          "on_inactive_timeout": 50001,
+          "on_interval": 300332
+        },
+        "exporters": [
+          {
+            "name": "ayush_exporter",
+            "collector": {
+              "host": "127.0.0.2"
+            },
+            "local_interface": "Loopback0",
+            "template_interval": 40002
+          }
+        ]
+      }
+    ]
+  },
+  "mgmt_gateway": "192.168.0.1",
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "single-interface-true",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10",
+                  "Ethernet10"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf1",
+                  "flow-tracking-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "eth1",
+                  "eth2"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "flow_tracking": {
+                  "name": "FLOW-TRACKER-3"
+                }
+              }
+            ]
+          },
+          {
+            "name": "single-interface-false",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet11",
+                  "Ethernet11"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf1",
+                  "flow-tracking-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "eth11",
+                  "eth12"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "flow_tracking": {
+                  "enabled": false
+                }
+              }
+            ]
+          },
+          {
+            "name": "single-interface-no-definition",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12",
+                  "Ethernet12"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf1",
+                  "flow-tracking-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "eth12",
+                  "eth13"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "flow_tracking": {
+                  "enabled": true
+                }
+              }
+            ]
+          },
+          {
+            "name": "single-interface-true4",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet13",
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf1",
+                  "flow-tracking-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "eth1",
+                  "eth1"
+                ],
+                "mode": "access",
+                "vlans": "11"
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-true",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet14",
+                  "Ethernet14"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf3",
+                  "flow-tracking-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI1",
+                  "PCI2"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "flow_tracking": {
+                  "name": "FLOW-TRACKER-4"
+                },
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-false",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet15",
+                  "Ethernet15"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf3",
+                  "flow-tracking-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI11",
+                  "PCI12"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "flow_tracking": {
+                  "enabled": true
+                },
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          },
+          {
+            "name": "port-channel-interface-no-definition",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet16",
+                  "Ethernet16"
+                ],
+                "switches": [
+                  "flow-tracking-tests-leaf3",
+                  "flow-tracking-tests-leaf4"
+                ],
+                "endpoint_ports": [
+                  "PCI13",
+                  "PCI14"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "flow_tracking": {
+                  "enabled": false
+                },
+                "port_channel": {
+                  "mode": "on"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "FLOW_TRACKING",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_vni": 1,
+                "svis": [
+                  {
+                    "id": 11,
+                    "name": "VLAN11",
+                    "nodes": [
+                      {
+                        "node": "flow-tracking-tests-leaf1",
+                        "ip_address": "172.16.11.1/24"
+                      },
+                      {
+                        "node": "flow-tracking-tests-leaf2",
+                        "ip_address": "172.17.11.1/24"
+                      }
+                    ],
+                    "enabled": true
+                  }
+                ],
+                "l3_interfaces": [
+                  {
+                    "interfaces": [
+                      "Ethernet81",
+                      "Ethernet81"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": true,
+                      "name": "FLOW-TRACKER-3"
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet82",
+                      "Ethernet82"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": false
+                    }
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet83",
+                      "Ethernet83"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true
+                  },
+                  {
+                    "interfaces": [
+                      "Ethernet84",
+                      "Ethernet84"
+                    ],
+                    "ip_addresses": [
+                      "10.1.55.0/31",
+                      "10.1.55.2/31"
+                    ],
+                    "nodes": [
+                      "flow-tracking-tests-leaf1",
+                      "flow-tracking-tests-leaf2"
+                    ],
+                    "enabled": true,
+                    "flow_tracking": {
+                      "enabled": true
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-lab",
+            "uplink_ipv4_pool": "10.254.2.0/24",
+            "uplink_interfaces": [
+              "Ethernet1",
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "flow-tracking-tests-spine1",
+              "flow-tracking-tests-spine2"
+            ],
+            "loopback_ipv4_pool": "10.254.1.0/27",
+            "vtep_loopback_ipv4_pool": "10.254.11.0/27",
+            "mlag_interfaces": [
+              "Ethernet21",
+              "Ethernet22"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.254.1.96/27",
+            "mlag_peer_ipv4_pool": "10.254.1.64/27",
+            "spanning_tree_mode": "mstp",
+            "spanning_tree_priority": 4096,
+            "virtual_router_mac_address": "00:11:22:33:44:55",
+            "flow_tracker_type": "hardware"
+          },
+          "node_groups": [
+            {
+              "group": "flow-tracking-tests-leaf-mlag",
+              "nodes": [
+                {
+                  "name": "flow-tracking-tests-leaf3",
+                  "id": 5,
+                  "mgmt_ip": "192.168.0.103/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet5",
+                    "Ethernet6"
+                  ]
+                },
+                {
+                  "name": "flow-tracking-tests-leaf4",
+                  "id": 6,
+                  "mgmt_ip": "192.168.0.104/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet7",
+                    "Ethernet8"
+                  ],
+                  "flow_tracker_type": "hardware"
+                }
+              ],
+              "bgp_as": "65105"
+            }
+          ],
+          "nodes": [
+            {
+              "name": "flow-tracking-tests-leaf1",
+              "id": 1,
+              "mgmt_ip": "192.168.0.101/24",
+              "uplink_switch_interfaces": [
+                "Ethernet1",
+                "Ethernet2"
+              ],
+              "bgp_as": "65101"
+            },
+            {
+              "name": "flow-tracking-tests-leaf2",
+              "id": 2,
+              "mgmt_ip": "192.168.0.102/24",
+              "uplink_switch_interfaces": [
+                "Ethernet3",
+                "Ethernet4"
+              ],
+              "bgp_as": "65102",
+              "flow_tracker_type": "sampled"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

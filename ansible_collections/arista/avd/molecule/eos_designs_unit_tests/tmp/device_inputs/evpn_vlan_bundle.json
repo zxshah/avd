@@ -1,0 +1,308 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "evpn_vlan_aware_bundles": true,
+  "evpn_vlan_bundles": [
+    {
+      "name": "bundle1",
+      "id": 1,
+      "bgp": {
+        "raw_eos_cli": "vlan add 1000\n"
+      }
+    },
+    {
+      "name": "bundle2",
+      "id": 2,
+      "rt_override": "111",
+      "rd_override": "1.1.1.1:222"
+    },
+    {
+      "name": "bundle3",
+      "id": 3,
+      "rt_override": "333",
+      "rd_override": "1.1.1.1:333"
+    },
+    {
+      "name": "bundle4",
+      "id": 4,
+      "rt_override": "444",
+      "rd_override": "1.1.1.1:444"
+    },
+    {
+      "name": "bundle5",
+      "id": 5,
+      "rt_override": "555",
+      "rd_override": "1.1.1.1:555"
+    },
+    {
+      "name": "bundle6",
+      "id": 6,
+      "rt_override": "666",
+      "rd_override": "auto"
+    }
+  ],
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "StorageProd",
+            "mac_vrf_vni_base": 10000,
+            "vlan_aware_bundle_number_base": 100,
+            "l2vlans": [
+              {
+                "id": 10,
+                "name": "storage_prod",
+                "tags": [
+                  "storageProd"
+                ]
+              },
+              {
+                "id": 20,
+                "name": "storage_prod",
+                "tags": [
+                  "storageProd"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "FABRIC",
+            "mac_vrf_vni_base": 10000,
+            "vlan_aware_bundle_number_base": 200,
+            "l2vlans": [
+              {
+                "id": 50,
+                "name": "ipmi",
+                "tags": [
+                  "ipmi"
+                ],
+                "evpn_vlan_bundle": "bundle1"
+              },
+              {
+                "id": 60,
+                "name": "ipmi",
+                "tags": [
+                  "fabric"
+                ],
+                "evpn_vlan_bundle": "bundle1"
+              },
+              {
+                "id": 70,
+                "name": "vmotion",
+                "tags": [
+                  "ipmi"
+                ],
+                "evpn_vlan_bundle": "bundle2"
+              },
+              {
+                "id": 80,
+                "name": "vstorage",
+                "tags": [
+                  "fabric"
+                ],
+                "evpn_vlan_bundle": "bundle2"
+              }
+            ]
+          },
+          {
+            "name": "SIT",
+            "mac_vrf_vni_base": 20000,
+            "vlan_aware_bundle_number_base": 300,
+            "vrfs": [
+              {
+                "name": "SIT_VRF",
+                "vrf_vni": 789654,
+                "svis": [
+                  {
+                    "id": 1008,
+                    "name": "SVI_1",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1009,
+                    "name": "SVI_2",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1010,
+                    "name": "SVI_3",
+                    "tags": [
+                      "sit"
+                    ],
+                    "enabled": true
+                  }
+                ]
+              },
+              {
+                "name": "SIT2",
+                "vrf_vni": 654789,
+                "svis": [
+                  {
+                    "id": 1011,
+                    "name": "SVI_4",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1012,
+                    "name": "SVI_5",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1013,
+                    "name": "SVI_6",
+                    "tags": [
+                      "sit"
+                    ],
+                    "enabled": true
+                  }
+                ]
+              },
+              {
+                "name": "SIT3",
+                "vrf_vni": 654555,
+                "svis": [
+                  {
+                    "id": 1014,
+                    "name": "SVI_7",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle4",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1015,
+                    "name": "SVI_8",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle4",
+                    "enabled": true
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 90,
+                "name": "vlan90",
+                "tags": [
+                  "ipmi"
+                ],
+                "evpn_vlan_bundle": "bundle3"
+              },
+              {
+                "id": 100,
+                "name": "vlan100",
+                "tags": [
+                  "fabric"
+                ],
+                "evpn_vlan_bundle": "bundle3"
+              }
+            ]
+          },
+          {
+            "name": "research",
+            "mac_vrf_vni_base": 10000,
+            "vlan_aware_bundle_number_base": 400,
+            "evpn_vlan_bundle": "bundle5",
+            "vrfs": [
+              {
+                "name": "research1",
+                "vrf_vni": 654556,
+                "svis": [
+                  {
+                    "id": 1016,
+                    "name": "SVI_9",
+                    "tags": [
+                      "research"
+                    ],
+                    "evpn_vlan_bundle": "bundle6",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1017,
+                    "name": "SVI_10",
+                    "tags": [
+                      "research"
+                    ],
+                    "enabled": true
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 110,
+                "name": "research1",
+                "tags": [
+                  "research"
+                ],
+                "evpn_vlan_bundle": "bundle6"
+              },
+              {
+                "id": 120,
+                "name": "research2",
+                "tags": [
+                  "research"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "10.10.0.0/24",
+            "vtep_loopback_ipv4_pool": "10.11.0.0/24",
+            "vtep_loopback": "Loopback1",
+            "evpn_services_l2_only": false
+          },
+          "nodes": [
+            {
+              "name": "evpn_vlan_bundle",
+              "id": 3,
+              "bgp_as": "65101",
+              "filter": {
+                "tags": [
+                  "fabric",
+                  "ipmi",
+                  "storageProd",
+                  "sit",
+                  "research"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "SINGLE_LINK_TO_MLAG_PAIR",
+  "mlag_on_orphan_port_channel_downlink": true,
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "mlag_interfaces": [
+              "Ethernet25",
+              "Ethernet26"
+            ],
+            "mlag_peer_ipv4_pool": "10.10.255.0/24"
+          },
+          "node_groups": [
+            {
+              "group": "SL-LEAF0",
+              "nodes": [
+                {
+                  "name": "SL-LEAF0A",
+                  "id": 1
+                },
+                {
+                  "name": "SL-LEAF0B",
+                  "id": 2
+                }
+              ]
+            },
+            {
+              "group": "SL-LEAF1",
+              "nodes": [
+                {
+                  "name": "SL-LEAF1A",
+                  "id": 3,
+                  "uplink_switch_interfaces": [
+                    "Ethernet27"
+                  ]
+                },
+                {
+                  "name": "SL-LEAF1B",
+                  "id": 4,
+                  "uplink_switch_interfaces": [
+                    "Ethernet28"
+                  ]
+                }
+              ],
+              "uplink_interfaces": [
+                "Ethernet27"
+              ],
+              "uplink_switches": [
+                "SL-LEAF0B"
+              ]
+            },
+            {
+              "group": "SL-MLEAF1",
+              "nodes": [
+                {
+                  "name": "SL-MLEAF1",
+                  "id": 5,
+                  "uplink_interfaces": [
+                    "Ethernet16"
+                  ],
+                  "uplink_switch_interfaces": [
+                    "Ethernet28"
+                  ],
+                  "uplink_switches": [
+                    "SL-LEAF1A"
+                  ]
+                }
+              ]
+            },
+            {
+              "group": "SL-LEAF2",
+              "nodes": [
+                {
+                  "name": "SL-LEAF2A",
+                  "id": 6,
+                  "uplink_switch_interfaces": [
+                    "Ethernet41",
+                    "Ethernet42"
+                  ]
+                },
+                {
+                  "name": "SL-LEAF2B",
+                  "id": 7,
+                  "uplink_switch_interfaces": [
+                    "Ethernet43",
+                    "Ethernet44"
+                  ]
+                }
+              ],
+              "uplink_interfaces": [
+                "Ethernet41",
+                "Ethernet42"
+              ],
+              "uplink_switches": [
+                "SL-LEAF0B",
+                "SL-LEAF0B"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

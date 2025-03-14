@@ -31,6 +31,15 @@ ethernet_interfaces:
   peer: SL-LEAF0B
   peer_interface: Ethernet27
   peer_type: l2leaf
+- name: Ethernet28
+  description: L2_SL-MLEAF1_Ethernet16
+  shutdown: false
+  channel_group:
+    id: 28
+    mode: active
+  peer: SL-MLEAF1
+  peer_interface: Ethernet16
+  peer_type: l2leaf
 hostname: SL-LEAF1A
 ip_igmp_snooping:
   globally_enabled: true
@@ -66,8 +75,13 @@ port_channel_interfaces:
   switchport:
     enabled: true
     mode: trunk
-    trunk:
-      allowed_vlan: none
+- name: Port-Channel28
+  description: L2_SL-MLEAF1_Port-Channel16
+  shutdown: false
+  mlag: 28
+  switchport:
+    enabled: true
+    mode: trunk
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

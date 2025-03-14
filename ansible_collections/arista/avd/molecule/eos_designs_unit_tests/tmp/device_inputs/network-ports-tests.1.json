@@ -1,0 +1,407 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "192.168.0.1",
+  "network_ports": [
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet1-2"
+      ],
+      "endpoint": "PCs",
+      "profile": "pc"
+    },
+    {
+      "switches": [
+        "network-ports-tests-2$"
+      ],
+      "switch_ports": [
+        "Ethernet1-2"
+      ],
+      "description": "{endpoint}{port_channel_id?<_Po}",
+      "endpoint": "AP1 with port_channel",
+      "profile": "ap_with_port_channel"
+    },
+    {
+      "switches": [
+        "network-ports-[est]{5}[-.].*"
+      ],
+      "switch_ports": [
+        "Ethernet3-4",
+        "Ethernet2/1-48"
+      ],
+      "endpoint": "PCs",
+      "profile": "pc"
+    },
+    {
+      "switches": [
+        "network-ports-tests-2"
+      ],
+      "switch_ports": [
+        "Ethernet11-12"
+      ],
+      "description": "Phones with attached PCs",
+      "profile": "phone_with_pc"
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet5-6"
+      ],
+      "description": "N: {endpoint}",
+      "endpoint": "blah"
+    },
+    {
+      "switches": [
+        "network-ports-tests.2"
+      ],
+      "switch_ports": [
+        "Ethernet7-10"
+      ],
+      "endpoint": "Checking port-channels",
+      "port_channel": {
+        "mode": "active",
+        "channel_id": 42
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.2"
+      ],
+      "switch_ports": [
+        "Ethernet14"
+      ],
+      "description": "Checking monitor sessions on single interface",
+      "monitor_sessions": [
+        {
+          "name": "DMF",
+          "role": "source",
+          "source_settings": {
+            "direction": "both"
+          },
+          "session_settings": {
+            "encapsulation_gre_metadata_tx": true
+          }
+        }
+      ]
+    },
+    {
+      "switches": [
+        "network-ports-tests.2"
+      ],
+      "switch_ports": [
+        "Ethernet15-16"
+      ],
+      "description": "Checking monitor sessions on port-channels",
+      "monitor_sessions": [
+        {
+          "name": "DMF",
+          "role": "source",
+          "source_settings": {
+            "direction": "both"
+          },
+          "session_settings": {
+            "encapsulation_gre_metadata_tx": true
+          }
+        }
+      ],
+      "port_channel": {
+        "mode": "active",
+        "channel_id": 44
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.2"
+      ],
+      "switch_ports": [
+        "Ethernet17"
+      ],
+      "description": "Monitor sessions destination",
+      "monitor_sessions": [
+        {
+          "name": "DMF",
+          "role": "destination",
+          "session_settings": {
+            "encapsulation_gre_metadata_tx": true
+          }
+        }
+      ]
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet11-14"
+      ],
+      "description": "Base config which may be overwritten"
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet12"
+      ],
+      "description": "Config overwriting base config"
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet51-54"
+      ],
+      "enabled": false
+    },
+    {
+      "switches": [
+        "network-ports-tests.2"
+      ],
+      "switch_ports": [
+        "Ethernet51-52"
+      ],
+      "port_channel": {
+        "mode": "active",
+        "channel_id": 43
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.*"
+      ],
+      "platforms": [
+        "720XPM-48Y6"
+      ],
+      "switch_ports": [
+        "Ethernet48"
+      ],
+      "description": "Matched on all hostnames and 48 port platform"
+    },
+    {
+      "platforms": [
+        "720\\w+-24Y6"
+      ],
+      "switch_ports": [
+        "Ethernet24"
+      ],
+      "description": "Matched on only 24 port platform"
+    },
+    {
+      "switches": [
+        "network-ports-no-match"
+      ],
+      "platforms": [
+        "720XPM-48Y6"
+      ],
+      "switch_ports": [
+        "Ethernet49"
+      ],
+      "description": "Should not match hostname and platform"
+    },
+    {
+      "switch_ports": [
+        "Ethernet25"
+      ],
+      "description": "No criteria, no config"
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet20-21"
+      ],
+      "description": "Range",
+      "structured_config": {
+        "switchport": {
+          "access_vlan": 666
+        }
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet20"
+      ],
+      "description": "Single overwrite",
+      "structured_config": {
+        "switchport": {
+          "access_vlan": 42
+        }
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet22-23"
+      ],
+      "description": "Range",
+      "port_channel": {
+        "mode": "active",
+        "channel_id": 222,
+        "structured_config": {
+          "description": "Range",
+          "switchport": {
+            "access_vlan": 666
+          }
+        }
+      }
+    },
+    {
+      "switches": [
+        "network-ports-tests.1"
+      ],
+      "switch_ports": [
+        "Ethernet22"
+      ],
+      "description": "Single overwrite",
+      "port_channel": {
+        "mode": "active",
+        "channel_id": 222,
+        "structured_config": {
+          "description": "This will not be rendered since it is overwritten by \"Range\" coming from the Eth22-23 range."
+        }
+      }
+    }
+  ],
+  "custom_platform_settings": [
+    {
+      "platforms": [
+        "720XPM-48Y6",
+        "720XPM-24Y6"
+      ],
+      "trident_forwarding_table_partition": "flexible exact-match 16000 l2-shared 18000 l3-shared 22000",
+      "reload_delay": {
+        "mlag": 300,
+        "non_mlag": 330
+      },
+      "feature_support": {
+        "queue_monitor_length_notify": false,
+        "poe": true
+      }
+    }
+  ],
+  "port_profiles": [
+    {
+      "profile": "common",
+      "mode": "access",
+      "vlans": "999",
+      "spanning_tree_portfast": "edge",
+      "spanning_tree_bpdufilter": "enabled"
+    },
+    {
+      "profile": "ap_with_port_channel",
+      "parent_profile": "common",
+      "vlans": "101",
+      "port_channel": {
+        "mode": "active"
+      }
+    },
+    {
+      "profile": "pc",
+      "parent_profile": "common",
+      "vlans": "100"
+    },
+    {
+      "profile": "phone_with_pc",
+      "mode": "trunk phone",
+      "native_vlan": 100,
+      "phone_vlan": 300,
+      "phone_trunk_mode": "untagged"
+    }
+  ],
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "CONNECTED_ENDPOINT_OVERWRITING_NETWORK_PORT",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet14"
+                ],
+                "switches": [
+                  "network-ports-tests.1"
+                ],
+                "endpoint_ports": [
+                  "Eth42"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TEST",
+            "l2vlans": [
+              {
+                "id": 100,
+                "name": "VLAN100_ON_L2LEAF_1_AND_2"
+              },
+              {
+                "id": 200,
+                "name": "VLAN200_ON_L2LEAF_1_ONLY"
+              },
+              {
+                "id": 300,
+                "name": "VLAN300_PHONE_ON_L2LEAF1_AND_2"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "node_groups": [
+            {
+              "group": "mlag",
+              "nodes": [
+                {
+                  "name": "network-ports-tests.1",
+                  "id": 1,
+                  "platform": "720XPM-48Y6"
+                },
+                {
+                  "name": "network-ports-tests-2",
+                  "id": 2,
+                  "platform": "720XPM-24Y6",
+                  "filter": {
+                    "only_vlans_in_use": true
+                  }
+                }
+              ],
+              "mlag_interfaces": [
+                "Ethernet10/1"
+              ],
+              "mlag_peer_ipv4_pool": "10.255.252.0/24"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

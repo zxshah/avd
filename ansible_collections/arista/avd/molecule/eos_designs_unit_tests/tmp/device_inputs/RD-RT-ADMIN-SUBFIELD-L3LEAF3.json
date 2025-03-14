@@ -1,0 +1,169 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "192.168.200.1",
+  "overlay_rd_type": {
+    "admin_subfield": "bgp_as",
+    "admin_subfield_offset": 111,
+    "vrf_admin_subfield": "123",
+    "vrf_admin_subfield_offset": 0
+  },
+  "overlay_rt_type": {
+    "admin_subfield": "15",
+    "vrf_admin_subfield": "bgp_as"
+  },
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "Tenant_A",
+            "mac_vrf_vni_base": 80000,
+            "mac_vrf_id_base": 10000,
+            "vrfs": [
+              {
+                "name": "TEST1",
+                "description": "TEST1",
+                "vrf_vni": 22,
+                "vrf_id": 11,
+                "svis": [
+                  {
+                    "id": 1,
+                    "name": "VLAN_1",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.1.1/24"
+                  },
+                  {
+                    "id": 2,
+                    "name": "VLAN_2",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.2.1/24"
+                  },
+                  {
+                    "id": 3,
+                    "name": "VLAN_3",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.3.1/24",
+                    "rt_override": "3333",
+                    "rd_override": "33333"
+                  },
+                  {
+                    "id": 4,
+                    "name": "VLAN_4",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.4.1/24",
+                    "rt_override": "3333:3333",
+                    "rd_override": "33333:33333"
+                  },
+                  {
+                    "id": 5,
+                    "name": "VLAN_5",
+                    "tags": [
+                      "test_l3"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.0.5.1/24",
+                    "rd_override": "auto"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "TENANT_WITH_VRFS_WITHOUT_SVIS",
+            "vrfs": [
+              {
+                "name": "TEST2",
+                "description": "VRF with router-id",
+                "vrf_id": 12,
+                "bgp": {
+                  "router_id": "10.12.12.12"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "filter": {
+              "always_include_vrfs_in_tenants": [
+                "TENANT_WITH_VRFS_WITHOUT_SVIS"
+              ]
+            },
+            "virtual_router_mac_address": "00:dc:00:00:00:0a"
+          },
+          "nodes": [
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF1",
+              "id": 1,
+              "mgmt_ip": "192.168.200.101/24",
+              "bgp_as": "65001"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF2",
+              "id": 2,
+              "mgmt_ip": "192.168.200.102/24",
+              "bgp_as": "65002"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF3",
+              "id": 3,
+              "mgmt_ip": "192.168.200.103/24",
+              "bgp_as": "65003"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF4",
+              "id": 4,
+              "mgmt_ip": "192.168.200.104/24",
+              "bgp_as": "65004"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF5",
+              "id": 5,
+              "mgmt_ip": "192.168.200.105/24",
+              "bgp_as": "65005"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF6",
+              "id": 6,
+              "mgmt_ip": "192.168.200.106/24",
+              "bgp_as": "65006"
+            },
+            {
+              "name": "RD-RT-ADMIN-SUBFIELD-L3LEAF7",
+              "id": 7,
+              "mgmt_ip": "192.168.200.107/24",
+              "bgp_as": "65007"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "default_interface_mtu": 8765,
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "platform_settings": [
+    {
+      "platforms": [
+        "default"
+      ],
+      "default_interface_mtu": 1234
+    }
+  ],
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "default_interface_mtu_platform"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

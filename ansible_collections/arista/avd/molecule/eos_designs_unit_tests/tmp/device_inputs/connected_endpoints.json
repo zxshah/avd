@@ -1,0 +1,272 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "port_profiles": [
+    {
+      "profile": "INDIVIDUAL_TRUNK",
+      "mode": "trunk",
+      "native_vlan": 123,
+      "native_vlan_tag": false,
+      "vlans": "1,2,3,4,5,6,7,123,234",
+      "spanning_tree_portfast": "edge",
+      "spanning_tree_bpdufilter": "True",
+      "qos_profile": "MYQOS",
+      "ptp": {
+        "enabled": true
+      },
+      "sflow": false,
+      "dot1x": {
+        "unauthorized": {
+          "access_vlan_membership_egress": true,
+          "native_vlan_membership_egress": true
+        }
+      },
+      "poe": {
+        "disabled": true
+      }
+    },
+    {
+      "profile": "INDIVIDUAL_TRUNK_PHONE",
+      "mode": "trunk phone",
+      "native_vlan": 123,
+      "phone_vlan": 321,
+      "link_tracking": {
+        "enabled": true
+      }
+    }
+  ],
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "OLD_SW-1/2",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet1",
+                  "Ethernet2"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "endpoint_ports": [
+                  "Endpoint_port1",
+                  "ENDPOINT_PORT2"
+                ],
+                "description": "Interface description {endpoint_type}_{endpoint}{endpoint_port?<_!u}",
+                "port_channel": {
+                  "mode": "active",
+                  "description": "Port channel description {endpoint_type}_{endpoint}_Po{port_channel_id}_{endpoint_port_channel}_{adapter_description!u}",
+                  "endpoint_port_channel": "ENDPOINT_PORT_CHANNEL"
+                }
+              }
+            ]
+          },
+          {
+            "name": "OLD_SW-1/3",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet3"
+                ],
+                "switches": [
+                  "connected_endpoints"
+                ],
+                "endpoint_ports": [
+                  "ENDPOINT_PORT"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "ENDPOINT_PORT_CHANNEL"
+                }
+              }
+            ]
+          },
+          {
+            "name": "OLD_SW-1/4",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet4"
+                ],
+                "switches": [
+                  "connected_endpoints"
+                ],
+                "description": "PHYSICAL_PORT_DESCRIPTION"
+              }
+            ]
+          },
+          {
+            "name": "OLD_SW-1/5",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet5",
+                  "Ethernet6"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "description": "PORT_CHANNEL_DESCRIPTION"
+                }
+              }
+            ]
+          },
+          {
+            "name": "OLD_SW-1/6",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet7",
+                  "Ethernet8"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "description": "PHYSICAL_PORT_DESCRIPTION",
+                "port_channel": {
+                  "mode": "active",
+                  "description": "PORT_CHANNEL_DESCRIPTION"
+                }
+              }
+            ]
+          },
+          {
+            "name": "OLD_SW-1/7",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet10",
+                  "Ethernet11"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "descriptions": [
+                  "PHYSICAL_PORT_DESCRIPTION_1",
+                  "PHYSICAL_PORT_DESCRIPTION_2"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "description": "PORT_CHANNEL_DESCRIPTION"
+                }
+              }
+            ]
+          },
+          {
+            "name": "INDIVIDUAL_1",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12",
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "endpoint_port_channel": "INDIVIDUAL_1",
+                  "lacp_fallback": {
+                    "mode": "individual",
+                    "individual": {
+                      "profile": "INDIVIDUAL_TRUNK"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "DOT1X_UNAUTHORIZED",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet14"
+                ],
+                "switches": [
+                  "connected_endpoints"
+                ],
+                "profile": "INDIVIDUAL_TRUNK"
+              }
+            ]
+          },
+          {
+            "name": "INDIVIDUAL_2_TRUNK_PHONE",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet15",
+                  "Ethernet16"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "lacp_fallback": {
+                    "mode": "individual",
+                    "individual": {
+                      "profile": "INDIVIDUAL_TRUNK_PHONE"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "DOT1X_UNAUTHORIZED_PORT_CHANNEL",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet17",
+                  "Ethernet18"
+                ],
+                "switches": [
+                  "connected_endpoints",
+                  "connected_endpoints"
+                ],
+                "profile": "INDIVIDUAL_TRUNK",
+                "port_channel": {
+                  "mode": "active"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "connected_endpoints",
+              "platform": "720XP",
+              "link_tracking": {
+                "enabled": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

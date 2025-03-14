@@ -1,0 +1,65 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "1.1.1.1",
+  "mgmt_interface_vrf": "MGMT",
+  "snmp_settings": {
+    "contact": "example@example.com",
+    "location": true,
+    "compute_local_engineid": true,
+    "compute_v3_user_localized_key": true,
+    "users": [
+      {
+        "name": "usertest-auth-priv",
+        "group": "usergroup",
+        "version": "v3",
+        "auth": "sha",
+        "auth_passphrase": "clearauth",
+        "priv": "aes192",
+        "priv_passphrase": "clearpriv"
+      },
+      {
+        "name": "usertest-auth-no-priv",
+        "group": "usergroup",
+        "version": "v3",
+        "auth": "sha512",
+        "auth_passphrase": "clearauth"
+      },
+      {
+        "name": "usertest-no-auth-no-priv",
+        "group": "usergroup",
+        "version": "v3"
+      },
+      {
+        "name": "usertest-v2c",
+        "group": "usergroup",
+        "version": "v2c",
+        "auth": "md5",
+        "auth_passphrase": "clearauth",
+        "priv": "des",
+        "priv_passphrase": "clearpriv"
+      }
+    ]
+  },
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "SNMP_AUTOGEN_ENGINEID",
+              "id": 43
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

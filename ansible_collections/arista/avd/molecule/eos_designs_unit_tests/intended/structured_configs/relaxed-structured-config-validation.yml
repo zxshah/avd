@@ -1,7 +1,6 @@
 aaa_accounting:
   exec:
     console:
-      type: start-stop
       methods:
       - method: group
         group: node_group

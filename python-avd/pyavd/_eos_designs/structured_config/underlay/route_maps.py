@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import get
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigUnderlayProtocol
@@ -67,14 +66,14 @@ class RouteMapsMixin(Protocol):
 
             add_p2p_links = False
             for peer in self._avd_peers:
-                peer_facts = self.shared_utils.get_peer_facts(peer, required=True)
-                for uplink in peer_facts["uplinks"]:
+                peer_facts = self.shared_utils.get_peer_facts(peer)
+                for uplink in peer_facts.uplinks:
                     if (
-                        uplink["peer"] == self.shared_utils.hostname
-                        and uplink["type"] == "underlay_p2p"
-                        and uplink.get("ip_address")
-                        and "unnumbered" not in uplink["ip_address"]
-                        and get(peer_facts, "inband_ztp")
+                        uplink.peer == self.shared_utils.hostname
+                        and uplink.type == "underlay_p2p"
+                        and uplink.ip_address
+                        and "unnumbered" not in uplink.ip_address
+                        and peer_facts.inband_ztp
                     ):
                         add_p2p_links = True
                         break

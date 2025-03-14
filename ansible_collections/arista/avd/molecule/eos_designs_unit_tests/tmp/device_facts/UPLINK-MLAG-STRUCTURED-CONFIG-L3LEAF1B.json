@@ -28,6 +28,9 @@
     "secondary": 2
   },
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1"
+  ],
   "overlay": {
     "peering_address": "192.168.255.4",
     "evpn_mpls": false
@@ -35,6 +38,28 @@
   "vtep_ip": "192.168.254.3",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1",
+      "peer_interface": "Ethernet2",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.255.3",
+      "peer_ip_address": "172.31.255.2",
+      "structured_config": {
+        "pim": {
+          "ipv4": {
+            "sparse_mode": true
+          }
+        }
+      }
+    }
+  ],
   "uplink_peers": [
     "UPLINK-MLAG-STRUCTURED-CONFIG-SPINE1"
   ],

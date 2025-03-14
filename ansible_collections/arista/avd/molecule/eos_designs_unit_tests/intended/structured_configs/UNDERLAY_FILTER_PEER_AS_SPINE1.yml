@@ -3,6 +3,17 @@ aaa_root:
 config_end: true
 enable_password:
   disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: P2P_UNDERLAY_FILTER_PEER_AS_L3LEAF1_Ethernet1
+  shutdown: false
+  mtu: 9214
+  ip_address: 192.168.0.0/31
+  peer: UNDERLAY_FILTER_PEER_AS_L3LEAF1
+  peer_interface: Ethernet1
+  peer_type: l3leaf
+  switchport:
+    enabled: false
 hostname: UNDERLAY_FILTER_PEER_AS_SPINE1
 ip_routing: true
 is_deployed: true
@@ -29,6 +40,14 @@ route_maps:
     type: permit
     match:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+- name: RM-BGP-AS65001-OUT
+  sequence_numbers:
+  - sequence: 10
+    type: deny
+    match:
+    - as 65001
+  - sequence: 20
+    type: permit
 router_bgp:
   as: '65000'
   router_id: 192.168.255.1
@@ -45,6 +64,13 @@ router_bgp:
     type: ipv4
     send_community: all
     maximum_routes: 12000
+  neighbors:
+  - ip_address: 192.168.0.1
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65001'
+    peer: UNDERLAY_FILTER_PEER_AS_L3LEAF1
+    description: UNDERLAY_FILTER_PEER_AS_L3LEAF1_Ethernet1
+    route_map_out: RM-BGP-AS65001-OUT
   redistribute:
     connected:
       enabled: true

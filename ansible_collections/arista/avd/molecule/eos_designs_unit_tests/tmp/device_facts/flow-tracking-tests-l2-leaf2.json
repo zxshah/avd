@@ -15,6 +15,36 @@
   "pod": "FLOW_TRACKING_TESTS",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "flow-tracking-tests-leaf3",
+      "peer_interface": "Ethernet32",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "flow-tracking-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 32,
+      "vlans": "11,4092",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "flow-tracking-tests-leaf4",
+      "peer_interface": "Ethernet32",
+      "peer_type": "l3leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "flow-tracking-tests-leaf-mlag",
+      "peer_mlag": true,
+      "channel_group_id": 1,
+      "peer_channel_group_id": 32,
+      "vlans": "11,4092",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "flow-tracking-tests-leaf3",
     "flow-tracking-tests-leaf4"

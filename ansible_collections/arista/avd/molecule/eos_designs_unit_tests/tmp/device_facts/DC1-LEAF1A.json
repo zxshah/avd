@@ -77,6 +77,12 @@
     }
   ],
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "DC1-SPINE1",
+    "DC1-SPINE2",
+    "DC1-SPINE3",
+    "DC1-SPINE4"
+  ],
   "overlay": {
     "peering_address": "192.168.42.42",
     "evpn_mpls": false
@@ -84,6 +90,68 @@
   "vtep_ip": "192.168.43.43",
   "max_parallel_uplinks": 2,
   "max_uplink_switches": 8,
+  "uplinks": [
+    {
+      "interface": "Ethernet27",
+      "peer": "DC1-SPINE1",
+      "peer_interface": "Ethernet1/1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.254.1",
+      "peer_ip_address": "172.31.254.0",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet28",
+      "peer": "DC1-SPINE2",
+      "peer_interface": "Ethernet1/1/1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.254.3",
+      "peer_ip_address": "172.31.254.2",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet29",
+      "peer": "DC1-SPINE3",
+      "peer_interface": "Ethernet1/1/1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.254.5",
+      "peer_ip_address": "172.31.254.4",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet30",
+      "peer": "DC1-SPINE4",
+      "peer_interface": "Ethernet1/1",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65001",
+      "type": "underlay_p2p",
+      "speed": "forced 100gfull",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "172.31.254.7",
+      "peer_ip_address": "172.31.254.6",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "DC1-SPINE1",
     "DC1-SPINE2",

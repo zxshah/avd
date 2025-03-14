@@ -1,0 +1,104 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "network_ports": [
+    {
+      "switches": [
+        "only-connected-endpoints(-something-showing-this-supports-regex)?"
+      ],
+      "switch_ports": [
+        "Ethernet20-29"
+      ],
+      "endpoint": "Network Port",
+      "profile": "MY_PROFILE"
+    }
+  ],
+  "node_type_keys": [
+    {
+      "key": "device",
+      "type": "device",
+      "connected_endpoints": true,
+      "underlay_router": false,
+      "uplink_type": "port-channel"
+    }
+  ],
+  "port_profiles": [
+    {
+      "profile": "MY_PROFILE",
+      "enabled": true,
+      "mode": "trunk",
+      "native_vlan": 1000,
+      "vlans": "1-100"
+    }
+  ],
+  "type": "device",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "TEST_SERVER_01",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12"
+                ],
+                "switches": [
+                  "only-connected-endpoints"
+                ],
+                "endpoint_ports": [
+                  "Nic1"
+                ],
+                "profile": "MY_PROFILE"
+              },
+              {
+                "switch_ports": [
+                  "Ethernet1",
+                  "Ethernet2"
+                ],
+                "switches": [
+                  "only-connected-endpoints",
+                  "only-connected-endpoints"
+                ],
+                "endpoint_ports": [
+                  "Nic1",
+                  "Nic2"
+                ],
+                "profile": "MY_PROFILE",
+                "port_channel": {
+                  "mode": "active"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "device",
+        "node_type_keys_key": {
+          "defaults": {
+            "structured_config": {
+              "aaa_root": null,
+              "config_end": null,
+              "enable_password": null,
+              "is_deployed": null,
+              "management_api_http": null,
+              "service_routing_protocols_model": null,
+              "spanning_tree": null,
+              "transceiver_qsfp_default_mode_4x10": null,
+              "vlan_internal_order": null,
+              "vrfs": null
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -38,7 +38,7 @@ class OverlayMixin(Protocol):
         For all other evpn roles there is no default.
         """
         if self.shared_utils.underlay_router is True:
-            if self.evpn_role == "client":
+            if self.shared_utils.evpn_role == "client":
                 self.facts.evpn_route_servers.extend(self.shared_utils.node_config.evpn_route_servers or self.shared_utils.uplink_switches)
             else:
                 self.facts.evpn_route_servers.extend(self.shared_utils.node_config.evpn_route_servers)
@@ -47,7 +47,8 @@ class OverlayMixin(Protocol):
     def mpls_route_reflectors(self: FactsStageOneProtocol) -> None:
         """Exposed in avd_switch_facts."""
         if self.shared_utils.underlay_router is True and (
-            self.mpls_overlay_role in ["client", "server"] or (self.evpn_role in ["client", "server"] and self.shared_utils.overlay_evpn_mpls)
+            self.shared_utils.mpls_overlay_role in ["client", "server"]
+            or (self.shared_utils.evpn_role in ["client", "server"] and self.shared_utils.overlay_evpn_mpls)
         ):
             self.facts.mpls_route_reflectors.extend(self.shared_utils.node_config.mpls_route_reflectors)
 

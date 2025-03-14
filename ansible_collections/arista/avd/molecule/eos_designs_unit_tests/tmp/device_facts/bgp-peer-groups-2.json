@@ -38,5 +38,8 @@
   },
   "evpn_route_server_clients": [
     "bgp-peer-groups-1"
+  ],
+  "mpls_route_reflector_clients": [
+    "bgp-peer-groups-1"
   ]
 }

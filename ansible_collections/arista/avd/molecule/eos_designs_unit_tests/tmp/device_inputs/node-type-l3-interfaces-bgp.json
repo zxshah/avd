@@ -1,0 +1,52 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "ipv4_prefix_list_catalog": [
+    {
+      "name": "ALLOW-DEFAULT",
+      "sequence_numbers": [
+        {
+          "sequence": 10,
+          "action": "permit 0.0.0.0/0"
+        }
+      ]
+    }
+  ],
+  "type": "l3spine",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l3spine",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "node-type-l3-interfaces-bgp",
+              "id": 1,
+              "uplink_type": "lan",
+              "loopback_ipv4_pool": "192.168.255.0/24",
+              "bgp_as": "65000",
+              "l3_interfaces": [
+                {
+                  "name": "Ethernet43",
+                  "ip_address": "192.168.42.42/24",
+                  "enabled": false,
+                  "peer_ip": "192.168.42.1",
+                  "bgp": {
+                    "peer_as": "65042",
+                    "ipv4_prefix_list_in": "ALLOW-DEFAULT"
+                  },
+                  "wan_carrier": "INTERNET"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -25,6 +25,10 @@
     }
   ],
   "evpn_role": "client",
+  "evpn_route_servers": [
+    "ptp-tests-spine1",
+    "ptp-tests-spine2"
+  ],
   "overlay": {
     "peering_address": "192.168.3.3",
     "evpn_mpls": false
@@ -32,6 +36,39 @@
   "vtep_ip": "192.168.2.3",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 2,
+  "uplinks": [
+    {
+      "interface": "Ethernet1",
+      "peer": "ptp-tests-spine1",
+      "peer_interface": "Ethernet17",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "ptp": {
+        "enable": true
+      },
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "192.168.1.9",
+      "peer_ip_address": "192.168.1.8",
+      "structured_config": {}
+    },
+    {
+      "interface": "Ethernet2",
+      "peer": "ptp-tests-spine2",
+      "peer_interface": "Ethernet17",
+      "peer_type": "spine",
+      "peer_is_deployed": true,
+      "peer_bgp_as": "65200",
+      "type": "underlay_p2p",
+      "underlay_multicast": false,
+      "prefix_length": 31,
+      "ip_address": "192.168.1.11",
+      "peer_ip_address": "192.168.1.10",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "ptp-tests-spine1",
     "ptp-tests-spine2"

@@ -1,0 +1,38 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "ntp_settings": {
+    "server_vrf": "use_inband_mgmt_vrf",
+    "servers": [
+      {
+        "name": "10.10.10.1"
+      },
+      {
+        "name": "10.10.10.2"
+      }
+    ]
+  },
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": null,
+          "nodes": [
+            {
+              "name": "ntp-settings-2",
+              "inband_mgmt_ip": "192.168.1.2/24",
+              "inband_mgmt_vrf": "INBAND_MGMT"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "core_interfaces": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "ptp-tests-spine1",
+          "ptp-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet6",
+          "Ethernet6"
+        ],
+        "include_in_underlay_protocol": false,
+        "ptp": {
+          "enabled": true,
+          "profile": "myptpprofile"
+        }
+      },
+      {
+        "nodes": [
+          "ptp-tests-spine1",
+          "ptp-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet7",
+          "Ethernet7"
+        ],
+        "include_in_underlay_protocol": false,
+        "ptp": {
+          "enabled": true,
+          "roles": [
+            "master",
+            "dynamic"
+          ]
+        }
+      }
+    ]
+  },
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "PTP_TESTS",
+  "l3_edge": {
+    "p2p_links": [
+      {
+        "nodes": [
+          "ptp-tests-spine1",
+          "ptp-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet8",
+          "Ethernet8"
+        ],
+        "include_in_underlay_protocol": false,
+        "ptp": {
+          "enabled": true
+        }
+      },
+      {
+        "nodes": [
+          "ptp-tests-spine1",
+          "ptp-tests-spine2"
+        ],
+        "interfaces": [
+          "Ethernet9",
+          "Ethernet9"
+        ],
+        "include_in_underlay_protocol": false,
+        "ptp": {
+          "enabled": true
+        }
+      }
+    ]
+  },
+  "mgmt_gateway": "192.168.0.1",
+  "port_profiles": [
+    {
+      "profile": "PTP-profile-dynamic",
+      "mode": "access",
+      "vlans": "11",
+      "ptp": {
+        "enabled": true,
+        "endpoint_role": "dynamic"
+      }
+    }
+  ],
+  "ptp_settings": {
+    "enabled": true
+  },
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "dynamic-endpoint",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "ptp-tests-leaf1"
+                ],
+                "endpoint_ports": [
+                  "eth1"
+                ],
+                "profile": "PTP-profile-dynamic"
+              }
+            ]
+          },
+          {
+            "name": "video-endpoint",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet5",
+                  "Ethernet5"
+                ],
+                "switches": [
+                  "ptp-tests-leaf1",
+                  "ptp-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "PCI1",
+                  "PCI2"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "spanning_tree_portfast": "edge",
+                "ptp": {
+                  "enabled": true,
+                  "endpoint_role": "follower"
+                }
+              }
+            ]
+          },
+          {
+            "name": "Endpoint-with-mpass",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet6",
+                  "Ethernet6"
+                ],
+                "switches": [
+                  "ptp-tests-leaf1",
+                  "ptp-tests-leaf2"
+                ],
+                "endpoint_ports": [
+                  "PCI1",
+                  "PCI2"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "ptp": {
+                  "enabled": true,
+                  "endpoint_role": "follower"
+                },
+                "port_channel": {
+                  "mode": "active",
+                  "ptp_mpass": true
+                }
+              }
+            ]
+          },
+          {
+            "name": "Endpoint-with-specific-PTP-profile",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet3"
+                ],
+                "switches": [
+                  "ptp-tests-leaf1"
+                ],
+                "endpoint_ports": [
+                  "eth3"
+                ],
+                "mode": "access",
+                "vlans": "11",
+                "ptp": {
+                  "enabled": true,
+                  "profile": "smpte2059-2"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "PTP",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "VRF1",
+                "vrf_vni": 1,
+                "svis": [
+                  {
+                    "id": 11,
+                    "name": "VLAN11",
+                    "nodes": [
+                      {
+                        "node": "ptp-tests-leaf1",
+                        "ip_address": "172.16.11.1/24"
+                      },
+                      {
+                        "node": "ptp-tests-leaf2",
+                        "ip_address": "172.17.11.1/24"
+                      }
+                    ],
+                    "enabled": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-lab",
+            "uplink_ipv4_pool": "10.254.2.0/24",
+            "uplink_interfaces": [
+              "Ethernet1",
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "ptp-tests-spine1",
+              "ptp-tests-spine1"
+            ],
+            "loopback_ipv4_pool": "10.254.1.0/27",
+            "vtep_loopback_ipv4_pool": "10.254.11.0/27",
+            "igmp_snooping_enabled": false,
+            "mlag_interfaces": [
+              "Ethernet9",
+              "Ethernet10"
+            ],
+            "mlag_peer_l3_ipv4_pool": "10.254.1.96/27",
+            "mlag_peer_ipv4_pool": "10.254.1.64/27",
+            "spanning_tree_mode": "mstp",
+            "spanning_tree_priority": 4096,
+            "ptp": {
+              "enabled": true,
+              "mlag": true
+            }
+          },
+          "node_groups": [
+            {
+              "group": "ptp-test-leaf",
+              "nodes": [
+                {
+                  "name": "ptp-tests-leaf1",
+                  "id": 1,
+                  "mgmt_ip": "192.168.0.101/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet1",
+                    "Ethernet2"
+                  ],
+                  "bgp_as": "65101",
+                  "ptp": {
+                    "clock_identity": "11:11:11:11:11:11",
+                    "mode": "boundary",
+                    "mode_one_step": true
+                  }
+                },
+                {
+                  "name": "ptp-tests-leaf2",
+                  "id": 2,
+                  "mgmt_ip": "192.168.0.102/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet3",
+                    "Ethernet4"
+                  ],
+                  "bgp_as": "65102",
+                  "ptp": {
+                    "enabled": true,
+                    "priority1": 40,
+                    "priority2": 1,
+                    "source_ip": "10.254.1.2",
+                    "ttl": 16,
+                    "forward_unicast": true,
+                    "dscp": {
+                      "general_messages": 46,
+                      "event_messages": 48
+                    },
+                    "monitor": {
+                      "enabled": true,
+                      "threshold": {
+                        "offset_from_master": 1234,
+                        "mean_path_delay": 4567
+                      },
+                      "missing_message": {
+                        "intervals": {
+                          "announce": 10,
+                          "follow_up": 9,
+                          "sync": 8
+                        },
+                        "sequence_ids": {
+                          "enabled": true,
+                          "announce": 11,
+                          "delay_resp": 12,
+                          "follow_up": 13,
+                          "sync": 14
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

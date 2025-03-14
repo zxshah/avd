@@ -25,12 +25,14 @@ ethernet_interfaces:
 - name: Ethernet27
   description: L2_SL-LEAF0B_Ethernet28
   shutdown: false
-  channel_group:
-    id: 27
-    mode: active
   peer: SL-LEAF0B
   peer_interface: Ethernet28
   peer_type: l2leaf
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: none
 hostname: SL-LEAF1B
 ip_igmp_snooping:
   globally_enabled: true
@@ -59,15 +61,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel27
-  description: L2_SL-LEAF0_Port-Channel27
-  shutdown: false
-  mlag: 27
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

@@ -28,12 +28,6 @@ class FactsStageTwoProtocol(MlagMixin, OverlayMixin, UplinksMixin, VlansMixin, F
     peer_facts: dict[str, EosDesignsFacts]
 
     @facts_contributor
-    def bgp_as(self) -> None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router is True:
-            self.facts.bgp_as = self.shared_utils.bgp_as
-
-    @facts_contributor
     def evpn_multicast(self) -> None:
         """
         Is EPVN Multicast enabled?

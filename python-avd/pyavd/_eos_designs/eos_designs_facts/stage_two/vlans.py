@@ -40,7 +40,7 @@ class VlansMixin(Protocol):
             peer_name: Hostname of device to get from.
             only_port_channel_uplink: Check if uplink type is port-channel *for the first device*. All nested devices are always checked.
         """
-        peer_facts = self.shared_utils.get_peer_facts_cls(peer_name)
+        peer_facts = self.shared_utils.get_peer_facts(peer_name)
         if only_port_channel_uplink and peer_facts.only_used_for_peer_facts.uplink_type != "port-channel":
             return set(), set()
 

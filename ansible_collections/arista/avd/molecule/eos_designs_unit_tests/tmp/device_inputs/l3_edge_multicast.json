@@ -1,0 +1,86 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "l3_edge": {
+    "p2p_links_ip_pools": [
+      {
+        "name": "pool1",
+        "ipv4_pool": "192.168.0.0/24"
+      }
+    ],
+    "p2p_links_profiles": [
+      {
+        "name": "profile1",
+        "speed": "forced 10000full",
+        "ip_pool": "pool1",
+        "mtu": 2000,
+        "bfd": true,
+        "ptp": {
+          "enabled": true
+        },
+        "qos_profile": "TEST-QOS-PROFILE",
+        "macsec_profile": "TEST-MACSEC-PROFILE"
+      }
+    ],
+    "p2p_links": [
+      {
+        "nodes": [
+          "l3_edge_multicast",
+          "peer1"
+        ],
+        "ip": [
+          "192.168.0.4/31",
+          "192.168.0.5/31"
+        ],
+        "interfaces": [
+          "ethernet1",
+          "ethernet1"
+        ],
+        "include_in_underlay_protocol": true,
+        "underlay_multicast": false
+      },
+      {
+        "nodes": [
+          "l3_edge_multicast",
+          "peer2"
+        ],
+        "ip": [
+          "192.168.0.2/31",
+          "192.168.0.3/31"
+        ],
+        "interfaces": [
+          "ethernet2",
+          "ethernet2"
+        ],
+        "include_in_underlay_protocol": true,
+        "underlay_multicast": true
+      }
+    ]
+  },
+  "type": "spine",
+  "underlay_multicast": true,
+  "underlay_routing_protocol": "ospf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "nodes": [
+            {
+              "name": "l3_edge_multicast",
+              "id": 1,
+              "loopback_ipv4_pool": "1.2.3.4/24",
+              "bgp_as": "65000",
+              "evpn_role": "none"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

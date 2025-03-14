@@ -22,6 +22,21 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 1,
+  "uplinks": [
+    {
+      "interface": "Ethernet27",
+      "peer": "SL-LEAF0B",
+      "peer_interface": "Ethernet28",
+      "peer_type": "l2leaf",
+      "peer_is_deployed": true,
+      "type": "underlay_l2",
+      "peer_node_group": "SL-LEAF0",
+      "node_group": "SL-LEAF1",
+      "peer_mlag": false,
+      "vlans": "none",
+      "structured_config": {}
+    }
+  ],
   "uplink_peers": [
     "SL-LEAF0B"
   ],

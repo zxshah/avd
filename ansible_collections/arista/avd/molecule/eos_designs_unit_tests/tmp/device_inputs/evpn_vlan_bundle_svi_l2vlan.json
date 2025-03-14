@@ -1,0 +1,126 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "evpn_vlan_aware_bundles": false,
+  "evpn_vlan_bundles": [
+    {
+      "name": "bundle3",
+      "id": 3,
+      "rt_override": "333",
+      "rd_override": "1.1.1.1:333"
+    }
+  ],
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l3leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "SIT",
+            "mac_vrf_vni_base": 20000,
+            "vlan_aware_bundle_number_base": 300,
+            "vrfs": [
+              {
+                "name": "SIT_VRF",
+                "vrf_vni": 789654,
+                "svis": [
+                  {
+                    "id": 1008,
+                    "name": "SVI_1",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1009,
+                    "name": "SVI_2",
+                    "tags": [
+                      "sit"
+                    ],
+                    "evpn_vlan_bundle": "bundle3",
+                    "enabled": true
+                  },
+                  {
+                    "id": 1010,
+                    "name": "SVI_3",
+                    "tags": [
+                      "sit"
+                    ],
+                    "enabled": true
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 10,
+                "name": "storage_prod",
+                "tags": [
+                  "storageProd"
+                ]
+              },
+              {
+                "id": 20,
+                "name": "storage_prod",
+                "tags": [
+                  "storageProd"
+                ]
+              },
+              {
+                "id": 90,
+                "name": "vlan90",
+                "tags": [
+                  "ipmi"
+                ],
+                "evpn_vlan_bundle": "bundle3"
+              },
+              {
+                "id": 100,
+                "name": "vlan100",
+                "tags": [
+                  "fabric"
+                ],
+                "evpn_vlan_bundle": "bundle3"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "loopback_ipv4_pool": "10.10.0.0/24",
+            "vtep_loopback_ipv4_pool": "10.11.0.0/24",
+            "vtep_loopback": "Loopback1",
+            "evpn_services_l2_only": false
+          },
+          "nodes": [
+            {
+              "name": "evpn_vlan_bundle_svi_l2vlan",
+              "id": 3,
+              "bgp_as": "65101",
+              "filter": {
+                "tags": [
+                  "fabric",
+                  "ipmi",
+                  "storageProd",
+                  "sit"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

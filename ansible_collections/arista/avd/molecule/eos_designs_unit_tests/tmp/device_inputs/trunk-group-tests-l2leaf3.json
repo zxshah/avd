@@ -1,0 +1,368 @@
+{
+  "enable_trunk_groups": true,
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "1.1.1.1",
+  "only_local_vlan_trunk_groups": true,
+  "pod_name": "TRUNK_GROUP_TESTS",
+  "type": "l2leaf",
+  "_dynamic_keys": {
+    "connected_endpoints": [
+      {
+        "key": "servers",
+        "connected_endpoints_keys_key": [
+          {
+            "name": "server_with_tg_100",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet11"
+                ],
+                "switches": [
+                  "trunk-group-tests-l3leaf1a"
+                ],
+                "endpoint_ports": [
+                  "Nic1"
+                ],
+                "enabled": true,
+                "mode": "trunk",
+                "trunk_groups": [
+                  "TG_NOT_MATCHING_ANY_VLANS",
+                  "TG_100"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "server_with_tg_200",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet12",
+                  "Ethernet12",
+                  "Ethernet12"
+                ],
+                "switches": [
+                  "trunk-group-tests-l2leaf1b",
+                  "trunk-group-tests-l2leaf3",
+                  "trunk-group-tests-l2leaf4"
+                ],
+                "endpoint_ports": [
+                  "Nic1",
+                  "Nic2",
+                  "Nic3"
+                ],
+                "enabled": true,
+                "mode": "trunk",
+                "trunk_groups": [
+                  "TG_NOT_MATCHING_ANY_VLANS",
+                  "TG_200"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "server_with_tg_300",
+            "adapters": [
+              {
+                "switch_ports": [
+                  "Ethernet13",
+                  "Ethernet13",
+                  "Ethernet13",
+                  "Ethernet13"
+                ],
+                "switches": [
+                  "trunk-group-tests-l3leaf1a",
+                  "trunk-group-tests-l3leaf1b",
+                  "trunk-group-tests-l2leaf1a",
+                  "trunk-group-tests-l2leaf1b"
+                ],
+                "endpoint_ports": [
+                  "Nic1",
+                  "Nic2",
+                  "Nic3",
+                  "Nic4"
+                ],
+                "enabled": true,
+                "mode": "trunk",
+                "trunk_groups": [
+                  "TG_NOT_MATCHING_ANY_VLANS",
+                  "TG_300"
+                ],
+                "port_channel": {
+                  "mode": "active",
+                  "description": "portchannel"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "custom_node_types": [],
+    "network_services": [
+      {
+        "key": "tenants",
+        "network_services_keys_name": [
+          {
+            "name": "TRUNK_GROUP_TESTS",
+            "mac_vrf_vni_base": 10000,
+            "vrfs": [
+              {
+                "name": "TG_100",
+                "vrf_vni": 100,
+                "svis": [
+                  {
+                    "id": 100,
+                    "name": "svi100_with_trunk_groups",
+                    "tags": [
+                      "TRUNK_GROUP_TESTS_L3LEAF1",
+                      "TRUNK_GROUP_TESTS_L2LEAF1"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.1.0.1/24",
+                    "trunk_groups": [
+                      "TG_100",
+                      "TG_NOT_MATCHING_ANY_SERVERS"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "TG_200",
+                "vrf_vni": 200,
+                "svis": [
+                  {
+                    "id": 200,
+                    "name": "svi200_with_trunk_groups",
+                    "tags": [
+                      "TRUNK_GROUP_TESTS_L3LEAF1",
+                      "TRUNK_GROUP_TESTS_L2LEAF1"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.2.0.1/24",
+                    "trunk_groups": [
+                      "TG_200",
+                      "TG_NOT_MATCHING_ANY_SERVERS"
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "TG_300",
+                "vrf_vni": 300,
+                "svis": [
+                  {
+                    "id": 300,
+                    "name": "svi300_with_trunk_groups",
+                    "tags": [
+                      "TRUNK_GROUP_TESTS_L3LEAF1",
+                      "TRUNK_GROUP_TESTS_L2LEAF1"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.0.1/24",
+                    "trunk_groups": [
+                      "TG_300",
+                      "TG_NOT_MATCHING_ANY_SERVERS"
+                    ]
+                  },
+                  {
+                    "id": 301,
+                    "name": "svi301_with_trunk_groups_only_l3leaf",
+                    "tags": [
+                      "TRUNK_GROUP_TESTS_L3LEAF1"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.1.1/24",
+                    "trunk_groups": [
+                      "TG_300",
+                      "TG_NOT_MATCHING_ANY_SERVERS"
+                    ]
+                  },
+                  {
+                    "id": 398,
+                    "name": "svi398_without_trunk_groups",
+                    "tags": [
+                      "TRUNK_GROUP_TESTS_L3LEAF1",
+                      "TRUNK_GROUP_TESTS_L2LEAF1"
+                    ],
+                    "enabled": true,
+                    "ip_address_virtual": "10.3.1.1/24"
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 110,
+                "name": "l2vlan110_with_trunk_groups",
+                "tags": [
+                  "TRUNK_GROUP_TESTS_L3LEAF1",
+                  "TRUNK_GROUP_TESTS_L2LEAF1"
+                ],
+                "trunk_groups": [
+                  "TG_100",
+                  "TG_NOT_MATCHING_ANY_SERVERS"
+                ]
+              },
+              {
+                "id": 210,
+                "name": "l2vlan210_with_trunk_groups",
+                "tags": [
+                  "TRUNK_GROUP_TESTS_L3LEAF1",
+                  "TRUNK_GROUP_TESTS_L2LEAF1"
+                ],
+                "trunk_groups": [
+                  "TG_200",
+                  "TG_NOT_MATCHING_ANY_SERVERS"
+                ]
+              },
+              {
+                "id": 310,
+                "name": "l2vlan310_with_trunk_groups",
+                "tags": [
+                  "TRUNK_GROUP_TESTS_L3LEAF1",
+                  "TRUNK_GROUP_TESTS_L2LEAF1"
+                ],
+                "trunk_groups": [
+                  "TG_300",
+                  "TG_NOT_MATCHING_ANY_SERVERS"
+                ]
+              },
+              {
+                "id": 311,
+                "name": "l2vlan310_with_trunk_groups_only_l3leaf",
+                "tags": [
+                  "TRUNK_GROUP_TESTS_L3LEAF1"
+                ],
+                "trunk_groups": [
+                  "TG_300",
+                  "TG_NOT_MATCHING_ANY_SERVERS"
+                ]
+              },
+              {
+                "id": 399,
+                "name": "l2vlan399_without_trunk_groups",
+                "tags": [
+                  "TRUNK_GROUP_TESTS_L3LEAF1",
+                  "TRUNK_GROUP_TESTS_L2LEAF1"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "TENANT_WITH_DUPLICATE_VLANS",
+            "mac_vrf_vni_base": 20000,
+            "vrfs": [
+              {
+                "name": "DUPLICATE_TG_200",
+                "vrf_vni": 200,
+                "svis": [
+                  {
+                    "id": 200,
+                    "name": "duplicate svi200_with_trunk_groups not in use. Should not get configured anywhere",
+                    "enabled": true,
+                    "ip_address_virtual": "10.22.0.1/24",
+                    "trunk_groups": [
+                      "TG_NOT_MATCHING_ANY_SERVERS"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "l2vlans": [
+              {
+                "id": 210,
+                "name": "duplicate l2vlan210_with_trunk_groups not in use. Should not get configured anywhere",
+                "trunk_groups": [
+                  "TG_NOT_MATCHING_ANY_SERVERS"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "node_types": [
+      {
+        "key": "l2leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "uplink_interfaces": [
+              "Ethernet1",
+              "Ethernet2"
+            ],
+            "uplink_switches": [
+              "trunk-group-tests-l3leaf1a",
+              "trunk-group-tests-l3leaf1b"
+            ],
+            "mlag_interfaces": [
+              "Ethernet3",
+              "Ethernet4"
+            ],
+            "mlag_peer_ipv4_pool": "10.255.248.0/24"
+          },
+          "node_groups": [
+            {
+              "group": "TRUNK_GROUP_TESTS_L2LEAF1",
+              "nodes": [
+                {
+                  "name": "trunk-group-tests-l2leaf1a",
+                  "id": 1,
+                  "uplink_switch_interfaces": [
+                    "Ethernet1",
+                    "Ethernet1"
+                  ]
+                },
+                {
+                  "name": "trunk-group-tests-l2leaf1b",
+                  "id": 2,
+                  "uplink_switch_interfaces": [
+                    "Ethernet2",
+                    "Ethernet2"
+                  ]
+                }
+              ],
+              "filter": {
+                "tenants": [
+                  "TRUNK_GROUP_TESTS"
+                ],
+                "tags": []
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "name": "trunk-group-tests-l2leaf3",
+              "id": 3,
+              "uplink_switch_interfaces": [
+                "Ethernet5",
+                "Ethernet5"
+              ],
+              "filter": {
+                "only_vlans_in_use": true
+              }
+            },
+            {
+              "name": "trunk-group-tests-l2leaf4",
+              "id": 4,
+              "uplink_switch_interfaces": [
+                "Ethernet1",
+                "Ethernet1"
+              ],
+              "uplink_switches": [
+                "trunk-group-tests-l3leaf2a",
+                "trunk-group-tests-l3leaf2b"
+              ],
+              "filter": {
+                "only_vlans_in_use": true
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

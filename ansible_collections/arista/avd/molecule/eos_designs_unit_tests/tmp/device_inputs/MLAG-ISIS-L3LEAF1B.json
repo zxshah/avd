@@ -1,0 +1,71 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "type": "l3leaf",
+  "underlay_isis_authentication_key": "$1c$sTNAlR6rKSw=",
+  "underlay_isis_authentication_mode": "md5",
+  "underlay_routing_protocol": "isis",
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "l3leaf",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "uplink_ipv4_pool": "10.10.101.0/24",
+            "uplink_interfaces": [
+              "Ethernet1"
+            ],
+            "uplink_switches": [
+              "MLAG-ISIS-SPINE"
+            ],
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "vtep_loopback_ipv4_pool": "192.168.254.0/24",
+            "loopback_ipv4_offset": 32,
+            "mlag_peer_l3_vlan": 4094,
+            "mlag_peer_vlan": 4094,
+            "mlag_peer_ipv4_pool": "10.10.255.0/24"
+          },
+          "node_groups": [
+            {
+              "group": "MLAG_ISIS_L3LEAF1",
+              "nodes": [
+                {
+                  "name": "MLAG-ISIS-L3LEAF1A",
+                  "id": 4,
+                  "mgmt_ip": "192.168.201.116/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet30"
+                  ],
+                  "bgp_as": "65161",
+                  "mlag_interfaces": [
+                    "Ethernet5",
+                    "Ethernet6"
+                  ]
+                },
+                {
+                  "name": "MLAG-ISIS-L3LEAF1B",
+                  "id": 5,
+                  "mgmt_ip": "192.168.201.117/24",
+                  "uplink_switch_interfaces": [
+                    "Ethernet31"
+                  ],
+                  "bgp_as": "65161",
+                  "mlag_interfaces": [
+                    "Ethernet5",
+                    "Ethernet6"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

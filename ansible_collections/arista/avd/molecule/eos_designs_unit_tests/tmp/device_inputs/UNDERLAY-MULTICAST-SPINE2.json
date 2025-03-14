@@ -1,0 +1,100 @@
+{
+  "eos_designs_documentation": {
+    "enable": false
+  },
+  "fabric_name": "EOS_DESIGNS_UNIT_TESTS",
+  "mgmt_gateway": "192.168.200.5",
+  "type": "spine",
+  "underlay_multicast": false,
+  "underlay_multicast_rps": [
+    {
+      "rp": "192.168.200.1",
+      "groups": [
+        "239.255.1.0/24"
+      ]
+    },
+    {
+      "rp": "192.168.200.2",
+      "groups": [
+        "239.255.2.0/24"
+      ],
+      "access_list_name": "RP_ACL_2"
+    },
+    {
+      "rp": "192.168.200.3",
+      "nodes": [
+        {
+          "name": "UNDERLAY-MULTICAST-L3LEAF1A",
+          "loopback_number": 3
+        }
+      ],
+      "groups": [
+        "239.255.3.0/24"
+      ],
+      "access_list_name": "RP_ACL_3"
+    },
+    {
+      "rp": "192.168.200.4",
+      "nodes": [
+        {
+          "name": "UNDERLAY-MULTICAST-L3LEAF1A",
+          "loopback_number": 4
+        },
+        {
+          "name": "UNDERLAY-MULTICAST-L3LEAF1B",
+          "loopback_number": 4
+        }
+      ],
+      "groups": [
+        "239.255.4.0/24"
+      ],
+      "access_list_name": "RP_ACL_4"
+    },
+    {
+      "rp": "192.168.200.5",
+      "nodes": [
+        {
+          "name": "UNDERLAY-MULTICAST-L3LEAF2A",
+          "loopback_number": 5
+        },
+        {
+          "name": "UNDERLAY-MULTICAST-L3LEAF2B",
+          "loopback_number": 5
+        }
+      ],
+      "groups": [
+        "239.255.5.0/24"
+      ],
+      "access_list_name": "RP_ACL_5"
+    }
+  ],
+  "_dynamic_keys": {
+    "connected_endpoints": [],
+    "custom_node_types": [],
+    "network_services": [],
+    "node_types": [
+      {
+        "key": "spine",
+        "node_type_keys_key": {
+          "defaults": {
+            "platform": "vEOS-LAB",
+            "loopback_ipv4_pool": "192.168.255.0/24",
+            "bgp_as": "65001"
+          },
+          "nodes": [
+            {
+              "name": "UNDERLAY-MULTICAST-SPINE1",
+              "id": 1,
+              "mgmt_ip": "192.168.200.101/24"
+            },
+            {
+              "name": "UNDERLAY-MULTICAST-SPINE2",
+              "id": 2,
+              "mgmt_ip": "192.168.200.102/24"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

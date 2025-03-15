@@ -4,6 +4,20 @@ Arista.Avd Release Notes
 
 .. contents:: Topics
 
+v5.2.3
+======
+
+Release Summary
+---------------
+
+Release 5.2.3 - See documentation on avd.arista.com for details.
+
+Bugfixes
+--------
+
+- Fix(eos_designs): Fix performance regression in port-profile caching (#5150) by @carlbuchmann in https://github.com/aristanetworks/avd/pull/5159
+- Fix(eos_designs): Revert changed behavior for management_eapi (#5112) by @carlbuchmann in https://github.com/aristanetworks/avd/pull/5158
+
 v5.2.2
 ======
 

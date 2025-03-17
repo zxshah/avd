@@ -87,7 +87,7 @@ class UtilsMixin(Protocol):
         redistribute_route.connected.enabled = True
         if (self.shared_utils.overlay_routing_protocol != "none" or self.shared_utils.is_wan_router) and self.inputs.underlay_filter_redistribute_connected:
             # Use route-map for redistribution
-            redistribute_route.connected._update(route_map="RM-CONN-2-BGP")
+            redistribute_route.connected.route_map = "RM-CONN-2-BGP"
             return redistribute_route
 
         return redistribute_route

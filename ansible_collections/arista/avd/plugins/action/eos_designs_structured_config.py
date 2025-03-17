@@ -76,23 +76,23 @@ class ActionModule(ActionBase):
         # Initialise defaultdict that loads facts from json files on demand.
         all_facts = AvdSwitchFactsDefaultDict(tmp_path, fabric_hosts)
 
-        # Load validated and coerced inputs from json file.
-        host_inputs = EosDesigns._from_dumped_dict(read_json_file(tmp_path / "device_inputs" / f"{hostname}.json", f"AVD device inputs for {hostname}"))
-
         # TODO: AVD 6.0.0 remove 'switch'
         task_vars["switch"] = all_facts[hostname]
 
-        # Read ansible variables and perform templating to support inline jinja2
-        for var in task_vars:
-            if str(var).startswith(("ansible", "molecule", "hostvars", "vars")):
-                continue
-            if self._templar.is_template(task_vars[var]):
-                # Var contains a jinja2 template.
-                try:
-                    task_vars[var] = self._templar.template(task_vars[var], fail_on_undefined=False)
-                except Exception as e:
-                    msg = f"Exception during templating of task_var '{var}'"
-                    raise AnsibleActionFail(msg) from e
+        # Load validated and coerced inputs from json file.
+        inputs_as_dumped_dict = read_json_file(tmp_path / "device_inputs" / f"{hostname}.json", f"AVD device inputs for {hostname}")
+
+        # Template input vars in case someone use inline jinja that points to facts.
+        # TODO: AVD 6.0.0 stop supporting this.
+        if self._templar.is_template(inputs_as_dumped_dict):
+            # Var contains a jinja2 template.
+            try:
+                inputs_as_dumped_dict = self._templar.template(inputs_as_dumped_dict, fail_on_undefined=False)
+            except Exception as e:
+                msg = f"Exception during templating of eos_designs inputs: '{e}'"
+                raise AnsibleActionFail(msg) from e
+
+        host_inputs = EosDesigns._from_dumped_dict(inputs_as_dumped_dict)
 
         # Get updated templar instance to be passed along to our simplified "templater"
         self.templar = get_templar(self, task_vars)

@@ -10328,7 +10328,7 @@ ip as-path access-list mylist2 deny _64517$ igp
 #### 802.1X VLAN Assignment Groups
 
 | VLAN Group Name | Members |
-| --------------- | ----- |
+| --------------- | ------- |
 | Assignment_1 | 400-407 |
 | Assignment_2 | 55 |
 | Assignment_3 | 1,3,15-20 |

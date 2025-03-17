@@ -14,7 +14,7 @@
 - Default Switchport Mode: {{ switchport_default.mode }}
 {%     endif %}
 {%     if switchport_default.phone.access_list_bypass is arista.avd.defined(true) %}
-- Default Switchport bypass phone traffic from configured access-list.
+- Default Switchport Phone Access-list Bypass: True
 {%     endif %}
 {%     if switchport_default.phone.cos is arista.avd.defined %}
 - Default Switchport Phone COS: {{ switchport_default.phone.cos }}

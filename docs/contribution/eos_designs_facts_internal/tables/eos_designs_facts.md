@@ -37,7 +37,7 @@
     | [<samp>inband_mgmt_ip</samp>](## "inband_mgmt_ip") | String |  |  |  | Used for fabric docs. |
     | [<samp>inband_mgmt_interface</samp>](## "inband_mgmt_interface") | String |  |  |  | Used for fabric docs. |
     | [<samp>pod</samp>](## "pod") | String | Required |  |  | Used for fabric docs. |
-    | [<samp>connected_endpoints_keys</samp>](## "connected_endpoints_keys") | List, items: Dictionary | Required | See (+) on YAML tab |  | List of connected_endpoints_keys in use on this device.<br>Used for fabric docs. |
+    | [<samp>connected_endpoints_keys</samp>](## "connected_endpoints_keys") | List, items: Dictionary | Required |  |  | List of connected_endpoints_keys in use on this device.<br>Used for fabric docs. |
     | [<samp>&nbsp;&nbsp;-&nbsp;key</samp>](## "connected_endpoints_keys.[].key") | String | Required, Unique |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;type</samp>](## "connected_endpoints_keys.[].type") | String |  |  |  | Type used for documentation. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;description</samp>](## "connected_endpoints_keys.[].description") | String |  |  |  | Description used for documentation. |
@@ -221,7 +221,7 @@
 
     # List of connected_endpoints_keys in use on this device.
     # Used for fabric docs.
-    connected_endpoints_keys: # required # (1)!
+    connected_endpoints_keys: # required
       - key: <str; required; unique>
 
         # Type used for documentation.
@@ -456,45 +456,3 @@
     mpls_route_reflector_clients:
       - <str>
     ```
-
-    1. Default Value
-
-        ```yaml
-        connected_endpoints_keys:
-        - description: Server
-          key: servers
-          type: server
-        - description: Firewall
-          key: firewalls
-          type: firewall
-        - description: Router
-          key: routers
-          type: router
-        - description: Load Balancer
-          key: load_balancers
-          type: load_balancer
-        - description: Storage Array
-          key: storage_arrays
-          type: storage_array
-        - description: CPE
-          key: cpes
-          type: cpe
-        - description: Workstation
-          key: workstations
-          type: workstation
-        - description: Access Point
-          key: access_points
-          type: access_point
-        - description: Phone
-          key: phones
-          type: phone
-        - description: Printer
-          key: printers
-          type: printer
-        - description: Camera
-          key: cameras
-          type: camera
-        - description: Generic Device
-          key: generic_devices
-          type: generic_device
-        ```

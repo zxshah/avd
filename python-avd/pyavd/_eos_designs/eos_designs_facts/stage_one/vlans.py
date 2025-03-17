@@ -68,7 +68,7 @@ class VlansMixin(Protocol):
     @cached_property
     def _local_endpoint_vlans_and_trunk_groups(self: FactsStageOneProtocol) -> tuple[set[int], set[str]]:
         """
-        Return list of vlans and list of trunk groups used by connected_endpoints on this switch.
+        Return sets of vlans and trunk groups used by connected_endpoints on this switch.
 
         Also includes the inband_mgmt_vlan.
         """

@@ -148,7 +148,7 @@ class UtilsMixin(Protocol):
 
         mpls_route_clients = {}
 
-        for avd_peer in self._evpn_route_server_clients:
+        for avd_peer in self.facts.mpls_route_reflector_clients:
             peer_facts = self.shared_utils.get_peer_facts(avd_peer)
             if self._is_peer_mpls_client(peer_facts) is not True:
                 continue
@@ -214,7 +214,7 @@ class UtilsMixin(Protocol):
 
             self._append_peer(mpls_rr_peers, route_reflector, peer_facts)
 
-        for avd_peer in self._evpn_route_server_clients:
+        for avd_peer in self.facts.mpls_route_reflector_clients:
             peer_facts = self.shared_utils.get_peer_facts(avd_peer)
             if self._is_peer_mpls_server(peer_facts) is not True:
                 continue

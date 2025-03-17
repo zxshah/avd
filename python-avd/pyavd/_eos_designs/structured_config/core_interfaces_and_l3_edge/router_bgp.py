@@ -50,7 +50,7 @@ class RouterBgpMixin(Protocol):
                 msg = f"{self.data_model}.p2p_links.[].ip, .subnet or .ip_pool"
                 raise AristaAvdInvalidInputsError(msg)
 
-            neighbor = EosCliConfigGen.RouterBgp.NeighborsItem(
+            self.structured_config.router_bgp.neighbors.append_new(
                 remote_as=p2p_link_data["peer_bgp_as"],
                 peer=p2p_link_data["peer"],
                 description=p2p_link_data["peer"],
@@ -59,4 +59,3 @@ class RouterBgpMixin(Protocol):
                 bfd=p2p_link.bfd,
                 local_as=p2p_link_data["bgp_as"] if p2p_link_data["bgp_as"] != self.shared_utils.bgp_as else None,
             )
-            self.structured_config.router_bgp.neighbors.append(neighbor)

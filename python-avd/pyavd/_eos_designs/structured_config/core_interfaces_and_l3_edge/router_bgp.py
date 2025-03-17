@@ -51,11 +51,11 @@ class RouterBgpMixin(Protocol):
                 raise AristaAvdInvalidInputsError(msg)
 
             self.structured_config.router_bgp.neighbors.append_new(
+                ip_address=get_ip_from_ip_prefix(p2p_link_data["peer_ip"]),
                 remote_as=p2p_link_data["peer_bgp_as"],
                 peer=p2p_link_data["peer"],
                 description=p2p_link_data["peer"],
                 peer_group=self.inputs.bgp_peer_groups.ipv4_underlay_peers.name,
-                ip_address=get_ip_from_ip_prefix(p2p_link_data["peer_ip"]),
                 bfd=p2p_link.bfd,
                 local_as=p2p_link_data["bgp_as"] if p2p_link_data["bgp_as"] != self.shared_utils.bgp_as else None,
             )

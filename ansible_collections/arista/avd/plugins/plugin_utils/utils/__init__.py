@@ -3,6 +3,7 @@
 # that can be found in the LICENSE file.
 from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import RaiseOnUse
 
+from .avd_switch_facts_default_dict import AvdSwitchFactsDefaultDict
 from .clean_path import clean_path
 from .compile_searchpath import compile_searchpath
 from .cprofile_decorator import cprofile
@@ -12,6 +13,7 @@ from .get_validated_path import get_validated_path
 from .get_validated_value import get_validated_value
 from .log_message import log_message
 from .python_to_ansible_logging_handler import PythonToAnsibleContextFilter, PythonToAnsibleHandler
+from .read_json_file import read_json_file
 from .write_file import write_file
 from .yaml_dumper import NoAliasDumper, YamlDumper
 from .yaml_loader import YamlLoader
@@ -23,6 +25,7 @@ except ImportError as e:
     default = get = RaiseOnUse(ImportError(f"The 'arista.avd' collection requires the 'pyavd' Python library. Got import error {e}"))
 
 __all__ = [
+    "AvdSwitchFactsDefaultDict",
     "NoAliasDumper",
     "PythonToAnsibleContextFilter",
     "PythonToAnsibleHandler",
@@ -38,5 +41,6 @@ __all__ = [
     "get_validated_path",
     "get_validated_value",
     "log_message",
+    "read_json_file",
     "write_file",
 ]

@@ -1,13 +1,13 @@
 # Copyright (c) 2023-2025 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
+from __future__ import annotations
 
 import cProfile
 import json
 import logging
 import pstats
-from collections import ChainMap, defaultdict
-from pathlib import Path
+from collections import ChainMap
 from typing import Any
 
 import yaml
@@ -17,17 +17,16 @@ from ansible.plugins.action import ActionBase, display
 
 from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import RaiseOnUse
 from ansible_collections.arista.avd.plugins.plugin_utils.schema.avdschematools import AvdSchemaTools
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import get_templar, get_tmp_path, write_file
-from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
-from pyavd._eos_designs.schema import EosDesigns
+from ansible_collections.arista.avd.plugins.plugin_utils.utils import AvdSwitchFactsDefaultDict, get_templar, get_tmp_path, read_json_file, write_file
 
 PLUGIN_NAME = "arista.avd.eos_designs_structured_config"
 try:
+    from pyavd._eos_designs.schema import EosDesigns
     from pyavd._eos_designs.structured_config import get_structured_config
     from pyavd._utils import merge, strip_null_from_data
     from pyavd._utils import template as templater
 except ImportError as e:
-    get_structured_config = get = merge = RaiseOnUse(
+    EosDesigns = get_structured_config = get = merge = RaiseOnUse(
         AnsibleActionFail(
             f"The '{PLUGIN_NAME}' plugin requires the 'pyavd' Python library. Got import error",
             orig_exc=e,
@@ -186,47 +185,3 @@ class ActionModule(ActionBase):
             stats.dump_stats(cprofile_file)
 
         return result
-
-
-def read_json_file(file: Path, file_context: str) -> dict:
-    try:
-        with file.open("r") as stream:
-            data = json.load(stream)
-            if not isinstance(data, dict):
-                msg = f"Expected a 'dict' when reading data from {file_context}. Got {type(data)}."
-            return data
-    except OSError as e:
-        msg = f"Unable to read {file_context}: {e}"
-        raise type(e)(msg) from e
-    except json.JSONDecodeError as e:
-        msg = f"Unable to decode {file_context}: {e}"
-        raise type(e)(msg, e.doc, e.pos) from e
-
-
-class AvdSwitchFactsDefaultDict(defaultdict):
-    tmp_path: Path
-
-    def __init__(self, tmp_path: Path, fabric_hosts: list[str]) -> None:
-        self.fabric_hosts = fabric_hosts
-        self.tmp_path = tmp_path
-
-    def __contains__(self, key: object) -> bool:
-        try:
-            _dummy = self[key]
-        except (OSError, json.JSONDecodeError):
-            return False
-        return True
-
-    def get(self, key: str, default: Any = None) -> dict:
-        try:
-            return self[key]
-        except (OSError, json.JSONDecodeError):
-            return default
-
-    def __missing__(self, key: str) -> dict:
-        LOGGER.debug("Loading facts for %s", key)
-        self[key] = EosDesignsFacts._from_dict(read_json_file(self.tmp_path / "device_facts" / f"{key}.json", f"AVD device facts for {key}"))
-        return self[key]
-
-    def keys(self) -> list[str]:
-        return self.fabric_hosts

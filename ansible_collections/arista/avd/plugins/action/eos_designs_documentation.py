@@ -1,6 +1,8 @@
 # Copyright (c) 2023-2025 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
+from __future__ import annotations
+
 import json
 import logging
 from pathlib import Path
@@ -10,15 +12,27 @@ from ansible.errors import AnsibleActionFail
 from ansible.plugins.action import ActionBase, display
 from yaml import load
 
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import PythonToAnsibleHandler, YamlLoader, write_file
+from ansible_collections.arista.avd.plugins.plugin_utils.pyavd_wrappers import RaiseOnUse
+from ansible_collections.arista.avd.plugins.plugin_utils.utils import (
+    PythonToAnsibleHandler,
+    YamlLoader,
+    get_tmp_path,
+    read_json_file,
+    write_file,
+)
 
+PLUGIN_NAME = "arista.avd.eos_designs_documentation"
 try:
+    from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
     from pyavd._utils import get, strip_empties_from_dict
     from pyavd.get_fabric_documentation import get_fabric_documentation
-
-    HAS_PYAVD = True
-except ImportError:
-    HAS_PYAVD = False
+except ImportError as e:
+    EosDesignsFacts = get = strip_empties_from_dict = get_fabric_documentation = RaiseOnUse(
+        AnsibleActionFail(
+            f"The '{PLUGIN_NAME}' plugin requires the 'pyavd' Python library. Got import error",
+            orig_exc=e,
+        ),
+    )
 
 
 LOGGER = logging.getLogger("ansible_collections.arista.avd")
@@ -40,19 +54,18 @@ ARGUMENT_SPEC = {
 
 
 class ActionModule(ActionBase):
-    def run(self, tmp: Any = None, task_vars: dict | None = None) -> None:
+    def run(self, tmp: Any = None, task_vars: dict | None = None) -> dict:
         if task_vars is None:
             task_vars = {}
 
         result = super().run(tmp, task_vars)
         del tmp  # tmp no longer has any effect
 
-        if not HAS_PYAVD:
-            msg = "The arista.avd.eos_designs_documentation' plugin requires the 'pyavd' Python library. Got import error"
-            raise AnsibleActionFail(msg)
-
         # Setup module logging
         setup_module_logging(result)
+
+        tmp_path = get_tmp_path()
+        LOGGER.info("eos_designs_structured_config: Using %s for temporary files.", tmp_path)
 
         # Get task arguments and validate them
         validation_result, validated_args = self.validate_argument_spec(ARGUMENT_SPEC)
@@ -61,20 +74,27 @@ class ActionModule(ActionBase):
         # Converting to json and back to remove any AnsibeUnsafe types
         validated_args = json.loads(json.dumps(validated_args))
 
-        return self.main(validated_args, task_vars, result)
+        return self.main(validated_args, task_vars, result, tmp_path)
 
-    def main(self, validated_args: dict, task_vars: dict, result: dict) -> dict:
-        avd_switch_facts: dict = get(task_vars, "avd_switch_facts", required=True)
-        device_list = list(avd_switch_facts.keys())
+    def main(self, validated_args: dict, task_vars: dict, result: dict, tmp_path: Path) -> dict:
+        groups = task_vars.get("groups", {})
+        fabric_name = self._templar.template(get(task_vars, "fabric_name", required=True))
+        fabric_hosts = groups.get(fabric_name, [])
+
+        # Create dict of all facts read from json files.
+        all_facts = {
+            host: EosDesignsFacts._from_dict(read_json_file(tmp_path / "device_facts" / f"{host}.json", f"AVD device facts for {host}"))
+            for host in fabric_hosts
+        }
 
         structured_configs = self.read_structured_configs(
-            device_list=device_list,
+            device_list=fabric_hosts,
             structured_config_dir=validated_args["structured_config_dir"],
             structured_config_suffix=validated_args["structured_config_suffix"],
         )
-        fabric_name = get(task_vars, "fabric_name", required=True)
+
         output = get_fabric_documentation(
-            {"avd_switch_facts": avd_switch_facts},
+            all_facts,
             structured_configs=structured_configs,
             fabric_name=fabric_name,
             fabric_documentation=validated_args["fabric_documentation"],

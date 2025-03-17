@@ -310,7 +310,7 @@ keys:
           keys:
             name:
               type: str
-            vlan:
+            members:
               type: str
               required: true
               convert_types:

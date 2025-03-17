@@ -4898,14 +4898,14 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class VlanAssignmentGroupsItem(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"name": {"type": str}, "vlan": {"type": str}}
+            _fields: ClassVar[dict] = {"name": {"type": str}, "members": {"type": str}}
             name: str
-            vlan: str
+            members: str
             """VLAN value(s) or range(s) of VLAN values."""
 
             if TYPE_CHECKING:
 
-                def __init__(self, *, name: str | UndefinedType = Undefined, vlan: str | UndefinedType = Undefined) -> None:
+                def __init__(self, *, name: str | UndefinedType = Undefined, members: str | UndefinedType = Undefined) -> None:
                     """
                     VlanAssignmentGroupsItem.
 
@@ -4914,7 +4914,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     Args:
                         name: name
-                        vlan: VLAN value(s) or range(s) of VLAN values.
+                        members: VLAN value(s) or range(s) of VLAN values.
 
                     """
 

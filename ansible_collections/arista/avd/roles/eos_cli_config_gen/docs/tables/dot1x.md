@@ -81,7 +81,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;disconnect_cached_results_timeout</samp>](## "dot1x.supplicant.disconnect_cached_results_timeout") | Integer |  |  | Min: 60<br>Max: 65535 | Timeout in seconds for removing a disconnected supplicant. |
     | [<samp>&nbsp;&nbsp;vlan_assignment_groups</samp>](## "dot1x.vlan_assignment_groups") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "dot1x.vlan_assignment_groups.[].name") | String | Required, Unique |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vlan</samp>](## "dot1x.vlan_assignment_groups.[].vlan") | String | Required |  |  | VLAN value(s) or range(s) of VLAN values. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;members</samp>](## "dot1x.vlan_assignment_groups.[].members") | String | Required |  |  | VLAN value(s) or range(s) of VLAN values. |
 
 === "YAML"
 
@@ -248,5 +248,5 @@
         - name: <str; required; unique>
 
           # VLAN value(s) or range(s) of VLAN values.
-          vlan: <str; required>
+          members: <str; required>
     ```

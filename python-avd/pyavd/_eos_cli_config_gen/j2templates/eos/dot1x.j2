@@ -116,7 +116,7 @@ dot1x
 {%             endif %}
 {%         endif %}
 {%         for vlan_assignment_group in dot1x.vlan_assignment_groups | arista.avd.natural_sort("name") %}
-   vlan assignment group {{ vlan_assignment_group.name }} members {{ vlan_assignment_group.vlan }}
+   vlan assignment group {{ vlan_assignment_group.name }} members {{ vlan_assignment_group.members }}
 {%         endfor %}
 {%         if dot1x.statistics_packets_dropped is arista.avd.defined(true) %}
    statistics packets dropped

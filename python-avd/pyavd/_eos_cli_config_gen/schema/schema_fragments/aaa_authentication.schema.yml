@@ -22,6 +22,7 @@ keys:
               - "group radius group MYGROUP local"
           command_api:
             type: str
+            # TODO: Revisit to see if the feature is now visible in EOS and update description
             description: |
               Command-API authentication method(s) as a string.
               This feature is not yet visible in EOS.

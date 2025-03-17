@@ -69,7 +69,7 @@
 #### 802.1X VLAN Assignment Groups
 
 | VLAN Group Name | Members |
-| --------------- | ----- |
+| --------------- | ------- |
 {%             for vlan_assignment_group in dot1x.vlan_assignment_groups | arista.avd.natural_sort("name") %}
 | {{ vlan_assignment_group.name }} | {{ vlan_assignment_group.members }} |
 {%             endfor %}

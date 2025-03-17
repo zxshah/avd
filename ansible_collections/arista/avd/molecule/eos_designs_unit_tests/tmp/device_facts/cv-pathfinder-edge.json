@@ -60,6 +60,12 @@
   "uplink_peers": [
     "site-ha-disabled-leaf"
   ],
+  "uplink_switch_vrfs": [
+    "ATTRACTED-VRF-FROM-UPLINK",
+    "default",
+    "IT",
+    "PROD"
+  ],
   "vlans": "100-101,666",
   "wan_path_groups": [
     {

@@ -25,12 +25,6 @@ class FilteredTenantsMixin(Protocol):
     Using type-hint on self to get proper type-hints on attributes across all Mixins.
     """
 
-    discarded_vrfs: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.Vrfs
-    """
-    Tmp storage for VRFs that got discarded in filtered VRFs. This is only used for routers with 'uplink_type: p2p-vrfs',
-    as they may need to add VRF later if it is present on the uplink_switches. This addition is done during FactsStageFour.
-    """
-
     @cached_property
     def filtered_tenants(self: SharedUtilsProtocol) -> EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServices:
         """
@@ -167,15 +161,22 @@ class FilteredTenantsMixin(Protocol):
             not self.node_config.filter.deny_vrfs or vrf.name not in self.node_config.filter.deny_vrfs
         )
 
-    def is_forced_vrf(self: SharedUtilsProtocol, tenant_name: str) -> bool:
+    def is_forced_vrf(
+        self: SharedUtilsProtocol, vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem, tenant_name: str
+    ) -> bool:
         """
         Returns True if the given VRF name should be configured even without any loopbacks or SVIs etc.
 
         There can be various causes for this:
         - The VRF is part of a tenant set under 'always_include_vrfs_in_tenants'
         - 'always_include_vrfs_in_tenants' is set to ['all']
+        - This device is using 'p2p-vrfs' as uplink type and the VRF present on the uplink switch.
+          This check only works during structured config phase, since the fact is set in the last stage of facts.
         """
-        return "all" in self.node_config.filter.always_include_vrfs_in_tenants or tenant_name in self.node_config.filter.always_include_vrfs_in_tenants
+        if "all" in self.node_config.filter.always_include_vrfs_in_tenants or tenant_name in self.node_config.filter.always_include_vrfs_in_tenants:
+            return True
+
+        return vrf.name in self.switch_facts.uplink_switch_vrfs
 
     def filtered_vrfs(
         self: SharedUtilsProtocol, tenant: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem
@@ -186,7 +187,6 @@ class FilteredTenantsMixin(Protocol):
         Filtering based on svi tags, l3interfaces, loopbacks or self.is_forced_vrf() check.
         Keys of VRF data model will be converted to lists.
         """
-        self.discarded_vrfs = EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.Vrfs()
         filtered_vrfs = EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.Vrfs()
 
         for vrf in tenant.vrfs._natural_sorted():
@@ -238,15 +238,12 @@ class FilteredTenantsMixin(Protocol):
                 lambda rt: bool((not rt.nodes or self.hostname in rt.nodes) and rt.address_family and rt.route_target and rt.type in ["import", "export"])
             )
 
+            if vrf.svis or vrf.l3_interfaces or vrf.loopbacks or self.is_forced_vrf(vrf, tenant.name):
+                filtered_vrfs.append(vrf)
+
             if tenant_evpn_vlan_bundle := tenant.evpn_vlan_bundle:
                 for svi in vrf.svis:
                     svi.evpn_vlan_bundle = svi.evpn_vlan_bundle or tenant_evpn_vlan_bundle
-
-            if vrf.svis or vrf.l3_interfaces or vrf.loopbacks or self.is_forced_vrf(tenant.name):
-                filtered_vrfs.append(vrf)
-            elif self.uplink_type == "p2p-vrfs":
-                # For p2p-vrfs we may need to add a VRF later depending on what we find in the uplink_switches' VRFs, so we will store the discarded VRF:
-                self.discarded_vrfs.append(vrf)
 
         return filtered_vrfs
 

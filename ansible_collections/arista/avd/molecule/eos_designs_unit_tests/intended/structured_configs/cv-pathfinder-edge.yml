@@ -569,6 +569,8 @@ router_adaptive_virtual_topology:
     load_balance_policy: LB-PROD-AVT-POLICY-MPLS-ONLY
   - name: PROD-AVT-POLICY-DEFAULT
     load_balance_policy: LB-PROD-AVT-POLICY-DEFAULT
+  - name: DEFAULT-POLICY-DEFAULT
+    load_balance_policy: LB-DEFAULT-POLICY-DEFAULT
   policies:
   - name: DEFAULT-AVT-POLICY-WITH-CP
     matches:
@@ -594,6 +596,10 @@ router_adaptive_virtual_topology:
       avt_profile: DEFAULT-AVT-POLICY-VIDEO
     - application_profile: default
       avt_profile: DEFAULT-AVT-POLICY-DEFAULT
+  - name: DEFAULT-POLICY
+    matches:
+    - application_profile: default
+      avt_profile: DEFAULT-POLICY-DEFAULT
   vrfs:
   - name: default
     policy: DEFAULT-AVT-POLICY-WITH-CP
@@ -621,6 +627,11 @@ router_adaptive_virtual_topology:
     - name: DEFAULT-AVT-POLICY-VIDEO
       id: 3
     - name: DEFAULT-AVT-POLICY-DEFAULT
+      id: 1
+  - name: ATTRACTED-VRF-FROM-UPLINK
+    policy: DEFAULT-POLICY
+    profiles:
+    - name: DEFAULT-POLICY-DEFAULT
       id: 1
 router_bfd:
   multihop:
@@ -774,6 +785,21 @@ router_bgp:
         route_targets:
         - '1:1'
         - route-map RM-EVPN-EXPORT-VRF-DEFAULT
+  - name: ATTRACTED-VRF-FROM-UPLINK
+    rd: 192.168.42.1:666
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 666:666
+      export:
+      - address_family: evpn
+        route_targets:
+        - 666:666
+    router_id: 192.168.42.1
+    redistribute:
+      connected:
+        enabled: true
 router_internet_exit:
   policies:
   - name: DIRECT-EXIT-POLICY-1
@@ -886,6 +912,10 @@ router_path_selection:
     - name: INET
     - name: MPLS
       priority: 2
+  - name: LB-DEFAULT-POLICY-DEFAULT
+    path_groups:
+    - name: INET
+    - name: MPLS
   tcp_mss_ceiling:
     ipv4_segment_size: auto
 router_service_insertion:
@@ -985,6 +1015,9 @@ vrfs:
 - name: PROD
   ip_routing: true
   tenant: TenantA
+- name: ATTRACTED-VRF-FROM-UPLINK
+  ip_routing: true
+  tenant: TenantC
 vxlan_interface:
   vxlan1:
     description: cv-pathfinder-edge_VTEP
@@ -998,3 +1031,5 @@ vxlan_interface:
         vni: 100
       - name: PROD
         vni: 42
+      - name: ATTRACTED-VRF-FROM-UPLINK
+        vni: 166

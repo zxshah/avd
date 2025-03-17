@@ -163,6 +163,9 @@ router_bgp:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: '65000'
       description: UPLINK_P2P_VRFS_TESTS_SPINE2_Ethernet2.42_vrf_PROD
+    redistribute:
+      connected:
+        enabled: true
   - name: ONLY-ON-L2LEAF
     router_id: 192.168.42.3
     neighbors:
@@ -170,6 +173,9 @@ router_bgp:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: '65000'
       description: UPLINK_P2P_VRFS_TESTS_SPINE1_Ethernet1.66_vrf_ONLY-ON-L2LEAF
+    redistribute:
+      connected:
+        enabled: true
   - name: IT
     router_id: 192.168.42.3
     neighbors:
@@ -177,6 +183,9 @@ router_bgp:
       peer_group: IPv4-UNDERLAY-PEERS
       remote_as: '65000'
       description: UPLINK_P2P_VRFS_TESTS_SPINE2_Ethernet2.100_vrf_IT
+    redistribute:
+      connected:
+        enabled: true
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:

@@ -55,6 +55,9 @@
   "uplink_peers": [
     "CUSTOM-PYTHON_MODULES-L3LEAF1A"
   ],
+  "uplink_switch_vrfs": [
+    "TEST_VRF"
+  ],
   "vlans": "110",
   "only_used_for_peer_facts": {
     "mlag": false,

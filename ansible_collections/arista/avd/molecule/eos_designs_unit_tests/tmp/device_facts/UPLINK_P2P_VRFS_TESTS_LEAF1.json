@@ -109,6 +109,12 @@
     "UPLINK_P2P_VRFS_TESTS_SPINE1",
     "UPLINK_P2P_VRFS_TESTS_SPINE2"
   ],
+  "uplink_switch_vrfs": [
+    "default",
+    "IT",
+    "ONLY-ON-L2LEAF",
+    "PROD"
+  ],
   "vlans": "66",
   "only_used_for_peer_facts": {
     "mlag": false,

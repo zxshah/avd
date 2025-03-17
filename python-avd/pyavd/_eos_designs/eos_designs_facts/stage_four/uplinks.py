@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_designs.eos_designs_facts.facts_generator import facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._errors import AristaAvdError
-from pyavd.j2filters import list_compress, range_expand
+from pyavd.j2filters import list_compress, natural_sort, range_expand
 
 if TYPE_CHECKING:
     from . import FactsStageFourProtocol
@@ -79,6 +79,19 @@ class UplinksMixin(Protocol):
             )
             raise AristaAvdError(msg)
         return peer_uplink_switch_port_channel_id
+
+    @facts_contributor
+    def uplink_switch_vrfs(self: FactsStageFourProtocol) -> None:
+        """Return the list of VRF names present on uplink switches."""
+        if self.shared_utils.uplink_type != "p2p-vrfs":
+            return
+
+        vrfs = set()
+        for uplink_switch in self.facts.uplink_peers:
+            uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
+            vrfs.update(uplink_switch_facts.only_used_for_peer_facts.local_vrfs_in_use)
+
+        self.facts.uplink_switch_vrfs.extend(natural_sort(vrfs))
 
     @facts_contributor
     def uplinks(self: FactsStageFourProtocol) -> None:

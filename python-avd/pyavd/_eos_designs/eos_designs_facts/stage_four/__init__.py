@@ -6,9 +6,9 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
-from pyavd._eos_designs.eos_designs_facts.facts_generator import FactsGenerator, FactsGeneratorProtocol
+from pyavd._eos_designs.eos_designs_facts.facts_generator import FactsGenerator, FactsGeneratorProtocol, facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
-from pyavd.j2filters import range_expand
+from pyavd.j2filters import natural_sort, range_expand
 
 from .uplinks import UplinksMixin
 
@@ -32,6 +32,32 @@ class FactsStageFourProtocol(UplinksMixin, FactsGeneratorProtocol, Protocol):
         """
         return set(map(int, range_expand(self.facts.vlans)))
 
+    @facts_contributor
+    def uplink_switch_vrfs(self: FactsStageFourProtocol) -> None:
+        """
+        Return the list of VRF names present on uplink switches.
+
+        NOTE: This must be above the `uplinks` and `overlay` to ensure the fact has been set before filtered_tenants are parsed again.
+        """
+        if self.shared_utils.uplink_type != "p2p-vrfs":
+            return
+
+        vrfs = set()
+        for uplink_switch in self.facts.uplink_peers:
+            uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
+            vrfs.update(uplink_switch_facts.only_used_for_peer_facts.local_vrfs_in_use)
+
+        self.facts.uplink_switch_vrfs.extend(natural_sort(vrfs))
+
+    @facts_contributor
+    def overlay(self: FactsStageFourProtocol) -> None:
+        """Exposed in avd_switch_facts."""
+        if self.shared_utils.underlay_router is True:
+            self.facts.overlay._update(
+                peering_address=self.shared_utils.overlay_peering_address,
+                evpn_mpls=self.shared_utils.overlay_evpn_mpls,
+            )
+
 
 class FactsStageFour(FactsGenerator, FactsStageFourProtocol):
     """
@@ -46,3 +72,8 @@ class FactsStageFour(FactsGenerator, FactsStageFourProtocol):
     ) -> None:
         self.peer_facts = peer_facts
         super().__init__(hostvars, inputs, facts, shared_utils)
+
+        if self.shared_utils.uplink_type == "p2p-vrfs":
+            # Reset the cache of filtered tenants to allow to add in VRFs attracted from the uplink.
+            self.shared_utils.__dict__.pop("filtered_tenants")
+            self.shared_utils.__dict__.pop("vrfs")

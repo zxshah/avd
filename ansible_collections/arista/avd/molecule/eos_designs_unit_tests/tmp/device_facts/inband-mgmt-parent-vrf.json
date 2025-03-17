@@ -44,7 +44,7 @@
   "uplink_peers": [
     "inband-mgmt-spine1-ztp"
   ],
-  "vlans": "",
+  "vlans": "103,105",
   "local_endpoint_vlans": "",
   "endpoint_vlans": "",
   "only_used_for_peer_facts": {

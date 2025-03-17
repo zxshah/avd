@@ -53,15 +53,6 @@ class OverlayMixin(Protocol):
             self.facts.mpls_route_reflectors.extend(self.shared_utils.node_config.mpls_route_reflectors)
 
     @facts_contributor
-    def overlay(self: FactsStageOneProtocol) -> None:
-        """Exposed in avd_switch_facts."""
-        if self.shared_utils.underlay_router is True:
-            self.facts.overlay._update(
-                peering_address=self.shared_utils.overlay_peering_address,
-                evpn_mpls=self.shared_utils.overlay_evpn_mpls,
-            )
-
-    @facts_contributor
     def overlay_rd_type_admin_subfield(self: FactsStageOneProtocol) -> None:
         """Exposed in avd_switch_facts."""
         if "evpn" not in self.shared_utils.overlay_address_families:

@@ -52,7 +52,6 @@
     "MLAG_ODD_ID_L3LEAF1A",
     "MLAG_ODD_ID_L3LEAF1B"
   ],
-  "vlans": "",
   "only_used_for_peer_facts": {
     "mlag": false,
     "underlay_multicast": false

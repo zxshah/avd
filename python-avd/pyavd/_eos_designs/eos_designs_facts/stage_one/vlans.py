@@ -27,18 +27,13 @@ class VlansMixin(Protocol):
     @facts_contributor
     def vlans(self: FactsStageOneProtocol) -> None:
         """
-        Exposed in avd_switch_facts.
+        Return the compressed list of vlans allowed on this switch after filtering network services.
 
-        Return the compressed list of vlans to be defined on this switch after filtering network services.
         The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
 
         Ex. "1-100, 201-202"
-
-        This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
-        This is to ensure that native vlan is not necessarily permitted on the uplink trunk.
         """
         if not self.shared_utils.any_network_services:
-            self.facts.vlans = ""
             return
 
         vlans = []
@@ -54,6 +49,13 @@ class VlansMixin(Protocol):
 
         self.facts.vlans = list_compress(vlans)
 
+    def _is_accepted_vlan(
+        self: FactsStageOneProtocol,
+        vlan: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem
+        | EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.L2vlansItem,
+    ) -> bool:
+        return "all" in self.shared_utils.filter_tags or bool(set(vlan.tags).intersection(self.shared_utils.filter_tags))
+
     @facts_contributor
     def local_endpoint_vlans(self: FactsStageOneProtocol) -> None:
         if self.shared_utils.node_config.filter.only_vlans_in_use:
@@ -63,25 +65,6 @@ class VlansMixin(Protocol):
     def local_endpoint_trunk_groups(self: FactsStageOneProtocol) -> None:
         if self.shared_utils.node_config.filter.only_vlans_in_use:
             self.facts.local_endpoint_trunk_groups.extend(natural_sort(self._local_endpoint_trunk_groups))
-
-    def _is_accepted_vlan(
-        self: FactsStageOneProtocol,
-        vlan: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem
-        | EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.L2vlansItem,
-    ) -> bool:
-        if "all" not in self.shared_utils.filter_tags and not set(vlan.tags).intersection(self.shared_utils.filter_tags):
-            return False
-
-        if not self.shared_utils.node_config.filter.only_vlans_in_use:
-            # Nothing else to filter
-            return True
-
-        # Check if vlan is in use on this switch
-        if vlan.id in self._local_endpoint_vlans:
-            return True
-
-        # Check if vlan has a trunk group defined which is in use
-        return bool(self.inputs.enable_trunk_groups and vlan.trunk_groups and self._local_endpoint_trunk_groups.intersection(vlan.trunk_groups))
 
     @cached_property
     def _local_endpoint_vlans(self: FactsStageOneProtocol) -> set[int]:

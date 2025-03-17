@@ -194,6 +194,36 @@ vlans:
   trunk_groups:
   - CUSTOM_MLAG_TG_NAME
   tenant: system
+- id: 100
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 110
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 200
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 210
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 300
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 301
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 310
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 311
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 398
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
+- id: 399
+  trunk_groups:
+  - trunk-group-tests-l2leaf4
 vrfs:
 - name: MGMT
   ip_routing: false

@@ -16,7 +16,6 @@
   },
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "vlans": "",
   "only_used_for_peer_facts": {
     "mlag": false,
     "underlay_multicast": true

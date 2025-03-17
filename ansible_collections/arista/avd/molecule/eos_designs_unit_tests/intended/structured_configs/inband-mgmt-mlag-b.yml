@@ -209,7 +209,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '101'
+      allowed_vlan: 101,103,105
 service_routing_protocols_model: multi-agent
 spanning_tree:
   no_spanning_tree_vlan: '4094'

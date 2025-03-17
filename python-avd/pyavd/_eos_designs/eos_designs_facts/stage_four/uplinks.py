@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_designs.eos_designs_facts.facts_generator import facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._errors import AristaAvdError
-from pyavd.j2filters import list_compress, natural_sort, range_expand
+from pyavd.j2filters import list_compress, range_expand
 
 if TYPE_CHECKING:
     from . import FactsStageFourProtocol
@@ -81,23 +81,6 @@ class UplinksMixin(Protocol):
         return peer_uplink_switch_port_channel_id
 
     @facts_contributor
-    def uplink_switch_vrfs(self: FactsStageFourProtocol) -> None:
-        """
-        Return the list of VRF names present on uplink switches.
-
-        NOTE: This must be above the `uplinks` to ensure the fact has been set before filtered_tenants are parsed again.
-        """
-        if self.shared_utils.uplink_type != "p2p-vrfs":
-            return
-
-        vrfs = set()
-        for uplink_switch in self.facts.uplink_peers:
-            uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
-            vrfs.update(uplink_switch_facts.only_used_for_peer_facts.local_vrfs_in_use)
-
-        self.facts.uplink_switch_vrfs.extend(natural_sort(vrfs))
-
-    @facts_contributor
     def uplinks(self: FactsStageFourProtocol) -> None:
         """
         Exposed in avd_switch_facts.
@@ -115,10 +98,6 @@ class UplinksMixin(Protocol):
             if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
                 msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'p2p-vrfs' as 'uplink_type'."
                 raise AristaAvdError(msg)
-
-            # Reset the cache of filtered tenants to allow to add in VRFs attracted from the uplink.
-            self.shared_utils.__dict__.pop("filtered_tenants")
-            self.shared_utils.__dict__.pop("vrfs")
 
             get_uplink = self._get_p2p_vrfs_uplink
         elif self.shared_utils.uplink_type == "lan":

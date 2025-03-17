@@ -25,7 +25,7 @@
       "peer_mlag": true,
       "channel_group_id": 1,
       "peer_channel_group_id": 25,
-      "vlans": "105",
+      "vlans": "103,105",
       "structured_config": {}
     },
     {
@@ -39,7 +39,7 @@
       "peer_mlag": true,
       "channel_group_id": 1,
       "peer_channel_group_id": 25,
-      "vlans": "105",
+      "vlans": "103,105",
       "structured_config": {}
     }
   ],
@@ -47,7 +47,7 @@
     "inband-mgmt-parent-dualstack1",
     "inband-mgmt-parent-dualstack2"
   ],
-  "vlans": "105",
+  "vlans": "103,105",
   "local_endpoint_vlans": "105",
   "endpoint_vlans": "105",
   "only_used_for_peer_facts": {

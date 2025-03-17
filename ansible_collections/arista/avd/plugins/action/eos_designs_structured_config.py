@@ -77,7 +77,7 @@ class ActionModule(ActionBase):
         all_facts = AvdSwitchFactsDefaultDict(tmp_path, fabric_hosts)
 
         # TODO: AVD 6.0.0 remove 'switch'
-        task_vars["switch"] = all_facts[hostname]
+        task_vars["switch"] = all_facts[hostname]._as_dict()
 
         # Load validated and coerced inputs from json file.
         inputs_as_dumped_dict = read_json_file(tmp_path / "device_inputs" / f"{hostname}.json", f"AVD device inputs for {hostname}")

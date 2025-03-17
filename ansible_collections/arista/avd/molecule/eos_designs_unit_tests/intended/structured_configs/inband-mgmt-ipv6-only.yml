@@ -63,7 +63,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '106'
+      allowed_vlan: 103,105-106
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:

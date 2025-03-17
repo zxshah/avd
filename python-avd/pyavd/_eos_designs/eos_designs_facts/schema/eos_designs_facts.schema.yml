@@ -325,10 +325,10 @@ keys:
       type: str
   vlans:
     type: str
-    required: true
+    default: ""
     description: |-
       Compressed list of vlans to be defined on this switch after filtering network services.
-      The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+      The filter is based on filter.tenants, filter.tags but not filter.only_vlans_in_use.
 
       Ex. "1-100, 201-202"
 
@@ -404,6 +404,9 @@ keys:
         type: list
         items:
           type: str
+      allowed_vlans:
+        type: str
+        description: Range of vlans allowed for this device. Not considering what is actually being used.
   downlink_switches:
     type: list
     items:

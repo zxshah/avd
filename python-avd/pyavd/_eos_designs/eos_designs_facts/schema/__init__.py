@@ -902,6 +902,7 @@ class EosDesignsFacts(AvdModel):
             "underlay_multicast": {"type": bool},
             "overlay_rd_type_admin_subfield": {"type": str},
             "default_downlink_interfaces": {"type": DefaultDownlinkInterfaces},
+            "allowed_vlans": {"type": str},
         }
         mlag: bool
         uplink_type: Literal["p2p", "port-channel", "p2p-vrfs", "lan"] | None
@@ -918,6 +919,8 @@ class EosDesignsFacts(AvdModel):
         overlay_rd_type_admin_subfield: str | None
         default_downlink_interfaces: DefaultDownlinkInterfaces
         """Subclass of AvdList with `str` items."""
+        allowed_vlans: str | None
+        """Range of vlans allowed for this device. Not considering what is actually being used."""
 
         if TYPE_CHECKING:
 
@@ -932,6 +935,7 @@ class EosDesignsFacts(AvdModel):
                 underlay_multicast: bool | None | UndefinedType = Undefined,
                 overlay_rd_type_admin_subfield: str | None | UndefinedType = Undefined,
                 default_downlink_interfaces: DefaultDownlinkInterfaces | UndefinedType = Undefined,
+                allowed_vlans: str | None | UndefinedType = Undefined,
             ) -> None:
                 """
                 OnlyUsedForPeerFacts.
@@ -951,6 +955,7 @@ class EosDesignsFacts(AvdModel):
                     underlay_multicast: underlay_multicast
                     overlay_rd_type_admin_subfield: overlay_rd_type_admin_subfield
                     default_downlink_interfaces: Subclass of AvdList with `str` items.
+                    allowed_vlans: Range of vlans allowed for this device. Not considering what is actually being used.
 
                 """
 
@@ -1035,7 +1040,7 @@ class EosDesignsFacts(AvdModel):
         "uplinks": {"type": Uplinks},
         "uplink_peers": {"type": UplinkPeers},
         "uplink_switch_vrfs": {"type": UplinkSwitchVrfs},
-        "vlans": {"type": str},
+        "vlans": {"type": str, "default": ""},
         "local_endpoint_vlans": {"type": str},
         "endpoint_vlans": {"type": str},
         "local_endpoint_trunk_groups": {"type": LocalEndpointTrunkGroups},
@@ -1164,14 +1169,14 @@ class EosDesignsFacts(AvdModel):
     """
     Compressed list of vlans to be defined on this switch after filtering network services.
     The filter
-    is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+    is based on filter.tenants, filter.tags but not filter.only_vlans_in_use.
 
     Ex. "1-100, 201-202"
+    This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+    This is
+    to ensure that native vlan is not necessarily permitted on the uplink trunk.
 
-    This
-    excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
-    This is to
-    ensure that native vlan is not necessarily permitted on the uplink trunk.
+    Default value: `""`
     """
     local_endpoint_vlans: str | None
     """Compressed list of vlans in use by endpoints connected to this switch."""
@@ -1372,14 +1377,12 @@ class EosDesignsFacts(AvdModel):
                 vlans:
                    Compressed list of vlans to be defined on this switch after filtering network services.
                    The filter
-                   is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
+                   is based on filter.tenants, filter.tags but not filter.only_vlans_in_use.
 
                    Ex. "1-100, 201-202"
-
-                   This
-                   excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
-                   This is to
-                   ensure that native vlan is not necessarily permitted on the uplink trunk.
+                   This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.
+                   This is
+                   to ensure that native vlan is not necessarily permitted on the uplink trunk.
                 local_endpoint_vlans: Compressed list of vlans in use by endpoints connected to this switch.
                 endpoint_vlans:
                    Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG

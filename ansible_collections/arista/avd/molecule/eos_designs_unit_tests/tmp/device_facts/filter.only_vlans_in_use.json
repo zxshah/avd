@@ -16,7 +16,7 @@
   ],
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "vlans": "1-2",
+  "vlans": "1-4",
   "local_endpoint_vlans": "1-2",
   "endpoint_vlans": "1-2",
   "only_used_for_peer_facts": {

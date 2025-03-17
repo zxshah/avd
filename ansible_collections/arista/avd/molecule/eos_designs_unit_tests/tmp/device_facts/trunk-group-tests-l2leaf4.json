@@ -34,7 +34,7 @@
       "peer_trunk_groups": [
         "trunk-group-tests-l2leaf4"
       ],
-      "vlans": "none",
+      "vlans": "100,110,200,210,300-301,310-311,398-399",
       "structured_config": {}
     },
     {
@@ -54,7 +54,7 @@
       "peer_trunk_groups": [
         "trunk-group-tests-l2leaf4"
       ],
-      "vlans": "none",
+      "vlans": "100,110,200,210,300-301,310-311,398-399",
       "structured_config": {}
     }
   ],
@@ -62,7 +62,7 @@
     "trunk-group-tests-l3leaf2a",
     "trunk-group-tests-l3leaf2b"
   ],
-  "vlans": "200,210",
+  "vlans": "100,110,200,200,210,210,300-301,310-311,398-399",
   "local_endpoint_vlans": "1",
   "endpoint_vlans": "1",
   "local_endpoint_trunk_groups": [

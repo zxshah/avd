@@ -193,7 +193,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '104'
+      allowed_vlan: 103-105
 - name: Port-Channel25
   description: INBAND-MGMT-DUALSTACK-IPS_Po1
   shutdown: false
@@ -204,7 +204,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '105'
+      allowed_vlan: 103,105
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

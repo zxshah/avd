@@ -55,7 +55,8 @@
     "mlag": false,
     "uplink_type": "lan",
     "local_vrfs_in_use": [
-      "default"
+      "default",
+      "VRF1"
     ],
     "underlay_multicast": false
   }

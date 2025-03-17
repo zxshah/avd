@@ -40,7 +40,7 @@
   "vtep_ip": "10.0.254.5",
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
-  "vlans": "",
+  "vlans": "103,105",
   "local_endpoint_vlans": "",
   "endpoint_vlans": "",
   "only_used_for_peer_facts": {

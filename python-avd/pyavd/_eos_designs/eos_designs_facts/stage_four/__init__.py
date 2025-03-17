@@ -58,10 +58,16 @@ class FactsStageFour(FactsGenerator, FactsStageFourProtocol):
     """
 
     def __init__(
-        self, hostvars: Mapping, inputs: EosDesigns, facts: EosDesignsFacts, shared_utils: SharedUtilsProtocol, peer_facts: dict[str, EosDesignsFacts]
+        self,
+        hostname: str,
+        hostvars: Mapping,
+        inputs: EosDesigns,
+        facts: EosDesignsFacts,
+        shared_utils: SharedUtilsProtocol,
+        peer_facts: dict[str, EosDesignsFacts],
     ) -> None:
         self.peer_facts = peer_facts
-        super().__init__(hostvars, inputs, facts, shared_utils)
+        super().__init__(hostname, hostvars, inputs, facts, shared_utils)
 
         if self.shared_utils.uplink_type == "p2p-vrfs":
             # Reset the cache of filtered tenants to allow to add in VRFs attracted from the uplink.

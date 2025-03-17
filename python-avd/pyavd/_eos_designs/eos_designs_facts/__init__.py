@@ -74,7 +74,7 @@ def get_facts(
         all_facts[hostname] = EosDesignsFacts()
 
         # Generate Stage One facts - TODO: evaluate if it is worth doing this with multiprocessing.
-        FactsStageOne(hostvars=hostvars, inputs=inputs, facts=all_facts[hostname], shared_utils=shared_utils).render_facts()
+        FactsStageOne(hostname=hostname, hostvars=hostvars, inputs=inputs, facts=all_facts[hostname], shared_utils=shared_utils).render_facts()
 
         all_devices_data[hostname] = OneDeviceData(
             facts=all_facts[hostname],
@@ -84,9 +84,10 @@ def get_facts(
         )
 
     # TODO: Rename things.
-    for device_data in all_devices_data.values():
+    for hostname, device_data in all_devices_data.items():
         # Generate Stage OneAndAHalf facts - TODO: evaluate if it is worth doing this with multiprocessing.
         FactsStageOneAndAHalf(
+            hostname=hostname,
             hostvars=device_data.hostvars,
             inputs=device_data.inputs,
             facts=device_data.facts,
@@ -94,9 +95,10 @@ def get_facts(
             peer_facts=all_facts,
         ).render_facts()
 
-    for device_data in all_devices_data.values():
+    for hostname, device_data in all_devices_data.items():
         # Generate Stage Three facts - NOTE: Not possible to do with multiprocessing.
         FactsStageThree(
+            hostname=hostname,
             hostvars=device_data.hostvars,
             inputs=device_data.inputs,
             facts=device_data.facts,
@@ -104,9 +106,10 @@ def get_facts(
             peer_facts=all_facts,
         ).render_facts()
 
-    for device_data in all_devices_data.values():
+    for hostname, device_data in all_devices_data.items():
         # Generate Stage Two facts - TODO: evaluate if it is worth doing this with multiprocessing.
         FactsStageTwo(
+            hostname=hostname,
             hostvars=device_data.hostvars,
             inputs=device_data.inputs,
             facts=device_data.facts,
@@ -114,9 +117,10 @@ def get_facts(
             peer_facts=all_facts,
         ).render_facts()
 
-    for device_data in all_devices_data.values():
+    for hostname, device_data in all_devices_data.items():
         # Generate Stage Four facts - TODO: evaluate if it is worth doing this with multiprocessing.
         FactsStageFour(
+            hostname=hostname,
             hostvars=device_data.hostvars,
             inputs=device_data.inputs,
             facts=device_data.facts,

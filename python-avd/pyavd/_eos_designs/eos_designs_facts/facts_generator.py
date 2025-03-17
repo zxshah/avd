@@ -3,13 +3,13 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from collections.abc import Mapping
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.avdfacts import AvdFacts, AvdFactsProtocol
+from pyavd._errors import AristaAvdError
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Callable, Mapping
     from typing import TypeVar
 
     from typing_extensions import Self
@@ -36,6 +36,7 @@ class FactsGeneratorProtocol(AvdFactsProtocol, Protocol):
     returning a dict.
     """
 
+    hostname: str
     facts: EosDesignsFacts
 
     def render_facts(self) -> None:
@@ -44,8 +45,11 @@ class FactsGeneratorProtocol(AvdFactsProtocol, Protocol):
 
         Each method will in-place update self.facts.
         """
-        for method in self.facts_methods():
-            method(self)
+        try:
+            for method in self.facts_methods():
+                method(self)
+        except AristaAvdError as e:
+            e.message = f"{e.message.removesuffix('.')} for host {self.hostname}."
 
     @classmethod
     def facts_methods(cls) -> list[Callable[[Self], None]]:
@@ -64,10 +68,12 @@ class FactsGenerator(AvdFacts, FactsGeneratorProtocol):
 
     def __init__(
         self,
+        hostname: str,
         hostvars: Mapping,
         inputs: EosDesigns,
         facts: EosDesignsFacts,
         shared_utils: SharedUtilsProtocol,
     ) -> None:
+        self.hostname = hostname
         self.facts = facts
         super().__init__(hostvars=hostvars, inputs=inputs, shared_utils=shared_utils)

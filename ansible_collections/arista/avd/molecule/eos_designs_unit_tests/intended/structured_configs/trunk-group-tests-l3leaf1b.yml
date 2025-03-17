@@ -505,6 +505,7 @@ vlans:
   - trunk-group-tests-l2leaf3
   - TRUNK_GROUP_TESTS_L2LEAF1
   - CUSTOM_MLAG_TG_NAME
+  - TG_300
   tenant: TRUNK_GROUP_TESTS
 - id: 310
   name: l2vlan310_with_trunk_groups
@@ -512,6 +513,7 @@ vlans:
   - trunk-group-tests-l2leaf3
   - TRUNK_GROUP_TESTS_L2LEAF1
   - CUSTOM_MLAG_TG_NAME
+  - TG_300
   tenant: TRUNK_GROUP_TESTS
 - id: 398
   name: svi398_without_trunk_groups
@@ -532,12 +534,14 @@ vlans:
   trunk_groups:
   - trunk-group-tests-l2leaf3
   - CUSTOM_MLAG_TG_NAME
+  - TG_300
   tenant: TRUNK_GROUP_TESTS
 - id: 311
   name: l2vlan310_with_trunk_groups_only_l3leaf
   trunk_groups:
   - trunk-group-tests-l2leaf3
   - CUSTOM_MLAG_TG_NAME
+  - TG_300
   tenant: TRUNK_GROUP_TESTS
 - id: 3099
   name: MLAG_L3_VRF_TG_100

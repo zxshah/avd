@@ -57,24 +57,13 @@ class VlansMixin(Protocol):
         return "all" in self.shared_utils.filter_tags or bool(set(vlan.tags).intersection(self.shared_utils.filter_tags))
 
     @facts_contributor
-    def local_endpoint_vlans(self: FactsStageOneProtocol) -> None:
-        if self.shared_utils.node_config.filter.only_vlans_in_use:
-            self.facts.local_endpoint_vlans = list_compress(list(self._local_endpoint_vlans))
+    def local_endpoint_vlans_and_local_endpoint_trunk_groups(self: FactsStageOneProtocol) -> None:
+        if not (self.shared_utils.node_config.filter.only_vlans_in_use or self.shared_utils.only_local_vlan_trunk_groups):
+            return
 
-    @facts_contributor
-    def local_endpoint_trunk_groups(self: FactsStageOneProtocol) -> None:
-        if self.shared_utils.node_config.filter.only_vlans_in_use:
-            self.facts.local_endpoint_trunk_groups.extend(natural_sort(self._local_endpoint_trunk_groups))
-
-    @cached_property
-    def _local_endpoint_vlans(self: FactsStageOneProtocol) -> set[int]:
-        vlans, _trunk_groups = self._local_endpoint_vlans_and_trunk_groups
-        return vlans
-
-    @cached_property
-    def _local_endpoint_trunk_groups(self: FactsStageOneProtocol) -> set[str]:
-        _vlans, trunk_groups = self._local_endpoint_vlans_and_trunk_groups
-        return trunk_groups
+        local_endpoint_vlans, local_endpoint_trunk_groups = self._local_endpoint_vlans_and_trunk_groups
+        self.facts.local_endpoint_vlans = list_compress(list(local_endpoint_vlans))
+        self.facts.local_endpoint_trunk_groups.extend(natural_sort(local_endpoint_trunk_groups))
 
     @cached_property
     def _local_endpoint_vlans_and_trunk_groups(self: FactsStageOneProtocol) -> tuple[set[int], set[str]]:

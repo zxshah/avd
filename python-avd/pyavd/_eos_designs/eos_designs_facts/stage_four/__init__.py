@@ -3,12 +3,11 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.eos_designs_facts.facts_generator import FactsGenerator, FactsGeneratorProtocol, facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
-from pyavd.j2filters import natural_sort, range_expand
+from pyavd.j2filters import natural_sort
 
 from .uplinks import UplinksMixin
 
@@ -22,15 +21,6 @@ if TYPE_CHECKING:
 
 class FactsStageFourProtocol(UplinksMixin, FactsGeneratorProtocol, Protocol):
     peer_facts: dict[str, EosDesignsFacts]
-
-    @cached_property
-    def _vlans(self: FactsStageFourProtocol) -> set[int]:
-        """
-        Decompressed list of vlans to be defined on this switch after filtering network services.
-
-        The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
-        """
-        return set(map(int, range_expand(self.facts.vlans)))
 
     @facts_contributor
     def uplink_switch_vrfs(self: FactsStageFourProtocol) -> None:

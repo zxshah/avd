@@ -43,13 +43,15 @@ class VlansMixin(Protocol):
         return vlans, trunk_groups
 
     @facts_contributor
-    def endpoint_vlans_trunk_groups(self: FactsStageTwoProtocol) -> None:
+    def endpoint_vlans_and_endpoint_trunk_groups(self: FactsStageTwoProtocol) -> None:
         """
         Set facts for vlans and trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer.
 
-        Used for filtering which vlans we configure on the device. This is a superset of local_endpoint_trunk_groups.
+        Used for filtering which vlans we configure on the device. These are supersets of local_endpoint_vlans and local_endpoint_trunk_groups.
         """
-        if not self.shared_utils.any_network_services or not self.shared_utils.node_config.filter.only_vlans_in_use:
+        if not self.shared_utils.any_network_services or not (
+            self.shared_utils.node_config.filter.only_vlans_in_use or self.shared_utils.only_local_vlan_trunk_groups
+        ):
             return
 
         endpoint_vlans, endpoint_trunk_groups = self.get_endpoint_vlans_and_trunk_groups_for_one_peer(

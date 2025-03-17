@@ -40,6 +40,16 @@
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
   "vlans": "100,110,200,210,300-301,310-311,398-399",
+  "local_endpoint_vlans": "1",
+  "endpoint_vlans": "1",
+  "local_endpoint_trunk_groups": [
+    "TG_300",
+    "TG_NOT_MATCHING_ANY_VLANS"
+  ],
+  "endpoint_trunk_groups": [
+    "TG_300",
+    "TG_NOT_MATCHING_ANY_VLANS"
+  ],
   "only_used_for_peer_facts": {
     "mlag": true,
     "local_vrfs_in_use": [

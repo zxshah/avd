@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_designs.eos_designs_facts.facts_generator import facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._errors import AristaAvdError
-from pyavd.j2filters import list_compress, range_expand
+from pyavd.j2filters import list_compress
 
 if TYPE_CHECKING:
     from . import FactsStageFourProtocol
@@ -237,7 +237,7 @@ class UplinksMixin(Protocol):
             else:
                 uplink.peer_trunk_groups.append_unique(self.shared_utils.hostname)
 
-        uplink_vlans = set(self._vlans).intersection(set(map(int, range_expand(uplink_switch_facts.vlans))))
+        uplink_vlans = self.shared_utils.accepted_vlans.copy()
 
         if self.shared_utils.configure_inband_mgmt or self.shared_utils.configure_inband_mgmt_ipv6:
             # Always add inband_mgmt_vlan even if the uplink switch does not have this vlan defined

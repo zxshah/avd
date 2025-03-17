@@ -133,9 +133,10 @@ class FilteredTenantsMixin(Protocol):
         For anything else return the expanded vlans from this switch.
         """
         accepted_vlans = set(map(int, range_expand(self.switch_facts.vlans)))
-        if self.uplink_type != "port-channel":
+        if self.uplink_type not in ["port-channel", "lan"]:
             return accepted_vlans
 
+        # Remove any VLANs not allowed on both ends.
         for uplink_switch in unique(self.uplink_switches):
             if uplink_switch_facts := self.get_peer_facts(uplink_switch, required=False):
                 accepted_vlans.intersection_update(map(int, range_expand(uplink_switch_facts.vlans)))
@@ -166,7 +167,7 @@ class FilteredTenantsMixin(Protocol):
         - The VRF is part of a tenant set under 'always_include_vrfs_in_tenants'
         - 'always_include_vrfs_in_tenants' is set to ['all']
         - This device is using 'p2p-vrfs' as uplink type and the VRF present on the uplink switch.
-          This check only works during structured config phase, since the fact is set in the last stage of facts.
+          This check only works during FactsStageFour or in structured config phase, since the fact is set first in FactsStageFour.
         """
         if "all" in self.node_config.filter.always_include_vrfs_in_tenants or tenant_name in self.node_config.filter.always_include_vrfs_in_tenants:
             return True

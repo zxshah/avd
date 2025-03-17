@@ -204,7 +204,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if not prefix_set_name:
                     continue
 
-                elif prefix_set_name not in self.inputs.application_classification.field_sets.ipv4_prefixes:
+                if prefix_set_name not in self.inputs.application_classification.field_sets.ipv4_prefixes:
                     msg = (
                         f"The IPv4 prefix field set {prefix_set_name} used in the application {application} "
                         "is undefined in 'application_classification.fields_sets.ipv4_prefixes'."
@@ -222,7 +222,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             ):
                 if not port_set_name:
                     continue
-                elif port_set_name not in self.inputs.application_classification.field_sets.l4_ports:
+                if port_set_name not in self.inputs.application_classification.field_sets.l4_ports:
                     msg = (
                         f"The L4 Ports field set {port_set_name} used in the application {application} "
                         "is undefined in 'application_classification.fields_sets.l4_ports'."

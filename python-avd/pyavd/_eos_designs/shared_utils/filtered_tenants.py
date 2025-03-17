@@ -106,6 +106,9 @@ class FilteredTenantsMixin(Protocol):
 
         If filter.only_vlans_in_use is True also check if vlan id or trunk group is assigned to connected endpoint.
         """
+        if "all" not in self.filter_tags and not set(vlan.tags).intersection(self.filter_tags):
+            return False
+
         if vlan.id not in self.accepted_vlans:
             return False
 
@@ -122,28 +125,20 @@ class FilteredTenantsMixin(Protocol):
         return bool(self.inputs.enable_trunk_groups and vlan.trunk_groups and endpoint_trunk_groups.intersection(vlan.trunk_groups))
 
     @cached_property
-    def accepted_vlans(self: SharedUtilsProtocol) -> list[int]:
+    def accepted_vlans(self: SharedUtilsProtocol) -> set[int]:
         """
-        The 'vlans' switch fact is a string representing a vlan range (ex. "1-200").
+        Vlans allowed on this device as well as all uplink switches. These are used to further filter allowed vlans.
 
         For l2 switches return intersection of vlans from this switch and vlans from uplink switches.
         For anything else return the expanded vlans from this switch.
         """
-        switch_vlans = self.switch_facts.vlans
-        if not switch_vlans:
-            return []
-        switch_vlans_list = range_expand(switch_vlans)
-        accepted_vlans = [int(vlan) for vlan in switch_vlans_list]
+        accepted_vlans = set(map(int, range_expand(self.switch_facts.vlans)))
         if self.uplink_type != "port-channel":
             return accepted_vlans
 
-        uplink_switches = unique(self.uplink_switches)
-        uplink_switches = [uplink_switch for uplink_switch in uplink_switches if uplink_switch in self.all_fabric_devices]
-        for uplink_switch in uplink_switches:
-            uplink_switch_facts = self.get_peer_facts(uplink_switch)
-            uplink_switch_vlans = set(map(int, range_expand(uplink_switch_facts.vlans)))
-
-            accepted_vlans = [vlan for vlan in accepted_vlans if vlan in uplink_switch_vlans]
+        for uplink_switch in unique(self.uplink_switches):
+            if uplink_switch_facts := self.get_peer_facts(uplink_switch, required=False):
+                accepted_vlans.intersection_update(map(int, range_expand(uplink_switch_facts.vlans)))
 
         return accepted_vlans
 

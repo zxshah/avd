@@ -3,7 +3,6 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.eos_designs_facts.facts_generator import facts_contributor
@@ -43,78 +42,26 @@ class VlansMixin(Protocol):
             trunk_groups.update(downstream_trunk_groups)
         return vlans, trunk_groups
 
-    @cached_property
-    def _mlag_peer_endpoint_vlans_and_trunk_groups(self: FactsStageTwoProtocol) -> tuple[set[int], set[str]]:
-        """
-        Return set of vlans and set of trunk groups used by connected_endpoints on the MLAG peer and it's downstream switches.
-
-        This could differ from local vlans and trunk groups if a connected endpoint or a downstream switch is only connected to one leaf.
-        """
-        if not self.shared_utils.mlag:
-            return set(), set()
-
-        return self.get_endpoint_vlans_and_trunk_groups_for_one_peer(self.shared_utils.mlag_peer, only_port_channel_uplink=False)
-
-    @cached_property
-    def _endpoint_vlans_and_trunk_groups(self: FactsStageTwoProtocol) -> tuple[set[int], set[str]]:
-        """
-        Return set of vlans and set of trunk groups.
-
-        The trunk groups are those used by connected_endpoints on this switch,
-        downstream switches but NOT mlag peer (since we would have circular references then).
-        """
-        if not self.shared_utils.any_network_services:
-            return set(), set()
-
-        return self.get_endpoint_vlans_and_trunk_groups_for_one_peer(self.shared_utils.hostname, only_port_channel_uplink=False)
-
-    @cached_property
-    def _endpoint_vlans(self: FactsStageTwoProtocol) -> set[int]:
-        """
-        Return set of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer.
-
-        Ex: {1, 20, 21, 22, 23} or set().
-        """
-        if not self.shared_utils.node_config.filter.only_vlans_in_use:
-            return set()
-
-        endpoint_vlans, _ = self._endpoint_vlans_and_trunk_groups
-        if not self.shared_utils.mlag:
-            return endpoint_vlans
-
-        mlag_peer_endpoint_vlans, _mlag_peer_endpoint_trunk_groups = self._mlag_peer_endpoint_vlans_and_trunk_groups
-
-        return endpoint_vlans.union(mlag_peer_endpoint_vlans)
-
     @facts_contributor
-    def endpoint_vlans(self: FactsStageTwoProtocol) -> None:
+    def endpoint_vlans_trunk_groups(self: FactsStageTwoProtocol) -> None:
         """
-        Return compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer.
-
-        Ex: "1,20-30" or "".
-        """
-        if self.shared_utils.node_config.filter.only_vlans_in_use:
-            self.facts.endpoint_vlans = list_compress(list(self._endpoint_vlans))
-
-    @cached_property
-    def _endpoint_trunk_groups(self: FactsStageTwoProtocol) -> set[str]:
-        """Return set of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer."""
-        if not self.shared_utils.node_config.filter.only_vlans_in_use:
-            return set()
-
-        _, endpoint_trunk_groups = self._endpoint_vlans_and_trunk_groups
-        if not self.shared_utils.mlag:
-            return endpoint_trunk_groups
-
-        _mlag_peer_endpoint_vlans, mlag_peer_endpoint_trunk_groups = self._mlag_peer_endpoint_vlans_and_trunk_groups
-
-        return endpoint_trunk_groups.union(mlag_peer_endpoint_trunk_groups)
-
-    @facts_contributor
-    def endpoint_trunk_groups(self: FactsStageTwoProtocol) -> None:
-        """
-        Return list of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer.
+        Set facts for vlans and trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer.
 
         Used for filtering which vlans we configure on the device. This is a superset of local_endpoint_trunk_groups.
         """
-        self.facts.endpoint_trunk_groups.extend(natural_sort(self._endpoint_trunk_groups))
+        if not self.shared_utils.any_network_services or not self.shared_utils.node_config.filter.only_vlans_in_use:
+            return
+
+        endpoint_vlans, endpoint_trunk_groups = self.get_endpoint_vlans_and_trunk_groups_for_one_peer(
+            self.shared_utils.hostname, only_port_channel_uplink=False
+        )
+        if self.shared_utils.mlag:
+            mlag_peer_endpoint_vlans, mlag_peer_endpoint_trunk_groups = self.get_endpoint_vlans_and_trunk_groups_for_one_peer(
+                self.shared_utils.mlag_peer, only_port_channel_uplink=False
+            )
+            # Using union instead of update to avoid changing the cached property
+            endpoint_vlans = endpoint_vlans.union(mlag_peer_endpoint_vlans)
+            endpoint_trunk_groups = endpoint_trunk_groups.union(mlag_peer_endpoint_trunk_groups)
+
+        self.facts.endpoint_vlans = list_compress(list(endpoint_vlans))
+        self.facts.endpoint_trunk_groups.extend(natural_sort(endpoint_trunk_groups))

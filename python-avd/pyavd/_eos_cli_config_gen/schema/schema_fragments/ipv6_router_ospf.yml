@@ -14,7 +14,7 @@ keys:
         type: list
         primary_key: id
         unique_keys:
-        - vrf
+          - vrf
         items:
           type: dict
           keys:

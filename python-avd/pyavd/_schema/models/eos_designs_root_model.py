@@ -7,6 +7,8 @@ from collections import ChainMap
 from collections.abc import Iterator, Mapping
 from typing import TYPE_CHECKING, TypeVar
 
+from typing_extensions import Self
+
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._schema.store import create_store
 from pyavd._schema.utils import get_instance_with_defaults
@@ -25,7 +27,7 @@ SKIP_KEYS = ["custom_structured_configuration_list_merge", "custom_structured_co
 
 class EosDesignsRootModel(AvdModel):
     @classmethod
-    def _from_dict(cls: type[T], data: Mapping, keep_extra_keys: bool = False, load_custom_structured_config: bool = True) -> T:
+    def _from_dict(cls, data: Mapping, keep_extra_keys: bool = False, load_custom_structured_config: bool = True) -> Self:
         """
         Returns a new instance loaded with the data from the given dict.
 

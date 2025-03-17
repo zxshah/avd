@@ -8,13 +8,14 @@ from re import findall
 from typing import TYPE_CHECKING, Literal, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
 from pyavd._utils import default, get, get_ip_from_ip_prefix, strip_empties_from_dict
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
+    from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
+
     from . import SharedUtilsProtocol
 
 
@@ -200,17 +201,13 @@ class WanMixin(Protocol):
         return list(self.wan_local_path_groups.keys())
 
     @cached_property
-    def wan_ha_peer_path_groups(self: SharedUtilsProtocol) -> EosDesignsFacts.WanPathGroups:
-        """List of WAN HA peer path-groups coming from facts."""
-        if not self.is_wan_router or not self.wan_ha:
-            return EosDesignsFacts.WanPathGroups()
-        peer_facts = self.get_peer_facts(self.wan_ha_peer)
-        return peer_facts.wan_path_groups
-
-    @cached_property
     def wan_ha_peer_path_group_names(self: SharedUtilsProtocol) -> list[str]:
         """Return a list of wan_ha_peer_path_group names."""
-        return [path_group.name for path_group in self.wan_ha_peer_path_groups]
+        if not self.is_wan_router or not self.wan_ha:
+            return []
+
+        peer_facts = self.get_peer_facts(self.wan_ha_peer)
+        return [path_group.name for path_group in peer_facts.wan_path_groups]
 
     def get_public_ip_for_wan_interface(
         self: SharedUtilsProtocol,

@@ -137,11 +137,11 @@ router bgp {{ router_bgp.as }}
 {%         if peer_group.remote_as is arista.avd.defined %}
    neighbor {{ peer_group.name }} remote-as {{ peer_group.remote_as }}
 {%         endif %}
-{%         if peer_group.next_hop_peer is arista.avd.defined(true) %}
-   neighbor {{ peer_group.name }} next-hop-peer
-{%         endif %}
 {%         if peer_group.next_hop_self is arista.avd.defined(true) %}
    neighbor {{ peer_group.name }} next-hop-self
+{%         endif %}
+{%         if peer_group.next_hop_peer is arista.avd.defined(true) %}
+   neighbor {{ peer_group.name }} next-hop-peer
 {%         endif %}
 {%         if peer_group.next_hop_unchanged is arista.avd.defined(true) %}
    neighbor {{ peer_group.name }} next-hop-unchanged
@@ -306,11 +306,11 @@ router bgp {{ router_bgp.as }}
 {%         if neighbor.remote_as is arista.avd.defined %}
    neighbor {{ neighbor.ip_address }} remote-as {{ neighbor.remote_as }}
 {%         endif %}
-{%         if neighbor.next_hop_peer is arista.avd.defined(true) %}
-   neighbor {{ neighbor.ip_address }} next-hop-peer
-{%         endif %}
 {%         if neighbor.next_hop_self is arista.avd.defined(true) %}
    neighbor {{ neighbor.ip_address }} next-hop-self
+{%         endif %}
+{%         if neighbor.next_hop_peer is arista.avd.defined(true) %}
+   neighbor {{ neighbor.ip_address }} next-hop-peer
 {%         endif %}
 {%         if neighbor.shutdown is arista.avd.defined(true) %}
    neighbor {{ neighbor.ip_address }} shutdown
@@ -2760,11 +2760,11 @@ router bgp {{ router_bgp.as }}
 {%             if neighbor.remote_as is arista.avd.defined %}
       neighbor {{ neighbor.ip_address }} remote-as {{ neighbor.remote_as }}
 {%             endif %}
-{%             if neighbor.next_hop_peer is arista.avd.defined(true) %}
-      neighbor {{ neighbor.ip_address }} next-hop-peer
-{%             endif %}
 {%             if neighbor.next_hop_self is arista.avd.defined(true) %}
       neighbor {{ neighbor.ip_address }} next-hop-self
+{%             endif %}
+{%             if neighbor.next_hop_peer is arista.avd.defined(true) %}
+      neighbor {{ neighbor.ip_address }} next-hop-peer
 {%             endif %}
 {%             if neighbor.shutdown is arista.avd.defined(true) %}
       neighbor {{ neighbor.ip_address }} shutdown

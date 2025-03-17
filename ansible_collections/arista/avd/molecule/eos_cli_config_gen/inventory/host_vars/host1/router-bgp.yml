@@ -1228,6 +1228,7 @@ router_bgp:
       remote_as: 1
       shutdown: false
       description: TEST
+      next_hop_peer: true
     - ip_address: 192.168.251.1
       shutdown: true
     - ip_address: 192.168.251.2

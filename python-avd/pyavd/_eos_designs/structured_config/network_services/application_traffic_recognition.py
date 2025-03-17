@@ -174,27 +174,26 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         for application_profile in atr.application_profiles:
             for category in application_profile.categories:
-                if category.name and category.name not in self.inputs.application_classification.categories:
+                if category.name not in self.inputs.application_classification.categories:
                     msg = (
                         f"The application profile {application_profile.name} uses the category {category.name} "
                         "undefined in 'application_classification.categories'."
                     )
                     raise AristaAvdInvalidInputsError(msg)
 
-                if category.name:
-                    category_item = self.inputs.application_classification.categories[category.name]
-                    atr.categories.append(category_item)
-                    self.structured_config.application_traffic_recognition.categories.extend(atr.categories)
+                category_item = self.inputs.application_classification.categories[category.name]
+                atr.categories.append(category_item)
+                self.structured_config.application_traffic_recognition.categories.extend(atr.categories)
             # Applications in application profiles
             for application in application_profile.applications:
-                if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
+                if application.name in self.inputs.application_classification.applications.ipv4_applications:
                     application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
                     atr.applications.ipv4_applications.append(application_item)
 
         # Applications in categories
         for category in atr.categories:
             for application in category.applications:
-                if application.name and application.name in self.inputs.application_classification.applications.ipv4_applications:
+                if application.name in self.inputs.application_classification.applications.ipv4_applications:
                     application_item = self.inputs.application_classification.applications.ipv4_applications[application.name]
                     atr.applications.ipv4_applications.append(application_item)
 
@@ -202,15 +201,18 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         for application in atr.applications.ipv4_applications:
             for prefix_set_name in (application.src_prefix_set_name, application.dest_prefix_set_name):
-                if prefix_set_name and prefix_set_name not in self.inputs.application_classification.field_sets.ipv4_prefixes:
+                if not prefix_set_name:
+                    continue
+
+                elif prefix_set_name not in self.inputs.application_classification.field_sets.ipv4_prefixes:
                     msg = (
                         f"The IPv4 prefix field set {prefix_set_name} used in the application {application} "
                         "is undefined in 'application_classification.fields_sets.ipv4_prefixes'."
                     )
                     raise AristaAvdInvalidInputsError(msg)
-                if prefix_set_name:
-                    ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]
-                    atr.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
+
+                ipv4_prefix_item = self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name]
+                atr.field_sets.ipv4_prefixes.append(ipv4_prefix_item)
 
             for port_set_name in (
                 application.udp_src_port_set_name,
@@ -218,16 +220,17 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 application.tcp_src_port_set_name,
                 application.tcp_dest_port_set_name,
             ):
-                if port_set_name and port_set_name not in self.inputs.application_classification.field_sets.l4_ports:
+                if not port_set_name:
+                    continue
+                elif port_set_name not in self.inputs.application_classification.field_sets.l4_ports:
                     msg = (
                         f"The L4 Ports field set {port_set_name} used in the application {application} "
                         "is undefined in 'application_classification.fields_sets.l4_ports'."
                     )
                     raise AristaAvdInvalidInputsError(msg)
 
-                if port_set_name:
-                    l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]
-                    atr.field_sets.l4_ports.append(l4_port)
+                l4_port = self.inputs.application_classification.field_sets.l4_ports[port_set_name]
+                atr.field_sets.l4_ports.append(l4_port)
 
         self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.extend(atr.field_sets.ipv4_prefixes)
         self.structured_config.application_traffic_recognition.field_sets.l4_ports.extend(atr.field_sets.l4_ports)

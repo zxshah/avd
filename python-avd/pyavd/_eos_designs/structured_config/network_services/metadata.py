@@ -75,9 +75,7 @@ class MetadataMixin(Protocol):
         categories = atr.categories
         for profile in atr.application_profiles:
             application_profile = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem(name=profile.name)
-            protocols = profile.application_transports
-            if protocols:
-                application_profile.transport_protocols.extend(protocols)
+            application_profile.transport_protocols.extend(profile.application_transports)
             for application in profile.applications:
                 if application.name not in user_defined_app_names:
                     services = application.service or []

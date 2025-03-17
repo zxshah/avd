@@ -82,7 +82,11 @@ class UplinksMixin(Protocol):
 
     @facts_contributor
     def uplink_switch_vrfs(self: FactsStageFourProtocol) -> None:
-        """Return the list of VRF names present on uplink switches."""
+        """
+        Return the list of VRF names present on uplink switches.
+
+        NOTE: This must be above the `uplinks` to ensure the fact has been set before filtered_tenants are parsed again.
+        """
         if self.shared_utils.uplink_type != "p2p-vrfs":
             return
 
@@ -111,6 +115,11 @@ class UplinksMixin(Protocol):
             if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:
                 msg = "'underlay_router' and 'network_services.l3' must be 'true' for the node_type_key when using 'p2p-vrfs' as 'uplink_type'."
                 raise AristaAvdError(msg)
+
+            # Reset the cache of filtered tenants to allow to add in VRFs attracted from the uplink.
+            self.shared_utils.__dict__.pop("filtered_tenants")
+            self.shared_utils.__dict__.pop("vrfs")
+
             get_uplink = self._get_p2p_vrfs_uplink
         elif self.shared_utils.uplink_type == "lan":
             if self.shared_utils.network_services_l3 is False or self.shared_utils.underlay_router is False:

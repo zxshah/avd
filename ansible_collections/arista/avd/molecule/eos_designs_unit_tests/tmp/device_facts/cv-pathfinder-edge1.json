@@ -53,6 +53,16 @@
           "ip_address": "172.17.0.3",
           "peer_ip_address": "172.17.0.2",
           "structured_config": {}
+        },
+        {
+          "interface": "Ethernet52.666",
+          "peer_interface": "Ethernet2.666",
+          "vrf": "ATTRACTED-VRF-FROM-UPLINK",
+          "encapsulation_dot1q_vlan": 666,
+          "prefix_length": 31,
+          "ip_address": "172.17.0.3",
+          "peer_ip_address": "172.17.0.2",
+          "structured_config": {}
         }
       ]
     }

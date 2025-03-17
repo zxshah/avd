@@ -53,6 +53,16 @@
           "ip_address": "172.17.0.9",
           "peer_ip_address": "172.17.0.8",
           "structured_config": {}
+        },
+        {
+          "interface": "Ethernet52.666",
+          "peer_interface": "Ethernet2.666",
+          "vrf": "ATTRACTED-VRF-FROM-UPLINK",
+          "encapsulation_dot1q_vlan": 666,
+          "prefix_length": 31,
+          "ip_address": "172.17.0.9",
+          "peer_ip_address": "172.17.0.8",
+          "structured_config": {}
         }
       ]
     },
@@ -85,6 +95,16 @@
           "peer_interface": "Ethernet2.142",
           "vrf": "PROD",
           "encapsulation_dot1q_vlan": 142,
+          "prefix_length": 31,
+          "ip_address": "172.17.0.11",
+          "peer_ip_address": "172.17.0.10",
+          "structured_config": {}
+        },
+        {
+          "interface": "Ethernet53.666",
+          "peer_interface": "Ethernet2.666",
+          "vrf": "ATTRACTED-VRF-FROM-UPLINK",
+          "encapsulation_dot1q_vlan": 666,
           "prefix_length": 31,
           "ip_address": "172.17.0.11",
           "peer_ip_address": "172.17.0.10",

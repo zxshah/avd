@@ -116,6 +116,17 @@ ethernet_interfaces:
   peer: site-ha-enabled-leaf1
   peer_interface: Ethernet1.142
   peer_type: l3leaf
+- name: Ethernet52.666
+  description: P2P_site-ha-enabled-leaf1_Ethernet1.666_VRF_ATTRACTED-VRF-FROM-UPLINK
+  shutdown: false
+  mtu: 9214
+  vrf: ATTRACTED-VRF-FROM-UPLINK
+  encapsulation_dot1q:
+    vlan: 666
+  ip_address: 172.17.0.1/31
+  peer: site-ha-enabled-leaf1
+  peer_interface: Ethernet1.666
+  peer_type: l3leaf
 - name: Ethernet1.42
   description: Comcast
   shutdown: false
@@ -261,6 +272,10 @@ metadata:
       - name: Type
         value: lan
     - interface: Ethernet52.142
+      tags:
+      - name: Type
+        value: lan
+    - interface: Ethernet52.666
       tags:
       - name: Type
         value: lan
@@ -659,6 +674,26 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
+  - name: ATTRACTED-VRF-FROM-UPLINK
+    rd: 192.168.43.1:666
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - 666:666
+      export:
+      - address_family: evpn
+        route_targets:
+        - 666:666
+    router_id: 192.168.43.1
+    neighbors:
+    - ip_address: 172.17.0.0
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65199'
+      description: site-ha-enabled-leaf1_Ethernet1.666_vrf_ATTRACTED-VRF-FROM-UPLINK
+    redistribute:
+      connected:
+        enabled: true
   - name: default
     rd: 192.168.43.1:1
     route_targets:
@@ -687,21 +722,6 @@ router_bgp:
       - address_family: evpn
         route_targets:
         - 66:66
-    router_id: 192.168.43.1
-    redistribute:
-      connected:
-        enabled: true
-  - name: ATTRACTED-VRF-FROM-UPLINK
-    rd: 192.168.43.1:666
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - 666:666
-      export:
-      - address_family: evpn
-        route_targets:
-        - 666:666
     router_id: 192.168.43.1
     redistribute:
       connected:

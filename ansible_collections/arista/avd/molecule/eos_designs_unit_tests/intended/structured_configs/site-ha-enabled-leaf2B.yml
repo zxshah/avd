@@ -36,6 +36,17 @@ ethernet_interfaces:
   peer: cv-pathfinder-edge2A
   peer_interface: Ethernet53.142
   peer_type: wan_router
+- name: Ethernet1.666
+  description: P2P_cv-pathfinder-edge2A_Ethernet53.666_VRF_ATTRACTED-VRF-FROM-UPLINK
+  shutdown: false
+  mtu: 9214
+  vrf: ATTRACTED-VRF-FROM-UPLINK
+  encapsulation_dot1q:
+    vlan: 666
+  ip_address: 172.17.0.6/31
+  peer: cv-pathfinder-edge2A
+  peer_interface: Ethernet53.666
+  peer_type: wan_router
 - name: Ethernet2
   description: P2P_cv-pathfinder-edge2B_Ethernet53
   shutdown: false
@@ -67,6 +78,17 @@ ethernet_interfaces:
   ip_address: 172.17.0.10/31
   peer: cv-pathfinder-edge2B
   peer_interface: Ethernet53.142
+  peer_type: wan_router
+- name: Ethernet2.666
+  description: P2P_cv-pathfinder-edge2B_Ethernet53.666_VRF_ATTRACTED-VRF-FROM-UPLINK
+  shutdown: false
+  mtu: 9214
+  vrf: ATTRACTED-VRF-FROM-UPLINK
+  encapsulation_dot1q:
+    vlan: 666
+  ip_address: 172.17.0.10/31
+  peer: cv-pathfinder-edge2B
+  peer_interface: Ethernet53.666
   peer_type: wan_router
 hostname: site-ha-enabled-leaf2B
 ip_igmp_snooping:
@@ -230,17 +252,6 @@ router_bgp:
     redistribute:
       connected:
         enabled: true
-  - name: default
-    rd: 192.168.45.3:1
-    route_targets:
-      import:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
-      export:
-      - address_family: evpn
-        route_targets:
-        - '1:1'
   - name: ATTRACTED-VRF-FROM-UPLINK
     rd: 192.168.45.3:666
     route_targets:
@@ -253,9 +264,29 @@ router_bgp:
         route_targets:
         - 666:666
     router_id: 192.168.45.3
+    neighbors:
+    - ip_address: 172.17.0.7
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge2A_Ethernet53.666_vrf_ATTRACTED-VRF-FROM-UPLINK
+    - ip_address: 172.17.0.11
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65000'
+      description: cv-pathfinder-edge2B_Ethernet53.666_vrf_ATTRACTED-VRF-FROM-UPLINK
     redistribute:
       connected:
         enabled: true
+  - name: default
+    rd: 192.168.45.3:1
+    route_targets:
+      import:
+      - address_family: evpn
+        route_targets:
+        - '1:1'
+      export:
+      - address_family: evpn
+        route_targets:
+        - '1:1'
 service_routing_protocols_model: multi-agent
 transceiver_qsfp_default_mode_4x10: true
 vlan_interfaces:

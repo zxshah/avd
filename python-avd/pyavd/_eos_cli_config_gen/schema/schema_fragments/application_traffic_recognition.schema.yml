@@ -20,7 +20,6 @@ keys:
             name:
               type: str
               description: Category name.
-              required: true
             applications:
               type: list
               description: List of applications.
@@ -30,7 +29,6 @@ keys:
                   name:
                     type: str
                     description: Application name.
-                    required: true
                   service:
                     type: str
                     description: |-
@@ -137,13 +135,13 @@ keys:
             applications:
               type: list
               description: List of applications part of the application profile.
+              primary_key: name
               items:
                 type: dict
                 keys:
                   name:
                     type: str
                     description: Application Name.
-                    required: true
                   service:
                     type: str
                     description: |-
@@ -162,13 +160,13 @@ keys:
             categories:
               type: list
               description: Categories under this application profile.
+              primary_key: name
               items:
                 type: dict
                 keys:
                   name:
                     type: str
                     description: Name of a category.
-                    required: true
                   service:
                     type: str
                     description: |-

@@ -336,9 +336,11 @@ keys:
       This is to ensure that native vlan is not necessarily permitted on the uplink trunk.
   local_endpoint_vlans:
     type: str
+    default: ""
     description: Compressed list of vlans in use by endpoints connected to this switch.
   endpoint_vlans:
     type: str
+    default: ""
     description: Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
   local_endpoint_trunk_groups:
     type: list
@@ -404,9 +406,6 @@ keys:
         type: list
         items:
           type: str
-      allowed_vlans:
-        type: str
-        description: Range of vlans allowed for this device. Not considering what is actually being used.
   downlink_switches:
     type: list
     items:

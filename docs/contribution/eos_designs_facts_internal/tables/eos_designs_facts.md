@@ -127,8 +127,8 @@
     | [<samp>uplink_switch_vrfs</samp>](## "uplink_switch_vrfs") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "uplink_switch_vrfs.[]") | String |  |  |  |  |
     | [<samp>vlans</samp>](## "vlans") | String |  | `` |  | Compressed list of vlans to be defined on this switch after filtering network services.<br>The filter is based on filter.tenants, filter.tags but not filter.only_vlans_in_use.<br><br>Ex. "1-100, 201-202"<br><br>This excludes the optional "uplink_native_vlan" if that vlan is not used for anything else.<br>This is to ensure that native vlan is not necessarily permitted on the uplink trunk. |
-    | [<samp>local_endpoint_vlans</samp>](## "local_endpoint_vlans") | String |  |  |  | Compressed list of vlans in use by endpoints connected to this switch. |
-    | [<samp>endpoint_vlans</samp>](## "endpoint_vlans") | String |  |  |  | Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches. |
+    | [<samp>local_endpoint_vlans</samp>](## "local_endpoint_vlans") | String |  | `` |  | Compressed list of vlans in use by endpoints connected to this switch. |
+    | [<samp>endpoint_vlans</samp>](## "endpoint_vlans") | String |  | `` |  | Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches. |
     | [<samp>local_endpoint_trunk_groups</samp>](## "local_endpoint_trunk_groups") | List, items: String |  |  |  | List of trunk_groups in use by endpoints connected to this switch. |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "local_endpoint_trunk_groups.[]") | String |  |  |  |  |
     | [<samp>endpoint_trunk_groups</samp>](## "endpoint_trunk_groups") | List, items: String |  |  |  | List of trunk_groups in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches. |
@@ -165,7 +165,6 @@
     | [<samp>&nbsp;&nbsp;overlay_rd_type_admin_subfield</samp>](## "only_used_for_peer_facts.overlay_rd_type_admin_subfield") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;default_downlink_interfaces</samp>](## "only_used_for_peer_facts.default_downlink_interfaces") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "only_used_for_peer_facts.default_downlink_interfaces.[]") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;allowed_vlans</samp>](## "only_used_for_peer_facts.allowed_vlans") | String |  |  |  | Range of vlans allowed for this device. Not considering what is actually being used. |
     | [<samp>downlink_switches</samp>](## "downlink_switches") | List, items: String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "downlink_switches.[]") | String |  |  |  |  |
     | [<samp>evpn_route_server_clients</samp>](## "evpn_route_server_clients") | List, items: String |  |  |  |  |
@@ -364,10 +363,10 @@
     vlans: <str; default="">
 
     # Compressed list of vlans in use by endpoints connected to this switch.
-    local_endpoint_vlans: <str>
+    local_endpoint_vlans: <str; default="">
 
     # Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG peer and it's downstream switches.
-    endpoint_vlans: <str>
+    endpoint_vlans: <str; default="">
 
     # List of trunk_groups in use by endpoints connected to this switch.
     local_endpoint_trunk_groups:
@@ -450,9 +449,6 @@
       overlay_rd_type_admin_subfield: <str>
       default_downlink_interfaces:
         - <str>
-
-      # Range of vlans allowed for this device. Not considering what is actually being used.
-      allowed_vlans: <str>
     downlink_switches:
       - <str>
     evpn_route_server_clients:

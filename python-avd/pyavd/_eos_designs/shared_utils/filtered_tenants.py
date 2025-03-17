@@ -312,11 +312,8 @@ class FilteredTenantsMixin(Protocol):
         return svis._natural_sorted(sort_key="id")
 
     @cached_property
-    def endpoint_vlans(self: SharedUtilsProtocol) -> list:
-        endpoint_vlans = self.switch_facts.endpoint_vlans
-        if not endpoint_vlans:
-            return []
-        return [int(vlan_id) for vlan_id in range_expand(endpoint_vlans)]
+    def endpoint_vlans(self: SharedUtilsProtocol) -> set[int]:
+        return set(map(int, range_expand(self.switch_facts.endpoint_vlans)))
 
     @overload
     @staticmethod

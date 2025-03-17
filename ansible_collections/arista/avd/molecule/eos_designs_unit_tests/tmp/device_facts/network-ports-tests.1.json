@@ -45,6 +45,7 @@
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
   "vlans": "100,200,300",
+  "local_endpoint_vlans": "",
   "only_used_for_peer_facts": {
     "mlag": true,
     "underlay_multicast": false

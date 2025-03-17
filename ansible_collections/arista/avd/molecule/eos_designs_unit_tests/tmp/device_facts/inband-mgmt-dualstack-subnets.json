@@ -28,7 +28,7 @@
       "peer_mlag": true,
       "channel_group_id": 1,
       "peer_channel_group_id": 24,
-      "vlans": "103-105",
+      "vlans": "104",
       "structured_config": {}
     },
     {
@@ -42,7 +42,7 @@
       "peer_mlag": true,
       "channel_group_id": 1,
       "peer_channel_group_id": 24,
-      "vlans": "103-105",
+      "vlans": "104",
       "structured_config": {}
     }
   ],

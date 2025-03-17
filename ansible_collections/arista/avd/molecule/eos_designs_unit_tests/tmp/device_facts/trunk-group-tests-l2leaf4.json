@@ -34,7 +34,7 @@
       "peer_trunk_groups": [
         "trunk-group-tests-l2leaf4"
       ],
-      "vlans": "100,110,200,210,300-301,310-311,398-399",
+      "vlans": "none",
       "structured_config": {}
     },
     {
@@ -54,7 +54,7 @@
       "peer_trunk_groups": [
         "trunk-group-tests-l2leaf4"
       ],
-      "vlans": "100,110,200,210,300-301,310-311,398-399",
+      "vlans": "none",
       "structured_config": {}
     }
   ],

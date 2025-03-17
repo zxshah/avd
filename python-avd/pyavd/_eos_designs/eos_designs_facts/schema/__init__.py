@@ -902,7 +902,6 @@ class EosDesignsFacts(AvdModel):
             "underlay_multicast": {"type": bool},
             "overlay_rd_type_admin_subfield": {"type": str},
             "default_downlink_interfaces": {"type": DefaultDownlinkInterfaces},
-            "allowed_vlans": {"type": str},
         }
         mlag: bool
         uplink_type: Literal["p2p", "port-channel", "p2p-vrfs", "lan"] | None
@@ -919,8 +918,6 @@ class EosDesignsFacts(AvdModel):
         overlay_rd_type_admin_subfield: str | None
         default_downlink_interfaces: DefaultDownlinkInterfaces
         """Subclass of AvdList with `str` items."""
-        allowed_vlans: str | None
-        """Range of vlans allowed for this device. Not considering what is actually being used."""
 
         if TYPE_CHECKING:
 
@@ -935,7 +932,6 @@ class EosDesignsFacts(AvdModel):
                 underlay_multicast: bool | None | UndefinedType = Undefined,
                 overlay_rd_type_admin_subfield: str | None | UndefinedType = Undefined,
                 default_downlink_interfaces: DefaultDownlinkInterfaces | UndefinedType = Undefined,
-                allowed_vlans: str | None | UndefinedType = Undefined,
             ) -> None:
                 """
                 OnlyUsedForPeerFacts.
@@ -955,7 +951,6 @@ class EosDesignsFacts(AvdModel):
                     underlay_multicast: underlay_multicast
                     overlay_rd_type_admin_subfield: overlay_rd_type_admin_subfield
                     default_downlink_interfaces: Subclass of AvdList with `str` items.
-                    allowed_vlans: Range of vlans allowed for this device. Not considering what is actually being used.
 
                 """
 
@@ -1041,8 +1036,8 @@ class EosDesignsFacts(AvdModel):
         "uplink_peers": {"type": UplinkPeers},
         "uplink_switch_vrfs": {"type": UplinkSwitchVrfs},
         "vlans": {"type": str, "default": ""},
-        "local_endpoint_vlans": {"type": str},
-        "endpoint_vlans": {"type": str},
+        "local_endpoint_vlans": {"type": str, "default": ""},
+        "endpoint_vlans": {"type": str, "default": ""},
         "local_endpoint_trunk_groups": {"type": LocalEndpointTrunkGroups},
         "endpoint_trunk_groups": {"type": EndpointTrunkGroups},
         "wan_path_groups": {"type": WanPathGroups},
@@ -1178,12 +1173,18 @@ class EosDesignsFacts(AvdModel):
 
     Default value: `""`
     """
-    local_endpoint_vlans: str | None
-    """Compressed list of vlans in use by endpoints connected to this switch."""
-    endpoint_vlans: str | None
+    local_endpoint_vlans: str
+    """
+    Compressed list of vlans in use by endpoints connected to this switch.
+
+    Default value: `""`
+    """
+    endpoint_vlans: str
     """
     Compressed list of vlans in use by endpoints connected to this switch, downstream switches or MLAG
     peer and it's downstream switches.
+
+    Default value: `""`
     """
     local_endpoint_trunk_groups: LocalEndpointTrunkGroups
     """
@@ -1270,8 +1271,8 @@ class EosDesignsFacts(AvdModel):
             uplink_peers: UplinkPeers | UndefinedType = Undefined,
             uplink_switch_vrfs: UplinkSwitchVrfs | UndefinedType = Undefined,
             vlans: str | UndefinedType = Undefined,
-            local_endpoint_vlans: str | None | UndefinedType = Undefined,
-            endpoint_vlans: str | None | UndefinedType = Undefined,
+            local_endpoint_vlans: str | UndefinedType = Undefined,
+            endpoint_vlans: str | UndefinedType = Undefined,
             local_endpoint_trunk_groups: LocalEndpointTrunkGroups | UndefinedType = Undefined,
             endpoint_trunk_groups: EndpointTrunkGroups | UndefinedType = Undefined,
             wan_path_groups: WanPathGroups | UndefinedType = Undefined,

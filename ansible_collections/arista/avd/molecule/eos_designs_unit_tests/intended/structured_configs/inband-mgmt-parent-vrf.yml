@@ -126,7 +126,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 101,103,105
+      allowed_vlan: '101'
 - name: Port-Channel22
   description: INBAND-MGMT-SUBNET-VRF_Po1
   shutdown: false
@@ -136,7 +136,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 102-103,105
+      allowed_vlan: '102'
 - name: Port-Channel23
   description: INBAND-MGMT-IP_Po1
   shutdown: false
@@ -144,7 +144,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 103,105
+      allowed_vlan: '103'
 - name: Port-Channel101
   description: inband-mgmt-mlag-test_Po1
   shutdown: false
@@ -154,7 +154,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 101,103,105
+      allowed_vlan: '101'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

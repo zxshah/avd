@@ -80,6 +80,19 @@ class UplinksMixin(Protocol):
             raise AristaAvdError(msg)
         return peer_uplink_switch_port_channel_id
 
+    @cached_property
+    def uplink_vlans(self: FactsStageFourProtocol) -> str:
+        uplink_vlans = self.shared_utils.accepted_vlans.copy()
+
+        if self.shared_utils.node_config.filter.only_vlans_in_use:
+            uplink_vlans.intersection_update(self.shared_utils.endpoint_vlans)
+
+        if self.shared_utils.configure_inband_mgmt or self.shared_utils.configure_inband_mgmt_ipv6:
+            # Always add inband_mgmt_vlan even if the uplink switch does not have this vlan defined
+            uplink_vlans.add(self.shared_utils.node_config.inband_mgmt_vlan)
+
+        return list_compress(list(uplink_vlans)) if uplink_vlans else "none"
+
     @facts_contributor
     def uplinks(self: FactsStageFourProtocol) -> None:
         """
@@ -237,13 +250,7 @@ class UplinksMixin(Protocol):
             else:
                 uplink.peer_trunk_groups.append_unique(self.shared_utils.hostname)
 
-        uplink_vlans = self.shared_utils.accepted_vlans.copy()
-
-        if self.shared_utils.configure_inband_mgmt or self.shared_utils.configure_inband_mgmt_ipv6:
-            # Always add inband_mgmt_vlan even if the uplink switch does not have this vlan defined
-            uplink_vlans.add(self.shared_utils.node_config.inband_mgmt_vlan)
-
-        uplink.vlans = list_compress(list(uplink_vlans)) if uplink_vlans else "none"
+        uplink.vlans = self.uplink_vlans
 
         if self.shared_utils.link_tracking_groups is not None:
             for lt_group in self.shared_utils.link_tracking_groups:

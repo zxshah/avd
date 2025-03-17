@@ -40,6 +40,7 @@
   "max_parallel_uplinks": 1,
   "max_uplink_switches": 0,
   "vlans": "100,110,200,210,300-301,310-311,398-399",
+  "local_endpoint_vlans": "",
   "only_used_for_peer_facts": {
     "mlag": true,
     "local_vrfs_in_use": [

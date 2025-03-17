@@ -188,7 +188,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 103,105-106
+      allowed_vlan: '106'
 - name: Port-Channel27
   description: INBAND-MGMT-IPV6-ONLY-VRF_Po1
   shutdown: false
@@ -199,7 +199,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 103,105,107
+      allowed_vlan: '107'
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

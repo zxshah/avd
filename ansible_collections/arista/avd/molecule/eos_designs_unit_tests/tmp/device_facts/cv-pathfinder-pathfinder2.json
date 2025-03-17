@@ -53,7 +53,7 @@
   ],
   "only_used_for_peer_facts": {
     "mlag": false,
-    "vrfs": [
+    "local_vrfs_in_use": [
       "default"
     ],
     "underlay_multicast": false

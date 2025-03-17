@@ -161,9 +161,12 @@
   "vlans": "150,250,350,453",
   "only_used_for_peer_facts": {
     "mlag": false,
-    "vrfs": [
+    "local_vrfs_in_use": [
+      "Tenant_A_WAN_Zone",
       "Tenant_B_OP_Zone",
-      "Tenant_B_WAN_Zone"
+      "Tenant_B_WAN_Zone",
+      "Tenant_C_WAN_Zone",
+      "TENANT_D_WAN_ZONE"
     ],
     "underlay_multicast": false,
     "default_downlink_interfaces": [

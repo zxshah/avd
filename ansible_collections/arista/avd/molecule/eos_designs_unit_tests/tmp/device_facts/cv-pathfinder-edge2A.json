@@ -97,11 +97,6 @@
     "site-ha-enabled-leaf2A",
     "site-ha-enabled-leaf2B"
   ],
-  "uplink_switch_vrfs": [
-    "default",
-    "IT",
-    "PROD"
-  ],
   "vlans": "100-101,666",
   "wan_path_groups": [
     {
@@ -120,7 +115,7 @@
   "only_used_for_peer_facts": {
     "mlag": false,
     "uplink_type": "p2p-vrfs",
-    "vrfs": [
+    "local_vrfs_in_use": [
       "default",
       "IT",
       "PROD"

@@ -3,7 +3,6 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_designs.eos_designs_facts.facts_generator import FactsGenerator, FactsGeneratorProtocol, facts_contributor
@@ -12,7 +11,6 @@ from pyavd._errors import AristaAvdError
 
 from .mlag import MlagMixin
 from .overlay import OverlayMixin
-from .uplinks import UplinksMixin
 from .vlans import VlansMixin
 
 if TYPE_CHECKING:
@@ -24,7 +22,7 @@ if TYPE_CHECKING:
     from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 
 
-class FactsStageTwoProtocol(MlagMixin, OverlayMixin, UplinksMixin, VlansMixin, FactsGeneratorProtocol, Protocol):
+class FactsStageTwoProtocol(MlagMixin, OverlayMixin, VlansMixin, FactsGeneratorProtocol, Protocol):
     peer_facts: dict[str, EosDesignsFacts]
 
     @facts_contributor
@@ -52,8 +50,12 @@ class FactsStageTwoProtocol(MlagMixin, OverlayMixin, UplinksMixin, VlansMixin, F
                 raise AristaAvdError(msg)
             self.facts.evpn_multicast = True
 
-    @cached_property
-    def _short_esi(self: FactsStageTwoProtocol) -> str | None:
+    @facts_contributor
+    def local_vrfs_in_use(self) -> None:
+        self.facts.only_used_for_peer_facts.local_vrfs_in_use.extend(self.shared_utils.vrfs)
+
+    @facts_contributor
+    def short_esi(self) -> None:
         """
         The short_esi value to use for this device.
 
@@ -62,8 +64,8 @@ class FactsStageTwoProtocol(MlagMixin, OverlayMixin, UplinksMixin, VlansMixin, F
         """
         # On the MLAG Secondary use short-esi from MLAG primary
         if self.shared_utils.mlag_role == "secondary" and (peer_short_esi := self.shared_utils.mlag_peer_facts.local_short_esi):
-            return peer_short_esi
-        return self.facts.local_short_esi
+            self.facts.short_esi = peer_short_esi
+        self.facts.short_esi = self.facts.local_short_esi
 
 
 class FactsStageTwo(FactsGenerator, FactsStageTwoProtocol):

@@ -22,6 +22,9 @@
   "vlans": "10,20,90,100,1008-1010",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "SIT_VRF"
+    ],
     "underlay_multicast": false
   }
 }

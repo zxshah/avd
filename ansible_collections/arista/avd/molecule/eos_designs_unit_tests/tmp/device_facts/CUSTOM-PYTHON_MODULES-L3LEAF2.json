@@ -37,7 +37,19 @@
       "prefix_length": 31,
       "ip_address": "172.31.255.25",
       "peer_ip_address": "172.31.255.24",
-      "structured_config": {}
+      "structured_config": {},
+      "subinterfaces": [
+        {
+          "interface": "Ethernet1.1",
+          "peer_interface": "Ethernet3.1",
+          "vrf": "TEST_VRF",
+          "encapsulation_dot1q_vlan": 1,
+          "prefix_length": 31,
+          "ip_address": "172.16.0.25",
+          "peer_ip_address": "172.16.0.24",
+          "structured_config": {}
+        }
+      ]
     }
   ],
   "uplink_peers": [
@@ -47,6 +59,9 @@
   "only_used_for_peer_facts": {
     "mlag": false,
     "uplink_type": "p2p-vrfs",
+    "local_vrfs_in_use": [
+      "TEST_VRF"
+    ],
     "underlay_multicast": false
   }
 }

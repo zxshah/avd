@@ -24,6 +24,11 @@
   "vlans": "1-3,11-12,21-23,101-103,111-113,121-123",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "IGMP_QUERIER_TEST_1",
+      "IGMP_QUERIER_TEST_2",
+      "IGMP_QUERIER_TEST_3"
+    ],
     "underlay_multicast": false
   },
   "downlink_switches": [

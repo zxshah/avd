@@ -21,7 +21,7 @@
   "vlans": "66",
   "only_used_for_peer_facts": {
     "mlag": false,
-    "vrfs": [
+    "local_vrfs_in_use": [
       "ONLY-ON-L2LEAF",
       "PROD"
     ],

@@ -154,12 +154,13 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;interval</samp>](## "wan_path_groups.[].dps_keepalive.interval") | String |  |  |  | Interval in milliseconds. Valid values are 50-60000 | "auto".<br><br>When auto, the interval and failure_threshold are automatically determined based on<br>path state. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;failure_threshold</samp>](## "wan_path_groups.[].dps_keepalive.failure_threshold") | Integer |  | `5` | Min: 2<br>Max: 100 | Failure threshold in number of lost keep-alive messages. |
     | [<samp>local_short_esi</samp>](## "local_short_esi") | String |  |  |  |  |
+    | [<samp>short_esi</samp>](## "short_esi") | String |  |  |  | Short ESI to be used on this device after coordination with MLAG peer. |
     | [<samp>only_used_for_peer_facts</samp>](## "only_used_for_peer_facts") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;mlag</samp>](## "only_used_for_peer_facts.mlag") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;uplink_switch_port_channel_id</samp>](## "only_used_for_peer_facts.uplink_switch_port_channel_id") | Integer |  |  |  |  |
     | [<samp>&nbsp;&nbsp;uplink_port_channel_id</samp>](## "only_used_for_peer_facts.uplink_port_channel_id") | Integer |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;vrfs</samp>](## "only_used_for_peer_facts.vrfs") | List, items: String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "only_used_for_peer_facts.vrfs.[]") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;local_vrfs_in_use</samp>](## "only_used_for_peer_facts.local_vrfs_in_use") | List, items: String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "only_used_for_peer_facts.local_vrfs_in_use.[]") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;underlay_multicast</samp>](## "only_used_for_peer_facts.underlay_multicast") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;overlay_rd_type_admin_subfield</samp>](## "only_used_for_peer_facts.overlay_rd_type_admin_subfield") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;default_downlink_interfaces</samp>](## "only_used_for_peer_facts.default_downlink_interfaces") | List, items: String |  |  |  |  |
@@ -435,11 +436,14 @@
           # Failure threshold in number of lost keep-alive messages.
           failure_threshold: <int; 2-100; default=5>
     local_short_esi: <str>
+
+    # Short ESI to be used on this device after coordination with MLAG peer.
+    short_esi: <str>
     only_used_for_peer_facts:
       mlag: <bool; required>
       uplink_switch_port_channel_id: <int>
       uplink_port_channel_id: <int>
-      vrfs:
+      local_vrfs_in_use:
         - <str>
       underlay_multicast: <bool>
       overlay_rd_type_admin_subfield: <str>

@@ -9,10 +9,10 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_designs.eos_designs_facts.facts_generator import facts_contributor
 from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
 from pyavd._errors import AristaAvdError
-from pyavd.j2filters import list_compress, natural_sort, range_expand
+from pyavd.j2filters import list_compress, range_expand
 
 if TYPE_CHECKING:
-    from . import FactsStageTwoProtocol
+    from . import FactsStageFourProtocol
 
 
 class UplinksMixin(Protocol):
@@ -24,7 +24,7 @@ class UplinksMixin(Protocol):
     """
 
     @cached_property
-    def _uplink_port_channel_id(self: FactsStageTwoProtocol) -> int | None:
+    def _uplink_port_channel_id(self: FactsStageFourProtocol) -> int | None:
         """
         For MLAG secondary get the uplink_port_channel_id from the peer's facts.
 
@@ -51,7 +51,7 @@ class UplinksMixin(Protocol):
         return peer_uplink_port_channel_id
 
     @cached_property
-    def _uplink_switch_port_channel_id(self: FactsStageTwoProtocol) -> int | None:
+    def _uplink_switch_port_channel_id(self: FactsStageFourProtocol) -> int | None:
         """
         For MLAG secondary get the uplink_switch_port_channel_id from the peer's facts.
 
@@ -81,7 +81,7 @@ class UplinksMixin(Protocol):
         return peer_uplink_switch_port_channel_id
 
     @facts_contributor
-    def uplinks(self: FactsStageTwoProtocol) -> None:
+    def uplinks(self: FactsStageFourProtocol) -> None:
         """
         Exposed in avd_switch_facts.
 
@@ -130,7 +130,7 @@ class UplinksMixin(Protocol):
             self.facts.uplinks.append(get_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface))
 
     def _get_p2p_uplink(
-        self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
+        self: FactsStageFourProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type p2p."""
         uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
@@ -171,7 +171,7 @@ class UplinksMixin(Protocol):
         return uplink
 
     def _get_port_channel_uplink(
-        self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
+        self: FactsStageFourProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type port-channel."""
         uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
@@ -179,7 +179,7 @@ class UplinksMixin(Protocol):
         # Reusing get_l2_uplink
         uplink = self._get_l2_uplink(uplink_index, uplink_interface, uplink_switch, uplink_switch_interface)
 
-        if uplink_switch_facts.only_used_for_peer_facts.mlag is True or self._short_esi is not None:
+        if uplink_switch_facts.only_used_for_peer_facts.mlag is True or self.facts.short_esi is not None:
             # Override our description on port-channel to be peer's group name if they are mlag pair or A/A #}
             uplink.peer_node_group = uplink_switch_facts.group
 
@@ -201,7 +201,7 @@ class UplinksMixin(Protocol):
         return uplink
 
     def _get_l2_uplink(
-        self: FactsStageTwoProtocol,
+        self: FactsStageFourProtocol,
         uplink_index: int,  # pylint: disable=unused-argument # noqa: ARG002
         uplink_interface: str,
         uplink_switch: str,
@@ -219,7 +219,7 @@ class UplinksMixin(Protocol):
             speed=self.shared_utils.uplink_interface_speed,
             peer_speed=self.shared_utils.uplink_switch_interface_speed,
             native_vlan=self.shared_utils.node_config.uplink_native_vlan,
-            peer_short_esi=self._short_esi,
+            peer_short_esi=self.facts.short_esi,
             structured_config=self.shared_utils.node_config.uplink_structured_config,
         )
 
@@ -255,7 +255,7 @@ class UplinksMixin(Protocol):
         return uplink
 
     def _get_p2p_vrfs_uplink(
-        self: FactsStageTwoProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
+        self: FactsStageFourProtocol, uplink_index: int, uplink_interface: str, uplink_switch: str, uplink_switch_interface: str
     ) -> EosDesignsFacts.UplinksItem:
         """Return facts for a single uplink for uplink_type p2p-vrfs."""
         uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
@@ -267,7 +267,7 @@ class UplinksMixin(Protocol):
                 # Only keep VRFs present on the uplink switch as well.
                 # Also skip VRF default since it is covered on the parent interface.
                 # ok to use like this because this is only ever called inside EosDesignsFacts
-                uplink_switch_vrfs = uplink_switch_facts.only_used_for_peer_facts.vrfs
+                uplink_switch_vrfs = uplink_switch_facts.only_used_for_peer_facts.local_vrfs_in_use
                 if vrf.name == "default" or vrf.name not in uplink_switch_vrfs:
                     continue
 
@@ -292,20 +292,3 @@ class UplinksMixin(Protocol):
                 uplink.subinterfaces.append(subinterface)
 
         return uplink
-
-    @facts_contributor
-    def uplink_switch_vrfs(self: FactsStageTwoProtocol) -> None:
-        """
-        Exposed in avd_switch_facts.
-
-        Return the list of VRF names present on uplink switches.
-        """
-        if self.shared_utils.uplink_type != "p2p-vrfs":
-            return
-
-        vrfs = set()
-        for uplink_switch in self.facts.uplink_peers:
-            uplink_switch_facts = self.shared_utils.get_peer_facts(uplink_switch)
-            vrfs.update(uplink_switch_facts.only_used_for_peer_facts.vrfs)
-
-        self.facts.uplink_switch_vrfs.extend(natural_sort(vrfs))

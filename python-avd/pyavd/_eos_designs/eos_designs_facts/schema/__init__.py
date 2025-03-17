@@ -883,10 +883,10 @@ class EosDesignsFacts(AvdModel):
     class OnlyUsedForPeerFacts(AvdModel):
         """Subclass of AvdModel."""
 
-        class Vrfs(AvdList[str]):
+        class LocalVrfsInUse(AvdList[str]):
             """Subclass of AvdList with `str` items."""
 
-        Vrfs._item_type = str
+        LocalVrfsInUse._item_type = str
 
         class DefaultDownlinkInterfaces(AvdList[str]):
             """Subclass of AvdList with `str` items."""
@@ -898,7 +898,7 @@ class EosDesignsFacts(AvdModel):
             "uplink_type": {"type": str},
             "uplink_switch_port_channel_id": {"type": int},
             "uplink_port_channel_id": {"type": int},
-            "vrfs": {"type": Vrfs},
+            "local_vrfs_in_use": {"type": LocalVrfsInUse},
             "underlay_multicast": {"type": bool},
             "overlay_rd_type_admin_subfield": {"type": str},
             "default_downlink_interfaces": {"type": DefaultDownlinkInterfaces},
@@ -912,7 +912,7 @@ class EosDesignsFacts(AvdModel):
         """
         uplink_switch_port_channel_id: int | None
         uplink_port_channel_id: int | None
-        vrfs: Vrfs
+        local_vrfs_in_use: LocalVrfsInUse
         """Subclass of AvdList with `str` items."""
         underlay_multicast: bool | None
         overlay_rd_type_admin_subfield: str | None
@@ -928,7 +928,7 @@ class EosDesignsFacts(AvdModel):
                 uplink_type: Literal["p2p", "port-channel", "p2p-vrfs", "lan"] | None | UndefinedType = Undefined,
                 uplink_switch_port_channel_id: int | None | UndefinedType = Undefined,
                 uplink_port_channel_id: int | None | UndefinedType = Undefined,
-                vrfs: Vrfs | UndefinedType = Undefined,
+                local_vrfs_in_use: LocalVrfsInUse | UndefinedType = Undefined,
                 underlay_multicast: bool | None | UndefinedType = Undefined,
                 overlay_rd_type_admin_subfield: str | None | UndefinedType = Undefined,
                 default_downlink_interfaces: DefaultDownlinkInterfaces | UndefinedType = Undefined,
@@ -947,7 +947,7 @@ class EosDesignsFacts(AvdModel):
                        `vtep` or `underlay_router` is true for the `node_type_key` definition.
                     uplink_switch_port_channel_id: uplink_switch_port_channel_id
                     uplink_port_channel_id: uplink_port_channel_id
-                    vrfs: Subclass of AvdList with `str` items.
+                    local_vrfs_in_use: Subclass of AvdList with `str` items.
                     underlay_multicast: underlay_multicast
                     overlay_rd_type_admin_subfield: overlay_rd_type_admin_subfield
                     default_downlink_interfaces: Subclass of AvdList with `str` items.
@@ -1042,6 +1042,7 @@ class EosDesignsFacts(AvdModel):
         "endpoint_trunk_groups": {"type": EndpointTrunkGroups},
         "wan_path_groups": {"type": WanPathGroups},
         "local_short_esi": {"type": str},
+        "short_esi": {"type": str},
         "only_used_for_peer_facts": {"type": OnlyUsedForPeerFacts},
         "downlink_switches": {"type": DownlinkSwitches},
         "evpn_route_server_clients": {"type": EvpnRouteServerClients},
@@ -1201,6 +1202,8 @@ class EosDesignsFacts(AvdModel):
     `WanPathGroupsItem` items. Primary key is `name` (`str`).
     """
     local_short_esi: str | None
+    short_esi: str | None
+    """Short ESI to be used on this device after coordination with MLAG peer."""
     only_used_for_peer_facts: OnlyUsedForPeerFacts
     """Subclass of AvdModel."""
     downlink_switches: DownlinkSwitches
@@ -1268,6 +1271,7 @@ class EosDesignsFacts(AvdModel):
             endpoint_trunk_groups: EndpointTrunkGroups | UndefinedType = Undefined,
             wan_path_groups: WanPathGroups | UndefinedType = Undefined,
             local_short_esi: str | None | UndefinedType = Undefined,
+            short_esi: str | None | UndefinedType = Undefined,
             only_used_for_peer_facts: OnlyUsedForPeerFacts | UndefinedType = Undefined,
             downlink_switches: DownlinkSwitches | UndefinedType = Undefined,
             evpn_route_server_clients: EvpnRouteServerClients | UndefinedType = Undefined,
@@ -1396,6 +1400,7 @@ class EosDesignsFacts(AvdModel):
                    Subclass of AvdIndexedList with
                    `WanPathGroupsItem` items. Primary key is `name` (`str`).
                 local_short_esi: local_short_esi
+                short_esi: Short ESI to be used on this device after coordination with MLAG peer.
                 only_used_for_peer_facts: Subclass of AvdModel.
                 downlink_switches: Subclass of AvdList with `str` items.
                 evpn_route_server_clients: Subclass of AvdList with `str` items.

@@ -23,6 +23,9 @@
   "vlans": "2900,2902-2903,3900,3902-3903",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "TEST"
+    ],
     "underlay_multicast": false
   }
 }

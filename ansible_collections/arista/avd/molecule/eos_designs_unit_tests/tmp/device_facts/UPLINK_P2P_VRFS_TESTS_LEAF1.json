@@ -52,6 +52,16 @@
           "ip_address": "10.42.42.9",
           "peer_ip_address": "10.42.42.8",
           "structured_config": {}
+        },
+        {
+          "interface": "Ethernet1.66",
+          "peer_interface": "Ethernet1.66",
+          "vrf": "ONLY-ON-L2LEAF",
+          "encapsulation_dot1q_vlan": 66,
+          "prefix_length": 31,
+          "ip_address": "10.42.42.9",
+          "peer_ip_address": "10.42.42.8",
+          "structured_config": {}
         }
       ]
     },
@@ -99,19 +109,14 @@
     "UPLINK_P2P_VRFS_TESTS_SPINE1",
     "UPLINK_P2P_VRFS_TESTS_SPINE2"
   ],
-  "uplink_switch_vrfs": [
-    "default",
-    "IT",
-    "ONLY-ON-L2LEAF",
-    "PROD"
-  ],
   "vlans": "66",
   "only_used_for_peer_facts": {
     "mlag": false,
     "uplink_type": "p2p-vrfs",
-    "vrfs": [
+    "local_vrfs_in_use": [
       "default",
       "IT",
+      "ONLY-ON-L2LEAF",
       "PROD"
     ],
     "underlay_multicast": false

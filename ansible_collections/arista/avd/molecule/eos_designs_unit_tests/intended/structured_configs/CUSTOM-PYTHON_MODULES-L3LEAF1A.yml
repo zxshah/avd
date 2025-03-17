@@ -36,6 +36,17 @@ ethernet_interfaces:
   peer_type: custom_spine
   switchport:
     enabled: false
+- name: Ethernet3.1
+  description: TEST_CUSTOM_PREFIX_P2P_LINK_TO_CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1.1 VRF TEST_VRF
+  shutdown: false
+  mtu: 9214
+  vrf: TEST_VRF
+  encapsulation_dot1q:
+    vlan: 1
+  ip_address: 172.16.0.24/31
+  peer: CUSTOM-PYTHON_MODULES-L3LEAF2
+  peer_interface: Ethernet1.1
+  peer_type: l3leaf
 hostname: CUSTOM-PYTHON_MODULES-L3LEAF1A
 ip_igmp_snooping:
   globally_enabled: true
@@ -213,6 +224,10 @@ router_bgp:
     updates:
       wait_install: true
     neighbors:
+    - ip_address: 172.16.0.25
+      peer_group: IPv4-UNDERLAY-PEERS
+      remote_as: '65103'
+      description: CUSTOM-PYTHON_MODULES-L3LEAF2_Ethernet1.1_vrf_TEST_VRF
     - ip_address: 10.255.240.11
       peer_group: MLAG-IPv4-UNDERLAY-PEER
       description: CUSTOM-PYTHON_MODULES-L3LEAF1B_Vlan3000

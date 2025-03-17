@@ -60,6 +60,9 @@
   "vlans": "110",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "local_vrfs_in_use": [
+      "TEST_VRF"
+    ],
     "underlay_multicast": false
   },
   "downlink_switches": [

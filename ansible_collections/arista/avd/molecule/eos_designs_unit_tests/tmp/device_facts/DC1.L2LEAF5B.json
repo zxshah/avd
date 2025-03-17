@@ -98,7 +98,7 @@
       "channel_group_id": 1,
       "peer_channel_group_id": 141,
       "vlans": "110-112,120-121,130-131,160-161",
-      "peer_short_esi": "fa91:ce62:ce95",
+      "peer_short_esi": "4738:c516:b289",
       "structured_config": {}
     },
     {
@@ -114,7 +114,7 @@
       "channel_group_id": 1,
       "peer_channel_group_id": 141,
       "vlans": "110-112,120-121,130-131,160-161",
-      "peer_short_esi": "fa91:ce62:ce95",
+      "peer_short_esi": "4738:c516:b289",
       "structured_config": {}
     }
   ],
@@ -124,6 +124,7 @@
   ],
   "vlans": "110-112,120-121,130-131,160-161",
   "local_short_esi": "4738:c516:b289",
+  "short_esi": "4738:c516:b289",
   "only_used_for_peer_facts": {
     "mlag": true,
     "uplink_switch_port_channel_id": 151,

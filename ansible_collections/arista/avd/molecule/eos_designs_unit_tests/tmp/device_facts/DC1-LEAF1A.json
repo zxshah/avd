@@ -161,6 +161,12 @@
   "vlans": "113,120-121,130-132,450-452",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "12345678",
+      "Tenant_A_APP_Zone",
+      "Tenant_A_OP_Zone",
+      "Tenant_A_WEB_Zone"
+    ],
     "underlay_multicast": false,
     "default_downlink_interfaces": [
       "Ethernet1",

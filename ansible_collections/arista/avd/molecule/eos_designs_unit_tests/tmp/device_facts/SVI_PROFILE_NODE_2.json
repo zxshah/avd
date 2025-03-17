@@ -22,6 +22,9 @@
   "vlans": "110-115,120-121,210-212,310-312,410-412,510-512",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "svi_profile_tests_vrf"
+    ],
     "underlay_multicast": false
   }
 }

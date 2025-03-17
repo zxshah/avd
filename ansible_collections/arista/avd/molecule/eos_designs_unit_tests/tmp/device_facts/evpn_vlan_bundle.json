@@ -22,6 +22,12 @@
   "vlans": "10,20,50,60,70,80,90,100,110,120,1008-1017",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "research1",
+      "SIT2",
+      "SIT3",
+      "SIT_VRF"
+    ],
     "underlay_multicast": false
   }
 }

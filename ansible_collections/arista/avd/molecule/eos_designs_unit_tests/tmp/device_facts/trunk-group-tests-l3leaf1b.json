@@ -42,6 +42,11 @@
   "vlans": "100,110,200,210,300-301,310-311,398-399",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "local_vrfs_in_use": [
+      "TG_100",
+      "TG_200",
+      "TG_300"
+    ],
     "underlay_multicast": false
   },
   "downlink_switches": [

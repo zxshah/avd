@@ -37,6 +37,9 @@
   "vlans": "10",
   "only_used_for_peer_facts": {
     "mlag": true,
+    "local_vrfs_in_use": [
+      "TEST"
+    ],
     "underlay_multicast": false
   }
 }

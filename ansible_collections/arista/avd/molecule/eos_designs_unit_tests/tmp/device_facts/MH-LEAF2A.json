@@ -90,6 +90,10 @@
   "vlans": "310-311",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "default",
+      "Tenant_X_OP_Zone"
+    ],
     "underlay_multicast": false,
     "default_downlink_interfaces": [
       "Ethernet1",

@@ -24,6 +24,9 @@
   "vlans": "100,200",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "TEST"
+    ],
     "underlay_multicast": false
   }
 }

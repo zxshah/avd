@@ -69,6 +69,9 @@
   "vlans": "11",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "VRF1"
+    ],
     "underlay_multicast": false
   }
 }

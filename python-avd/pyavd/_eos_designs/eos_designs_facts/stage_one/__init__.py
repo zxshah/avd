@@ -195,10 +195,6 @@ class FactsStageOneProtocol(MlagMixin, OverlayMixin, UplinksMixin, VlansMixin, W
             self.facts.port_profile_names.append_new(profile=profile.profile, parent_profile=profile.parent_profile)
 
     @facts_contributor
-    def vrfs(self) -> None:
-        self.facts.only_used_for_peer_facts.vrfs.extend(self.shared_utils.vrfs)
-
-    @facts_contributor
     def underlay_multicast(self) -> None:
         self.facts.only_used_for_peer_facts.underlay_multicast = self.shared_utils.underlay_multicast
 

@@ -22,7 +22,8 @@
   "vlans": "100-101,666",
   "only_used_for_peer_facts": {
     "mlag": false,
-    "vrfs": [
+    "local_vrfs_in_use": [
+      "ATTRACTED-VRF-FROM-UPLINK",
       "default",
       "IT",
       "PROD",

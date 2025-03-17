@@ -84,6 +84,22 @@
   "vlans": "110-113,120-122,130-132,140-141,150-151,160-166,166,210-211,250,310-311,350,410-413,450-453,1234",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "12345678",
+      "default",
+      "Tenant_A_APP_Zone",
+      "Tenant_A_DB_Zone",
+      "Tenant_A_ERP_Zone",
+      "Tenant_A_OP_Zone",
+      "Tenant_A_WAN_Zone",
+      "Tenant_A_WEB_Zone",
+      "Tenant_B_OP_Zone",
+      "Tenant_B_WAN_Zone",
+      "Tenant_C_OP_Zone",
+      "Tenant_C_WAN_Zone",
+      "Tenant_D_OP_Zone",
+      "TENANT_D_WAN_ZONE"
+    ],
     "underlay_multicast": false,
     "default_downlink_interfaces": [
       "Ethernet1/1",

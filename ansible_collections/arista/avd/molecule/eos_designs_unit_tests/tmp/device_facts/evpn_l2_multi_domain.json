@@ -24,6 +24,12 @@
   "vlans": "110-111,150,160,170,180,190,210-211,250,260,270,280,290",
   "only_used_for_peer_facts": {
     "mlag": false,
+    "local_vrfs_in_use": [
+      "L2_MULTI_DOMAIN_DISBLED",
+      "L2_MULTI_DOMAIN_ENABLED",
+      "L2_MULTI_DOMAIN_NEUTRAL_1",
+      "L2_MULTI_DOMAIN_NEUTRAL_2"
+    ],
     "underlay_multicast": false
   }
 }

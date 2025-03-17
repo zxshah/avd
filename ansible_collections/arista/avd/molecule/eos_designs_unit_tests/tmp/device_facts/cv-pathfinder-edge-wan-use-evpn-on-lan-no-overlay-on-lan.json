@@ -60,7 +60,7 @@
   "only_used_for_peer_facts": {
     "mlag": false,
     "uplink_type": "p2p",
-    "vrfs": [
+    "local_vrfs_in_use": [
       "default",
       "PROD",
       "VRF-NO-WAN",

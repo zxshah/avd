@@ -13,6 +13,7 @@ from typing import TYPE_CHECKING
 from pyavd._eos_designs.shared_utils import SharedUtils
 
 from .schema import EosDesignsFacts
+from .stage_four import FactsStageFour
 from .stage_one import FactsStageOne
 from .stage_one_and_a_half import FactsStageOneAndAHalf
 from .stage_three import FactsStageThree
@@ -106,6 +107,16 @@ def get_facts(
     for device_data in all_devices_data.values():
         # Generate Stage Two facts - TODO: evaluate if it is worth doing this with multiprocessing.
         FactsStageTwo(
+            hostvars=device_data.hostvars,
+            inputs=device_data.inputs,
+            facts=device_data.facts,
+            shared_utils=device_data.shared_utils,
+            peer_facts=all_facts,
+        ).render_facts()
+
+    for device_data in all_devices_data.values():
+        # Generate Stage Four facts - TODO: evaluate if it is worth doing this with multiprocessing.
+        FactsStageFour(
             hostvars=device_data.hostvars,
             inputs=device_data.inputs,
             facts=device_data.facts,

@@ -21,15 +21,6 @@ class VlansMixin(Protocol):
     Using type-hint on self to get proper type-hints on attributes across all Mixins.
     """
 
-    @cached_property
-    def _vlans(self: FactsStageTwoProtocol) -> set[int]:
-        """
-        Decompressed list of vlans to be defined on this switch after filtering network services.
-
-        The filter is based on filter.tenants, filter.tags and filter.only_vlans_in_use.
-        """
-        return set(map(int, range_expand(self.facts.vlans)))
-
     def get_endpoint_vlans_and_trunk_groups_for_one_peer(
         self: FactsStageTwoProtocol, peer_name: str, only_port_channel_uplink: bool = True
     ) -> tuple[set[int], set[str]]:

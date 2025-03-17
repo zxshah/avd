@@ -411,9 +411,9 @@ port_channel_interfaces:
   description: DC1_L2LEAF6_Po1
   shutdown: false
   evpn_ethernet_segment:
-    identifier: 0000:0000:a8be:743c:0a1a
-    route_target: a8:be:74:3c:0a:1a
-  lacp_id: a8be.743c.0a1a
+    identifier: 0000:0000:087e:8d50:bde9
+    route_target: 08:7e:8d:50:bd:e9
+  lacp_id: 087e.8d50.bde9
   switchport:
     enabled: true
     mode: trunk

@@ -124,6 +124,7 @@
   ],
   "vlans": "110-112,120-121,130-131,160-161",
   "local_short_esi": "fa91:ce62:ce95",
+  "short_esi": "fa91:ce62:ce95",
   "only_used_for_peer_facts": {
     "mlag": true,
     "uplink_switch_port_channel_id": 141,

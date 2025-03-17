@@ -6,6 +6,7 @@ from __future__ import annotations
 import cProfile
 import json
 import logging
+import os
 import pstats
 from collections import ChainMap
 from pathlib import Path
@@ -91,6 +92,11 @@ class ActionModule(ActionBase):
             return result
 
         changed = self.render_and_save_facts(all_inputs=all_inputs, all_hostvars=all_hostvars, pool_manager=pool_manager, templar=templar, tmp_path=tmp_path)
+
+        if not os.environ.get("AVDTMPDIR"):
+            # Do not set changed flag for updated facts unless AVDTMPDIR is set specifically.
+            # Otherwise it will always show as changed, since the files would always be in a new directory.
+            changed = False
 
         # Save any updated pools.
         changed = pool_manager.save_updated_pools(dumper_cls=AnsibleDumper) or changed

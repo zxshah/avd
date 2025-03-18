@@ -11,7 +11,13 @@ from anta.tests.hardware import (
     VerifyTransceiversTemperature,
 )
 from anta.tests.interfaces import VerifyInterfacesStatus
-from anta.tests.mlag import VerifyMlagStatus
+from anta.tests.mlag import (
+    VerifyMlagConfigSanity,
+    VerifyMlagDualPrimary,
+    VerifyMlagInterfaces,
+    VerifyMlagReloadDelay,
+    VerifyMlagStatus,
+)
 from anta.tests.routing.bgp import VerifyBGPPeerSession
 from anta.tests.routing.generic import VerifyRoutingProtocolModel
 from anta.tests.security import VerifyAPIHttpsSSL, VerifySpecificIPSecConn
@@ -25,6 +31,11 @@ __all__ = [
     "VerifyEnvironmentSystemCooling",
     "VerifyInterfacesStatus",
     "VerifyLLDPNeighbors",
+    "VerifyMlagConfigSanity",
+    "VerifyMlagDualPrimary",
+    "VerifyMlagInterfaces",
+    "VerifyMlagPrimaryPriority",
+    "VerifyMlagReloadDelay",
     "VerifyMlagStatus",
     "VerifyNTP",
     "VerifyReachability",

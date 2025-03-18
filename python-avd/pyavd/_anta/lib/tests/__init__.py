@@ -34,7 +34,6 @@ __all__ = [
     "VerifyMlagConfigSanity",
     "VerifyMlagDualPrimary",
     "VerifyMlagInterfaces",
-    "VerifyMlagPrimaryPriority",
     "VerifyMlagReloadDelay",
     "VerifyMlagStatus",
     "VerifyNTP",

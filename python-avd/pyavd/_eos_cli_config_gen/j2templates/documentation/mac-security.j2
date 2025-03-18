@@ -38,9 +38,9 @@ FIPS restrictions enabled.
 {%             if traffic_unprotected == "allow" and profile.traffic_unprotected.allow_active_sak is arista.avd.defined(true) %}
 {%                 set traffic_unprotected = traffic_unprotected ~ " active-sak" %}
 {%             endif %}
-{%             set replace_protection_disabled = profile.replace_protection.disabled | arista.avd.default('-') %}
-{%             set replace_protection_window = profile.replace_protection.window | arista.avd.default('-') %}
-| {{ cipher }} | {{ key_server_priority }} | {{ rekey_period }} | {{ sci }} | {{ traffic_unprotected }} | {{ replace_protection_disabled }} | {{ replace_protection_window }} |
+{%             set replay_protection_disabled = profile.replay_protection.disabled | arista.avd.default('-') %}
+{%             set replay_protection_window = profile.replay_protection.window | arista.avd.default('-') %}
+| {{ cipher }} | {{ key_server_priority }} | {{ rekey_period }} | {{ sci }} | {{ traffic_unprotected }} | {{ replay_protection_disabled }} | {{ replay_protection_window }} |
 {%             if profile.connection_keys is arista.avd.defined %}
 
 ###### Keys

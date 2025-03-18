@@ -11881,11 +11881,13 @@ mac security
    profile A2
       key 1234b 7 <removed>
       traffic unprotected allow active-sak
+      replay protection disabled
    !
    profile A3
       cipher aes256-gcm-xpn
       key ab 7 <removed>
       traffic unprotected drop
+      replay protection window 20000
 ```
 
 ### Traffic Policies information

@@ -20,7 +20,7 @@ keys:
         type: bool
       statistics_packets_dropped:
         type: bool
-        description: Enable the dot1x dropped counters.
+        description: Enable the 802.1X port authentication dropped data packet statistics.
       mac_based_authentication:
         type: dict
         keys:

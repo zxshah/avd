@@ -479,7 +479,7 @@ jobs:
       - name: "Install Ansible requirements"
         run: |
           source /tmp/python_env/bin/activate
-          python -m pip install "/tmp/python_env/*.whl[extras]"
+          python -m pip install --no-cache-dir /tmp/python_env/*.whl
           pip install "ansible-core<2.19.0"
       - name: "Run ansible-test sanity"
         run: |

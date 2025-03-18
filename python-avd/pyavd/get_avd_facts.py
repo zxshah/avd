@@ -6,10 +6,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from pyavd._eos_designs.eos_designs_facts.schema import EosDesignsFacts
     from pyavd.api.pool_manager import PoolManager
 
 
-def get_avd_facts(all_inputs: dict[str, dict], pool_manager: PoolManager | None = None) -> dict[str, dict]:
+def get_avd_facts(all_inputs: dict[str, dict], pool_manager: PoolManager | None = None) -> dict[str, EosDesignsFacts]:
     """
     Build avd_facts using the AVD eos_designs_facts logic.
 
@@ -41,5 +42,4 @@ def get_avd_facts(all_inputs: dict[str, dict], pool_manager: PoolManager | None 
 
     all_input_classes: dict[str, EosDesigns] = {}
     all_input_classes = {hostname: EosDesigns._from_dict(hostvars) for hostname, hostvars in all_inputs.items()}
-    all_facts = get_facts(all_inputs=all_input_classes, pool_manager=pool_manager, all_hostvars=all_inputs)
-    return {hostname: facts._as_dict() for hostname, facts in all_facts.items()}
+    return get_facts(all_inputs=all_input_classes, pool_manager=pool_manager, all_hostvars=all_inputs)

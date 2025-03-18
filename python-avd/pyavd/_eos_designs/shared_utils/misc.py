@@ -47,9 +47,9 @@ class MiscMixin(Protocol):
             Use 'self.switch_data_combined.id' which is the ID defined in the node type config or None.
         """
         # Check if we are running from eos_designs_structured_config (id is already set)
-        if self.peer_facts[self.hostname]._get_defined_attr("id") is not Undefined:
+        if self.switch_facts._get_defined_attr("id") is not Undefined:
             # Return ID or None
-            return self.peer_facts[self.hostname].id
+            return self.switch_facts.id
 
         # We are running from eos_designs_facts.
         # Check if pool manager is activated.

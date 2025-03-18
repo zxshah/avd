@@ -89,7 +89,7 @@ platform:
     data_plane_cpu_allocation_max: 3
     interface:
       profiles:
-      - name: DEFAULT-INTERFACE-PROFILE
+      - name: AVD-DEFAULT-INTERFACE-PROFILE
         interfaces:
         - name: Ethernet1/10
           rx_queue:
@@ -111,7 +111,7 @@ platform:
           rx_queue:
             count: 3
             mode: shared
-      interface_profile: DEFAULT-INTERFACE-PROFILE
+      interface_profile: AVD-DEFAULT-INTERFACE-PROFILE
 port_channel_interfaces:
 - name: Port-Channel2
   description: Cybercast

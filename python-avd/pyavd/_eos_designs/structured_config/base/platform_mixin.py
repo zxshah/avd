@@ -54,7 +54,7 @@ class PlatformMixin(Protocol):
         # populate interface profile for SFE platform (if supported)
         if self.shared_utils.is_sfe_interface_profile_supported and (sfe_member_interfaces_for_profile := self._get_sfe_interface_profile_member_interfaces):
             # build single ProfilesItem and append to Profiles
-            default_sfe_interface_profile_name = "DEFAULT-INTERFACE-PROFILE"
+            default_sfe_interface_profile_name = "AVD-DEFAULT-INTERFACE-PROFILE"
             self.structured_config.platform.sfe.interface.profiles.append_new(
                 name=default_sfe_interface_profile_name,
                 interfaces=sfe_member_interfaces_for_profile,
@@ -106,11 +106,9 @@ class PlatformMixin(Protocol):
         # validate rx_queue 'count' when specified
         self._validate_rx_queue_count(l3_ethernet_interface.rx_queue.count, l3_ethernet_interface.name)
 
-        rx_queue_workers = set()
-        for _worker in l3_ethernet_interface.rx_queue.workers:
-            for worker_id in map(int, range_expand(_worker)):
-                self._validate_rx_queue_worker(worker_id, l3_ethernet_interface.name)
-                rx_queue_workers.add(worker_id)
+        # build a set of worker_ids with each value as int and then validate
+        if rx_queue_workers := set(map(int, range_expand(l3_ethernet_interface.rx_queue.workers))):
+            self._validate_rx_queue_worker(max(rx_queue_workers), l3_ethernet_interface.name)
         rx_queue_workers_range = list_compress(list(rx_queue_workers))
 
         return EosCliConfigGen.Platform.Sfe.Interface.ProfilesItem.InterfacesItem(

@@ -453,8 +453,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def link_tracking_groups(self) -> None:
         """Set link_tracking_groups."""
-        if link_tracking_groups := self.shared_utils.link_tracking_groups:
-            self.structured_config.link_tracking_groups = link_tracking_groups
+        self.structured_config.link_tracking_groups = self.shared_utils.link_tracking_groups
 
     @structured_config_contributor
     def lacp(self) -> None:

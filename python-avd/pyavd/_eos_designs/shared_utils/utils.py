@@ -72,7 +72,7 @@ class UtilsMixin(Protocol):
 
     def get_merged_port_profile(self: SharedUtilsProtocol, profile_name: str, context: str) -> EosDesigns.PortProfilesItem:
         """
-        Return list of merged "port_profiles" where "parent_profile" has been applied.
+        Returns a merged "port_profile" where "parent_profile" has been applied.
 
         Leverages a dict of resolved profiles as a cache.
         """
@@ -89,7 +89,7 @@ class UtilsMixin(Protocol):
         return resolved_profile
 
     def resolve_port_profile(self: SharedUtilsProtocol, profile_name: str, context: str) -> EosDesigns.PortProfilesItem:
-        """Resolve one port-profile and return it. Also updates the cache."""
+        """Resolve one port-profile and return it."""
         if profile_name not in self.inputs.port_profiles:
             msg = f"Profile '{profile_name}' applied under '{context}' does not exist in `port_profiles`."
             raise AristaAvdInvalidInputsError(msg)

@@ -432,8 +432,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def mac_address_table(self) -> None:
         """mac_address_table set based on mac_address_table data-model."""
-        if self.inputs.mac_address_table.aging_time is not None:
-            self.structured_config.mac_address_table.aging_time = self.inputs.mac_address_table.aging_time
+        self.structured_config.mac_address_table.aging_time = self.inputs.mac_address_table.aging_time
 
     @structured_config_contributor
     def queue_monitor_streaming(self) -> None:
@@ -453,7 +452,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @structured_config_contributor
     def link_tracking_groups(self) -> None:
         """Set link_tracking_groups."""
-        self.structured_config.link_tracking_groups = self.shared_utils.link_tracking_groups
+        if link_tracking_groups := self.shared_utils.link_tracking_groups:
+            self.structured_config.link_tracking_groups = link_tracking_groups
 
     @structured_config_contributor
     def lacp(self) -> None:

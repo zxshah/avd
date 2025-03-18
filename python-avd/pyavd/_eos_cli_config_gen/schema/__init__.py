@@ -4944,7 +4944,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         protocol_bpdu_bypass: bool | None
         dynamic_authorization: bool | None
         statistics_packets_dropped: bool | None
-        """Enable the dot1x dropped counters."""
+        """Enable the 802.1X port authentication dropped data packet statistics."""
         mac_based_authentication: MacBasedAuthentication
         """Subclass of AvdModel."""
         radius_av_pair_username_format: RadiusAvPairUsernameFormat
@@ -5002,7 +5002,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     protocol_lldp_bypass: protocol_lldp_bypass
                     protocol_bpdu_bypass: protocol_bpdu_bypass
                     dynamic_authorization: dynamic_authorization
-                    statistics_packets_dropped: Enable the dot1x dropped counters.
+                    statistics_packets_dropped: Enable the 802.1X port authentication dropped data packet statistics.
                     mac_based_authentication: Subclass of AvdModel.
                     radius_av_pair_username_format:
                        RADIUS AV-pair username settings.

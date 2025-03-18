@@ -12,7 +12,7 @@
     | [<samp>&nbsp;&nbsp;protocol_lldp_bypass</samp>](## "dot1x.protocol_lldp_bypass") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;protocol_bpdu_bypass</samp>](## "dot1x.protocol_bpdu_bypass") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;dynamic_authorization</samp>](## "dot1x.dynamic_authorization") | Boolean |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;statistics_packets_dropped</samp>](## "dot1x.statistics_packets_dropped") | Boolean |  |  |  | Enable the dot1x dropped counters. |
+    | [<samp>&nbsp;&nbsp;statistics_packets_dropped</samp>](## "dot1x.statistics_packets_dropped") | Boolean |  |  |  | Enable the 802.1X port authentication dropped data packet statistics. |
     | [<samp>&nbsp;&nbsp;mac_based_authentication</samp>](## "dot1x.mac_based_authentication") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;delay</samp>](## "dot1x.mac_based_authentication.delay") | Integer |  |  | Min: 0<br>Max: 300 |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;hold_period</samp>](## "dot1x.mac_based_authentication.hold_period") | Integer |  |  | Min: 1<br>Max: 300 |  |
@@ -92,7 +92,7 @@
       protocol_bpdu_bypass: <bool>
       dynamic_authorization: <bool>
 
-      # Enable the dot1x dropped counters.
+      # Enable the 802.1X port authentication dropped data packet statistics.
       statistics_packets_dropped: <bool>
       mac_based_authentication:
         delay: <int; 0-300>

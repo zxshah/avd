@@ -146,7 +146,7 @@ jobs:
           pip install build
           cd python-avd
           python -m build --wheel --outdir /tmp/pyavd
-      - name: Compress wheel pacakges
+      - name: Compress wheel packages
         run: tar -czf /tmp/pyavd.tar.gz -C /tmp pyavd
       - name: Upload pyavd artifact
         uses: actions/upload-artifact@v4

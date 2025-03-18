@@ -11837,7 +11837,7 @@ FIPS restrictions enabled.
 
 | Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
 | ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
-| - | - | - | - | allow active-sak | - | - |
+| - | - | - | - | allow active-sak | True | - |
 
 ###### Keys
 
@@ -11851,7 +11851,7 @@ FIPS restrictions enabled.
 
 | Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
 | ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
-| aes256-gcm-xpn | - | - | - | drop | - | - |
+| aes256-gcm-xpn | - | - | - | drop | - | 20000 |
 
 ###### Keys
 

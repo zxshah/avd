@@ -618,7 +618,7 @@ class EosDesignsFacts(AvdModel):
                 "wan_circuit_id": {"type": str},
             }
             name: str
-            public_ip: str
+            public_ip: str | None
             connected_to_pathfinder: bool
             wan_circuit_id: str | None
 
@@ -628,7 +628,7 @@ class EosDesignsFacts(AvdModel):
                     self,
                     *,
                     name: str | UndefinedType = Undefined,
-                    public_ip: str | UndefinedType = Undefined,
+                    public_ip: str | None | UndefinedType = Undefined,
                     connected_to_pathfinder: bool | UndefinedType = Undefined,
                     wan_circuit_id: str | None | UndefinedType = Undefined,
                 ) -> None:

@@ -136,7 +136,7 @@
     | [<samp>wan_path_groups</samp>](## "wan_path_groups") | List, items: Dictionary |  |  |  | List of path-groups used for the WAN configuration. |
     | [<samp>&nbsp;&nbsp;-&nbsp;interfaces</samp>](## "wan_path_groups.[].interfaces") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "wan_path_groups.[].interfaces.[].name") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public_ip</samp>](## "wan_path_groups.[].interfaces.[].public_ip") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;public_ip</samp>](## "wan_path_groups.[].interfaces.[].public_ip") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connected_to_pathfinder</samp>](## "wan_path_groups.[].interfaces.[].connected_to_pathfinder") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wan_circuit_id</samp>](## "wan_path_groups.[].interfaces.[].wan_circuit_id") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "wan_path_groups.[].name") | String | Required, Unique |  |  | Path-group name. |
@@ -380,7 +380,7 @@
     wan_path_groups:
       - interfaces:
           - name: <str; required>
-            public_ip: <str; required>
+            public_ip: <str>
             connected_to_pathfinder: <bool; required>
             wan_circuit_id: <str>
 

@@ -38,8 +38,8 @@ class WanMixin(Protocol):
             for interface in wan_path_group._internal_data.interfaces:
                 wan_path_group_item.interfaces.append_new(
                     name=interface["name"],
-                    public_ip=interface["public_ip"],
                     connected_to_pathfinder=interface["connected_to_pathfinder"],
+                    public_ip=interface.get("public_ip"),
                     wan_circuit_id=interface.get("wan_circuit_id"),
                 )
             self.facts.wan_path_groups.append(wan_path_group_item)

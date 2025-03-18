@@ -49,7 +49,8 @@ class FactsGeneratorProtocol(AvdFactsProtocol, Protocol):
             for method in self.facts_methods():
                 method(self)
         except AristaAvdError as e:
-            e.message = f"{e.message.removesuffix('.')} for host {self.hostname}."
+            msg = f"{e.message.removesuffix('.')} for host '{self.hostname}'."
+            raise AristaAvdError(msg) from e
 
     @classmethod
     def facts_methods(cls) -> list[Callable[[Self], None]]:

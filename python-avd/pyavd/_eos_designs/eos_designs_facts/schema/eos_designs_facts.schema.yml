@@ -371,7 +371,6 @@ keys:
                 required: true
               public_ip:
                 type: str
-                required: true
               connected_to_pathfinder:
                 type: bool
                 required: true

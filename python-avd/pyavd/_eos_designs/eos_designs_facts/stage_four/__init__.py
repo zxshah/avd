@@ -71,5 +71,5 @@ class FactsStageFour(FactsGenerator, FactsStageFourProtocol):
 
         if self.shared_utils.uplink_type == "p2p-vrfs":
             # Reset the cache of filtered tenants to allow to add in VRFs attracted from the uplink.
-            self.shared_utils.__dict__.pop("filtered_tenants")
-            self.shared_utils.__dict__.pop("vrfs")
+            self.shared_utils.__dict__.pop("filtered_tenants", None)
+            self.shared_utils.__dict__.pop("vrfs", None)

@@ -456,7 +456,7 @@ jobs:
   ansible_test_sanity:
     name: Run ansible-test sanity validation
     runs-on: ubuntu-latest
-    needs: [file-changes]
+    needs: [build_pyavd, file-changes]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3
@@ -467,11 +467,23 @@ jobs:
             3.11
             3.12
             3.13
-      - name: "Install Python requirements"
+      - name: Download AVD Collection Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyavd
+          path: /tmp/
+      - name: Extract Virtual Environment
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Fix Virtual Environment Permissions (if needed)
+        run: chmod -R +x /tmp/python_env/bin || true
+      - name: "Install Ansible requirements"
         run: |
-          pip install "ansible-core<2.19.0" -r .github/requirements-ci-dev.txt --upgrade
+          source /tmp/python_env/bin/activate
+          python -m pip install "/tmp/python_env/*.whl[extras]"
+          pip install "ansible-core<2.19.0"
       - name: "Run ansible-test sanity"
         run: |
+          source /tmp/python_env/bin/activate
           cd ansible_collections/arista/avd/
           ansible-test sanity --color yes -v
 

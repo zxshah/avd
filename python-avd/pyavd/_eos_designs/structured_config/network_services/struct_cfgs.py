@@ -25,4 +25,4 @@ class StructCfgsMixin(Protocol):
             return
 
         for tenant in self.shared_utils.filtered_tenants:
-            self.custom_structured_configs.root.extend(vrf.structured_config for vrf in tenant.vrfs if vrf.structured_config)
+            self.custom_structured_configs.root.extend(vrf.structured_config for vrf in tenant.vrfs)

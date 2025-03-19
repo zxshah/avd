@@ -46,7 +46,7 @@ class UtilsMixin(Protocol):
     def _underlay_links(self: AvdStructuredConfigUnderlayProtocol) -> list:
         """Returns the list of underlay links for this device."""
         underlay_links = []
-        underlay_links.extend(self._uplinks)
+        underlay_links.extend(get(self._hostvars, "switch.uplinks"))
         if self.inputs.fabric_sflow.uplinks is not None:
             for uplink in underlay_links:
                 uplink.update({"sflow": {"enable": self.inputs.fabric_sflow.uplinks}})
@@ -138,10 +138,6 @@ class UtilsMixin(Protocol):
             return trunk_groups
 
         return []
-
-    @cached_property
-    def _uplinks(self: AvdStructuredConfigUnderlayProtocol) -> list:
-        return get(self._hostvars, "switch.uplinks")
 
     # These overloads are just here to help the type checker enforce that input type x gives output type y
     @overload

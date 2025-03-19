@@ -8,13 +8,13 @@ from functools import cached_property
 from hashlib import sha256
 from typing import TYPE_CHECKING, Literal, Protocol
 
-from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
-from pyavd._utils import Undefined, UndefinedType, default, get_v2, short_esi_to_route_target
+from pyavd._utils import Undefined, UndefinedType, get_v2, short_esi_to_route_target
 
 if TYPE_CHECKING:
     from typing import TypeVar
 
+    from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
     from pyavd._eos_designs.schema import EosDesigns
 
     from . import AvdStructuredConfigConnectedEndpointsProtocol
@@ -260,16 +260,6 @@ class UtilsMixin(Protocol):
 
         return ptp_config
 
-    def _get_adapter_poe(
-        self: AvdStructuredConfigConnectedEndpointsProtocol,
-        adapter: EosDesigns._DynamicKeys.DynamicConnectedEndpointsItem.ConnectedEndpointsItem.AdaptersItem,
-    ) -> EosCliConfigGen.EthernetInterfacesItem.Poe | UndefinedType:
-        """Return poe settings for one adapter."""
-        if self.shared_utils.platform_settings.feature_support.poe and adapter.poe:
-            return adapter.poe._cast_as(EosCliConfigGen.EthernetInterfacesItem.Poe)
-
-        return Undefined
-
     def _get_adapter_phone(
         self: AvdStructuredConfigConnectedEndpointsProtocol,
         adapter: EosDesigns._DynamicKeys.DynamicConnectedEndpointsItem.ConnectedEndpointsItem.AdaptersItem,
@@ -294,13 +284,3 @@ class UtilsMixin(Protocol):
             raise AristaAvdError(msg)
 
         return output_type(trunk=adapter.phone_trunk_mode, vlan=adapter.phone_vlan)
-
-    def _get_adapter_sflow(
-        self: AvdStructuredConfigConnectedEndpointsProtocol,
-        adapter: EosDesigns._DynamicKeys.DynamicConnectedEndpointsItem.ConnectedEndpointsItem.AdaptersItem,
-        output_type: type[T_Sflow],
-    ) -> T_Sflow | UndefinedType:
-        if (adapter_sflow := default(adapter.sflow, self.inputs.fabric_sflow.endpoints)) is not None:
-            return output_type(enable=adapter_sflow)
-
-        return Undefined

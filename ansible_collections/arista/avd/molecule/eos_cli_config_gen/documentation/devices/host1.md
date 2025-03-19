@@ -1865,6 +1865,7 @@ dhcp server vrf VRF01
 | -------------- | --------- | --------- |
 | Ethernet64 | True | True |
 | Port-Channel112 | True | True |
+| Vlan2002 | True | True |
 
 ## System Boot Settings
 

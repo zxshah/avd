@@ -72,7 +72,7 @@ class EthernetInterfacesMixin(Protocol):
             if "." in l3_port_channel.name:
                 continue
 
-            channel_group_id = l3_port_channel.name.split("Port-Channel")[-1]
+            channel_group_id = l3_port_channel.name.removeprefix("Port-Channel")
             for member_intf in l3_port_channel.member_interfaces:
                 interface_description = member_intf.description
                 # derive values for peer from parent L3 port-channel

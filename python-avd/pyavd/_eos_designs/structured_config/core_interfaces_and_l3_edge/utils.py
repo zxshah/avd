@@ -30,10 +30,6 @@ class UtilsMixin(Protocol):
     """
 
     @cached_property
-    def _p2p_links_sflow(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol) -> bool | None:
-        return self.inputs.fabric_sflow.core_interfaces if self.data_model == "core_interfaces" else self.inputs.fabric_sflow.l3_edge
-
-    @cached_property
     def _filtered_p2p_links(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol) -> list[tuple[T_P2pLinksItem, dict]]:
         """
         Returns a filtered list of p2p_links, which only contains links with our hostname.
@@ -295,7 +291,9 @@ class UtilsMixin(Protocol):
         if p2p_link.macsec_profile:
             interface.mac_security.profile = p2p_link.macsec_profile
 
-        if (p2p_link_sflow := default(p2p_link.sflow, self._p2p_links_sflow)) is not None:
+        if p2p_link.sflow is not None:
+            interface.sflow.enable = p2p_link.sflow
+        elif (p2p_link_sflow:=self.inputs.fabric_sflow.core_interfaces if self.data_model == "core_interfaces" else self.inputs.fabric_sflow.l3_edge):
             interface.sflow.enable = p2p_link_sflow
 
         if (p2p_link_flow_tracking := self.shared_utils.get_flow_tracker(p2p_link.flow_tracking)) is not None:

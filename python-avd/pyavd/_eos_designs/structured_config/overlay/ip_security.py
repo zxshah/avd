@@ -43,6 +43,8 @@ class IpSecurityMixin(Protocol):
         if self.shared_utils.is_wan_client and self.inputs.wan_ipsec_profiles.data_plane:
             self._set_data_plane()
         self._set_control_plane()
+        # settings applicable to all ipsec connections
+        self._set_ipsec_parameters()
 
     def _set_data_plane(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Set ip_security structured config for DataPlane."""
@@ -118,3 +120,8 @@ class IpSecurityMixin(Protocol):
         if self.shared_utils.is_wan_server:
             return
         self.structured_config.ip_security.key_controller.profile = profile_name
+
+    def _set_ipsec_parameters(self: AvdStructuredConfigOverlayProtocol) -> None:
+        """Set parameters relevant to all ipsec connections."""
+        if self.inputs.ipsec_settings.bind_connection_to_interface:
+            self.structured_config.ip_security.connection_tx_interface_match_source_ip = True

@@ -33,8 +33,8 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;action</samp>](## "mac_security.profiles.[].traffic_unprotected.action") | String | Required |  | Valid Values:<br>- <code>allow</code><br>- <code>drop</code> | Allow/drop the transmit/receive of unprotected traffic. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;allow_active_sak</samp>](## "mac_security.profiles.[].traffic_unprotected.allow_active_sak") | Boolean |  |  |  | Allow transmit/receive of encrypted traffic using operational SAK and block otherwise. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;replay_protection</samp>](## "mac_security.profiles.[].replay_protection") | Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled</samp>](## "mac_security.profiles.[].replay_protection.disabled") | Boolean |  |  |  | Disable replay protection |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window</samp>](## "mac_security.profiles.[].replay_protection.window") | Integer |  |  | Min: 0<br>Max: 4294967295 | Set replay protection window size |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabled</samp>](## "mac_security.profiles.[].replay_protection.disabled") | Boolean |  |  |  | Disable replay protection. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;window</samp>](## "mac_security.profiles.[].replay_protection.window") | Integer |  |  | Min: 0<br>Max: 4294967295 | Set replay protection window size. |
 
 === "YAML"
 
@@ -74,9 +74,9 @@
             allow_active_sak: <bool>
           replay_protection:
 
-            # Disable replay protection
+            # Disable replay protection.
             disabled: <bool>
 
-            # Set replay protection window size
+            # Set replay protection window size.
             window: <int; 0-4294967295>
     ```

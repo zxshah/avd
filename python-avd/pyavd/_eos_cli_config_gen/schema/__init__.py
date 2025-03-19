@@ -18066,9 +18066,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                 _fields: ClassVar[dict] = {"disabled": {"type": bool}, "window": {"type": int}}
                 disabled: bool | None
-                """Disable replay protection"""
+                """Disable replay protection."""
                 window: int | None
-                """Set replay protection window size"""
+                """Set replay protection window size."""
 
                 if TYPE_CHECKING:
 
@@ -18080,8 +18080,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Subclass of AvdModel.
 
                         Args:
-                            disabled: Disable replay protection
-                            window: Set replay protection window size
+                            disabled: Disable replay protection.
+                            window: Set replay protection window size.
 
                         """
 

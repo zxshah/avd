@@ -25,6 +25,9 @@ class FilteredTenantsMixin(Protocol):
     Using type-hint on self to get proper type-hints on attributes across all Mixins.
     """
 
+    resolved_svi_profiles_cache: dict[str, EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem] | None = None
+    """Poor-mans cache to only resolve and deepmerge an svi_profile once."""
+
     @cached_property
     def filtered_tenants(self: SharedUtilsProtocol) -> EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServices:
         """
@@ -247,6 +250,49 @@ class FilteredTenantsMixin(Protocol):
 
         return filtered_vrfs
 
+    def get_merged_svi_profile(
+        self: SharedUtilsProtocol, profile_name: str, context: str
+    ) -> EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem:
+        """
+        Returns a merged "svi_profile" where "parent_profile" has been applied. The profile is casted as an SVI instance for easy inheritance.
+
+        Leverages a dict of resolved profiles as a cache.
+        """
+        if self.resolved_svi_profiles_cache and profile_name in self.resolved_svi_profiles_cache:
+            return self.resolved_svi_profiles_cache[profile_name]
+
+        resolved_profile = self.resolve_svi_profile(profile_name, context)._cast_as(
+            EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem
+        )
+
+        # Update the cache so we don't resolve again next time.
+        if self.resolved_svi_profiles_cache is None:
+            self.resolved_svi_profiles_cache = {}
+        self.resolved_svi_profiles_cache[profile_name] = resolved_profile
+
+        return resolved_profile
+
+    def resolve_svi_profile(self: SharedUtilsProtocol, profile_name: str, context: str) -> EosDesigns.SviProfilesItem:
+        """Resolve one svi-profile and return it."""
+        if profile_name not in self.inputs.svi_profiles:
+            msg = f"Profile '{profile_name}' applied under SVI '{context}' does not exist in `svi_profiles`."
+            raise AristaAvdInvalidInputsError(msg)
+
+        svi_profile = self.inputs.svi_profiles[profile_name]
+        if svi_profile.parent_profile:
+            if svi_profile.parent_profile not in self.inputs.svi_profiles:
+                msg = f"Profile '{svi_profile.parent_profile}' applied under svi_profile '{profile_name}' does not exist in `svi_profiles`."
+                raise AristaAvdInvalidInputsError(msg)
+
+            parent_profile = self.inputs.svi_profiles[svi_profile.parent_profile]
+
+            # Notice reuse of the same variable with the merged content.
+            svi_profile = svi_profile._deepinherited(parent_profile)
+
+        delattr(svi_profile, "parent_profile")
+
+        return svi_profile
+
     def get_merged_svi_config(
         self: SharedUtilsProtocol, svi: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem
     ) -> EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem:
@@ -264,23 +310,10 @@ class FilteredTenantsMixin(Protocol):
         svi_node_cfg > svi_cfg --> svi
         """
         if svi.profile:
-            if svi.profile not in self.inputs.svi_profiles:
-                msg = f"Profile '{svi.profile}' applied under SVI '{svi.name}' does not exist in `svi_profiles`."
-                raise AristaAvdInvalidInputsError(msg)
-            svi_profile = self.inputs.svi_profiles[svi.profile]._deepcopy()
-
-            if svi_profile.parent_profile:
-                if svi_profile.parent_profile not in self.inputs.svi_profiles:
-                    msg = f"Profile '{svi_profile.parent_profile}' applied under SVI Profile '{svi_profile.profile}' does not exist in `svi_profiles`."
-                    raise AristaAvdInvalidInputsError(msg)
-
-                # Inherit from the parent profile
-                svi_profile._deepinherit(self.inputs.svi_profiles[svi_profile.parent_profile])
+            svi_profile = self.get_merged_svi_profile(svi.profile, f"{svi.id} ({svi.name})")
 
             # Inherit from the profile
-            merged_svi = svi._deepinherited(
-                svi_profile._cast_as(EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.SvisItem, ignore_extra_keys=True)
-            )
+            merged_svi = svi._deepinherited(svi_profile)
         else:
             merged_svi = svi
 

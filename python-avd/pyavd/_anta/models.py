@@ -20,12 +20,11 @@ LOGGER = getLogger(__name__)
 
 @dataclass(frozen=True)
 class BgpNeighbor:
-    """Represents a BGP neighbor configuration."""
+    """Represents a BGP neighbor from the structured configuration."""
 
     ip_address: IPv4Address
     vrf: str
-    peer_group: str | None
-    peer: str | None = None
+    update_source: str | None = None
 
 
 @dataclass
@@ -79,7 +78,7 @@ class DeviceTestContext:
                 LOGGER.debug("<%s>: skipped BGP peer %s - IPv6 not supported", self.hostname, identifier)
                 continue
 
-            neighbors.append(BgpNeighbor(ip_address=ip_address, vrf="default", peer_group=neighbor.peer_group, peer=neighbor.peer))
+            neighbors.append(BgpNeighbor(ip_address=ip_address, vrf="default"))
 
         if not self.input_factory_settings.allow_bgp_vrfs:
             LOGGER.debug("<%s>: skipped BGP VRF peers - VRF processing disabled", self.hostname)
@@ -109,6 +108,6 @@ class DeviceTestContext:
                     LOGGER.debug("<%s>: skipped BGP peer %s - IPv6 not supported", self.hostname, identifier)
                     continue
 
-                neighbors.append(BgpNeighbor(ip_address=ip_address, vrf=vrf.name, peer_group=neighbor.peer_group))
+                neighbors.append(BgpNeighbor(ip_address=ip_address, vrf=vrf.name))
 
         return neighbors

@@ -84,12 +84,14 @@ class VerifyReachabilityInputFactory(AntaTestInputFactory):
 
         # Get the P2P reachability inputs
         with self.logger.context("Point-to-Point Links"):
-            if p2p_inputs := self._get_p2p_inputs():
+            p2p_inputs = self._get_p2p_inputs()
+            if p2p_inputs.hosts:
                 inputs.append(p2p_inputs)
 
         # Get the BGP neighbor reachability inputs
         with self.logger.context("BGP Neighbors"):
-            if bgp_inputs := self._get_bgp_inputs():
+            bgp_inputs = self._get_bgp_inputs()
+            if bgp_inputs.hosts:
                 inputs.append(bgp_inputs)
 
         return inputs if inputs else None

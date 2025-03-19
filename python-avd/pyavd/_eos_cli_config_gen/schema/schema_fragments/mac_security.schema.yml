@@ -109,11 +109,11 @@ keys:
               keys:
                 disabled:
                   type: bool
-                  description: Disable replay protection
+                  description: Disable replay protection.
                 window:
                   type: int
                   convert_types:
                     - str
                   min: 0
                   max: 4294967295
-                  description: Set replay protection window size
+                  description: Set replay protection window size.

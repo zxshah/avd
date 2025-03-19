@@ -293,7 +293,7 @@ class UtilsMixin(Protocol):
 
         if p2p_link.sflow is not None:
             interface.sflow.enable = p2p_link.sflow
-        elif (p2p_link_sflow:=self.inputs.fabric_sflow.core_interfaces if self.data_model == "core_interfaces" else self.inputs.fabric_sflow.l3_edge):
+        elif p2p_link_sflow := self.inputs.fabric_sflow.core_interfaces if self.data_model == "core_interfaces" else self.inputs.fabric_sflow.l3_edge:
             interface.sflow.enable = p2p_link_sflow
 
         if (p2p_link_flow_tracking := self.shared_utils.get_flow_tracker(p2p_link.flow_tracking)) is not None:

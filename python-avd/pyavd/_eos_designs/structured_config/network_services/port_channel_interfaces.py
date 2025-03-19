@@ -48,7 +48,6 @@ class PortChannelInterfacesMixin(Protocol):
         regular_l3_port_channel_names = set()
         for tenant in self.shared_utils.filtered_tenants:
             for vrf in tenant.vrfs:
-                node_type_in_schema = "l3_port_channels"
                 for l3_port_channel in vrf.l3_port_channels:
                     if l3_port_channel.node != self.shared_utils.hostname:
                         continue
@@ -149,7 +148,7 @@ class PortChannelInterfacesMixin(Protocol):
                             l3_port_channel.encapsulation_dot1q_vlan, int(l3_port_channel.name.split(".", maxsplit=1)[-1])
                         )
                         if not l3_port_channel.ip_address:
-                            msg = f"{self.shared_utils.node_type_key_data.key}.nodes[name={self.shared_utils.hostname}].{node_type_in_schema}"
+                            msg = f"{self.shared_utils.node_type_key_data.key}.nodes[name={self.shared_utils.hostname}].l3_port_channels"
                             msg += f"[name={l3_port_channel.name}].ip_address"
                             raise AristaAvdMissingVariableError(msg)
 

@@ -26,10 +26,6 @@ class UtilsMixin(Protocol):
     """
 
     @cached_property
-    def _local_endpoint_trunk_groups(self: AvdStructuredConfigNetworkServicesProtocol) -> set:
-        return set(get(self._hostvars, "switch.local_endpoint_trunk_groups", default=[]))
-
-    @cached_property
     def _vrf_default_evpn(self: AvdStructuredConfigNetworkServicesProtocol) -> bool:
         """Return boolean telling if VRF "default" is running EVPN or not."""
         if not (

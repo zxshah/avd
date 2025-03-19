@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._utils import AvdStringFormatter
+from pyavd._utils import AvdStringFormatter, get
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
@@ -77,7 +77,8 @@ class VlansMixin(Protocol):
         if self.inputs.enable_trunk_groups:
             trunk_groups = vlan.trunk_groups
             if self.shared_utils.only_local_vlan_trunk_groups:
-                trunk_groups = list(self._local_endpoint_trunk_groups.intersection(trunk_groups))
+                local_endpoint_trunk_groups = set(get(self._hostvars, "switch.local_endpoint_trunk_groups", default=[]))
+                trunk_groups = list(local_endpoint_trunk_groups.intersection(trunk_groups))
             if self.shared_utils.mlag:
                 trunk_groups.append(self.inputs.trunk_groups.mlag.name)
             if self.shared_utils.uplink_type == "port-channel":

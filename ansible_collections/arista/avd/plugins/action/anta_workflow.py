@@ -278,7 +278,10 @@ def get_ansible_vars(device_list: list[str], task_vars: dict) -> dict:
             continue
 
         # Adding the Ansible connection variables following the HTTPAPI connection plugin settings
-        device_vars[device] = {key: get(host_hostvars, key, default=get(task_vars, key)) for key in ANSIBLE_CONNECTION_VARS}
+        device_vars[device] = {
+            key: get(host_hostvars, key) if key in ["ansible_host", "inventory_hostname"] else get(task_vars, key, default=get(host_hostvars, key))
+            for key in ANSIBLE_CONNECTION_VARS
+        }
 
         # Same as above, we also honor the `anta_tags` variable if provided in the hostvars
         device_vars[device]["anta_tags"] = get(host_hostvars, "anta_tags")

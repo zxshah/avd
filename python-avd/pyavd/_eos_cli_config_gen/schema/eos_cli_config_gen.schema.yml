@@ -208,6 +208,19 @@ keys:
               - "group radius group MYGROUP local"
 
               '
+          command_api:
+            type: str
+            description: 'Command-API authentication method(s) as a string.
+
+              This feature is not yet visible in EOS.
+
+              This feature only supports local authentication at the moment.
+
+              Examples:
+
+              - "local"
+
+              '
           console:
             type: str
             description: 'Console authentication method(s) as a string.
@@ -3437,6 +3450,26 @@ keys:
           - 'False'
           - 'true'
           - 'false'
+        spanning_tree_bpduguard_rate_limit:
+          type: dict
+          keys:
+            enabled:
+              type: bool
+              description: Enable/Disable rate limiter on this port.
+            count:
+              type: int
+              convert_types:
+              - str
+              description: Max number of BPDUs per timer interval.
+              min: 1
+              max: 20000
+            interval:
+              type: int
+              convert_types:
+              - str
+              description: Number of seconds in the BPDU input rate limiter timer.
+              min: 1
+              max: 15
         spanning_tree_guard:
           type: str
           valid_values:
@@ -22621,6 +22654,12 @@ keys:
         ip_nat:
           type: dict
           $ref: eos_cli_config_gen#/$defs/interface_ip_nat
+        dhcp_server_ipv4:
+          type: bool
+          description: Enable IPv4 DHCP server.
+        dhcp_server_ipv6:
+          type: bool
+          description: Enable IPv6 DHCP server.
         ipv6_enable:
           type: bool
         ipv6_address:

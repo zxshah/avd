@@ -1382,6 +1382,7 @@ aaa group server tacacs+ TACACS2
 | Type | Sub-type | User Stores |
 | ---- | -------- | ---------- |
 | Login | default | group TACACS local |
+| Login | command-api | local |
 | Login | console | local |
 
 AAA Authentication on-failure log has been enabled
@@ -1396,6 +1397,7 @@ Policy lockout has been enabled. After **3** failed login attempts within **900*
 
 ```eos
 aaa authentication login default group TACACS local
+aaa authentication login command-api local
 aaa authentication login console local
 aaa authentication enable default group TACACS local
 aaa authentication dot1x default group RADIUS1
@@ -1865,6 +1867,7 @@ dhcp server vrf VRF01
 | -------------- | --------- | --------- |
 | Ethernet64 | True | True |
 | Port-Channel112 | True | True |
+| Vlan2002 | True | True |
 
 ## System Boot Settings
 
@@ -5953,6 +5956,7 @@ interface Loopback100
    description TENANT_A_PROJECT02_VTEP_DIAGNOSTICS
    vrf TENANT_A_PROJECT02
    ip address 10.1.255.3/32
+   hardware forwarding id
 ```
 
 ### Tunnel Interfaces
@@ -6565,6 +6569,8 @@ interface Vlan2002
    no autostate
    vrf Tenant_B
    ip verify unicast source reachable-via rx
+   dhcp server ipv4
+   dhcp server ipv6
    isis enable EVPN_UNDERLAY
    isis bfd
    isis authentication mode md5 rx-disabled
@@ -11813,9 +11819,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes128-gcm | 100 | 30 | True | allow |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes128-gcm | 100 | 30 | True | allow | - | - |
 
 ###### Keys
 
@@ -11835,9 +11841,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| - | - | - | - | allow active-sak |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| - | - | - | - | allow active-sak | True | - |
 
 ###### Keys
 
@@ -11849,9 +11855,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes256-gcm-xpn | - | - | - | drop |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes256-gcm-xpn | - | - | - | drop | - | 20000 |
 
 ###### Keys
 
@@ -11881,11 +11887,13 @@ mac security
    profile A2
       key 1234b 7 <removed>
       traffic unprotected allow active-sak
+      replay protection disabled
    !
    profile A3
       cipher aes256-gcm-xpn
       key ab 7 <removed>
       traffic unprotected drop
+      replay protection window 20000
 ```
 
 ### Traffic Policies information

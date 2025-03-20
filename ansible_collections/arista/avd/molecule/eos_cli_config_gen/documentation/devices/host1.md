@@ -5953,6 +5953,7 @@ interface Loopback100
    description TENANT_A_PROJECT02_VTEP_DIAGNOSTICS
    vrf TENANT_A_PROJECT02
    ip address 10.1.255.3/32
+   hardware forwarding id
 ```
 
 ### Tunnel Interfaces
@@ -11813,9 +11814,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes128-gcm | 100 | 30 | True | allow |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes128-gcm | 100 | 30 | True | allow | - | - |
 
 ###### Keys
 
@@ -11835,9 +11836,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| - | - | - | - | allow active-sak |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| - | - | - | - | allow active-sak | True | - |
 
 ###### Keys
 
@@ -11849,9 +11850,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes256-gcm-xpn | - | - | - | drop |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes256-gcm-xpn | - | - | - | drop | - | 20000 |
 
 ###### Keys
 
@@ -11881,11 +11882,13 @@ mac security
    profile A2
       key 1234b 7 <removed>
       traffic unprotected allow active-sak
+      replay protection disabled
    !
    profile A3
       cipher aes256-gcm-xpn
       key ab 7 <removed>
       traffic unprotected drop
+      replay protection window 20000
 ```
 
 ### Traffic Policies information

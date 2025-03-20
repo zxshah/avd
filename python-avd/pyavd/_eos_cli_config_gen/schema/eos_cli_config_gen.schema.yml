@@ -7053,6 +7053,10 @@ keys:
               type: int
               convert_types:
               - str
+        hardware_forwarding_id:
+          type: bool
+          description: Enable hardware forwarding for the VRF where this loopback
+            interface belongs.
         eos_cli:
           type: str
           description: EOS CLI rendered directly on the loopback interface in the
@@ -7208,6 +7212,19 @@ keys:
                   type: bool
                   description: Allow transmit/receive of encrypted traffic using operational
                     SAK and block otherwise.
+            replay_protection:
+              type: dict
+              keys:
+                disabled:
+                  type: bool
+                  description: Disable replay protection.
+                window:
+                  type: int
+                  convert_types:
+                  - str
+                  min: 0
+                  max: 4294967295
+                  description: Set replay protection window size.
   maintenance:
     type: dict
     display_name: Maintenance Mode
@@ -12236,9 +12253,8 @@ keys:
                             - kbytes
                             - mbytes
                             - milliseconds
-                            description: 'Units to be used for the threshold values.
-
-                              This should be one of segments, byte, kbytes, mbytes.'
+                            - microseconds
+                            description: Units to be used for the threshold values.
                           min:
                             type: int
                             required: true
@@ -21828,6 +21844,9 @@ keys:
             - str
             min: 1
             max: 4094
+          access_list_bypass:
+            description: Bypass phone traffic from configured access-list.
+            type: bool
   switchport_port_security:
     type: dict
     keys:

@@ -54,7 +54,7 @@ class PlatformMixin(Protocol):
         # populate interface profile for SFE platform (if supported)
         if self.shared_utils.is_sfe_interface_profile_supported and (sfe_member_interfaces_for_profile := self._get_sfe_interface_profile_member_interfaces):
             # build single ProfilesItem and append to Profiles
-            default_sfe_interface_profile_name = "AVD-DEFAULT-INTERFACE-PROFILE"
+            default_sfe_interface_profile_name = "SFE-INTERFACE-PROFILE"
             self.structured_config.platform.sfe.interface.profiles.append_new(
                 name=default_sfe_interface_profile_name,
                 interfaces=sfe_member_interfaces_for_profile,

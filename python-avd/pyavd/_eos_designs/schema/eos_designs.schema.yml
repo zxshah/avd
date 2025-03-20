@@ -4668,6 +4668,10 @@ keys:
       table: ospf-settings
     type: bool
     default: false
+  underlay_ospf_graceful_restart:
+    type: bool
+    default: false
+    description: Set graceful restart when the underlay_routing_protocol is OSPF.
   underlay_ospf_max_lsa:
     documentation_options:
       table: ospf-settings

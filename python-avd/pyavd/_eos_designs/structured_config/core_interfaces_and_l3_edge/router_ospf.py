@@ -35,3 +35,6 @@ class RouterOspfMixin(Protocol):
                 id=self.inputs.underlay_ospf_process_id,
                 no_passive_interfaces=EosCliConfigGen.RouterOspf.ProcessIdsItem.NoPassiveInterfaces(no_passive_interfaces),
             )
+
+        if self.inputs.underlay_ospf_graceful_restart:
+            self.structured_config.router_ospf.process_ids.obtain(self.inputs.underlay_ospf_process_id).graceful_restart.enabled = True

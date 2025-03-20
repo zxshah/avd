@@ -153,6 +153,7 @@ class RouterBgpMixin(Protocol):
                 )
 
                 bfd_timers_item = self.inputs.bgp_peer_groups.wan_rr_overlay_peers.bfd_timers
+                # We have to apply the attributes individually to get the defaults from the input class.
                 wan_rr_overlay_peer_group.bfd_timers._update(
                     interval=bfd_timers_item.interval, min_rx=bfd_timers_item.min_rx, multiplier=bfd_timers_item.multiplier
                 )

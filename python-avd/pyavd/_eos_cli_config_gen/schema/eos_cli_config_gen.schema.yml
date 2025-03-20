@@ -7056,7 +7056,7 @@ keys:
         hardware_forwarding_id:
           type: bool
           description: Enable hardware forwarding for the VRF where this loopback
-            inteface belongs.
+            interface belongs.
         eos_cli:
           type: str
           description: EOS CLI rendered directly on the loopback interface in the

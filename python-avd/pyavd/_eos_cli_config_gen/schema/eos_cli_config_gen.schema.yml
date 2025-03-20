@@ -208,6 +208,19 @@ keys:
               - "group radius group MYGROUP local"
 
               '
+          command_api:
+            type: str
+            description: 'Command-API authentication method(s) as a string.
+
+              This feature is not yet visible in EOS.
+
+              This feature only supports local authentication at the moment.
+
+              Examples:
+
+              - "local"
+
+              '
           console:
             type: str
             description: 'Console authentication method(s) as a string.
@@ -7073,6 +7086,10 @@ keys:
               type: int
               convert_types:
               - str
+        hardware_forwarding_id:
+          type: bool
+          description: Enable hardware forwarding for the VRF where this loopback
+            interface belongs.
         eos_cli:
           type: str
           description: EOS CLI rendered directly on the loopback interface in the
@@ -7228,6 +7245,19 @@ keys:
                   type: bool
                   description: Allow transmit/receive of encrypted traffic using operational
                     SAK and block otherwise.
+            replay_protection:
+              type: dict
+              keys:
+                disabled:
+                  type: bool
+                  description: Disable replay protection.
+                window:
+                  type: int
+                  convert_types:
+                  - str
+                  min: 0
+                  max: 4294967295
+                  description: Set replay protection window size.
   maintenance:
     type: dict
     display_name: Maintenance Mode
@@ -12256,9 +12286,8 @@ keys:
                             - kbytes
                             - mbytes
                             - milliseconds
-                            description: 'Units to be used for the threshold values.
-
-                              This should be one of segments, byte, kbytes, mbytes.'
+                            - microseconds
+                            description: Units to be used for the threshold values.
                           min:
                             type: int
                             required: true
@@ -22625,6 +22654,12 @@ keys:
         ip_nat:
           type: dict
           $ref: eos_cli_config_gen#/$defs/interface_ip_nat
+        dhcp_server_ipv4:
+          type: bool
+          description: Enable IPv4 DHCP server.
+        dhcp_server_ipv6:
+          type: bool
+          description: Enable IPv6 DHCP server.
         ipv6_enable:
           type: bool
         ipv6_address:

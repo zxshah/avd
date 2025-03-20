@@ -621,7 +621,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class Login(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"default": {"type": str}, "console": {"type": str}}
+            _fields: ClassVar[dict] = {"default": {"type": str}, "command_api": {"type": str}, "console": {"type": str}}
             default: str | None
             """
             Login authentication method(s) as a string.
@@ -629,6 +629,15 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             - "group tacacs+ local"
             - "group MYGROUP none"
             - "group radius group MYGROUP local"
+            """
+            command_api: str | None
+            """
+            Command-API authentication method(s) as a string.
+            This feature is not yet visible in EOS.
+            This
+            feature only supports local authentication at the moment.
+            Examples:
+            - "local"
             """
             console: str | None
             """
@@ -642,7 +651,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
             if TYPE_CHECKING:
 
-                def __init__(self, *, default: str | None | UndefinedType = Undefined, console: str | None | UndefinedType = Undefined) -> None:
+                def __init__(
+                    self,
+                    *,
+                    default: str | None | UndefinedType = Undefined,
+                    command_api: str | None | UndefinedType = Undefined,
+                    console: str | None | UndefinedType = Undefined,
+                ) -> None:
                     """
                     Login.
 
@@ -656,6 +671,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            - "group tacacs+ local"
                            - "group MYGROUP none"
                            - "group radius group MYGROUP local"
+                        command_api:
+                           Command-API authentication method(s) as a string.
+                           This feature is not yet visible in EOS.
+                           This
+                           feature only supports local authentication at the moment.
+                           Examples:  # fmt: skip
+                           - "local"
                         console:
                            Console authentication method(s) as a string.
                            Examples:  # fmt: skip
@@ -17671,6 +17693,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "isis_metric": {"type": int},
             "isis_network_point_to_point": {"type": bool},
             "node_segment": {"type": NodeSegment},
+            "hardware_forwarding_id": {"type": bool},
             "eos_cli": {"type": str},
         }
         name: str
@@ -17699,6 +17722,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         isis_network_point_to_point: bool | None
         node_segment: NodeSegment
         """Subclass of AvdModel."""
+        hardware_forwarding_id: bool | None
+        """Enable hardware forwarding for the VRF where this loopback interface belongs."""
         eos_cli: str | None
         """EOS CLI rendered directly on the loopback interface in the final EOS configuration."""
 
@@ -17724,6 +17749,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 isis_metric: int | None | UndefinedType = Undefined,
                 isis_network_point_to_point: bool | None | UndefinedType = Undefined,
                 node_segment: NodeSegment | UndefinedType = Undefined,
+                hardware_forwarding_id: bool | None | UndefinedType = Undefined,
                 eos_cli: str | None | UndefinedType = Undefined,
             ) -> None:
                 """
@@ -17750,6 +17776,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     isis_metric: isis_metric
                     isis_network_point_to_point: isis_network_point_to_point
                     node_segment: Subclass of AvdModel.
+                    hardware_forwarding_id: Enable hardware forwarding for the VRF where this loopback interface belongs.
                     eos_cli: EOS CLI rendered directly on the loopback interface in the final EOS configuration.
 
                 """
@@ -18099,6 +18126,30 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
+            class ReplayProtection(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"disabled": {"type": bool}, "window": {"type": int}}
+                disabled: bool | None
+                """Disable replay protection."""
+                window: int | None
+                """Set replay protection window size."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, disabled: bool | None | UndefinedType = Undefined, window: int | None | UndefinedType = Undefined) -> None:
+                        """
+                        ReplayProtection.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            disabled: Disable replay protection.
+                            window: Set replay protection window size.
+
+                        """
+
             _fields: ClassVar[dict] = {
                 "name": {"type": str},
                 "cipher": {"type": str},
@@ -18107,6 +18158,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "sci": {"type": bool},
                 "l2_protocols": {"type": L2Protocols},
                 "traffic_unprotected": {"type": TrafficUnprotected},
+                "replay_protection": {"type": ReplayProtection},
             }
             name: str
             """Profile-Name."""
@@ -18119,6 +18171,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             l2_protocols: L2Protocols
             """Subclass of AvdModel."""
             traffic_unprotected: TrafficUnprotected
+            """Subclass of AvdModel."""
+            replay_protection: ReplayProtection
             """Subclass of AvdModel."""
 
             if TYPE_CHECKING:
@@ -18133,6 +18187,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     sci: bool | None | UndefinedType = Undefined,
                     l2_protocols: L2Protocols | UndefinedType = Undefined,
                     traffic_unprotected: TrafficUnprotected | UndefinedType = Undefined,
+                    replay_protection: ReplayProtection | UndefinedType = Undefined,
                 ) -> None:
                     """
                     ProfilesItem.
@@ -18148,6 +18203,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         sci: sci
                         l2_protocols: Subclass of AvdModel.
                         traffic_unprotected: Subclass of AvdModel.
+                        replay_protection: Subclass of AvdModel.
 
                     """
 
@@ -31563,11 +31619,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             "max_probability": {"type": int},
                             "weight": {"type": int},
                         }
-                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"]
-                        """
-                        Units to be used for the threshold values.
-                        This should be one of segments, byte, kbytes, mbytes.
-                        """
+                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"]
+                        """Units to be used for the threshold values."""
                         min: int
                         """Random-detect ECN minimum-threshold."""
                         max: int
@@ -31582,7 +31635,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             def __init__(
                                 self,
                                 *,
-                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"] | UndefinedType = Undefined,
+                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"] | UndefinedType = Undefined,
                                 min: int | UndefinedType = Undefined,
                                 max: int | UndefinedType = Undefined,
                                 max_probability: int | None | UndefinedType = Undefined,
@@ -31595,9 +31648,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                 Subclass of AvdModel.
 
                                 Args:
-                                    units:
-                                       Units to be used for the threshold values.
-                                       This should be one of segments, byte, kbytes, mbytes.
+                                    units: Units to be used for the threshold values.
                                     min: Random-detect ECN minimum-threshold.
                                     max: Random-detect ECN maximum-threshold.
                                     max_probability: Random-detect ECN maximum mark probability.
@@ -62042,6 +62093,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ip_helpers": {"type": IpHelpers},
             "ip_dhcp_relay_all_subnets": {"type": bool},
             "ip_nat": {"type": IpNat},
+            "dhcp_server_ipv4": {"type": bool},
+            "dhcp_server_ipv6": {"type": bool},
             "ipv6_enable": {"type": bool},
             "ipv6_address": {"type": str},
             "ipv6_address_virtuals": {"type": Ipv6AddressVirtuals},
@@ -62126,6 +62179,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field."""
         ip_nat: IpNat
         """Subclass of AvdModel."""
+        dhcp_server_ipv4: bool | None
+        """Enable IPv4 DHCP server."""
+        dhcp_server_ipv6: bool | None
+        """Enable IPv6 DHCP server."""
         ipv6_enable: bool | None
         ipv6_address: str | None
         """IPv6_address/Mask."""
@@ -62258,6 +62315,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ip_helpers: IpHelpers | UndefinedType = Undefined,
                 ip_dhcp_relay_all_subnets: bool | None | UndefinedType = Undefined,
                 ip_nat: IpNat | UndefinedType = Undefined,
+                dhcp_server_ipv4: bool | None | UndefinedType = Undefined,
+                dhcp_server_ipv6: bool | None | UndefinedType = Undefined,
                 ipv6_enable: bool | None | UndefinedType = Undefined,
                 ipv6_address: str | None | UndefinedType = Undefined,
                 ipv6_address_virtuals: Ipv6AddressVirtuals | UndefinedType = Undefined,
@@ -62335,6 +62394,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                        `ip_helper` (`str`).
                     ip_dhcp_relay_all_subnets: Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field.
                     ip_nat: Subclass of AvdModel.
+                    dhcp_server_ipv4: Enable IPv4 DHCP server.
+                    dhcp_server_ipv6: Enable IPv6 DHCP server.
                     ipv6_enable: ipv6_enable
                     ipv6_address: IPv6_address/Mask.
                     ipv6_address_virtuals:

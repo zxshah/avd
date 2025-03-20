@@ -147,8 +147,8 @@
 {%         for port_channel_interface in port_channel_interfaces_dhcp_server | arista.avd.natural_sort %}
 | {{ port_channel_interface.name }} | {{ port_channel_interface.dhcp_server_ipv4 | arista.avd.default("-") }} | {{ port_channel_interface.dhcp_server_ipv6 | arista.avd.default("-") }} |
 {%         endfor %}
-{%         for vlan_interfaces in vlan_interfaces_dhcp_server | arista.avd.natural_sort %}
-| {{ vlan_interfaces.name }} | {{ vlan_interfaces.dhcp_server_ipv4 | arista.avd.default("-") }} | {{ vlan_interfaces.dhcp_server_ipv6 | arista.avd.default("-") }} |
+{%         for vlan_interface in vlan_interfaces_dhcp_server | arista.avd.natural_sort %}
+| {{ vlan_interface.name }} | {{ vlan_interface.dhcp_server_ipv4 | arista.avd.default("-") }} | {{ vlan_interface.dhcp_server_ipv6 | arista.avd.default("-") }} |
 {%         endfor %}
 {%     endif %}
 {% endif %}

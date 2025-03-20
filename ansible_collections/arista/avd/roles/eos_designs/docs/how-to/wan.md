@@ -65,6 +65,7 @@ Please familiarize yourself with the Arista WAN terminology before proceeding:
 - All the WAN routers must have a common path-group with at least one WAN route server to be able to inject the default control-plane match statement in the VRF default WAN policy.
 - For the default VRF, routes received over BGP peering configured under tenants in `network_services` will not be automatically advertised to the WAN (they will be advertised toward the LAN if eBGP is used). To advertise them towards the WAN, they need to be injected in EVPN and this can be achieved by adding a route-map to mark them with the site SOO.
 - Internet exit policies are not supported under WAN port-channel interfaces.
+- EVPN WAN gateway is supported only on sites with single WAN Router.
 
 ### Future work
 

@@ -19,48 +19,44 @@ enable_password:
   disabled: true
 ethernet_interfaces:
 - name: Ethernet1
-  description: pf1-Ethernet1
+  description: P2P_site1-border1_Ethernet1
   shutdown: false
-  ip_address: 172.18.100.1/24
-  peer_type: l3_interface
+  mtu: 9214
+  flow_tracker:
+    sampled: FLOW-TRACKER
+  ip_address: 10.0.5.8/31
+  peer: site1-border1
+  peer_interface: Ethernet1
+  peer_type: l3leaf
   switchport:
     enabled: false
 - name: Ethernet2
-  description: pf2-Ethernet1
+  description: P2P_site1-border2_Ethernet1
   shutdown: false
-  ip_address: 172.18.200.1/24
-  peer_type: l3_interface
+  mtu: 9214
+  flow_tracker:
+    sampled: FLOW-TRACKER
+  ip_address: 10.0.5.10/31
+  peer: site1-border2
+  peer_interface: Ethernet1
+  peer_type: l3leaf
   switchport:
     enabled: false
-- name: Ethernet5
-  description: site1-wan1-Ethernet3
-  shutdown: false
-  ip_address: 172.18.10.1/24
-  peer_type: l3_interface
-  switchport:
-    enabled: false
-- name: Ethernet6
-  description: site1-wan2-Ethernet3
-  shutdown: false
-  ip_address: 172.18.11.1/24
-  peer_type: l3_interface
-  switchport:
-    enabled: false
-- name: Ethernet7
-  description: site2-wan1-Ethernet3
-  shutdown: false
-  ip_address: 172.18.20.1/24
-  peer_type: l3_interface
-  switchport:
-    enabled: false
-- name: Ethernet8
-  description: site4-wan1-Ethernet3
-  shutdown: false
-  ip_address: 172.18.40.1/24
-  peer_type: l3_interface
-  switchport:
-    enabled: false
-hostname: mpls-cloud
+flow_tracking:
+  sampled:
+    sample: 10000
+    trackers:
+    - record_export:
+        on_inactive_timeout: 70000
+        on_interval: 5000
+      name: FLOW-TRACKER
+      exporters:
+      - name: CV-TELEMETRY
+        collector:
+          host: 127.0.0.1
+        local_interface: Loopback0
+    shutdown: false
+hostname: site1-spine1
 ip_name_servers:
 - ip_address: 192.168.17.1
   vrf: MGMT
@@ -83,7 +79,7 @@ loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
   shutdown: false
-  ip_address: 172.31.255.22/32
+  ip_address: 192.168.255.18/32
 management_api_http:
   enable_https: true
   enable_vrfs:
@@ -93,13 +89,14 @@ management_interfaces:
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: MGMT
-  ip_address: 192.168.17.30/24
+  ip_address: 192.168.17.101/24
   type: oob
   gateway: 192.168.17.1
   lldp:
     transmit: false
     receive: false
 metadata:
+  platform: vEOS-lab
   fabric_name: WAN
 ntp:
   local_interface:
@@ -113,7 +110,7 @@ prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
   - sequence: 10
-    action: permit 172.31.255.0/24 eq 32
+    action: permit 192.168.255.0/24 eq 32
 route_maps:
 - name: RM-CONN-2-BGP
   sequence_numbers:
@@ -127,8 +124,8 @@ router_bfd:
     min_rx: 300
     multiplier: 3
 router_bgp:
-  as: '65042'
-  router_id: 172.31.255.22
+  as: '65110'
+  router_id: 192.168.255.18
   maximum_paths:
     paths: 4
     ecmp: 4
@@ -148,6 +145,37 @@ router_bgp:
     ebgp_multihop: 3
     send_community: all
     maximum_routes: 0
+  neighbors:
+  - ip_address: 10.0.5.9
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65101'
+    peer: site1-border1
+    description: site1-border1_Ethernet1
+  - ip_address: 10.0.5.11
+    peer_group: IPv4-UNDERLAY-PEERS
+    remote_as: '65101'
+    peer: site1-border2
+    description: site1-border2_Ethernet1
+  - ip_address: 192.168.255.5
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65101'
+    peer: site1-border1
+    description: site1-border1_Loopback0
+  - ip_address: 192.168.255.6
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65101'
+    peer: site1-border2
+    description: site1-border2_Loopback0
+  - ip_address: 192.168.255.3
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65000'
+    peer: site1-wan1
+    description: site1-wan1_Loopback0
+  - ip_address: 192.168.255.4
+    peer_group: EVPN-OVERLAY-PEERS
+    remote_as: '65000'
+    peer: site1-wan2
+    description: site1-wan2_Loopback0
   redistribute:
     connected:
       enabled: true

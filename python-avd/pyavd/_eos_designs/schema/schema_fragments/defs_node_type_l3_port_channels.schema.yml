@@ -73,6 +73,7 @@ $defs:
                 $ref: "eos_designs#/$defs/rx_queue_settings"
               structured_config:
                 type: dict
+                relaxed_validation: true
                 documentation_options:
                   hide_keys: true
                 description: |-
@@ -231,6 +232,7 @@ $defs:
             Configures flow-tracking on the interface. Overrides `fabric_flow_tracking.l3_port_channels` setting.
         structured_config:
           type: dict
+          relaxed_validation: true
           documentation_options:
             hide_keys: true
           description: |-

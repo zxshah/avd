@@ -4245,12 +4245,19 @@ class EosDesigns(EosDesignsRootModel):
 
         _fields: ClassVar[dict] = {
             "topology_hints": {"type": bool, "default": False},
+            "campus_fabric": {"type": bool, "default": False},
             "interface_tags": {"type": InterfaceTags},
             "device_tags": {"type": DeviceTags},
         }
         topology_hints: bool
         """
         Enable the generation of CloudVision Topology Tags (hints).
+
+        Default value: `False`
+        """
+        campus_fabric: bool
+        """
+        Generate CloudVision device and interface Topology Tags for Campus fabric devices.
 
         Default value: `False`
         """
@@ -4274,6 +4281,7 @@ class EosDesigns(EosDesignsRootModel):
                 self,
                 *,
                 topology_hints: bool | UndefinedType = Undefined,
+                campus_fabric: bool | UndefinedType = Undefined,
                 interface_tags: InterfaceTags | UndefinedType = Undefined,
                 device_tags: DeviceTags | UndefinedType = Undefined,
             ) -> None:
@@ -4285,6 +4293,7 @@ class EosDesigns(EosDesignsRootModel):
 
                 Args:
                     topology_hints: Enable the generation of CloudVision Topology Tags (hints).
+                    campus_fabric: Generate CloudVision device and interface Topology Tags for Campus fabric devices.
                     interface_tags:
                        List of interface tags that should be generated.
 
@@ -20229,6 +20238,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     id: int | None
                     """Unique identifier used for IP addressing and other algorithms."""
@@ -21015,6 +21027,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -21127,6 +21145,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             Defaults.
@@ -21682,6 +21703,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -24088,6 +24112,9 @@ class EosDesigns(EosDesignsRootModel):
                             "l3_port_channels": {"type": L3PortChannels},
                             "data_plane_cpu_allocation_max": {"type": int},
                             "flow_tracker_type": {"type": str},
+                            "campus": {"type": str},
+                            "campus_pod": {"type": str},
+                            "campus_access_pod": {"type": str},
                         }
                         name: str
                         """The Node Name is used as "hostname"."""
@@ -24884,6 +24911,12 @@ class EosDesigns(EosDesignsRootModel):
                         level.
                         `default_flow_tracker_type` default value is `sampled`.
                         """
+                        campus: str | None
+                        """Name of the campus."""
+                        campus_pod: str | None
+                        """Name of the campus pod."""
+                        campus_access_pod: str | None
+                        """Name of the campus access pod."""
 
                         if TYPE_CHECKING:
 
@@ -24998,6 +25031,9 @@ class EosDesigns(EosDesignsRootModel):
                                 l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                                 data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                                 flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                                campus: str | None | UndefinedType = Undefined,
+                                campus_pod: str | None | UndefinedType = Undefined,
+                                campus_access_pod: str | None | UndefinedType = Undefined,
                             ) -> None:
                                 """
                                 NodesItem.
@@ -25560,6 +25596,9 @@ class EosDesigns(EosDesignsRootModel):
                                        Override the `default_flow_tracker_type`` set at the `node_type_key`
                                        level.
                                        `default_flow_tracker_type` default value is `sampled`.
+                                    campus: Name of the campus.
+                                    campus_pod: Name of the campus pod.
+                                    campus_access_pod: Name of the campus access pod.
 
                                 """
 
@@ -27891,6 +27930,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     group: str
                     """
@@ -28690,6 +28732,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -28804,6 +28852,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             NodeGroupsItem.
@@ -29368,6 +29419,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -31758,6 +31812,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     name: str
                     """The Node Name is used as "hostname"."""
@@ -32554,6 +32611,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -32668,6 +32731,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             NodesItem.
@@ -33230,6 +33296,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -42302,6 +42371,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     id: int | None
                     """Unique identifier used for IP addressing and other algorithms."""
@@ -43088,6 +43160,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -43200,6 +43278,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             Defaults.
@@ -43755,6 +43836,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -46161,6 +46245,9 @@ class EosDesigns(EosDesignsRootModel):
                             "l3_port_channels": {"type": L3PortChannels},
                             "data_plane_cpu_allocation_max": {"type": int},
                             "flow_tracker_type": {"type": str},
+                            "campus": {"type": str},
+                            "campus_pod": {"type": str},
+                            "campus_access_pod": {"type": str},
                         }
                         name: str
                         """The Node Name is used as "hostname"."""
@@ -46957,6 +47044,12 @@ class EosDesigns(EosDesignsRootModel):
                         level.
                         `default_flow_tracker_type` default value is `sampled`.
                         """
+                        campus: str | None
+                        """Name of the campus."""
+                        campus_pod: str | None
+                        """Name of the campus pod."""
+                        campus_access_pod: str | None
+                        """Name of the campus access pod."""
 
                         if TYPE_CHECKING:
 
@@ -47071,6 +47164,9 @@ class EosDesigns(EosDesignsRootModel):
                                 l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                                 data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                                 flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                                campus: str | None | UndefinedType = Undefined,
+                                campus_pod: str | None | UndefinedType = Undefined,
+                                campus_access_pod: str | None | UndefinedType = Undefined,
                             ) -> None:
                                 """
                                 NodesItem.
@@ -47633,6 +47729,9 @@ class EosDesigns(EosDesignsRootModel):
                                        Override the `default_flow_tracker_type`` set at the `node_type_key`
                                        level.
                                        `default_flow_tracker_type` default value is `sampled`.
+                                    campus: Name of the campus.
+                                    campus_pod: Name of the campus pod.
+                                    campus_access_pod: Name of the campus access pod.
 
                                 """
 
@@ -49964,6 +50063,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     group: str
                     """
@@ -50763,6 +50865,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -50877,6 +50985,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             NodeGroupsItem.
@@ -51441,6 +51552,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -53831,6 +53945,9 @@ class EosDesigns(EosDesignsRootModel):
                         "l3_port_channels": {"type": L3PortChannels},
                         "data_plane_cpu_allocation_max": {"type": int},
                         "flow_tracker_type": {"type": str},
+                        "campus": {"type": str},
+                        "campus_pod": {"type": str},
+                        "campus_access_pod": {"type": str},
                     }
                     name: str
                     """The Node Name is used as "hostname"."""
@@ -54627,6 +54744,12 @@ class EosDesigns(EosDesignsRootModel):
                     level.
                     `default_flow_tracker_type` default value is `sampled`.
                     """
+                    campus: str | None
+                    """Name of the campus."""
+                    campus_pod: str | None
+                    """Name of the campus pod."""
+                    campus_access_pod: str | None
+                    """Name of the campus access pod."""
 
                     if TYPE_CHECKING:
 
@@ -54741,6 +54864,9 @@ class EosDesigns(EosDesignsRootModel):
                             l3_port_channels: L3PortChannels | UndefinedType = Undefined,
                             data_plane_cpu_allocation_max: int | None | UndefinedType = Undefined,
                             flow_tracker_type: Literal["sampled", "hardware"] | None | UndefinedType = Undefined,
+                            campus: str | None | UndefinedType = Undefined,
+                            campus_pod: str | None | UndefinedType = Undefined,
+                            campus_access_pod: str | None | UndefinedType = Undefined,
                         ) -> None:
                             """
                             NodesItem.
@@ -55303,6 +55429,9 @@ class EosDesigns(EosDesignsRootModel):
                                    Override the `default_flow_tracker_type`` set at the `node_type_key`
                                    level.
                                    `default_flow_tracker_type` default value is `sampled`.
+                                campus: Name of the campus.
+                                campus_pod: Name of the campus pod.
+                                campus_access_pod: Name of the campus access pod.
 
                             """
 
@@ -55457,6 +55586,9 @@ class EosDesigns(EosDesignsRootModel):
         "bgp_peer_groups": {"type": BgpPeerGroups},
         "bgp_update_wait_install": {"type": bool, "default": True},
         "bgp_update_wait_for_convergence": {"type": bool, "default": False},
+        "campus": {"type": str},
+        "campus_access_pod": {"type": str},
+        "campus_pod": {"type": str},
         "connected_endpoints_keys": {
             "type": ConnectedEndpointsKeys,
             "default": lambda cls: coerce_type(
@@ -55931,6 +56063,21 @@ class EosDesigns(EosDesignsRootModel):
     convergence state is reached.
 
     Default value: `False`
+    """
+    campus: str | None
+    """
+    Name of the Campus fabric.
+    Used to generate CloudVision device Topology tags.
+    """
+    campus_access_pod: str | None
+    """
+    Name of the Campus access pod.
+    Used to generate CloudVision device Topology tags.
+    """
+    campus_pod: str | None
+    """
+    Name of the Campus pod.
+    Used to generate CloudVision device Topology tags.
     """
     connected_endpoints_keys: ConnectedEndpointsKeys
     """
@@ -57616,6 +57763,9 @@ class EosDesigns(EosDesignsRootModel):
             bgp_peer_groups: BgpPeerGroups | UndefinedType = Undefined,
             bgp_update_wait_install: bool | UndefinedType = Undefined,
             bgp_update_wait_for_convergence: bool | UndefinedType = Undefined,
+            campus: str | None | UndefinedType = Undefined,
+            campus_access_pod: str | None | UndefinedType = Undefined,
+            campus_pod: str | None | UndefinedType = Undefined,
             connected_endpoints_keys: ConnectedEndpointsKeys | UndefinedType = Undefined,
             core_interfaces: CoreInterfaces | UndefinedType = Undefined,
             custom_structured_configuration_list_merge: Literal["replace", "append", "keep", "prepend", "append_rp", "prepend_rp"] | UndefinedType = Undefined,
@@ -57881,6 +58031,15 @@ class EosDesigns(EosDesignsRootModel):
                 bgp_update_wait_for_convergence:
                    Disables FIB updates and route advertisement when the BGP instance is initiated until the BGP
                    convergence state is reached.
+                campus:
+                   Name of the Campus fabric.
+                   Used to generate CloudVision device Topology tags.
+                campus_access_pod:
+                   Name of the Campus access pod.
+                   Used to generate CloudVision device Topology tags.
+                campus_pod:
+                   Name of the Campus pod.
+                   Used to generate CloudVision device Topology tags.
                 connected_endpoints_keys:
                    Endpoints connecting to the fabric can be grouped by using separate keys.
                    The keys can be customized

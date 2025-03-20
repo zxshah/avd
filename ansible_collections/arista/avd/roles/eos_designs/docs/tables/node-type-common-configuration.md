@@ -25,6 +25,9 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;always_configure_ip_routing</samp>](## "<node_type_keys.key>.defaults.always_configure_ip_routing") | Boolean |  | `False` |  | Force configuration of "ip routing" even on L2 devices.<br>Use this to retain behavior of AVD versions below 4.0.0.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.defaults.raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the root level of the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "<node_type_keys.key>.defaults.structured_config") | Dictionary |  |  |  | Custom structured config for eos_cli_config_gen. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;campus</samp>](## "<node_type_keys.key>.defaults.campus") | String |  |  |  | Name of the campus. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;campus_pod</samp>](## "<node_type_keys.key>.defaults.campus_pod") | String |  |  |  | Name of the campus pod. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;campus_access_pod</samp>](## "<node_type_keys.key>.defaults.campus_access_pod") | String |  |  |  | Name of the campus access pod. |
     | [<samp>&nbsp;&nbsp;node_groups</samp>](## "<node_type_keys.key>.node_groups") | List, items: Dictionary |  |  |  | Define variables related to all nodes part of this group. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;group</samp>](## "<node_type_keys.key>.node_groups.[].group") | String | Required, Unique |  |  | The Node Group Name is used for MLAG domain unless set with 'mlag_domain_id'.<br>The Node Group Name is also used for peer description on downstream switches' uplinks.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nodes</samp>](## "<node_type_keys.key>.node_groups.[].nodes") | List, items: Dictionary |  |  |  | Define variables per node. |
@@ -45,6 +48,9 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;always_configure_ip_routing</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].always_configure_ip_routing") | Boolean |  | `False` |  | Force configuration of "ip routing" even on L2 devices.<br>Use this to retain behavior of AVD versions below 4.0.0.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the root level of the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].structured_config") | Dictionary |  |  |  | Custom structured config for eos_cli_config_gen. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].campus") | String |  |  |  | Name of the campus. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_pod</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].campus_pod") | String |  |  |  | Name of the campus pod. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_access_pod</samp>](## "<node_type_keys.key>.node_groups.[].nodes.[].campus_access_pod") | String |  |  |  | Name of the campus access pod. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id</samp>](## "<node_type_keys.key>.node_groups.[].id") | Integer |  |  |  | Unique identifier used for IP addressing and other algorithms. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;platform</samp>](## "<node_type_keys.key>.node_groups.[].platform") | String |  |  |  | Arista platform family. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mac_address</samp>](## "<node_type_keys.key>.node_groups.[].mac_address") | String |  |  |  | Leverage to document management interface mac address. |
@@ -61,6 +67,9 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;always_configure_ip_routing</samp>](## "<node_type_keys.key>.node_groups.[].always_configure_ip_routing") | Boolean |  | `False` |  | Force configuration of "ip routing" even on L2 devices.<br>Use this to retain behavior of AVD versions below 4.0.0.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.node_groups.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the root level of the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "<node_type_keys.key>.node_groups.[].structured_config") | Dictionary |  |  |  | Custom structured config for eos_cli_config_gen. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus</samp>](## "<node_type_keys.key>.node_groups.[].campus") | String |  |  |  | Name of the campus. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_pod</samp>](## "<node_type_keys.key>.node_groups.[].campus_pod") | String |  |  |  | Name of the campus pod. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_access_pod</samp>](## "<node_type_keys.key>.node_groups.[].campus_access_pod") | String |  |  |  | Name of the campus access pod. |
     | [<samp>&nbsp;&nbsp;nodes</samp>](## "<node_type_keys.key>.nodes") | List, items: Dictionary |  |  |  | Define variables per node. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "<node_type_keys.key>.nodes.[].name") | String | Required, Unique |  |  | The Node Name is used as "hostname". |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id</samp>](## "<node_type_keys.key>.nodes.[].id") | Integer |  |  |  | Unique identifier used for IP addressing and other algorithms. |
@@ -79,6 +88,9 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;always_configure_ip_routing</samp>](## "<node_type_keys.key>.nodes.[].always_configure_ip_routing") | Boolean |  | `False` |  | Force configuration of "ip routing" even on L2 devices.<br>Use this to retain behavior of AVD versions below 4.0.0.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;raw_eos_cli</samp>](## "<node_type_keys.key>.nodes.[].raw_eos_cli") | String |  |  |  | EOS CLI rendered directly on the root level of the final EOS configuration. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;structured_config</samp>](## "<node_type_keys.key>.nodes.[].structured_config") | Dictionary |  |  |  | Custom structured config for eos_cli_config_gen. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus</samp>](## "<node_type_keys.key>.nodes.[].campus") | String |  |  |  | Name of the campus. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_pod</samp>](## "<node_type_keys.key>.nodes.[].campus_pod") | String |  |  |  | Name of the campus pod. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;campus_access_pod</samp>](## "<node_type_keys.key>.nodes.[].campus_access_pod") | String |  |  |  | Name of the campus access pod. |
 
 === "YAML"
 
@@ -143,6 +155,15 @@
 
         # Custom structured config for eos_cli_config_gen.
         structured_config: <dict>
+
+        # Name of the campus.
+        campus: <str>
+
+        # Name of the campus pod.
+        campus_pod: <str>
+
+        # Name of the campus access pod.
+        campus_access_pod: <str>
 
       # Define variables related to all nodes part of this group.
       node_groups:
@@ -213,6 +234,15 @@
               # Custom structured config for eos_cli_config_gen.
               structured_config: <dict>
 
+              # Name of the campus.
+              campus: <str>
+
+              # Name of the campus pod.
+              campus_pod: <str>
+
+              # Name of the campus access pod.
+              campus_access_pod: <str>
+
           # Unique identifier used for IP addressing and other algorithms.
           id: <int>
 
@@ -268,6 +298,15 @@
 
           # Custom structured config for eos_cli_config_gen.
           structured_config: <dict>
+
+          # Name of the campus.
+          campus: <str>
+
+          # Name of the campus pod.
+          campus_pod: <str>
+
+          # Name of the campus access pod.
+          campus_access_pod: <str>
 
       # Define variables per node.
       nodes:
@@ -330,4 +369,13 @@
 
           # Custom structured config for eos_cli_config_gen.
           structured_config: <dict>
+
+          # Name of the campus.
+          campus: <str>
+
+          # Name of the campus pod.
+          campus_pod: <str>
+
+          # Name of the campus access pod.
+          campus_access_pod: <str>
     ```

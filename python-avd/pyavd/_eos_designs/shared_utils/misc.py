@@ -114,6 +114,15 @@ class MiscMixin(Protocol):
         return self.node_config.uplink_switches._as_list() or get(self.cv_topology_config, "uplink_switches") or []
 
     @cached_property
+    def uplink_switches_types(self: SharedUtilsProtocol) -> list[str]:
+        uplink_switches_types: list[str] = []
+        for uplink_switch in self.uplink_switches:
+            uplink_switch_facts: EosDesignsFacts = self.get_peer_facts(uplink_switch, required=True)
+            uplink_switches_types.append(uplink_switch_facts["type"])
+
+        return uplink_switches_types
+
+    @cached_property
     def uplink_interfaces(self: SharedUtilsProtocol) -> list[str]:
         return range_expand(
             self.node_config.uplink_interfaces or get(self.cv_topology_config, "uplink_interfaces") or self.default_interfaces.uplink_interfaces,
@@ -364,3 +373,8 @@ class MiscMixin(Protocol):
         l3_bgp_neighbors = self.get_l3_generic_interface_bgp_neighbors(self.l3_interfaces)
         l3_bgp_neighbors.extend(self.get_l3_generic_interface_bgp_neighbors(self.node_config.l3_port_channels))
         return l3_bgp_neighbors
+
+    @cached_property
+    def is_campus_device(self: SharedUtilsProtocol) -> bool:
+        """Return True is the current device is a Campus device."""
+        return bool(default(self.node_config.campus, self.inputs.campus))

@@ -141,3 +141,8 @@ class NodeTypeMixin(Protocol):
             # For WAN routers without the knob, vtep should be ignored.
             return False
         return default(self.node_config.vtep, self.node_type_key_data.vtep)
+
+    @cached_property
+    def hint_type(self: SharedUtilsProtocol) -> str | None:
+        """Type hint fact set based on type variable."""
+        return default(self.inputs.cv_tags_topology_type, self.node_type_key_data.cv_tags_topology_type)

@@ -18,6 +18,10 @@ keys:
         type: bool
         default: false
         description: Enable the generation of CloudVision Topology Tags (hints).
+      campus_fabric:
+        type: bool
+        default: false
+        description: Generate CloudVision device and interface Topology Tags for Campus fabric devices.
       interface_tags:
         description: List of interface tags that should be generated.
         type: list

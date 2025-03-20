@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Literal, Protocol, TypeVar
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import default, get_ip_from_pool
+from pyavd._utils import default, get_ip_from_pool, Undefined
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol
@@ -296,9 +296,8 @@ class UtilsMixin(Protocol):
         elif p2p_link_sflow := self.inputs.fabric_sflow.core_interfaces if self.data_model == "core_interfaces" else self.inputs.fabric_sflow.l3_edge:
             interface.sflow.enable = p2p_link_sflow
 
-        if (p2p_link_flow_tracking := self.shared_utils.get_flow_tracker(p2p_link.flow_tracking)) is not None:
-            interface.flow_tracker.sampled = p2p_link_flow_tracking.get("sampled")
-            interface.flow_tracker.hardware = p2p_link_flow_tracking.get("hardware")
+        if (p2p_link_flow_tracking := self.shared_utils.new_get_flow_tracker(p2p_link.flow_tracking, output_type=interface.FlowTracker)) is not Undefined:
+            interface.flow_tracker = p2p_link_flow_tracking
 
         if self.shared_utils.mpls_lsr and default(p2p_link.mpls_ip, True):  # noqa: FBT003
             interface.mpls.ip = True

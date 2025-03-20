@@ -7066,6 +7066,10 @@ keys:
               type: int
               convert_types:
               - str
+        hardware_forwarding_id:
+          type: bool
+          description: Enable hardware forwarding for the VRF where this loopback
+            interface belongs.
         eos_cli:
           type: str
           description: EOS CLI rendered directly on the loopback interface in the
@@ -7221,6 +7225,19 @@ keys:
                   type: bool
                   description: Allow transmit/receive of encrypted traffic using operational
                     SAK and block otherwise.
+            replay_protection:
+              type: dict
+              keys:
+                disabled:
+                  type: bool
+                  description: Disable replay protection.
+                window:
+                  type: int
+                  convert_types:
+                  - str
+                  min: 0
+                  max: 4294967295
+                  description: Set replay protection window size.
   maintenance:
     type: dict
     display_name: Maintenance Mode

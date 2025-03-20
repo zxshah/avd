@@ -17655,6 +17655,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "isis_metric": {"type": int},
             "isis_network_point_to_point": {"type": bool},
             "node_segment": {"type": NodeSegment},
+            "hardware_forwarding_id": {"type": bool},
             "eos_cli": {"type": str},
         }
         name: str
@@ -17683,6 +17684,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         isis_network_point_to_point: bool | None
         node_segment: NodeSegment
         """Subclass of AvdModel."""
+        hardware_forwarding_id: bool | None
+        """Enable hardware forwarding for the VRF where this loopback interface belongs."""
         eos_cli: str | None
         """EOS CLI rendered directly on the loopback interface in the final EOS configuration."""
 
@@ -17708,6 +17711,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 isis_metric: int | None | UndefinedType = Undefined,
                 isis_network_point_to_point: bool | None | UndefinedType = Undefined,
                 node_segment: NodeSegment | UndefinedType = Undefined,
+                hardware_forwarding_id: bool | None | UndefinedType = Undefined,
                 eos_cli: str | None | UndefinedType = Undefined,
             ) -> None:
                 """
@@ -17734,6 +17738,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     isis_metric: isis_metric
                     isis_network_point_to_point: isis_network_point_to_point
                     node_segment: Subclass of AvdModel.
+                    hardware_forwarding_id: Enable hardware forwarding for the VRF where this loopback interface belongs.
                     eos_cli: EOS CLI rendered directly on the loopback interface in the final EOS configuration.
 
                 """
@@ -18083,6 +18088,30 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
+            class ReplayProtection(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"disabled": {"type": bool}, "window": {"type": int}}
+                disabled: bool | None
+                """Disable replay protection."""
+                window: int | None
+                """Set replay protection window size."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, disabled: bool | None | UndefinedType = Undefined, window: int | None | UndefinedType = Undefined) -> None:
+                        """
+                        ReplayProtection.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            disabled: Disable replay protection.
+                            window: Set replay protection window size.
+
+                        """
+
             _fields: ClassVar[dict] = {
                 "name": {"type": str},
                 "cipher": {"type": str},
@@ -18091,6 +18120,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "sci": {"type": bool},
                 "l2_protocols": {"type": L2Protocols},
                 "traffic_unprotected": {"type": TrafficUnprotected},
+                "replay_protection": {"type": ReplayProtection},
             }
             name: str
             """Profile-Name."""
@@ -18103,6 +18133,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             l2_protocols: L2Protocols
             """Subclass of AvdModel."""
             traffic_unprotected: TrafficUnprotected
+            """Subclass of AvdModel."""
+            replay_protection: ReplayProtection
             """Subclass of AvdModel."""
 
             if TYPE_CHECKING:
@@ -18117,6 +18149,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     sci: bool | None | UndefinedType = Undefined,
                     l2_protocols: L2Protocols | UndefinedType = Undefined,
                     traffic_unprotected: TrafficUnprotected | UndefinedType = Undefined,
+                    replay_protection: ReplayProtection | UndefinedType = Undefined,
                 ) -> None:
                     """
                     ProfilesItem.
@@ -18132,6 +18165,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         sci: sci
                         l2_protocols: Subclass of AvdModel.
                         traffic_unprotected: Subclass of AvdModel.
+                        replay_protection: Subclass of AvdModel.
 
                     """
 

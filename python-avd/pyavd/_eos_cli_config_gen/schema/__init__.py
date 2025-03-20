@@ -18066,6 +18066,30 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
+            class ReplayProtection(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"disabled": {"type": bool}, "window": {"type": int}}
+                disabled: bool | None
+                """Disable replay protection."""
+                window: int | None
+                """Set replay protection window size."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, disabled: bool | None | UndefinedType = Undefined, window: int | None | UndefinedType = Undefined) -> None:
+                        """
+                        ReplayProtection.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            disabled: Disable replay protection.
+                            window: Set replay protection window size.
+
+                        """
+
             _fields: ClassVar[dict] = {
                 "name": {"type": str},
                 "cipher": {"type": str},
@@ -18074,6 +18098,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "sci": {"type": bool},
                 "l2_protocols": {"type": L2Protocols},
                 "traffic_unprotected": {"type": TrafficUnprotected},
+                "replay_protection": {"type": ReplayProtection},
             }
             name: str
             """Profile-Name."""
@@ -18086,6 +18111,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             l2_protocols: L2Protocols
             """Subclass of AvdModel."""
             traffic_unprotected: TrafficUnprotected
+            """Subclass of AvdModel."""
+            replay_protection: ReplayProtection
             """Subclass of AvdModel."""
 
             if TYPE_CHECKING:
@@ -18100,6 +18127,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     sci: bool | None | UndefinedType = Undefined,
                     l2_protocols: L2Protocols | UndefinedType = Undefined,
                     traffic_unprotected: TrafficUnprotected | UndefinedType = Undefined,
+                    replay_protection: ReplayProtection | UndefinedType = Undefined,
                 ) -> None:
                     """
                     ProfilesItem.
@@ -18115,6 +18143,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         sci: sci
                         l2_protocols: Subclass of AvdModel.
                         traffic_unprotected: Subclass of AvdModel.
+                        replay_protection: Subclass of AvdModel.
 
                     """
 
@@ -31530,11 +31559,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             "max_probability": {"type": int},
                             "weight": {"type": int},
                         }
-                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"]
-                        """
-                        Units to be used for the threshold values.
-                        This should be one of segments, byte, kbytes, mbytes.
-                        """
+                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"]
+                        """Units to be used for the threshold values."""
                         min: int
                         """Random-detect ECN minimum-threshold."""
                         max: int
@@ -31549,7 +31575,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             def __init__(
                                 self,
                                 *,
-                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"] | UndefinedType = Undefined,
+                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"] | UndefinedType = Undefined,
                                 min: int | UndefinedType = Undefined,
                                 max: int | UndefinedType = Undefined,
                                 max_probability: int | None | UndefinedType = Undefined,
@@ -31562,9 +31588,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                 Subclass of AvdModel.
 
                                 Args:
-                                    units:
-                                       Units to be used for the threshold values.
-                                       This should be one of segments, byte, kbytes, mbytes.
+                                    units: Units to be used for the threshold values.
                                     min: Random-detect ECN minimum-threshold.
                                     max: Random-detect ECN maximum-threshold.
                                     max_probability: Random-detect ECN maximum mark probability.
@@ -58306,11 +58330,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class Phone(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"cos": {"type": int}, "trunk": {"type": str}, "vlan": {"type": int}}
+            _fields: ClassVar[dict] = {"cos": {"type": int}, "trunk": {"type": str}, "vlan": {"type": int}, "access_list_bypass": {"type": bool}}
             cos: int | None
             trunk: Literal["tagged", "untagged"] | None
             vlan: int | None
             """VLAN ID."""
+            access_list_bypass: bool | None
+            """Bypass phone traffic from configured access-list."""
 
             if TYPE_CHECKING:
 
@@ -58320,6 +58346,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     cos: int | None | UndefinedType = Undefined,
                     trunk: Literal["tagged", "untagged"] | None | UndefinedType = Undefined,
                     vlan: int | None | UndefinedType = Undefined,
+                    access_list_bypass: bool | None | UndefinedType = Undefined,
                 ) -> None:
                     """
                     Phone.
@@ -58331,6 +58358,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         cos: cos
                         trunk: trunk
                         vlan: VLAN ID.
+                        access_list_bypass: Bypass phone traffic from configured access-list.
 
                     """
 

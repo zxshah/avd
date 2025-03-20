@@ -621,7 +621,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class Login(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"default": {"type": str}, "console": {"type": str}}
+            _fields: ClassVar[dict] = {"default": {"type": str}, "command_api": {"type": str}, "console": {"type": str}}
             default: str | None
             """
             Login authentication method(s) as a string.
@@ -629,6 +629,15 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             - "group tacacs+ local"
             - "group MYGROUP none"
             - "group radius group MYGROUP local"
+            """
+            command_api: str | None
+            """
+            Command-API authentication method(s) as a string.
+            This feature is not yet visible in EOS.
+            This
+            feature only supports local authentication at the moment.
+            Examples:
+            - "local"
             """
             console: str | None
             """
@@ -642,7 +651,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
             if TYPE_CHECKING:
 
-                def __init__(self, *, default: str | None | UndefinedType = Undefined, console: str | None | UndefinedType = Undefined) -> None:
+                def __init__(
+                    self,
+                    *,
+                    default: str | None | UndefinedType = Undefined,
+                    command_api: str | None | UndefinedType = Undefined,
+                    console: str | None | UndefinedType = Undefined,
+                ) -> None:
                     """
                     Login.
 
@@ -656,6 +671,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            - "group tacacs+ local"
                            - "group MYGROUP none"
                            - "group radius group MYGROUP local"
+                        command_api:
+                           Command-API authentication method(s) as a string.
+                           This feature is not yet visible in EOS.
+                           This
+                           feature only supports local authentication at the moment.
+                           Examples:  # fmt: skip
+                           - "local"
                         console:
                            Console authentication method(s) as a string.
                            Examples:  # fmt: skip
@@ -62033,6 +62055,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ip_helpers": {"type": IpHelpers},
             "ip_dhcp_relay_all_subnets": {"type": bool},
             "ip_nat": {"type": IpNat},
+            "dhcp_server_ipv4": {"type": bool},
+            "dhcp_server_ipv6": {"type": bool},
             "ipv6_enable": {"type": bool},
             "ipv6_address": {"type": str},
             "ipv6_address_virtuals": {"type": Ipv6AddressVirtuals},
@@ -62117,6 +62141,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field."""
         ip_nat: IpNat
         """Subclass of AvdModel."""
+        dhcp_server_ipv4: bool | None
+        """Enable IPv4 DHCP server."""
+        dhcp_server_ipv6: bool | None
+        """Enable IPv6 DHCP server."""
         ipv6_enable: bool | None
         ipv6_address: str | None
         """IPv6_address/Mask."""
@@ -62249,6 +62277,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ip_helpers: IpHelpers | UndefinedType = Undefined,
                 ip_dhcp_relay_all_subnets: bool | None | UndefinedType = Undefined,
                 ip_nat: IpNat | UndefinedType = Undefined,
+                dhcp_server_ipv4: bool | None | UndefinedType = Undefined,
+                dhcp_server_ipv6: bool | None | UndefinedType = Undefined,
                 ipv6_enable: bool | None | UndefinedType = Undefined,
                 ipv6_address: str | None | UndefinedType = Undefined,
                 ipv6_address_virtuals: Ipv6AddressVirtuals | UndefinedType = Undefined,
@@ -62326,6 +62356,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                        `ip_helper` (`str`).
                     ip_dhcp_relay_all_subnets: Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field.
                     ip_nat: Subclass of AvdModel.
+                    dhcp_server_ipv4: Enable IPv4 DHCP server.
+                    dhcp_server_ipv6: Enable IPv6 DHCP server.
                     ipv6_enable: ipv6_enable
                     ipv6_address: IPv6_address/Mask.
                     ipv6_address_virtuals:

@@ -8,8 +8,9 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._errors import AristaAvdError
-from pyavd._utils import AvdStringFormatter, default, strip_empties_from_dict
+from pyavd._utils import AvdStringFormatter, default, get, strip_empties_from_dict
 from pyavd.j2filters import natural_sort
+from pyavd._utils import get
 
 if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
@@ -530,15 +531,52 @@ class RouterBgpMixin(Protocol):
                 )
                 neighbors.append(neighbor)
 
-            for gw_remote_peer, data in natural_sort(self._evpn_gateway_remote_peers.items()):
-                neighbor = self._create_neighbor(
-                    data["ip_address"],
-                    gw_remote_peer,
-                    self.inputs.bgp_peer_groups.evpn_overlay_core.name,
-                    remote_as=data["bgp_as"],
-                    overlay_peering_interface=data.get("overlay_peering_interface"),
-                )
-                neighbors.append(neighbor)
+        if self.shared_utils.overlay_evpn:
+            for remote_peer in self.shared_utils.node_config.evpn_gateway.remote_peers._natural_sorted():
+                remote_peer_name = remote_peer.hostname
+
+                peer_facts = self.shared_utils.get_peer_facts(remote_peer_name, required=False)
+                if peer_facts is None:
+                    if remote_peer.bgp_as is None or remote_peer.ip_address is None:
+                        msg = f"The EVPN Gateway remote peer '{remote_peer_name}' is missing either a `bpg_as` or an `ip_address`."
+                        raise AristaAvdError(msg)
+                    neighbor = self._create_neighbor(
+                        remote_peer.ip_address,
+                        remote_peer_name,
+                        self.inputs.bgp_peer_groups.evpn_overlay_core.name,
+                        remote_as=remote_peer.bgp_as,
+                    )
+                    neighbors.append(neighbor)
+
+                else:
+                    # Found a matching name for this remote gateway in the inventory
+                    bgp_as = peer_facts.get("bgp_as")
+                    remote_peer_address = get(
+                        peer_facts,
+                        "overlay.peering_address",
+                        required=True,
+                        custom_error_msg=f"switch.overlay.peering_address for {remote_peer_name} is required.",
+                    )
+                    # Apply potential override if present in the input variables
+                    if remote_peer.bgp_as is not None:
+                        bgp_as = remote_peer.bgp_as
+
+                    if remote_peer.ip_address is not None:
+                        remote_peer_address = remote_peer.ip_address
+
+                    if bgp_as is None or remote_peer_address is None:
+                        msg = f"The EVPN Gateway remote peer '{remote_peer_name}' is missing either a `bpg_as` or an `ip_address`."
+                        raise AristaAvdError(msg)
+
+                    neighbor = self._create_neighbor(
+                        remote_peer_address,
+                        remote_peer_name,
+                        self.inputs.bgp_peer_groups.evpn_overlay_core.name,
+                        remote_as=bgp_as,
+                        overlay_peering_interface="Loopback0",
+                    )
+
+                    neighbors.append(neighbor)
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
             if self.shared_utils.overlay_mpls is True:
@@ -551,33 +589,94 @@ class RouterBgpMixin(Protocol):
                     )
                     neighbors.append(neighbor)
 
-                for route_client, data in natural_sort(self._mpls_route_clients.items()):
-                    neighbor = self._create_neighbor(
-                        data["ip_address"],
-                        route_client,
-                        self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
-                        overlay_peering_interface=data.get("overlay_peering_interface"),
-                    )
-                    neighbors.append(neighbor)
+                if self._is_mpls_server is True:
+                    for avd_peer in self._avd_overlay_peers:
+                        peer_facts = self.shared_utils.get_peer_facts(avd_peer, required=True)
+                        if self._is_peer_mpls_client(peer_facts) is not True:
+                            continue
 
-                for mesh_pe, data in natural_sort(self._mpls_mesh_pe.items()):
+                        if self.shared_utils.hostname in peer_facts.get("mpls_route_reflectors", []) and avd_peer not in self._mpls_route_reflectors:
+                            neighbor = self._create_neighbor(
+                                get(
+                                    peer_facts,
+                                    "overlay.peering_address",
+                                    required=True,
+                                    custom_error_msg=f"switch.overlay.peering_address for {avd_peer} is required.",
+                                ),
+                                avd_peer,
+                                self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
+                            )
+                            neighbors.append(neighbor)
+
+            if self.inputs.bgp_mesh_pes:
+                for fabric_switch in self.shared_utils.all_fabric_devices:
+                    if self._mpls_route_reflectors is not None and fabric_switch in self._mpls_route_reflectors:
+                        continue
+                    if fabric_switch == self.shared_utils.hostname:
+                        continue
+
+                    peer_facts = self.shared_utils.get_peer_facts(fabric_switch, required=True)
+                    if self._is_peer_mpls_client(peer_facts) is not True:
+                        continue
+
                     neighbor = self._create_neighbor(
-                        data["ip_address"],
-                        mesh_pe,
+                        get(
+                            peer_facts,
+                            "overlay.peering_address",
+                            required=True,
+                            custom_error_msg=f"switch.overlay.peering_address for {fabric_switch} is required.",
+                        ),
+                        fabric_switch,
                         self.inputs.bgp_peer_groups.mpls_overlay_peers.name,
-                        overlay_peering_interface=data.get("overlay_peering_interface"),
+                        overlay_peering_interface="Loopback0",
                     )
-                    neighbors.append(neighbor)
+
+                neighbors.append(neighbor)
 
                 if self._is_mpls_server is True:
-                    for rr_peer, data in natural_sort(self._mpls_rr_peers.items()):
+                    for route_reflector in natural_sort(get(self._hostvars, "switch.mpls_route_reflectors", default=[])):
+                        if route_reflector == self.shared_utils.hostname:
+                            continue
+
+                        peer_facts = self.shared_utils.get_peer_facts(route_reflector, required=True)
+                        if self._is_peer_mpls_server(peer_facts) is not True:
+                            continue
+
                         neighbor = self._create_neighbor(
-                            data["ip_address"],
-                            rr_peer,
+                            get(
+                                peer_facts,
+                                "overlay.peering_address",
+                                required=True,
+                                custom_error_msg=f"switch.overlay.peering_address for {route_reflector} is required.",
+                            ),
+                            route_reflector,
                             self.inputs.bgp_peer_groups.rr_overlay_peers.name,
-                            overlay_peering_interface=data.get("overlay_peering_interface"),
+                            overlay_peering_interface="Loopback0",
                         )
                         neighbors.append(neighbor)
+
+                    for avd_peer in self._avd_overlay_peers:
+                        peer_facts = self.shared_utils.get_peer_facts(avd_peer, required=True)
+                        if self._is_peer_mpls_server(peer_facts) is not True:
+                            continue
+
+                        if self.shared_utils.hostname in peer_facts.get("mpls_route_reflectors", []) and avd_peer not in get(
+                            self._hostvars,
+                            "switch.mpls_route_reflectors",
+                            default=[],
+                        ):
+                            neighbor = self._create_neighbor(
+                                get(
+                                    peer_facts,
+                                    "overlay.peering_address",
+                                    required=True,
+                                    custom_error_msg=f"switch.overlay.peering_address for {avd_peer} is required.",
+                                ),
+                                avd_peer,
+                                self.inputs.bgp_peer_groups.rr_overlay_peers.name,
+                                overlay_peering_interface="Loopback0",
+                            )
+                            neighbors.append(neighbor)
 
             if self.shared_utils.overlay_evpn_vxlan is True:
                 for route_server, data in natural_sort(self._evpn_route_servers.items()):
@@ -636,24 +735,24 @@ class RouterBgpMixin(Protocol):
                 )
                 neighbors.append(neighbor)
 
-        for ipvpn_gw_peer, data in natural_sort(self._ipvpn_gateway_remote_peers.items()):
-            neighbor = self._create_neighbor(
-                data["ip_address"],
-                ipvpn_gw_peer,
-                self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name,
-                remote_as=data["bgp_as"],
-                overlay_peering_interface=data.get("overlay_peering_interface"),
-            )
-            # Add ebgp_multihop if the gw peer is an ebgp peer.
-            if data["bgp_as"] != default(self.shared_utils.node_config.ipvpn_gateway.local_as, self.shared_utils.bgp_as):
-                neighbor["ebgp_multihop"] = self.inputs.evpn_ebgp_gateway_multihop
+        if self.shared_utils.overlay_ipvpn_gateway is True:
+            for remote_peer in self.shared_utils.node_config.ipvpn_gateway.remote_peers._natural_sorted():
+                # These remote gw are outside of the inventory
+                bgp_as = str(remote_peer.bgp_as) if remote_peer.bgp_as else None
 
-            neighbors.append(neighbor)
+                neighbor = self._create_neighbor(
+                    remote_peer.ip_address,
+                    remote_peer.hostname,
+                    self.inputs.bgp_peer_groups.ipvpn_gateway_peers.name,
+                    remote_as=bgp_as,
+                )
+                # Add ebgp_multihop if the gw peer is an ebgp peer.
+                if bgp_as != default(self.shared_utils.node_config.ipvpn_gateway.local_as, self.shared_utils.bgp_as):
+                    neighbor["ebgp_multihop"] = self.inputs.evpn_ebgp_gateway_multihop
 
-        if neighbors:
-            return neighbors
+                neighbors.append(neighbor)
 
-        return None
+        return neighbors
 
     def _ip_in_listen_ranges(
         self: AvdStructuredConfigOverlayProtocol, source_ip: str, listen_range_prefixes: EosDesigns.BgpPeerGroups.WanOverlayPeers.ListenRangePrefixes

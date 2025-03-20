@@ -78,29 +78,26 @@ class MetadataMixin(Protocol):
             application_profile.transport_protocols.extend(profile.application_transports)
             for application in profile.applications:
                 if application.name not in user_defined_app_names:
-                    services = application.service or []
-                    services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.BuiltinApplicationsItem.Services()
-                    for service in services:
-                        services_item.append(service)
-                    application_profile.builtin_applications.append_new(name=application.name, services=services_item)
-                if application.name in user_defined_app_names:
+                    services = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.BuiltinApplicationsItem.Services()
+                    if application.service is not None:
+                        services.append_new(application.service)
+                    application_profile.builtin_applications.append_new(name=application.name, services=services)
+                else:
                     application_profile.user_defined_applications.append_new(name=application.name)
             for category in profile.categories:
-                services = category.service or []
-                services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.CategoriesItem.Services()
-                for service in services:
-                    services_item.append(service)
-                application_profile.categories.append_new(category=category.name, services=services_item)
+                services = EosCliConfigGen.Metadata.CvPathfinder.Applications.ProfilesItem.CategoriesItem.Services()
+                if category.service is not None:
+                    services.append_new(category.service)
+                application_profile.categories.append_new(category=category.name, services=services)
             self.structured_config.metadata.cv_pathfinder.applications.profiles.append(application_profile)
         for category in categories:
             for application in category.applications:
                 if application.name not in user_defined_app_names:
-                    services_item = EosCliConfigGen.Metadata.CvPathfinder.Applications.Categories.BuiltinApplicationsItem.Services()
-                    services = application.service or []
-                    for service in services:
-                        services_item.append(service)
+                    services = EosCliConfigGen.Metadata.CvPathfinder.Applications.Categories.BuiltinApplicationsItem.Services()
+                    if application.service is not None:
+                        services.append_new(application.service)
                     self.structured_config.metadata.cv_pathfinder.applications.categories.builtin_applications.append_new(
-                        name=application.name, category=category.name, services=services_item
+                        name=application.name, category=category.name, services=services
                     )
 
                 if application.name in user_defined_app_names:

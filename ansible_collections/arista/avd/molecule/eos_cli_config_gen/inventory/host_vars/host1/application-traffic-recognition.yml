@@ -134,9 +134,10 @@ application_traffic_recognition:
     - name: app_profile_1
       applications:
         - name: user_defined_app1
-        - name: aim1
+        - name: aim
           service: chat
-        - name: aim2
+          # Render multiple services in same application
+        - name: aim
           service: audio-video
       application_transports:
         - udp

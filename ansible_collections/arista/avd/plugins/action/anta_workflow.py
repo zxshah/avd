@@ -20,8 +20,6 @@ from ansible.plugins.action import ActionBase, display
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import PythonToAnsibleHandler
 
 if TYPE_CHECKING:
-    from collections.abc import Mapping
-
     from pyavd.api._anta import MinimalStructuredConfig
 
 PLUGIN_NAME = "arista.avd.anta_workflow"
@@ -154,8 +152,8 @@ class ActionModule(ActionBase):
             msg = "'device_list' cannot be empty"
             raise AnsibleActionFail(msg)
 
-        # Extract only the needed hostvars from each device
-        ANSIBLE_VARS = extract_hostvars(device_list, task_vars["hostvars"])
+        # Get the required Ansible variables from task_vars for each device
+        ANSIBLE_VARS = get_ansible_vars(device_list, task_vars)
         deployed_devices = list(ANSIBLE_VARS.keys())
 
         generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")
@@ -261,9 +259,10 @@ def build_reports(batch_results: list[ResultManager], report_settings: dict) -> 
             file.write(result_manager.json)
 
 
-def extract_hostvars(device_list: list[str], hostvars: Mapping) -> dict:
-    """Extract only the required hostvars for each device."""
+def get_ansible_vars(device_list: list[str], task_vars: dict) -> dict:
+    """Get the required Ansible variables from task_vars for each device in the device list."""
     device_vars = {}
+    hostvars = task_vars["hostvars"]
 
     for device in device_list:
         if device not in hostvars:
@@ -279,7 +278,7 @@ def extract_hostvars(device_list: list[str], hostvars: Mapping) -> dict:
             continue
 
         # Adding the Ansible connection variables following the HTTPAPI connection plugin settings
-        device_vars[device] = {key: get(host_hostvars, key) for key in ANSIBLE_CONNECTION_VARS}
+        device_vars[device] = {key: get(host_hostvars, key, default=get(task_vars, key)) for key in ANSIBLE_CONNECTION_VARS}
 
         # Same as above, we also honor the `anta_tags` variable if provided in the hostvars
         device_vars[device]["anta_tags"] = get(host_hostvars, "anta_tags")
@@ -360,7 +359,6 @@ def build_anta_device(device: str) -> AsyncEOSDevice:
 
     device_vars = ANSIBLE_VARS[device]
 
-    # TODO: Confirm this is working with Ansible Vault
     device_settings = {
         "name": device,
         "host": get(device_vars, "ansible_host", default=get(device_vars, "inventory_hostname")),

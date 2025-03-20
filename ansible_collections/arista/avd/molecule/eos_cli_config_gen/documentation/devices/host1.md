@@ -10898,8 +10898,8 @@ system l1
 
 | Type | Name | Service |
 | ---- | ---- | ------- |
-| application | aim1 | chat |
-| application | aim2 | audio-video |
+| application | aim | audio-video |
+| application | aim | chat |
 | application | user_defined_app1 | - |
 | category | best-effort | - |
 | category | category1 | audio-video |
@@ -10996,8 +10996,8 @@ application traffic recognition
    category empty
    !
    application-profile app_profile_1
-      application aim2 service audio-video
-      application aim1 service chat
+      application aim service audio-video
+      application aim service chat
       application user_defined_app1
       application http transport
       application udp transport

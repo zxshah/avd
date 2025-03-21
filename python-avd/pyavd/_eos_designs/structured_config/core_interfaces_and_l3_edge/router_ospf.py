@@ -25,16 +25,13 @@ class RouterOspfMixin(Protocol):
         if not self.shared_utils.underlay_ospf:
             return
 
-        no_passive_interfaces = EosCliConfigGen.RouterOspf.ProcessIdsItem.NoPassiveInterfaces()
+        process = EosCliConfigGen.RouterOspf.ProcessIdsItem(id=self.inputs.underlay_ospf_process_id)
+
         for p2p_link, p2p_link_data in self._filtered_p2p_links:
             if p2p_link.include_in_underlay_protocol:
-                no_passive_interfaces.append(p2p_link_data["interface"])
-
-        if no_passive_interfaces:
-            self.structured_config.router_ospf.process_ids.append_new(
-                id=self.inputs.underlay_ospf_process_id,
-                no_passive_interfaces=EosCliConfigGen.RouterOspf.ProcessIdsItem.NoPassiveInterfaces(no_passive_interfaces),
-            )
+                process.no_passive_interfaces.append(p2p_link_data["interface"])
 
         if self.inputs.underlay_ospf_graceful_restart:
-            self.structured_config.router_ospf.process_ids.obtain(self.inputs.underlay_ospf_process_id).graceful_restart.enabled = True
+            process.graceful_restart.enabled = self.inputs.underlay_ospf_graceful_restart
+
+        self.structured_config.router_ospf.process_ids.append(process)

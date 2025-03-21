@@ -304,9 +304,7 @@ class UtilsMixin(Protocol):
                 interface.mpls.ldp.interface = True
                 interface.mpls.ldp.igp_sync = True
 
-    def _get_channel_id(
-            self:AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol, p2p_link: T_P2pLinksItem, node_data: dict
-    ) -> int:
+    def _get_channel_id(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol, p2p_link: T_P2pLinksItem, node_data: dict) -> int:
         """
         Returns a channel ID for one p2p_link.
         """

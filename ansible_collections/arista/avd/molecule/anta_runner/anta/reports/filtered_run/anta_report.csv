@@ -158,21 +158,11 @@ dc1-spine2,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the
 dc1-spine2,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-svc-leaf1a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
 dc1-svc-leaf1a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
-dc1-svc-leaf1a,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
-dc1-svc-leaf1a,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
-dc1-svc-leaf1a,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
-dc1-svc-leaf1a,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
-dc1-svc-leaf1a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
 dc1-svc-leaf1a,VerifyEOSExtensions,unset,,Verifies that all EOS extensions installed on the device are enabled for boot persistence.,Software
 dc1-svc-leaf1a,VerifyEOSVersion,unset,,Verifies the EOS version of the device.,Software
 dc1-svc-leaf1a,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the device.,Software
 dc1-svc-leaf1b,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
 dc1-svc-leaf1b,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
-dc1-svc-leaf1b,VerifyInterfaceDiscards,unset,,Verifies that the interfaces packet discard counters are equal to zero.,Interfaces
-dc1-svc-leaf1b,VerifyInterfaceErrDisabled,unset,,Verifies there are no interfaces in the errdisabled state.,Interfaces
-dc1-svc-leaf1b,VerifyInterfaceErrors,unset,,Verifies that the interfaces error counters are equal to zero.,Interfaces
-dc1-svc-leaf1b,VerifyInterfaceUtilization,unset,,Verifies that the utilization of interfaces is below a certain threshold.,Interfaces
-dc1-svc-leaf1b,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
 dc1-svc-leaf1b,VerifyEOSExtensions,unset,,Verifies that all EOS extensions installed on the device are enabled for boot persistence.,Software
 dc1-svc-leaf1b,VerifyEOSVersion,unset,,Verifies the EOS version of the device.,Software
 dc1-svc-leaf1b,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the device.,Software

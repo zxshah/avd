@@ -5,9 +5,7 @@
 - [ANTA Report](#anta-report)
   - [Test Results Summary](#test-results-summary)
     - [Summary Totals](#summary-totals)
-- [| 440 | 0 | 0 | 0 | 0 |](#-440--0--0--0--0-)
     - [Summary Totals Device Under Test](#summary-totals-device-under-test)
-- [| dc2-spine2 | 20 | 0 | 0 | 0 | 0 | - | - |](#-dc2-spine2--20--0--0--0--0-------)
     - [Summary Totals Per Category](#summary-totals-per-category)
   - [Test Results](#test-results)
 
@@ -17,31 +15,31 @@
 
 | Total Tests | Total Tests Success | Total Tests Skipped | Total Tests Failure | Total Tests Error |
 | ----------- | ------------------- | ------------------- | ------------------- | ------------------|
-| 440 | 0 | 0 | 0 | 0 |
+| 508 | 0 | 0 | 0 | 0 |
 
 ### Summary Totals Device Under Test
 
 | Device Under Test | Total Tests | Tests Success | Tests Skipped | Tests Failure | Tests Error | Categories Skipped | Categories Failed |
 | ------------------| ----------- | ------------- | ------------- | ------------- | ----------- | -------------------| ------------------|
-| dc1-leaf1a | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc1-leaf1b | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc1-leaf1c | 17 | 0 | 0 | 0 | 0 | - | - |
-| dc1-leaf2a | 26 | 0 | 0 | 0 | 0 | - | - |
-| dc1-leaf2c | 17 | 0 | 0 | 0 | 0 | - | - |
+| dc1-leaf1a | 27 | 0 | 0 | 0 | 0 | - | - |
+| dc1-leaf1b | 27 | 0 | 0 | 0 | 0 | - | - |
+| dc1-leaf1c | 19 | 0 | 0 | 0 | 0 | - | - |
+| dc1-leaf2a | 32 | 0 | 0 | 0 | 0 | - | - |
+| dc1-leaf2c | 19 | 0 | 0 | 0 | 0 | - | - |
 | dc1-spine1 | 20 | 0 | 0 | 0 | 0 | - | - |
 | dc1-spine2 | 20 | 0 | 0 | 0 | 0 | - | - |
-| dc1-svc-leaf1a | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc1-svc-leaf1b | 21 | 0 | 0 | 0 | 0 | - | - |
+| dc1-svc-leaf1a | 27 | 0 | 0 | 0 | 0 | - | - |
+| dc1-svc-leaf1b | 27 | 0 | 0 | 0 | 0 | - | - |
 | dc1-wan1 | 23 | 0 | 0 | 0 | 0 | - | - |
 | dc1-wan2 | 23 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf1a | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf1b | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf1c | 17 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf2a | 26 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf2b | 26 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf2c | 17 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf3a.arista.com | 21 | 0 | 0 | 0 | 0 | - | - |
-| dc2-leaf3b.arista.com | 21 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf1a | 26 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf1b | 26 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf1c | 19 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf2a | 31 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf2b | 31 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf2c | 19 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf3a.arista.com | 26 | 0 | 0 | 0 | 0 | - | - |
+| dc2-leaf3b.arista.com | 26 | 0 | 0 | 0 | 0 | - | - |
 | dc2-spine1 | 20 | 0 | 0 | 0 | 0 | - | - |
 | dc2-spine2 | 20 | 0 | 0 | 0 | 0 | - | - |
 

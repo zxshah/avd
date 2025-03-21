@@ -10361,6 +10361,24 @@ $defs:
             convert_types:
             - int
             description: The values can be like ["node_a_as", "node_b_as"].
+        channel_id_generation:
+          type: str
+          valid_values:
+          - first_port
+          - p2p_link_id
+          default: first_port
+          description: 'Configures how to generate the port-channel ID. By default
+            an id is generated based on the first switch port in the port channel.
+
+
+            The `p2p_link_id` setting will use the `id` for each link added with the
+            `channel_id_offset` to determine the port-channel interface name.'
+        channel_id_offset:
+          type: int
+          convert_types:
+          - str
+          min: 0
+          max: 900000
         descriptions:
           type: list
           description: Interface descriptions.

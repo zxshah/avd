@@ -1155,6 +1155,8 @@ class EosDesigns(EosDesignsRootModel):
                 "nodes": {"type": Nodes},
                 "interfaces": {"type": Interfaces},
                 "field_as": {"type": As},
+                "channel_id_generation": {"type": str, "default": "first_port"},
+                "channel_id_offset": {"type": int},
                 "descriptions": {"type": Descriptions},
                 "include_in_underlay_protocol": {"type": bool, "default": True},
                 "isis_hello_padding": {"type": bool, "default": True},
@@ -1234,6 +1236,17 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdList with `str` items.
             """
+            channel_id_generation: Literal["first_port", "p2p_link_id"]
+            """
+            Configures how to generate the port-channel ID. By default an id is generated based on the first
+            switch port in the port channel.
+
+            The `p2p_link_id` setting will use the `id` for each link added
+            with the `channel_id_offset` to determine the port-channel interface name.
+
+            Default value: `"first_port"`
+            """
+            channel_id_offset: int | None
             descriptions: Descriptions
             """
             Interface descriptions.
@@ -1324,6 +1337,8 @@ class EosDesigns(EosDesignsRootModel):
                     nodes: Nodes | UndefinedType = Undefined,
                     interfaces: Interfaces | UndefinedType = Undefined,
                     field_as: As | UndefinedType = Undefined,
+                    channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                    channel_id_offset: int | None | UndefinedType = Undefined,
                     descriptions: Descriptions | UndefinedType = Undefined,
                     include_in_underlay_protocol: bool | UndefinedType = Undefined,
                     isis_hello_padding: bool | UndefinedType = Undefined,
@@ -1388,6 +1403,13 @@ class EosDesigns(EosDesignsRootModel):
 
 
                            Subclass of AvdList with `str` items.
+                        channel_id_generation:
+                           Configures how to generate the port-channel ID. By default an id is generated based on the first
+                           switch port in the port channel.
+
+                           The `p2p_link_id` setting will use the `id` for each link added
+                           with the `channel_id_offset` to determine the port-channel interface name.
+                        channel_id_offset: channel_id_offset
                         descriptions:
                            Interface descriptions.
 
@@ -1696,6 +1718,8 @@ class EosDesigns(EosDesignsRootModel):
                 "ipv6_enable": {"type": bool, "default": False},
                 "interfaces": {"type": Interfaces},
                 "field_as": {"type": As},
+                "channel_id_generation": {"type": str, "default": "first_port"},
+                "channel_id_offset": {"type": int},
                 "descriptions": {"type": Descriptions},
                 "include_in_underlay_protocol": {"type": bool, "default": True},
                 "isis_hello_padding": {"type": bool, "default": True},
@@ -1775,6 +1799,17 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdList with `str` items.
             """
+            channel_id_generation: Literal["first_port", "p2p_link_id"]
+            """
+            Configures how to generate the port-channel ID. By default an id is generated based on the first
+            switch port in the port channel.
+
+            The `p2p_link_id` setting will use the `id` for each link added
+            with the `channel_id_offset` to determine the port-channel interface name.
+
+            Default value: `"first_port"`
+            """
+            channel_id_offset: int | None
             descriptions: Descriptions
             """
             Interface descriptions.
@@ -1865,6 +1900,8 @@ class EosDesigns(EosDesignsRootModel):
                     ipv6_enable: bool | UndefinedType = Undefined,
                     interfaces: Interfaces | UndefinedType = Undefined,
                     field_as: As | UndefinedType = Undefined,
+                    channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                    channel_id_offset: int | None | UndefinedType = Undefined,
                     descriptions: Descriptions | UndefinedType = Undefined,
                     include_in_underlay_protocol: bool | UndefinedType = Undefined,
                     isis_hello_padding: bool | UndefinedType = Undefined,
@@ -1929,6 +1966,13 @@ class EosDesigns(EosDesignsRootModel):
 
 
                            Subclass of AvdList with `str` items.
+                        channel_id_generation:
+                           Configures how to generate the port-channel ID. By default an id is generated based on the first
+                           switch port in the port channel.
+
+                           The `p2p_link_id` setting will use the `id` for each link added
+                           with the `channel_id_offset` to determine the port-channel interface name.
+                        channel_id_offset: channel_id_offset
                         descriptions:
                            Interface descriptions.
 
@@ -5025,6 +5069,8 @@ class EosDesigns(EosDesignsRootModel):
                 "nodes": {"type": Nodes},
                 "interfaces": {"type": Interfaces},
                 "field_as": {"type": As},
+                "channel_id_generation": {"type": str, "default": "first_port"},
+                "channel_id_offset": {"type": int},
                 "descriptions": {"type": Descriptions},
                 "include_in_underlay_protocol": {"type": bool, "default": True},
                 "isis_hello_padding": {"type": bool, "default": True},
@@ -5104,6 +5150,17 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdList with `str` items.
             """
+            channel_id_generation: Literal["first_port", "p2p_link_id"]
+            """
+            Configures how to generate the port-channel ID. By default an id is generated based on the first
+            switch port in the port channel.
+
+            The `p2p_link_id` setting will use the `id` for each link added
+            with the `channel_id_offset` to determine the port-channel interface name.
+
+            Default value: `"first_port"`
+            """
+            channel_id_offset: int | None
             descriptions: Descriptions
             """
             Interface descriptions.
@@ -5194,6 +5251,8 @@ class EosDesigns(EosDesignsRootModel):
                     nodes: Nodes | UndefinedType = Undefined,
                     interfaces: Interfaces | UndefinedType = Undefined,
                     field_as: As | UndefinedType = Undefined,
+                    channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                    channel_id_offset: int | None | UndefinedType = Undefined,
                     descriptions: Descriptions | UndefinedType = Undefined,
                     include_in_underlay_protocol: bool | UndefinedType = Undefined,
                     isis_hello_padding: bool | UndefinedType = Undefined,
@@ -5258,6 +5317,13 @@ class EosDesigns(EosDesignsRootModel):
 
 
                            Subclass of AvdList with `str` items.
+                        channel_id_generation:
+                           Configures how to generate the port-channel ID. By default an id is generated based on the first
+                           switch port in the port channel.
+
+                           The `p2p_link_id` setting will use the `id` for each link added
+                           with the `channel_id_offset` to determine the port-channel interface name.
+                        channel_id_offset: channel_id_offset
                         descriptions:
                            Interface descriptions.
 
@@ -5566,6 +5632,8 @@ class EosDesigns(EosDesignsRootModel):
                 "ipv6_enable": {"type": bool, "default": False},
                 "interfaces": {"type": Interfaces},
                 "field_as": {"type": As},
+                "channel_id_generation": {"type": str, "default": "first_port"},
+                "channel_id_offset": {"type": int},
                 "descriptions": {"type": Descriptions},
                 "include_in_underlay_protocol": {"type": bool, "default": True},
                 "isis_hello_padding": {"type": bool, "default": True},
@@ -5645,6 +5713,17 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdList with `str` items.
             """
+            channel_id_generation: Literal["first_port", "p2p_link_id"]
+            """
+            Configures how to generate the port-channel ID. By default an id is generated based on the first
+            switch port in the port channel.
+
+            The `p2p_link_id` setting will use the `id` for each link added
+            with the `channel_id_offset` to determine the port-channel interface name.
+
+            Default value: `"first_port"`
+            """
+            channel_id_offset: int | None
             descriptions: Descriptions
             """
             Interface descriptions.
@@ -5735,6 +5814,8 @@ class EosDesigns(EosDesignsRootModel):
                     ipv6_enable: bool | UndefinedType = Undefined,
                     interfaces: Interfaces | UndefinedType = Undefined,
                     field_as: As | UndefinedType = Undefined,
+                    channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                    channel_id_offset: int | None | UndefinedType = Undefined,
                     descriptions: Descriptions | UndefinedType = Undefined,
                     include_in_underlay_protocol: bool | UndefinedType = Undefined,
                     isis_hello_padding: bool | UndefinedType = Undefined,
@@ -5799,6 +5880,13 @@ class EosDesigns(EosDesignsRootModel):
 
 
                            Subclass of AvdList with `str` items.
+                        channel_id_generation:
+                           Configures how to generate the port-channel ID. By default an id is generated based on the first
+                           switch port in the port channel.
+
+                           The `p2p_link_id` setting will use the `id` for each link added
+                           with the `channel_id_offset` to determine the port-channel interface name.
+                        channel_id_offset: channel_id_offset
                         descriptions:
                            Interface descriptions.
 

@@ -77,6 +77,7 @@ core_interfaces:
       isis_authentication_mode: md5
       isis_authentication_key: $1c$sTNAlR6rKSw=
       isis_network_type: point-to-point
+      channel_id_generation: p2p_link_id
 
     - name: ospf_bb_profile
       speed: "forced 1000full"
@@ -156,6 +157,7 @@ core_interfaces:
     # core Port-Channel
     - nodes: [ core-1-isis-sr-ldp, core-2-ospf-ldp ]
       id: 9
+      channel_id_generation: first_port
       port_channel:
         mode: active
         nodes_child_interfaces:
@@ -183,6 +185,7 @@ core_interfaces:
     - nodes: [ core-1-isis-sr-ldp, core-2-ospf-ldp ]
       id: 9
       descriptions: [CUSTOM_DESCRIPTION_ON_P2P_LINK_A, CUSTOM_DESCRIPTION_ON_P2P_LINK_B]
+      channel_id_offset: 100
       port_channel:
         mode: active
         nodes_child_interfaces:
@@ -219,6 +222,20 @@ core_interfaces:
       interfaces: [ Ethernet3, Ethernet3 ]
       include_in_underlay_protocol: true
       ip_pool: underlay_pool
+
+    # core Port-Channel with specified channel_id
+    - nodes: [ core-1-isis-sr-ldp, core-2-ospf-ldp ]
+      id: 13
+      channel_id_generation: first_port
+      port_channel:
+        mode: active
+        nodes_child_interfaces:
+          - node: core-1-isis-sr-ldp
+            interfaces: [ Ethernet18, Ethernet19 ]
+            channel_id: 12345
+          - node: core-2-ospf-ldp
+            interfaces: [ Ethernet18, Ethernet19 ]
+      profile: isis_bb_profile
 
 l3_edge:
   p2p_links_ip_pools:

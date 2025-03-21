@@ -135,7 +135,10 @@ class UtilsMixin(Protocol):
         ):
             node_data = p2p_link.port_channel.nodes_child_interfaces[self.shared_utils.hostname]
             # Port-channel
-            default_channel_id = int("".join(re.findall(r"\d", node_data.interfaces[0])))
+            if p2p_link.channel_id_generation == "p2p_link_id":
+                default_channel_id = p2p_link.id + p2p_link._get("channel_id_offset", 0)
+            else:
+                default_channel_id = int("".join(re.findall(r"\d", node_data.interfaces[0])))
             portchannel_id = node_data.channel_id or default_channel_id
 
             if peer not in p2p_link.port_channel.nodes_child_interfaces:

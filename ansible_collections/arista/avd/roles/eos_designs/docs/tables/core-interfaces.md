@@ -27,6 +27,8 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links_profiles.[].interfaces.[]") | String |  |  |  | The value can be like < node_a_interface >, < node_b_interface >.<br>ex. - [ Ethernet2, Ethernet2 ].<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as</samp>](## "core_interfaces.p2p_links_profiles.[].as") | List, items: String |  |  |  | AS numbers for BGP.<br>Required with bgp peering.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links_profiles.[].as.[]") | String |  |  |  | The values can be like ["node_a_as", "node_b_as"]. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_id_generation</samp>](## "core_interfaces.p2p_links_profiles.[].channel_id_generation") | String |  | `first_port` | Valid Values:<br>- <code>first_port</code><br>- <code>p2p_link_id</code> | Configures how to generate the port-channel ID. By default an id is generated based on the first switch port in the port channel.<br><br>The `p2p_link_id` setting will use the `id` for each link added with the `channel_id_offset` to determine the port-channel interface name. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_id_offset</samp>](## "core_interfaces.p2p_links_profiles.[].channel_id_offset") | Integer |  |  | Min: 0<br>Max: 900000 |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;descriptions</samp>](## "core_interfaces.p2p_links_profiles.[].descriptions") | List, items: String |  |  |  | Interface descriptions. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links_profiles.[].descriptions.[]") | String |  |  |  | Description or description template to be used on the ethernet interface.<br>This can be a template using the AVD string formatter syntax: https://avd.arista.com/devel/roles/eos_designs/docs/how-to/custom-descriptions-names.html#avd-string-formatter-syntax.<br>The available template fields are:<br>  - `peer`: The name of the peer.<br>  - `interface`: The local interface name.<br>  - `peer_interface`: The interface on the peer.<br><br>The default description is set by `default_underlay_p2p_ethernet_description`.<br>By default the description is templated from the name and interface of the peer. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_in_underlay_protocol</samp>](## "core_interfaces.p2p_links_profiles.[].include_in_underlay_protocol") | Boolean |  | `True` |  | Add this interface to underlay routing protocol. |
@@ -78,6 +80,8 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links.[].interfaces.[]") | String |  |  |  | The value can be like < node_a_interface >, < node_b_interface >.<br>ex. - [ Ethernet2, Ethernet2 ].<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as</samp>](## "core_interfaces.p2p_links.[].as") | List, items: String |  |  |  | AS numbers for BGP.<br>Required with bgp peering.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links.[].as.[]") | String |  |  |  | The values can be like ["node_a_as", "node_b_as"]. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_id_generation</samp>](## "core_interfaces.p2p_links.[].channel_id_generation") | String |  | `first_port` | Valid Values:<br>- <code>first_port</code><br>- <code>p2p_link_id</code> | Configures how to generate the port-channel ID. By default an id is generated based on the first switch port in the port channel.<br><br>The `p2p_link_id` setting will use the `id` for each link added with the `channel_id_offset` to determine the port-channel interface name. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;channel_id_offset</samp>](## "core_interfaces.p2p_links.[].channel_id_offset") | Integer |  |  | Min: 0<br>Max: 900000 |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;descriptions</samp>](## "core_interfaces.p2p_links.[].descriptions") | List, items: String |  |  |  | Interface descriptions. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "core_interfaces.p2p_links.[].descriptions.[]") | String |  |  |  | Description or description template to be used on the ethernet interface.<br>This can be a template using the AVD string formatter syntax: https://avd.arista.com/devel/roles/eos_designs/docs/how-to/custom-descriptions-names.html#avd-string-formatter-syntax.<br>The available template fields are:<br>  - `peer`: The name of the peer.<br>  - `interface`: The local interface name.<br>  - `peer_interface`: The interface on the peer.<br><br>The default description is set by `default_underlay_p2p_ethernet_description`.<br>By default the description is templated from the name and interface of the peer. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_in_underlay_protocol</samp>](## "core_interfaces.p2p_links.[].include_in_underlay_protocol") | Boolean |  | `True` |  | Add this interface to underlay routing protocol. |
@@ -176,6 +180,12 @@
 
               # The values can be like ["node_a_as", "node_b_as"].
             - <str>
+
+          # Configures how to generate the port-channel ID. By default an id is generated based on the first switch port in the port channel.
+          #
+          # The `p2p_link_id` setting will use the `id` for each link added with the `channel_id_offset` to determine the port-channel interface name.
+          channel_id_generation: <str; "first_port" | "p2p_link_id"; default="first_port">
+          channel_id_offset: <int; 0-900000>
 
           # Interface descriptions.
           descriptions:
@@ -332,6 +342,12 @@
 
               # The values can be like ["node_a_as", "node_b_as"].
             - <str>
+
+          # Configures how to generate the port-channel ID. By default an id is generated based on the first switch port in the port channel.
+          #
+          # The `p2p_link_id` setting will use the `id` for each link added with the `channel_id_offset` to determine the port-channel interface name.
+          channel_id_generation: <str; "first_port" | "p2p_link_id"; default="first_port">
+          channel_id_offset: <int; 0-900000>
 
           # Interface descriptions.
           descriptions:

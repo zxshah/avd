@@ -48,8 +48,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     def _set_control_plane_application_profile(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
         Set an application-profile for control-plane in structured_config.
-        
-        
 
         * the device Pathfinders vtep_ips as destination for non Pathfinders.
         * the device Pathfinder vtep_ip as source.

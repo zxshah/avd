@@ -48,8 +48,6 @@ class RouterOspfMixin(Protocol):
                 )
                 self._update_ospf_interface(process, vrf)
 
-                if self.inputs.underlay_ospf_graceful_restart:
-                    process.graceful_restart.enabled = True
                 if vrf.name != "default":
                     process.vrf = vrf.name
                 if vrf.ospf.bfd:

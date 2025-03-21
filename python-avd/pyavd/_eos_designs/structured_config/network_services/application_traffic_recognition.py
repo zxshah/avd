@@ -28,9 +28,9 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         if not self.shared_utils.is_wan_router:
             return
 
-        self._filtered_application_classification()
+        self._set_application_classification()
 
-        self._generate_control_plane_application_profile()
+        self._set_control_plane_application_profile()
 
     #  self._wan_control_plane_application_profile is defined in utils.py
     @cached_property
@@ -45,9 +45,11 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     def _wan_cp_app_src_prefix(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
         return "PFX-LOCAL-VTEP-IP"
 
-    def _generate_control_plane_application_profile(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_control_plane_application_profile(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
-        Generate an application profile using a single application matching.
+        Set an application-profile for control-plane in structured_config.
+        
+        
 
         * the device Pathfinders vtep_ips as destination for non Pathfinders.
         * the device Pathfinder vtep_ip as source.
@@ -126,9 +128,9 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues([f"{self.shared_utils.vtep_ip}/32"]),
             )
 
-    def _filtered_application_classification(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_application_classification(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
         """
-        Based on the filtered policies local to the device, filter which application profiles should be configured on the device.
+        Based on the filtered policies local to the device, set the application-profiles relevant to the device in structured config.
 
         Supports only `application_classification.applications.ipv4_applications` for now.
 

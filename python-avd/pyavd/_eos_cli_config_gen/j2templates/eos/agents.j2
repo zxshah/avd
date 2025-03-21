@@ -15,4 +15,11 @@
 {%         endfor %}
 agent {{ agent.name }} environment {{ env_list | join(":") }}
 {%     endif %}
+{%     for shutdown_supervisor in agent.shutdown_supervisors | arista.avd.default([]) %}
+{%         if shutdown_supervisor == "all" %}
+agent {{ agent.name }} shutdown
+{%         else %}
+agent {{ agent.name }} shutdown supervisor {{ shutdown_supervisor }}
+{%         endif %}
+{%     endfor %}
 {% endfor %}

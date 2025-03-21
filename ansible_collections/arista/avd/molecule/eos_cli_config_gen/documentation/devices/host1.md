@@ -318,7 +318,12 @@
 ```eos
 !
 agent Dummy environment V1=42:V2=666
+agent Dummy shutdown
+agent Dummy shutdown supervisor active
+agent Dummy shutdown supervisor standby
 agent KernelFib environment KERNELFIB_PROGRAM_ALL_ECMP=true
+agent KernelFib shutdown supervisor active
+agent KernelFib shutdown supervisor standby
 ```
 
 ### Management Interfaces

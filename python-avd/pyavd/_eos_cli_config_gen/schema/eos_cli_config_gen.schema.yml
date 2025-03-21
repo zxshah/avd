@@ -516,6 +516,15 @@ keys:
                 - bool
                 required: true
                 description: Environment variable value.
+        shutdown_supervisors:
+          description: Shutdown the agent process for all, active or standby supervisors.
+          type: list
+          items:
+            type: str
+            valid_values:
+            - all
+            - active
+            - standby
   aliases:
     type: str
     description: "Multi-line string with one or more alias commands.\n\nExample:\n\n```yaml\naliases:

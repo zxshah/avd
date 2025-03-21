@@ -1441,15 +1441,37 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
         EnvironmentVariables._item_type = EnvironmentVariablesItem
 
-        _fields: ClassVar[dict] = {"name": {"type": str}, "environment_variables": {"type": EnvironmentVariables}}
+        class ShutdownSupervisors(AvdList[str]):
+            """Subclass of AvdList with `str` items."""
+
+        ShutdownSupervisors._item_type = str
+
+        _fields: ClassVar[dict] = {
+            "name": {"type": str},
+            "environment_variables": {"type": EnvironmentVariables},
+            "shutdown_supervisors": {"type": ShutdownSupervisors},
+        }
         name: str
         """Agent name."""
         environment_variables: EnvironmentVariables
         """Subclass of AvdIndexedList with `EnvironmentVariablesItem` items. Primary key is `name` (`str`)."""
+        shutdown_supervisors: ShutdownSupervisors
+        """
+        Shutdown the agent process for all, active or standby supervisors.
+
+        Subclass of AvdList with `str`
+        items.
+        """
 
         if TYPE_CHECKING:
 
-            def __init__(self, *, name: str | UndefinedType = Undefined, environment_variables: EnvironmentVariables | UndefinedType = Undefined) -> None:
+            def __init__(
+                self,
+                *,
+                name: str | UndefinedType = Undefined,
+                environment_variables: EnvironmentVariables | UndefinedType = Undefined,
+                shutdown_supervisors: ShutdownSupervisors | UndefinedType = Undefined,
+            ) -> None:
                 """
                 AgentsItem.
 
@@ -1459,6 +1481,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 Args:
                     name: Agent name.
                     environment_variables: Subclass of AvdIndexedList with `EnvironmentVariablesItem` items. Primary key is `name` (`str`).
+                    shutdown_supervisors:
+                       Shutdown the agent process for all, active or standby supervisors.
+
+                       Subclass of AvdList with `str`
+                       items.
 
                 """
 

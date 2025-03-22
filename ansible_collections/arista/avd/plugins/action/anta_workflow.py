@@ -17,7 +17,7 @@ import yaml
 from ansible.errors import AnsibleActionFail
 from ansible.plugins.action import ActionBase, display
 
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import PythonToAnsibleHandler
+from ansible_collections.arista.avd.plugins.plugin_utils.utils import ActionHostVars, PythonToAnsibleHandler
 
 if TYPE_CHECKING:
     from pyavd.api._anta import MinimalStructuredConfig
@@ -39,7 +39,7 @@ LOGGING_LEVELS = ["DEBUG", "INFO", "ERROR", "WARNING", "CRITICAL"]
 
 ANSIBLE_HTTPAPI_CONNECTION_DOC = "https://docs.ansible.com/ansible/latest/collections/ansible/netcommon/httpapi_connection.html"
 
-ANSIBLE_CONNECTION_VARS = [
+ANSIBLE_VARS = [
     "inventory_hostname",
     "ansible_host",
     "ansible_user",
@@ -50,6 +50,8 @@ ANSIBLE_CONNECTION_VARS = [
     "ansible_become_password",
     "ansible_httpapi_port",
     "ansible_httpapi_use_ssl",
+    "anta_tags",
+    "is_deployed",
 ]
 
 ARGUMENT_SPEC = {
@@ -113,13 +115,13 @@ ARGUMENT_SPEC = {
 STRUCTURED_CONFIGS: dict[str, dict[str, Any]] | None = None
 MINIMAL_STRUCTURED_CONFIGS: dict[str, MinimalStructuredConfig] | None = None
 PLUGIN_ARGS: dict[str, Any] | None = None
-ANSIBLE_VARS: dict[str, dict[str, Any]] | None = None
+ANSIBLE_VARS_MAP: dict[str, dict[str, Any]] | None = None
 USER_CATALOG: AntaCatalog | None = None
 
 
 class ActionModule(ActionBase):
     def run(self, tmp: Any = None, task_vars: dict | None = None) -> dict:
-        global STRUCTURED_CONFIGS, MINIMAL_STRUCTURED_CONFIGS, PLUGIN_ARGS, ANSIBLE_VARS, USER_CATALOG  # noqa: PLW0603
+        global STRUCTURED_CONFIGS, MINIMAL_STRUCTURED_CONFIGS, PLUGIN_ARGS, ANSIBLE_VARS_MAP, USER_CATALOG  # noqa: PLW0603
 
         self._supports_check_mode = False
 
@@ -152,9 +154,9 @@ class ActionModule(ActionBase):
             msg = "'device_list' cannot be empty"
             raise AnsibleActionFail(msg)
 
-        # Get the required Ansible variables from task_vars for each device
-        ANSIBLE_VARS = get_ansible_vars(device_list, task_vars)
-        deployed_devices = list(ANSIBLE_VARS.keys())
+        # Get the required Ansible variables for each device in the device list
+        action_hostvars = ActionHostVars(self)
+        ANSIBLE_VARS_MAP = action_hostvars.get_subset(device_list, ANSIBLE_VARS)
 
         generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")
         structured_config_dir = get(PLUGIN_ARGS, "avd_catalogs.structured_config_dir")
@@ -183,12 +185,12 @@ class ActionModule(ActionBase):
 
             # Load the structured configs and build the minimal structured configs if needed
             if generate_avd_catalogs:
-                STRUCTURED_CONFIGS = load_structured_configs(deployed_devices, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
+                STRUCTURED_CONFIGS = load_structured_configs(device_list, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
                 MINIMAL_STRUCTURED_CONFIGS = get_minimal_structured_configs(STRUCTURED_CONFIGS)
 
             with ProcessPoolExecutor(max_workers=max((ansible_forks - 1), 1), mp_context=get_context("fork")) as executor:
                 batch_size = get(PLUGIN_ARGS, "runner.batch_size")
-                batches = [deployed_devices[i : i + batch_size] for i in range(0, len(deployed_devices), batch_size)]
+                batches = [device_list[i : i + batch_size] for i in range(0, len(device_list), batch_size)]
                 batch_results = executor.map(run_anta, batches)
 
             # Build the ANTA reports
@@ -259,36 +261,6 @@ def build_reports(batch_results: list[ResultManager], report_settings: dict) -> 
             file.write(result_manager.json)
 
 
-def get_ansible_vars(device_list: list[str], task_vars: dict) -> dict:
-    """Get the required Ansible variables from task_vars for each device in the device list."""
-    device_vars = {}
-    hostvars = task_vars["hostvars"]
-
-    for device in device_list:
-        if device not in hostvars:
-            msg = f"Device '{device}' not found in Ansible inventory"
-            raise ValueError(msg)
-
-        host_hostvars = hostvars[device]
-
-        # Since we can run ANTA without any structured configs, i.e., only using user-defined catalogs,
-        # we honor the `is_deployed` flag in the hostvars to skip devices that are not deployed.
-        if get(host_hostvars, "is_deployed", default=True) is False:
-            LOGGER.info("skipping %s - device marked as not deployed", device)
-            continue
-
-        # Adding the Ansible connection variables following the HTTPAPI connection plugin settings
-        device_vars[device] = {
-            key: get(host_hostvars, key) if key in ["ansible_host", "inventory_hostname"] else get(task_vars, key, default=get(host_hostvars, key))
-            for key in ANSIBLE_CONNECTION_VARS
-        }
-
-        # Same as above, we also honor the `anta_tags` variable if provided in the hostvars
-        device_vars[device]["anta_tags"] = get(host_hostvars, "anta_tags")
-
-    return device_vars
-
-
 def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaInventory, AntaCatalog]:
     """Build the ANTA objects required to run an ANTA batch."""
     # Create the ANTA objects
@@ -305,6 +277,9 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
 
     for device in devices:
         anta_device = build_anta_device(device)
+        if anta_device is None:
+            LOGGER.info("skipping %s - device marked as not deployed", device)
+            continue
         inventory.add_device(anta_device)
         # We generate the device's AVD catalog only if structured configs are loaded
         if STRUCTURED_CONFIGS is not None and MINIMAL_STRUCTURED_CONFIGS is not None:
@@ -355,12 +330,14 @@ def get_device_catalog_filters(device: str, avd_catalogs_filters: list[dict]) ->
     return final_filters
 
 
-def build_anta_device(device: str) -> AsyncEOSDevice:
+def build_anta_device(device: str) -> AsyncEOSDevice | None:
     """Build the ANTA device object for a device using the provided Ansible inventory variables."""
+    device_vars = ANSIBLE_VARS_MAP[device]
+    if get(device_vars, "is_deployed", default=True) is False:
+        return None
+
     # Required settings to create the AsyncEOSDevice object
     required_settings = ["host", "username", "password"]
-
-    device_vars = ANSIBLE_VARS[device]
 
     device_settings = {
         "name": device,

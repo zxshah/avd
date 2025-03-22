@@ -249,14 +249,14 @@ cv_workspace_build_timeout: 300
 
 Presence of the same `serial_number` or `system_mac_address` values in structured configuration of multiple EOS devices may lead to the unexpected results (or even network outages) on the CloudVision side due to the possibility of pushing designed configuration of one device to another device.
 
-To eliminate this risk, this role will always raise an error and will terminate it's execution prior to an attempt to update CloudVision in the following cases:
+To eliminate this risk, this role will always raise an error and will terminate its execution before updating CloudVision in the following cases:
 
-- Structured configuration files of two or more targeted devices have the same `serial_number` (values of `system_mac_address` are not important in this case)
-- Structured configuration files of two or more targeted devices have the same `system_mac_address` and have `serial_number` values unset
+- Structured configuration files of two or more targeted devices have the same `serial_number` (values of `system_mac_address` are not important in this case).
+- Structured configuration files of two or more targeted devices have the same `system_mac_address` and have `serial_number` values unset.
 
 By default, this role will warn the user about inconsistencies in the structured configuration files in the following case:
 
-- Structured configuration files of two or more targeted devices have the same `system_mac_address` but unique `serial_number` values
+- Structured configuration files of two or more targeted devices have the same `system_mac_address` but unique `serial_number` values.
 
 Having duplicate `system_mac_address` but unique `serial_number` will not lead to unexpected results on CloudVision as the `serial_number` takes precedence.
 

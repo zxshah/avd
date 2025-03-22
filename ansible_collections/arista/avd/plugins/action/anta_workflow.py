@@ -157,6 +157,7 @@ class ActionModule(ActionBase):
         # Get the required Ansible variables for each device in the device list
         action_hostvars = ActionHostVars(self)
         ANSIBLE_VARS_MAP = action_hostvars.get_subset(device_list, ANSIBLE_VARS)
+        deployed_devices = [device for device, variables in ANSIBLE_VARS_MAP.items() if get(variables, "is_deployed", default=True)]
 
         generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")
         structured_config_dir = get(PLUGIN_ARGS, "avd_catalogs.structured_config_dir")
@@ -185,12 +186,12 @@ class ActionModule(ActionBase):
 
             # Load the structured configs and build the minimal structured configs if needed
             if generate_avd_catalogs:
-                STRUCTURED_CONFIGS = load_structured_configs(device_list, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
+                STRUCTURED_CONFIGS = load_structured_configs(deployed_devices, structured_config_dir, get(PLUGIN_ARGS, "avd_catalogs.structured_config_suffix"))
                 MINIMAL_STRUCTURED_CONFIGS = get_minimal_structured_configs(STRUCTURED_CONFIGS)
 
             with ProcessPoolExecutor(max_workers=max((ansible_forks - 1), 1), mp_context=get_context("fork")) as executor:
                 batch_size = get(PLUGIN_ARGS, "runner.batch_size")
-                batches = [device_list[i : i + batch_size] for i in range(0, len(device_list), batch_size)]
+                batches = [deployed_devices[i : i + batch_size] for i in range(0, len(deployed_devices), batch_size)]
                 batch_results = executor.map(run_anta, batches)
 
             # Build the ANTA reports
@@ -277,9 +278,6 @@ def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaIn
 
     for device in devices:
         anta_device = build_anta_device(device)
-        if anta_device is None:
-            LOGGER.info("skipping %s - device marked as not deployed", device)
-            continue
         inventory.add_device(anta_device)
         # We generate the device's AVD catalog only if structured configs are loaded
         if STRUCTURED_CONFIGS is not None and MINIMAL_STRUCTURED_CONFIGS is not None:
@@ -330,14 +328,12 @@ def get_device_catalog_filters(device: str, avd_catalogs_filters: list[dict]) ->
     return final_filters
 
 
-def build_anta_device(device: str) -> AsyncEOSDevice | None:
+def build_anta_device(device: str) -> AsyncEOSDevice:
     """Build the ANTA device object for a device using the provided Ansible inventory variables."""
-    device_vars = ANSIBLE_VARS_MAP[device]
-    if get(device_vars, "is_deployed", default=True) is False:
-        return None
-
     # Required settings to create the AsyncEOSDevice object
     required_settings = ["host", "username", "password"]
+
+    device_vars = ANSIBLE_VARS_MAP[device]
 
     device_settings = {
         "name": device,

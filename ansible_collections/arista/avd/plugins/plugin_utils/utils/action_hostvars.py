@@ -35,7 +35,7 @@ class ActionHostVars(Mapping):
         variables = self.get_host_variables(hostname)
         return HostVarsVars(variables=variables, loader=self.loader)
 
-    def get_host_variables(self, hostname: str, include_hostvars: bool = False) -> dict:
+    def get_host_variables(self, hostname: str) -> dict:
         """Get raw variables for a specific host with proper context."""
         if hostname in self._cache:
             return self._cache[hostname]
@@ -49,7 +49,7 @@ class ActionHostVars(Mapping):
             play=self.play,
             host=host,
             task=self.task,
-            include_hostvars=include_hostvars,
+            include_hostvars=False,
         )
 
         self._cache[hostname] = variables

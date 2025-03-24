@@ -31,7 +31,4 @@ class RouterOspfMixin(Protocol):
             if p2p_link.include_in_underlay_protocol:
                 process.no_passive_interfaces.append(p2p_link_data["interface"])
 
-        if self.inputs.underlay_ospf_graceful_restart:
-            process.graceful_restart.enabled = self.inputs.underlay_ospf_graceful_restart
-
         self.structured_config.router_ospf.process_ids.append(process)

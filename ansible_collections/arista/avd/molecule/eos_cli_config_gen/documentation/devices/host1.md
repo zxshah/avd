@@ -815,10 +815,12 @@ management accounts
 
 #### Management API gNMI Summary
 
-| Transport | SSL Profile | VRF | Notification Timestamp | ACL | Port |
-| --------- | ----------- | --- | ---------------------- | --- | ---- |
-| MGMT | gnmi | MGMT | send-time | acl1 | 6030 |
-| mytransport | - | - | send-time | acl1 | 6032 |
+| Transport | SSL Profile | VRF | Notification Timestamp | ACL | Port | Authorization Requests |
+| --------- | ----------- | --- | ---------------------- | --- | ---- | ---------------------- |
+| MGMT | gnmi | MGMT | send-time | acl1 | 6030 | - |
+| mytransport | - | - | send-time | acl1 | 6032 | - |
+| arTrue | - | - | send-time | acl1 | 6030 | True |
+| arFalse | - | - | send-time | acl1 | 6030 | False |
 
 | Transport | Destination | Destination Port | gNMI SSL Profile | Tunnel SSL Profile | VRF | Local Interface | Local Port | Target ID |
 | --------- | ----------- | ---------------- | ---------------- | ------------------ | --- | --------------- | ---------- | --------- |
@@ -835,6 +837,15 @@ Provider eos-native is configured.
 ```eos
 !
 management api gnmi
+   transport grpc arFalse
+      ip access-group acl1
+      notification timestamp send-time
+   !
+   transport grpc arTrue
+      ip access-group acl1
+      authorization requests
+      notification timestamp send-time
+   !
    transport grpc MGMT
       ssl profile gnmi
       vrf MGMT
@@ -1371,6 +1382,7 @@ aaa group server tacacs+ TACACS2
 | Type | Sub-type | User Stores |
 | ---- | -------- | ---------- |
 | Login | default | group TACACS local |
+| Login | command-api | local |
 | Login | console | local |
 
 AAA Authentication on-failure log has been enabled
@@ -1385,6 +1397,7 @@ Policy lockout has been enabled. After **3** failed login attempts within **900*
 
 ```eos
 aaa authentication login default group TACACS local
+aaa authentication login command-api local
 aaa authentication login console local
 aaa authentication enable default group TACACS local
 aaa authentication dot1x default group RADIUS1
@@ -1854,6 +1867,7 @@ dhcp server vrf VRF01
 | -------------- | --------- | --------- |
 | Ethernet64 | True | True |
 | Port-Channel112 | True | True |
+| Vlan2002 | True | True |
 
 ## System Boot Settings
 
@@ -3532,6 +3546,7 @@ ip security
 #### Switchport Defaults Summary
 
 - Default Switchport Mode: access
+- Default Switchport Phone Access-list Bypass: True
 - Default Switchport Phone COS: 0
 - Default Switchport Phone Trunk: tagged
 - Default Switchport Phone VLAN: 69
@@ -3541,6 +3556,8 @@ ip security
 ```eos
 !
 switchport default mode access
+!
+switchport default phone access-list bypass
 !
 switchport default phone cos 0
 !
@@ -3805,8 +3822,8 @@ interface Dps1
 | Ethernet64 | DHCP server interface | - | 192.168.42.42/24 | default | - | - | - | - |
 | Ethernet65 | Multiple VRIDs | - | 192.0.2.2/25 | default | - | False | - | - |
 | Ethernet66 | Multiple VRIDs and tracking | - | 192.0.2.2/25 | default | - | False | - | - |
-| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | **default | **- | **- | **- | **- |
-| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | **default | **- | **- | **- | **- |
+| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | *default | *- | *- | *- | *- |
+| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | *default | *- | *- | *- | *- |
 | Ethernet81/3 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 | Ethernet81/4 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 
@@ -4087,6 +4104,8 @@ interface Ethernet2
    storm-control all level 10
    spanning-tree bpduguard disable
    spanning-tree bpdufilter disable
+   spanning-tree bpduguard rate-limit enable
+   spanning-tree bpduguard rate-limit count 10 interval 3
 !
 interface Ethernet3
    !! testing single line comment
@@ -4123,6 +4142,8 @@ interface Ethernet3
    ptp vlan 2
    no priority-flow-control
    spanning-tree guard root
+   spanning-tree bpduguard rate-limit disable
+   spanning-tree bpduguard rate-limit count 10
    switchport backup-link Ethernet4
    !
    sync-e
@@ -4155,6 +4176,7 @@ interface Ethernet4
    switchport port-security violation protect
    priority-flow-control on
    spanning-tree guard none
+   spanning-tree bpduguard rate-limit count 10 interval 15
 !
 interface Ethernet5
    description Molecule Routing
@@ -5939,6 +5961,7 @@ interface Loopback100
    description TENANT_A_PROJECT02_VTEP_DIAGNOSTICS
    vrf TENANT_A_PROJECT02
    ip address 10.1.255.3/32
+   hardware forwarding id
 ```
 
 ### Tunnel Interfaces
@@ -6551,6 +6574,8 @@ interface Vlan2002
    no autostate
    vrf Tenant_B
    ip verify unicast source reachable-via rx
+   dhcp server ipv4
+   dhcp server ipv6
    isis enable EVPN_UNDERLAY
    isis bfd
    isis authentication mode md5 rx-disabled
@@ -7176,6 +7201,7 @@ router traffic-engineering
             segment-list label-stack 900002 900010 900011 900012
    router-id ipv4 10.0.0.1
    router-id ipv6 2001:beef:cafe::1
+   twamp-light sender profile test-profile
    !
    flex-algo
       flex-algo 128 test-algo
@@ -11798,9 +11824,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes128-gcm | 100 | 30 | True | allow |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes128-gcm | 100 | 30 | True | allow | - | - |
 
 ###### Keys
 
@@ -11820,9 +11846,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| - | - | - | - | allow active-sak |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| - | - | - | - | allow active-sak | True | - |
 
 ###### Keys
 
@@ -11834,9 +11860,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes256-gcm-xpn | - | - | - | drop |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes256-gcm-xpn | - | - | - | drop | - | 20000 |
 
 ###### Keys
 
@@ -11866,11 +11892,13 @@ mac security
    profile A2
       key 1234b 7 <removed>
       traffic unprotected allow active-sak
+      replay protection disabled
    !
    profile A3
       cipher aes256-gcm-xpn
       key ab 7 <removed>
       traffic unprotected drop
+      replay protection window 20000
 ```
 
 ### Traffic Policies information

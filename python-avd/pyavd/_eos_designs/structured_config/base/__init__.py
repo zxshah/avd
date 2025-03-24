@@ -17,6 +17,7 @@ from pyavd._utils import default, get, strip_empties_from_dict, strip_null_from_
 from pyavd.j2filters import natural_sort
 
 from .ntp import NtpMixin
+from .platform_mixin import PlatformMixin
 from .router_general import RouterGeneralMixin
 from .snmp_server import SnmpServerMixin
 from .utils import UtilsMixin
@@ -25,7 +26,7 @@ if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
 
 
-class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMixin, UtilsMixin, StructuredConfigGeneratorProtocol, Protocol):
+class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMixin, PlatformMixin, UtilsMixin, StructuredConfigGeneratorProtocol, Protocol):
     """
     Protocol for the AvdStructuredConfig Class, which is imported by "get_structured_config" to render parts of the structured config.
 
@@ -385,31 +386,26 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             }
         return None
 
-    @cached_property
-    def spanning_tree(self) -> dict | None:
+    @structured_config_contributor
+    def spanning_tree(self) -> None:
         """spanning_tree set based on spanning_tree_root_super, spanning_tree_mode and spanning_tree_priority."""
         if not self.shared_utils.network_services_l2:
-            return {"mode": "none"}
+            self.structured_config.spanning_tree.mode = "none"
+            return
 
-        spanning_tree_root_super = self.shared_utils.node_config.spanning_tree_root_super
         spanning_tree_mode = self.shared_utils.node_config.spanning_tree_mode
-        if spanning_tree_root_super is not True and spanning_tree_mode is None:
-            return None
 
-        spanning_tree = {}
-        if spanning_tree_root_super is True:
-            spanning_tree["root_super"] = True
+        if self.shared_utils.node_config.spanning_tree_root_super is True:
+            self.structured_config.spanning_tree.root_super = True
 
         if spanning_tree_mode is not None:
-            spanning_tree["mode"] = spanning_tree_mode
+            self.structured_config.spanning_tree.mode = spanning_tree_mode
             priority = self.shared_utils.node_config.spanning_tree_priority
             # "rapid-pvst" is not included below. Per vlan spanning-tree priorities are set under network-services.
             if spanning_tree_mode == "mstp":
-                spanning_tree["mst_instances"] = [{"id": "0", "priority": priority}]
+                self.structured_config.spanning_tree.mst_instances.append_new(id="0", priority=priority)
             elif spanning_tree_mode == "rstp":
-                spanning_tree["rstp_priority"] = priority
-
-        return spanning_tree
+                self.structured_config.spanning_tree.rstp_priority = priority
 
     @cached_property
     def service_unsupported_transceiver(self) -> dict | None:
@@ -484,35 +480,6 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         return None
 
     @cached_property
-    def platform(self) -> dict | None:
-        """
-        Platform set based on.
-
-        * platform_settings.lag_hardware_only,
-        * platform_settings.trident_forwarding_table_partition and switch.evpn_multicast facts
-        * data_plane_cpu_allocation_max.
-        """
-        platform = {}
-        if (lag_hardware_only := self.shared_utils.platform_settings.lag_hardware_only) is not None:
-            platform["sand"] = {"lag": {"hardware_only": lag_hardware_only}}
-
-        trident_forwarding_table_partition = self.shared_utils.platform_settings.trident_forwarding_table_partition
-        if trident_forwarding_table_partition and self.shared_utils.evpn_multicast:
-            platform["trident"] = {"forwarding_table_partition": trident_forwarding_table_partition}
-
-        if (cpu_max_allocation := self.shared_utils.node_config.data_plane_cpu_allocation_max) is not None:
-            platform["sfe"] = {"data_plane_cpu_allocation_max": cpu_max_allocation}
-        elif self.shared_utils.is_wan_server:
-            # For AutoVPN Route Reflectors and Pathfinders, running on CloudEOS, setting
-            # this value is required for the solution to work.
-            msg = "For AutoVPN RRs and Pathfinders, 'data_plane_cpu_allocation_max' must be set"
-            raise AristaAvdInvalidInputsError(msg)
-
-        if platform:
-            return platform
-        return None
-
-    @cached_property
     def mac_address_table(self) -> dict | None:
         """mac_address_table set based on mac_address_table data-model."""
         if self.inputs.mac_address_table.aging_time is not None:
@@ -530,8 +497,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         return strip_empties_from_dict(
             {
                 "enable_vrfs": [{"name": self.inputs.mgmt_interface_vrf}],
-                "enable_http": self.inputs.management_eapi.enable_http or None,
-                "enable_https": self.inputs.management_eapi.enable_https or None,
+                "enable_http": self.inputs.management_eapi.enable_http,
+                "enable_https": self.inputs.management_eapi.enable_https,
                 "default_services": self.inputs.management_eapi.default_services,
             }
         )

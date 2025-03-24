@@ -1037,8 +1037,8 @@ ASN Notation: {{ router_bgp.as_notation | arista.avd.default('asplain') }}
 {%             set multicast_out = [] %}
 {%             do multicast_out.append("IPv4: " ~ multicast) %}
 {%             do multicast_out.append("Transit: " ~ multicast_transit) %}
-{%             set graceful_restart_time = vrf.graceful_restart.restart_time | arista.avd.default(false) %}
-{%             set graceful_restart_stale = vrf.graceful_restart.stalepath_time | arista.avd.default(false) %}
+{%             set graceful_restart_time = vrf.graceful_restart.restart_time | arista.avd.default("-") %}
+{%             set graceful_restart_stale = vrf.graceful_restart.stalepath_time | arista.avd.default("-") %}
 {%             set graceful_out = [] %}
 {%             do graceful_out.append("Restart-Time: " ~ graceful_restart_time) %}
 {%             do graceful_out.append("Stalepath-Time: " ~ graceful_restart_stale) %}

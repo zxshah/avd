@@ -1,7 +1,8 @@
 Device,Test Name,Test Status,Message(s),Test description,Test category
 dc1-leaf1a,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-leaf1a,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-leaf1a,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-leaf1a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-leaf1a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-leaf1a,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-leaf1a,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-leaf1a,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -13,6 +14,10 @@ dc1-leaf1a,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc1-leaf1a,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc1-leaf1a,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc1-leaf1a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc1-leaf1a,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc1-leaf1a,VerifyMlagDualPrimary,unset,,Verifies the MLAG dual-primary detection parameters.,MLAG
+dc1-leaf1a,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc1-leaf1a,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc1-leaf1a,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc1-leaf1a,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc1-leaf1a,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -23,7 +28,8 @@ dc1-leaf1a,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-leaf1a,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-leaf1b,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-leaf1b,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-leaf1b,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-leaf1b,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-leaf1b,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-leaf1b,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-leaf1b,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-leaf1b,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -35,6 +41,10 @@ dc1-leaf1b,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc1-leaf1b,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc1-leaf1b,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc1-leaf1b,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc1-leaf1b,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc1-leaf1b,VerifyMlagDualPrimary,unset,,Verifies the MLAG dual-primary detection parameters.,MLAG
+dc1-leaf1b,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc1-leaf1b,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc1-leaf1b,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc1-leaf1b,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc1-leaf1b,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -64,7 +74,8 @@ dc1-leaf1c,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-leaf1c,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-leaf2a,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-leaf2a,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-leaf2a,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-leaf2a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-leaf2a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-leaf2a,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-leaf2a,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-leaf2a,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -76,6 +87,10 @@ dc1-leaf2a,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc1-leaf2a,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc1-leaf2a,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc1-leaf2a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc1-leaf2a,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc1-leaf2a,VerifyMlagDualPrimary,unset,,Verifies the MLAG dual-primary detection parameters.,MLAG
+dc1-leaf2a,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc1-leaf2a,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc1-leaf2a,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc1-leaf2a,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc1-leaf2a,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -110,7 +125,8 @@ dc1-leaf2c,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-leaf2c,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-spine1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-spine1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-spine1,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-spine1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-spine1,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-spine1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-spine1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-spine1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -129,7 +145,8 @@ dc1-spine1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-spine1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-spine2,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-spine2,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-spine2,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-spine2,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-spine2,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-spine2,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-spine2,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-spine2,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -148,7 +165,8 @@ dc1-spine2,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-spine2,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-svc-leaf1a,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-svc-leaf1a,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-svc-leaf1a,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-svc-leaf1a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-svc-leaf1a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-svc-leaf1a,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-svc-leaf1a,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-svc-leaf1a,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -160,6 +178,10 @@ dc1-svc-leaf1a,VerifyInterfaceUtilization,unset,,Verifies that the utilization o
 dc1-svc-leaf1a,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc1-svc-leaf1a,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc1-svc-leaf1a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc1-svc-leaf1a,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc1-svc-leaf1a,VerifyMlagDualPrimary,unset,,Verifies the MLAG dual-primary detection parameters.,MLAG
+dc1-svc-leaf1a,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc1-svc-leaf1a,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc1-svc-leaf1a,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc1-svc-leaf1a,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc1-svc-leaf1a,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -170,7 +192,8 @@ dc1-svc-leaf1a,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-svc-leaf1a,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-svc-leaf1b,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-svc-leaf1b,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-svc-leaf1b,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-svc-leaf1b,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-svc-leaf1b,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-svc-leaf1b,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-svc-leaf1b,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-svc-leaf1b,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -182,6 +205,10 @@ dc1-svc-leaf1b,VerifyInterfaceUtilization,unset,,Verifies that the utilization o
 dc1-svc-leaf1b,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc1-svc-leaf1b,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc1-svc-leaf1b,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc1-svc-leaf1b,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc1-svc-leaf1b,VerifyMlagDualPrimary,unset,,Verifies the MLAG dual-primary detection parameters.,MLAG
+dc1-svc-leaf1b,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc1-svc-leaf1b,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc1-svc-leaf1b,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc1-svc-leaf1b,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc1-svc-leaf1b,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -193,7 +220,8 @@ dc1-svc-leaf1b,VerifyReloadCause,unset,,Verifies the last reload cause of the de
 dc1-wan1,VerifyAVTRole,unset,,Verifies the AVT role of a device.,AVT
 dc1-wan1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-wan1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-wan1,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-wan1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-wan1,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-wan1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-wan1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-wan1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -215,7 +243,8 @@ dc1-wan1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,
 dc1-wan2,VerifyAVTRole,unset,,Verifies the AVT role of a device.,AVT
 dc1-wan2,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc1-wan2,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc1-wan2,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc1-wan2,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc1-wan2,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc1-wan2,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc1-wan2,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc1-wan2,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -236,7 +265,8 @@ dc1-wan2,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-wan2,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf1a,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf1a,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf1a,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf1a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf1a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf1a,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf1a,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf1a,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -248,6 +278,9 @@ dc2-leaf1a,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc2-leaf1a,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf1a,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf1a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf1a,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf1a,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf1a,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf1a,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf1a,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf1a,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -258,7 +291,8 @@ dc2-leaf1a,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-leaf1a,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf1b,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf1b,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf1b,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf1b,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf1b,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf1b,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf1b,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf1b,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -270,6 +304,9 @@ dc2-leaf1b,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc2-leaf1b,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf1b,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf1b,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf1b,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf1b,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf1b,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf1b,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf1b,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf1b,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -299,7 +336,8 @@ dc2-leaf1c,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-leaf1c,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf2a,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf2a,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf2a,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf2a,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf2a,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf2a,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf2a,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf2a,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -311,6 +349,9 @@ dc2-leaf2a,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc2-leaf2a,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf2a,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf2a,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf2a,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf2a,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf2a,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf2a,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf2a,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf2a,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -326,7 +367,8 @@ dc2-leaf2a,VerifyVxlanVniBinding,unset,,Verifies the VNI-VLAN bindings of the Vx
 dc2-leaf2a,VerifyVxlanVtep,unset,,Verifies the VTEP peers of the Vxlan1 interface.,VXLAN
 dc2-leaf2b,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf2b,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf2b,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf2b,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf2b,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf2b,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf2b,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf2b,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -338,6 +380,9 @@ dc2-leaf2b,VerifyInterfaceUtilization,unset,,Verifies that the utilization of in
 dc2-leaf2b,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf2b,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf2b,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf2b,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf2b,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf2b,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf2b,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf2b,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf2b,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -372,7 +417,8 @@ dc2-leaf2c,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-leaf2c,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf3a.arista.com,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf3a.arista.com,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf3a.arista.com,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf3a.arista.com,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf3a.arista.com,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf3a.arista.com,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf3a.arista.com,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf3a.arista.com,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -384,6 +430,9 @@ dc2-leaf3a.arista.com,VerifyInterfaceUtilization,unset,,Verifies that the utiliz
 dc2-leaf3a.arista.com,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf3a.arista.com,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf3a.arista.com,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf3a.arista.com,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf3a.arista.com,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf3a.arista.com,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf3a.arista.com,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf3a.arista.com,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf3a.arista.com,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -394,7 +443,8 @@ dc2-leaf3a.arista.com,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-leaf3a.arista.com,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf3b.arista.com,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-leaf3b.arista.com,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-leaf3b.arista.com,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-leaf3b.arista.com,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-leaf3b.arista.com,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-leaf3b.arista.com,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-leaf3b.arista.com,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-leaf3b.arista.com,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -406,6 +456,9 @@ dc2-leaf3b.arista.com,VerifyInterfaceUtilization,unset,,Verifies that the utiliz
 dc2-leaf3b.arista.com,VerifyInterfacesStatus,unset,,Verifies the operational states of specified interfaces to ensure they match expected configurations.,Interfaces
 dc2-leaf3b.arista.com,VerifyPortChannels,unset,,Verifies there are no inactive ports in all port channels.,Interfaces
 dc2-leaf3b.arista.com,VerifyStormControlDrops,unset,,Verifies there are no interface storm-control drop counters.,Interfaces
+dc2-leaf3b.arista.com,VerifyMlagConfigSanity,unset,,Verifies there are no MLAG config-sanity inconsistencies.,MLAG
+dc2-leaf3b.arista.com,VerifyMlagInterfaces,unset,,Verifies there are no inactive or active-partial MLAG ports.,MLAG
+dc2-leaf3b.arista.com,VerifyMlagReloadDelay,unset,,Verifies the reload-delay parameters of the MLAG configuration.,MLAG
 dc2-leaf3b.arista.com,VerifyMlagStatus,unset,,Verifies the health status of the MLAG configuration.,MLAG
 dc2-leaf3b.arista.com,VerifyRoutingProtocolModel,unset,,Verifies the configured routing protocol model.,Routing
 dc2-leaf3b.arista.com,VerifyAPIHttpsSSL,unset,,Verifies if the eAPI has a valid SSL profile.,Security
@@ -416,7 +469,8 @@ dc2-leaf3b.arista.com,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-leaf3b.arista.com,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-spine1,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-spine1,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-spine1,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-spine1,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-spine1,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-spine1,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-spine1,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-spine1,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware
@@ -435,7 +489,8 @@ dc2-spine1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc2-spine1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-spine2,VerifyBGPPeerSession,unset,,Verifies the session state of BGP IPv4 peer(s).,BGP
 dc2-spine2,VerifyLLDPNeighbors,unset,,Verifies the connection status of the specified LLDP (Link Layer Discovery Protocol) neighbors.,Connectivity
-dc2-spine2,VerifyReachability,unset,,Test network reachability to one or many destination IP(s).,Connectivity
+dc2-spine2,VerifyReachability,unset,,Verifies point-to-point reachability between Ethernet interfaces.,Connectivity
+dc2-spine2,VerifyReachability,unset,,Verifies reachability to IPv4 BGP neighbors with an update source configured.,Connectivity
 dc2-spine2,VerifyEnvironmentSystemCooling,unset,,Verifies the device's system cooling status.,Hardware
 dc2-spine2,VerifyTemperature,unset,,Verifies if the device temperature is within acceptable limits.,Hardware
 dc2-spine2,VerifyTransceiversTemperature,unset,,Verifies if all the transceivers are operating at an acceptable temperature.,Hardware

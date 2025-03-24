@@ -58631,7 +58631,7 @@ class EosDesigns(EosDesignsRootModel):
     """Default value: `False`"""
     underlay_ospf_graceful_restart: bool
     """
-    Set graceful restart when the underlay_routing_protocol is OSPF.
+    Enable graceful restart for OSPF underlay.
 
     Default value: `False`
     """
@@ -60183,7 +60183,7 @@ class EosDesigns(EosDesignsRootModel):
                 underlay_ospf_area: underlay_ospf_area
                 underlay_ospf_authentication: Subclass of AvdModel.
                 underlay_ospf_bfd_enable: underlay_ospf_bfd_enable
-                underlay_ospf_graceful_restart: Set graceful restart when the underlay_routing_protocol is OSPF.
+                underlay_ospf_graceful_restart: Enable graceful restart for OSPF underlay.
                 underlay_ospf_max_lsa: underlay_ospf_max_lsa
                 underlay_ospf_process_id: underlay_ospf_process_id
                 underlay_rfc5549:

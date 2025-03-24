@@ -7,11 +7,11 @@
 
     | Variable | Type | Required | Default | Value Restrictions | Description |
     | -------- | ---- | -------- | ------- | ------------------ | ----------- |
-    | [<samp>underlay_ospf_graceful_restart</samp>](## "underlay_ospf_graceful_restart") | Boolean |  | `False` |  | Set graceful restart when the underlay_routing_protocol is OSPF. |
+    | [<samp>underlay_ospf_graceful_restart</samp>](## "underlay_ospf_graceful_restart") | Boolean |  | `False` |  | Enable graceful restart for OSPF underlay. |
 
 === "YAML"
 
     ```yaml
-    # Set graceful restart when the underlay_routing_protocol is OSPF.
+    # Enable graceful restart for OSPF underlay.
     underlay_ospf_graceful_restart: <bool; default=False>
     ```

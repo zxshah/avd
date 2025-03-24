@@ -9,7 +9,7 @@ from ansible_collections.arista.avd.plugins.plugin_utils.utils import AntaLoggin
 class TestAntaLoggingFilter:
     """Test the AntaLoggingFilter class."""
 
-    def test_exclude_anta_logs(self, anta_record: logging.LogRecord, non_anta_record: logging.LogRecord):
+    def test_exclude_anta_logs(self, anta_record: logging.LogRecord, non_anta_record: logging.LogRecord) -> None:
         """Test that ANTA library logs are excluded when exclude=True."""
         filter_obj = AntaLoggingFilter(exclude=True)
 
@@ -19,7 +19,7 @@ class TestAntaLoggingFilter:
         # Non-ANTA library logs should be kept (return True)
         assert filter_obj.filter(non_anta_record) is True
 
-    def test_include_anta_logs(self, anta_record: logging.LogRecord, non_anta_record: logging.LogRecord):
+    def test_include_anta_logs(self, anta_record: logging.LogRecord, non_anta_record: logging.LogRecord) -> None:
         """Test that ANTA library logs are included when exclude=False."""
         filter_obj = AntaLoggingFilter(exclude=False)
 
@@ -29,7 +29,7 @@ class TestAntaLoggingFilter:
         # Non-ANTA library logs should be filtered out (return False)
         assert filter_obj.filter(non_anta_record) is False
 
-    def test_warning_tracking(self, anta_record: logging.LogRecord, warning_record: logging.LogRecord):
+    def test_warning_tracking(self, anta_record: logging.LogRecord, warning_record: logging.LogRecord) -> None:
         """Test that warnings from ANTA libraries are tracked."""
         has_warnings = [False]
         filter_obj = AntaLoggingFilter(has_warnings_ref=has_warnings)
@@ -42,7 +42,7 @@ class TestAntaLoggingFilter:
         filter_obj.filter(warning_record)
         assert has_warnings[0] is True
 
-    def test_other_anta_libraries(self):
+    def test_other_anta_libraries(self) -> None:
         """Test that logs from other ANTA libraries are filtered correctly."""
         filter_obj = AntaLoggingFilter(exclude=True)
 
@@ -61,7 +61,7 @@ class TestAntaLoggingFilter:
             # Should be filtered out in exclude mode
             assert filter_obj.filter(record) is False
 
-    def test_non_anta_libraries(self):
+    def test_non_anta_libraries(self) -> None:
         """Test that non-ANTA libraries are correctly identified."""
         filter_obj = AntaLoggingFilter(exclude=True)
 

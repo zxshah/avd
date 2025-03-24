@@ -225,11 +225,13 @@ def run_anta(devices: list[str]) -> ResultManager:
         LOGGER.info("running ANTA in process %s for devices: %s", process_name, joined_devices)
         run(anta_runner(result_manager, inventory, catalog, tags=tags, dry_run=get(PLUGIN_ARGS, "runner.dry_run")))
     except Exception as error:
-        # Catch any unexpected exceptions in the process
+        # Catch any uncaught exceptions in the process and fail the task
         error_msg = f"ANTA process {process_name} for devices {joined_devices} failed with error: {error}"
         raise AnsibleActionFail(error_msg) from error
     else:
         # Check if warnings/errors occurred in ANTA and notify via main logger
+        # ANTA errors are typically handled properly within ANTA by marking impacted
+        # tests as errors or failures, so we don't need to fail the task here
         if has_warnings_ref[0]:
             base_message = f"ANTA warnings/errors detected that could impact test results for devices {joined_devices}. "
             if anta_log_filename:

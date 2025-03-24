@@ -6,7 +6,7 @@ import logging
 
 
 @pytest.fixture
-def anta_record():
+def anta_record() -> logging.LogRecord:
     """Create a log record from an ANTA library."""
     return logging.LogRecord(
         name="anta.runner",
@@ -20,7 +20,7 @@ def anta_record():
 
 
 @pytest.fixture
-def non_anta_record():
+def non_anta_record() -> logging.LogRecord:
     """Create a log record from a non-ANTA library."""
     return logging.LogRecord(
         name="pyavd",
@@ -34,7 +34,7 @@ def non_anta_record():
 
 
 @pytest.fixture
-def warning_record():
+def warning_record() -> logging.LogRecord:
     """Create a warning log record from an ANTA library."""
     return logging.LogRecord(
         name="anta.runner",

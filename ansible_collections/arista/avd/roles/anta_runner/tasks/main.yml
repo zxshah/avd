@@ -17,6 +17,7 @@
   ansible.builtin.file:
     path: "{{ anta_runner_logs_dir }}"
     state: "{{ item }}"
+    mode: "0o775"
   loop:
     - absent
     - directory

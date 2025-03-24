@@ -83,5 +83,6 @@
       ansible.builtin.file:
         path: "{{ anta_runner_logs_dir }}"
         state: absent
+        mode: "0o775"
       changed_when: false
       run_once: true

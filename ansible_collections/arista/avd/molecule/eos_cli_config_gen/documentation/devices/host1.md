@@ -7408,36 +7408,36 @@ router ospf 600
 
 #### IPv6 Router OSPF Summary
 
-| Process ID | Router ID | Auto Cost Reference Bandwidth |
-| ---------- | --------- | ----------------------------- |
-| 100 | 192.168.255.3 | 100 |
-| 101 | - | - |
-| 201 | - | - |
-| 301 | - | - |
-| 401 | - | - |
+| Process ID | VRF | Router ID | Auto Cost Reference Bandwidth |
+| ---------- | --- | --------- | ----------------------------- |
+| 100 | - | 192.168.255.3 | 100 |
+| 101 | TEST2 | - | - |
+| 201 | MGMT | - | - |
+| 301 | TEST1 | - | - |
+| 401 | TENANT_A_PROJECT02 | - | - |
 
 #### IPv6 Router OSPF Router Redistribution
 
-| Process ID | Source Protocol | Include Leaked | Route Map |
-| ---------- | --------------- | -------------- | --------- |
-| 100 | connected | enabled | rm-ospf-connected |
-| 100 | static | enabled | rm-ospf-static |
-| 100 | bgp | enabled | rm-ospf-bgp |
-| 100 | dhcp | - | rm-ospf-dhcp |
-| 100 | isis level-2 | enabled | rm-ospf-isis |
-| 100 | ospfv3 | enabled | rm-ospf-ospfv3 |
-| 100 | ospfv3 match external | enabled | rm-ospf-ospfv3-external |
-| 100 | ospfv3 match nssa external | enabled | rm-ospf-ospfv3-nssa-external |
-| 101 | connected | - | - |
-| 101 | static | - | - |
-| 101 | bgp | - | - |
-| 101 | dhcp | - | - |
-| 101 | isis | - | - |
-| 101 | ospfv3 match external | enabled | - |
-| 101 | ospfv3 match internal | enabled | rm-ospf-ospfv3-internal |
-| 101 | ospfv3 match nssa external | enabled | - |
-| 201 | ospfv3 match internal | enabled | - |
-| 301 | ospfv3 | enabled | - |
+| Process ID | VRF | Source Protocol | Include Leaked | Route Map |
+| ---------- | --- | --------------- | -------------- | --------- |
+| 100 | - |connected | enabled | rm-ospf-connected |
+| 100 | - |static | enabled | rm-ospf-static |
+| 100 | - |bgp | enabled | rm-ospf-bgp |
+| 100 | - |dhcp | - | rm-ospf-dhcp |
+| 100 | - |isis level-2 | enabled | rm-ospf-isis |
+| 100 | - |ospfv3 | enabled | rm-ospf-ospfv3 |
+| 100 | - |ospfv3 match external | enabled | rm-ospf-ospfv3-external |
+| 100 | - |ospfv3 match nssa external | enabled | rm-ospf-ospfv3-nssa-external |
+| 101 | TEST2 |connected | - | - |
+| 101 | TEST2 |static | - | - |
+| 101 | TEST2 |bgp | - | - |
+| 101 | TEST2 |dhcp | - | - |
+| 101 | TEST2 |isis | - | - |
+| 101 | TEST2 |ospfv3 match external | enabled | - |
+| 101 | TEST2 |ospfv3 match internal | enabled | rm-ospf-ospfv3-internal |
+| 101 | TEST2 |ospfv3 match nssa external | enabled | - |
+| 201 | MGMT |ospfv3 match internal | enabled | - |
+| 301 | TEST1 |ospfv3 | enabled | - |
 
 #### IPv6 Router OSPF Device Configuration
 

@@ -10,12 +10,12 @@
 
 #### IPv6 Router OSPF Summary
 
-| Process ID | Router ID | Auto Cost Reference Bandwidth |
-| ---------- | --------- | ----------------------------- |
+| Process ID | VRF | Router ID | Auto Cost Reference Bandwidth |
+| ---------- | --- | --------- | ----------------------------- |
 {%     for process_id in ipv6_router_ospf.process_ids | arista.avd.natural_sort('id') %}
 {%         set router_id = process_id.router_id | arista.avd.default ('-') %}
 {%         set auto_cost_reference_bandwidth = process_id.auto_cost_reference_bandwidth | arista.avd.default('-') %}
-| {{ process_id.id }} | {{ router_id }} | {{ auto_cost_reference_bandwidth }} |
+| {{ process_id.id }} | {{ process_id.vrf | arista.avd.default ('-') }} | {{ router_id }} | {{ auto_cost_reference_bandwidth }} |
 {%     endfor %}
 {# Router Redistribution #}
 {%     set has = namespace() %}
@@ -29,8 +29,8 @@
 
 #### IPv6 Router OSPF Router Redistribution
 
-| Process ID | Source Protocol | Include Leaked | Route Map |
-| ---------- | --------------- | -------------- | --------- |
+| Process ID | VRF | Source Protocol | Include Leaked | Route Map |
+| ---------- | --- | --------------- | -------------- | --------- |
 {%         for process_id in ipv6_router_ospf.process_ids | arista.avd.natural_sort('id') %}
 {%             if process_id.redistribute is arista.avd.defined %}
 {%                 set source_protocols = [] %}
@@ -87,7 +87,7 @@
 {%                     do source_protocols.append(('ospfv3 match nssa external', 'enabled', process_id.redistribute.ospfv3.match_nssa_external.route_map | arista.avd.default('-'))) %}
 {%                 endif %}
 {%                 for source_protocol in source_protocols %}
-| {{ process_id.id }} | {{ source_protocol[0] }} | {{ source_protocol[1] }} | {{ source_protocol[2] }} |
+| {{ process_id.id }} | {{ process_id.vrf | arista.avd.default ('-') }} |{{ source_protocol[0] }} | {{ source_protocol[1] }} | {{ source_protocol[2] }} |
 {%                 endfor %}
 {%             endif %}
 {%         endfor %}

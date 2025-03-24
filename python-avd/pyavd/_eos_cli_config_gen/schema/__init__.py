@@ -16742,7 +16742,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "auto_cost_reference_bandwidth": {"type": int},
             }
             id: int
-            """OSPF process ID. Must be unique across all OSPFv3 instance."""
+            """OSPF process ID."""
             vrf: str | None
             """VRF name for OSPF process. Must be unique across all OSPFv3 instance."""
             router_id: str | None
@@ -16774,7 +16774,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        id: OSPF process ID. Must be unique across all OSPFv3 instance.
+                        id: OSPF process ID.
                         vrf: VRF name for OSPF process. Must be unique across all OSPFv3 instance.
                         router_id: IPv4 Address.
                         redistribute:

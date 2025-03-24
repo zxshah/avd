@@ -9,7 +9,7 @@
     | -------- | ---- | -------- | ------- | ------------------ | ----------- |
     | [<samp>ipv6_router_ospf</samp>](## "ipv6_router_ospf") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;process_ids</samp>](## "ipv6_router_ospf.process_ids") | List, items: Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;id</samp>](## "ipv6_router_ospf.process_ids.[].id") | Integer | Required, Unique |  |  | OSPF process ID. Must be unique across all OSPFv3 instance. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;id</samp>](## "ipv6_router_ospf.process_ids.[].id") | Integer | Required, Unique |  |  | OSPF process ID. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ipv6_router_ospf.process_ids.[].vrf") | String |  |  |  | VRF name for OSPF process. Must be unique across all OSPFv3 instance. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;router_id</samp>](## "ipv6_router_ospf.process_ids.[].router_id") | String |  |  |  | IPv4 Address. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redistribute</samp>](## "ipv6_router_ospf.process_ids.[].redistribute") | Dictionary |  |  |  | Redistribute routes with OSPFv3. |
@@ -54,7 +54,7 @@
     ipv6_router_ospf:
       process_ids:
 
-          # OSPF process ID. Must be unique across all OSPFv3 instance.
+          # OSPF process ID.
         - id: <int; required; unique>
 
           # VRF name for OSPF process. Must be unique across all OSPFv3 instance.

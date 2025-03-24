@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._errors import AristaAvdError
 from pyavd._utils import AvdStringFormatter, default, get, strip_empties_from_dict
 from pyavd.j2filters import natural_sort
-from pyavd._utils import get
 
 if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns

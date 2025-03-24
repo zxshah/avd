@@ -79,7 +79,6 @@ class UtilsMixin(Protocol):
         return peer_facts.get("mpls_overlay_role") == "server" or (peer_facts.get("evpn_role") == "server" and get(peer_facts, "overlay.evpn_mpls") is True)
 
     @cached_property
-
     def _mpls_route_reflectors(self: AvdStructuredConfigOverlayProtocol) -> dict:
         if not (self.shared_utils.mpls_overlay_role == "client" or (self.shared_utils.evpn_role == "client" and self.shared_utils.overlay_evpn_mpls)):
             return {}

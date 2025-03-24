@@ -9,4 +9,4 @@ keys:
   underlay_ospf_graceful_restart:
     type: bool
     default: false
-    description: Set graceful restart when the underlay_routing_protocol is OSPF.
+    description: Enable graceful restart for OSPF underlay.

@@ -3,14 +3,13 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
+from functools import cached_property, lru_cache
 from typing import TYPE_CHECKING, Literal, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import get
 from pyavd._utils.password_utils.password import simple_7_encrypt
 from pyavd.j2filters import natural_sort, range_expand
 
@@ -59,22 +58,26 @@ class UtilsWanMixin(Protocol):
                 vrf_policy = self.inputs.wan_virtual_topologies.policies[vrf.policy]
 
             # TODO: it seems we could set multiple time the same policy here so need to check
-            append_policy(vrf_policy, control_plane=vrf.name == "default")
+            append_policy(vrf_policy, vrf, control_plane=vrf.name == "default")
+
+        # Add Application Traffic Recognition after all policies have been taken care off
+        # TODO: but this in a better place.
+        self._set_control_plane_application_profile()
+        self.set_cv_pathfinder_metadata_applications()
 
     def _append_control_plane_virtual_topology(
         self: AvdStructuredConfigNetworkServicesProtocol,
         policy: EosDesigns.WanVirtualTopologies.PoliciesItem,
         output_policy: EosCliConfigGen.RouterAdaptiveVirtualTopology.PoliciesItem | EosCliConfigGen.RouterPathSelection.PoliciesItem,
+        output_vrf: EosCliConfigGen.RouterAdaptiveVirtualTopology.VrfsItem | EosCliConfigGen.RouterPathSelection.VrfsItem,
     ) -> None:
         control_plane_virtual_topology = self._wan_control_plane_virtual_topology
-        # Adding suffix -WITH-CP
-        policy_name = f"{policy.name}-WITH-CP"
 
         if (
             load_balance_policy := self._generate_wan_load_balance_policy(
                 self._wan_control_plane_profile_name,
                 control_plane_virtual_topology,
-                policy_name,
+                output_policy.name,
             )
         ) is None:
             msg = "The WAN control-plane load-balance policy is empty. Make sure at least one path-group can be used in the policy"
@@ -97,39 +100,45 @@ class UtilsWanMixin(Protocol):
 
             # Add profile
             profile = EosCliConfigGen.RouterAdaptiveVirtualTopology.ProfilesItem(
-                name=self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile,
+                name=self._wan_control_plane_profile_name,
                 load_balance_policy=load_balance_policy.name,
             )
-            if policy.default_virtual_topology.internet_exit.policy and policy.default_virtual_topology.internet_exit.policy in [
-                policy.name for policy, _ in self._filtered_internet_exit_policies_and_connections
-            ]:
-                profile.internet_exit_policy = policy.default_virtual_topology.internet_exit.policy
+            if control_plane_virtual_topology.internet_exit.policy:
+                self._verify_internet_exit_policy(control_plane_virtual_topology.internet_exit.policy, output_policy.name)
+                if self._internet_exit_policy_has_local_interfaces(control_plane_virtual_topology.internet_exit.policy):
+                    profile.internet_exit_policy = control_plane_virtual_topology.internet_exit.policy
+
             self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
+            output_vrf.profiles.append_new(name=self._wan_control_plane_profile_name, id=254)
+
             # Handling Internet Exit
-            self._new_set_internet_exit_policy(control_plane_virtual_topology)
+            self._set_internet_exit_policy(control_plane_virtual_topology, output_policy.name)
 
         # Add load_balance_policy
         self.structured_config.router_path_selection.load_balance_policies.append(load_balance_policy)
+        self._set_virtual_topology_application_classification(control_plane_virtual_topology, output_policy.name)
 
     def _append_autovpn_policy(
-        self: AvdStructuredConfigNetworkServicesProtocol, policy: EosDesigns.WanVirtualTopologies.PoliciesItem, *, control_plane: bool = False
-    ) -> None:
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        policy: EosDesigns.WanVirtualTopologies.PoliciesItem,
+        vrf: EosDesigns.WanVirtualTopologies.VrfsItem,
+        *,
+        control_plane: bool = False,
+    ) -> EosCliConfigGen.RouterPathSelectionItems.PoliciesItem:
         index = 1
         output_policy = EosCliConfigGen.RouterPathSelection.PoliciesItem(name=policy.name)
+        output_vrf = EosCliConfigGen.RouterPathSelection.VrfsItem(name=vrf.name)
 
         # Control plane
         if control_plane:
             output_policy.name = f"{output_policy.name}-WITH-CP"
-            self._append_control_plane_virtual_topology(policy, output_policy)
+            self._append_control_plane_virtual_topology(policy, output_policy, output_vrf)
             index = 2
 
         # Normal entries
         for application_virtual_topology in policy.application_virtual_topologies:
             name = application_virtual_topology.name or self._default_profile_name(policy.name, application_virtual_topology.application_profile)
-            context_path = (
-                # TODO: fix prefix
-                f"wan_virtual_topologies.policies[{policy.name}].application_virtual_topologies[{application_virtual_topology.application_profile}]"
-            )
+            context_path = f"wan_virtual_topologies.policies[{policy.name}].application_virtual_topologies[{application_virtual_topology.application_profile}]"
             load_balance_policy = self._generate_wan_load_balance_policy(name, application_virtual_topology, context_path)
             if not load_balance_policy:
                 # Empty load balance policy so skipping
@@ -151,12 +160,15 @@ class UtilsWanMixin(Protocol):
 
             # Add load_balance_policy
             self.structured_config.router_path_selection.load_balance_policies.append(load_balance_policy)
+            # Add application traffic recognition
+            self._set_virtual_topology_application_classification(application_virtual_topology, policy.name)
             index += 1
 
         # default match
         self._verify_policy_default_match(policy)
         if not policy.default_virtual_topology.drop_unmatched:
             name = policy.default_virtual_topology.name or self._default_profile_name(policy.name, "DEFAULT")
+            context_path = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_topology"
             load_balance_policy = self._generate_wan_load_balance_policy(name, policy.default_virtual_topology, context_path)
 
             if not load_balance_policy:
@@ -181,6 +193,7 @@ class UtilsWanMixin(Protocol):
             raise AristaAvdError(msg)
 
         self.structured_config.router_path_selection.policies.append(output_policy)
+        return output_policy
 
     def _verify_policy_default_match(self: AvdStructuredConfigNetworkServicesProtocol, policy: EosDesigns.WanVirtualTopologies.PoliciesItem) -> None:
         """
@@ -206,27 +219,32 @@ class UtilsWanMixin(Protocol):
                 raise AristaAvdInvalidInputsError(msg)
 
     def _append_cv_pathfinder_policy(
-        self: AvdStructuredConfigNetworkServicesProtocol, policy: EosDesigns.WanVirtualTopologies.PoliciesItem, *, control_plane: bool = False
-    ) -> None:
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        policy: EosDesigns.WanVirtualTopologies.PoliciesItem,
+        vrf: EosDesigns.WanVirtualTopologies.VrfsItem,
+        *,
+        control_plane: bool = False,
+    ) -> EosCliConfigGen.RouterAdaptiveVirtualTopology.PoliciesItem:
         """
         TODO.
 
         Add policy to the output.
         """
         output_policy = EosCliConfigGen.RouterAdaptiveVirtualTopology.PoliciesItem(name=policy.name)
+        # Maybe set it directly
+        output_vrf = EosCliConfigGen.RouterAdaptiveVirtualTopology.VrfsItem(name=vrf.name)
 
         # Control Plane
         if control_plane:
             output_policy.name = f"{output_policy.name}-WITH-CP"
-            self._append_control_plane_virtual_topology(policy, output_policy)
+            self._append_control_plane_virtual_topology(policy, output_policy, output_vrf)
+
+        output_vrf.policy = output_policy.name
 
         # Normal entries
         for application_virtual_topology in policy.application_virtual_topologies:
             name = application_virtual_topology.name or self._default_profile_name(policy.name, application_virtual_topology.application_profile)
-            context_path = (
-                # TODO: fix prefix
-                f"wan_virtual_topologies.policies[{policy.name}].application_virtual_topologies[{application_virtual_topology.application_profile}]"
-            )
+            context_path = f"wan_virtual_topologies.policies[{policy.name}].application_virtual_topologies[{application_virtual_topology.application_profile}]"
             load_balance_policy = self._generate_wan_load_balance_policy(name, application_virtual_topology, context_path)
 
             if not load_balance_policy:
@@ -241,8 +259,7 @@ class UtilsWanMixin(Protocol):
                 msg = "TODO required"
                 raise AristaAvdInvalidInputsError(msg)
 
-            profile_id = application_virtual_topology.id
-            if self.shared_utils.is_cv_pathfinder_router and not profile_id:
+            if not application_virtual_topology.id:
                 msg = (
                     f"Missing mandatory `id` in "
                     f"`wan_virtual_topologies.policies[{policy.name}].application_virtual_topologies[{application_virtual_topology.application_profile}]` "
@@ -256,9 +273,12 @@ class UtilsWanMixin(Protocol):
                 traffic_class=application_virtual_topology.traffic_class,
                 dscp=application_virtual_topology.dscp,
             )
+            output_vrf.profiles.append_new(id=application_virtual_topology.id, name=name)
 
             # Add load_balance_policy
             self.structured_config.router_path_selection.load_balance_policies.append(load_balance_policy)
+            # Add application traffic recognition
+            self._set_virtual_topology_application_classification(application_virtual_topology, policy.name)
 
             # Need to create the object and not use append_new otherwise it conflicts
             # with other profiles as we are not adding the internet_exit_policy immediately
@@ -267,21 +287,21 @@ class UtilsWanMixin(Protocol):
                 load_balance_policy=load_balance_policy.name,
             )
             # TODO: refactor filtered_internet_exit_policies_and_connections
-            if application_virtual_topology.internet_exit.policy and application_virtual_topology.internet_exit.policy in [
-                policy.name for policy, _connections in self._filtered_internet_exit_policies_and_connections
-            ]:
-                profile.internet_exit_policy = application_virtual_topology.internet_exit.policy
+            if application_virtual_topology.internet_exit.policy:
+                self._verify_internet_exit_policy(application_virtual_topology.internet_exit.policy, policy.name)
+                if self._internet_exit_policy_has_local_interfaces(application_virtual_topology.internet_exit.policy):
+                    profile.internet_exit_policy = application_virtual_topology.internet_exit.policy
 
             self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
 
             # Handling Internet Exit
-            self._new_set_internet_exit_policy(application_virtual_topology)
+            self._set_internet_exit_policy(application_virtual_topology, output_policy.name)
 
         # default match
         self._verify_policy_default_match(policy)
         if not policy.default_virtual_topology.drop_unmatched:
             name = policy.default_virtual_topology.name or self._default_profile_name(policy.name, "DEFAULT")
-
+            context_path = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_topology"
             load_balance_policy = self._generate_wan_load_balance_policy(name, policy.default_virtual_topology, context_path)
 
             if not load_balance_policy:
@@ -305,14 +325,15 @@ class UtilsWanMixin(Protocol):
                 name=name,
                 load_balance_policy=load_balance_policy.name,
             )
-            if policy.default_virtual_topology.internet_exit.policy and policy.default_virtual_topology.internet_exit.policy in [
-                policy.name for policy, _connections in self._filtered_internet_exit_policies_and_connections
-            ]:
-                profile.internet_exit_policy = policy.default_virtual_topology.internet_exit.policy
+            if policy.default_virtual_topology.internet_exit.policy:
+                self._verify_internet_exit_policy(policy.default_virtual_topology.internet_exit.policy, policy.name)
+                if self._internet_exit_policy_has_local_interfaces(policy.default_virtual_topology.internet_exit.policy):
+                    profile.internet_exit_policy = policy.default_virtual_topology.internet_exit.policy
             self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
+            output_vrf.profiles.append_new(id=1, name=name)
 
             # Handling Internet Exit
-            self._new_set_internet_exit_policy(policy.default_virtual_topology)
+            self._set_internet_exit_policy(policy.default_virtual_topology, output_policy.name)
 
         # TODO: handle below
         if not output_policy.matches:
@@ -324,6 +345,30 @@ class UtilsWanMixin(Protocol):
             raise AristaAvdError(msg)
 
         self.structured_config.router_adaptive_virtual_topology.policies.append(output_policy)
+        self.structured_config.router_adaptive_virtual_topology.vrfs.append(output_vrf)
+
+    def _verify_internet_exit_policy(self: AvdStructuredConfigNetworkServicesProtocol, ie_policy_name: str, policy_name: str) -> None:
+        """Check if the Internet Exit policy name is configured.
+
+        If not raise an AristaAvdInvalidInputsError.
+
+        TODO: This used to check that there is an interface to make it valid.
+        """
+        if ie_policy_name not in self.inputs.cv_pathfinder_internet_exit_policies:
+            msg = (
+                f"The internet exit policy {ie_policy_name} configured under "
+                f"`wan_virtual_topologies.policies[name={policy_name}].internet_exit.policy` "
+                "is not defined under `cv_pathfinder_internet_exit_policies`."
+            )
+            raise AristaAvdInvalidInputsError(msg)
+
+    @lru_cache
+    def _internet_exit_policy_has_local_interfaces(self: AvdStructuredConfigNetworkServicesProtocol, ie_policy_name: str) -> bool:
+        """Cached property stating if an internet exit is used locally."""
+        local_wan_l3_interfaces = EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces(
+            [wan_interface for wan_interface in self.shared_utils.wan_interfaces if ie_policy_name in wan_interface.cv_pathfinder_internet_exit.policies]
+        )
+        return bool(local_wan_l3_interfaces)
 
     def _generate_wan_load_balance_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
@@ -531,86 +576,6 @@ class UtilsWanMixin(Protocol):
 
     def get_internet_exit_nat_acl_name(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]) -> str:
         return f"ACL-{self.get_internet_exit_nat_profile_name(internet_exit_policy_type)}"
-
-    @cached_property
-    def _filtered_internet_exit_policy_types(self: AvdStructuredConfigNetworkServicesProtocol) -> list:
-        return sorted({internet_exit_policy.type for internet_exit_policy, _connections in self._filtered_internet_exit_policies_and_connections})
-
-    @cached_property
-    def _filtered_internet_exit_policies_and_connections(
-        self: AvdStructuredConfigNetworkServicesProtocol,
-    ) -> list[tuple[EosDesigns.CvPathfinderInternetExitPoliciesItem, list[dict]]]:
-        """
-        Only supported for CV Pathfinder Edge routers. Returns an empty list for pathfinders.
-
-        - Parse self._filtered_wan_policies looking to internet_exit_policies.
-        - Verify each internet_exit_policy is present in inputs `cv_pathfinder_internet_exit_policies`.
-        - get_internet_exit_connections and insert into the policy dict.
-
-        Return the list of relevant internet_exit_policies together with the connections for that policy.
-        """
-        if not self.shared_utils.is_cv_pathfinder_client:
-            return []
-
-        internet_exit_policy_names = set()
-        candidate_internet_exit_policies: list[EosDesigns.CvPathfinderInternetExitPoliciesItem] = []
-        configured_internet_exit_policies = self.inputs.cv_pathfinder_internet_exit_policies
-
-        for policy in self._filtered_wan_policies:
-            for match in get(policy, "matches", default=[]):
-                internet_exit_policy_name = match.get("internet_exit_policy_name")
-                if not internet_exit_policy_name or internet_exit_policy_name in internet_exit_policy_names:
-                    continue
-                if internet_exit_policy_name not in configured_internet_exit_policies:
-                    msg = (
-                        f"The internet exit policy {internet_exit_policy_name} configured under "
-                        f"`wan_virtual_topologies.policies[name={policy['name']}].internet_exit.policy` "
-                        "is not defined under `cv_pathfinder_internet_exit_policies`."
-                    )
-                    raise AristaAvdInvalidInputsError(msg)
-                internet_exit_policy = configured_internet_exit_policies[internet_exit_policy_name]
-                internet_exit_policy_names.add(internet_exit_policy_name)
-                candidate_internet_exit_policies.append(internet_exit_policy)
-
-            if (default_match := policy.get("default_match")) is not None:
-                internet_exit_policy_name = default_match.get("internet_exit_policy_name")
-                if not internet_exit_policy_name or internet_exit_policy_name in internet_exit_policy_names:
-                    continue
-                if internet_exit_policy_name not in configured_internet_exit_policies:
-                    msg = (
-                        f"The internet exit policy {internet_exit_policy_name} configured under "
-                        f"`wan_virtual_topologies.policies[name={policy['name']}].internet_exit.policy` "
-                        "is not defined under `cv_pathfinder_internet_exit_policies`."
-                    )
-                    raise AristaAvdInvalidInputsError(msg)
-                internet_exit_policy = configured_internet_exit_policies[internet_exit_policy_name]
-                internet_exit_policy_names.add(internet_exit_policy_name)
-                candidate_internet_exit_policies.append(internet_exit_policy)
-
-        if not internet_exit_policy_names:
-            return []
-
-        internet_exit_policies = []
-
-        for internet_exit_policy in candidate_internet_exit_policies:
-            local_wan_l3_interfaces = EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces(
-                [
-                    wan_interface
-                    for wan_interface in self.shared_utils.wan_interfaces
-                    if internet_exit_policy.name in wan_interface.cv_pathfinder_internet_exit.policies
-                ]
-            )
-            if not local_wan_l3_interfaces:
-                # No local interface for this policy
-                # implies policy present in input yml, but not associated with any interface yet
-                # TODO: Decide if we should raise here instead
-                continue
-            # fetch connections associated with given internet exit policy that
-            # applies to one or more wan interfaces
-            connections = self.get_internet_exit_connections(internet_exit_policy, local_wan_l3_interfaces)
-            internet_exit_policies.append((internet_exit_policy, connections))
-
-        return internet_exit_policies
 
     def get_internet_exit_connections(
         self: AvdStructuredConfigNetworkServicesProtocol,

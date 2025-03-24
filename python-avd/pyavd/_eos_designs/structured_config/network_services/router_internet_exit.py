@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
-from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
 from pyavd._errors import AristaAvdInvalidInputsError
 
 if TYPE_CHECKING:
@@ -21,37 +20,12 @@ class RouterInternetExitMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    @structured_config_contributor
-    def router_internet_exit(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """
-        Set the structured config for router_internet_exit.
-
-        Only used for CV Pathfinder edge routers today
-        """
-        if not self._filtered_internet_exit_policies_and_connections:
-            return
-
-        policies = EosCliConfigGen.RouterInternetExit.Policies()
-        exit_groups = EosCliConfigGen.RouterInternetExit.ExitGroups()
-        for policy, connections in self._filtered_internet_exit_policies_and_connections:
-            # TODO: Today we use the order of the connection list to order the exit-groups inside the policy.
-            #       This works for zscaler but later we may need to use some sorting intelligence as order matters.
-            for connection in connections:
-                exit_group_name = connection["exit_group"]
-                exit_groups.obtain(exit_group_name).local_connections.append_new(name=connection["name"])
-                # Recording the exit_group in the policy
-                policies.obtain(policy.name).exit_groups.append_new(name=exit_group_name)
-
-            if policy.fallback_to_system_default:
-                policies.obtain(policy.name).exit_groups.append_new(name="system-default-exit-group")
-
-        self.structured_config.router_internet_exit._update(policies=policies, exit_groups=exit_groups)
-
     def _set_internet_exit_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
         input_topology: EosDesigns.WanVirtualTopologies.ControlPlaneVirtualTopology
         | EosDesigns.WanVirtualTopologies.PoliciesItem.DefaultVirtualTopology
         | EosDesigns.WanVirtualTopologies.PoliciesItem.ApplicationVirtualTopologiesItem,
+        policy_name: str,
     ) -> None:
         """
         Set the internet exit policy for a given Virtual Topology if required.
@@ -61,27 +35,24 @@ class RouterInternetExitMixin(Protocol):
         if not self.shared_utils.is_cv_pathfinder_client:
             return
 
-        if not (internet_policy_name := input_topology.internet_exit.policy):
+        if not (internet_exit_policy_name := input_topology.internet_exit.policy):
             return
 
-        # TODO: the older function was handling multiple definition
-        # if not internet_exit_policy_name or internet_exit_policy_name in internet_exit_policy_names:
-        #     continue
+        if internet_exit_policy_name in self.structured_config.router_internet_exit.policies:
+            # We have already added this policy
+            return
 
-        if internet_policy_name not in self.inputs.cv_pathfinder_internet_exit_policies:
+        if internet_exit_policy_name not in self.inputs.cv_pathfinder_internet_exit_policies:
             msg = (
-                f"The internet exit policy {internet_policy_name} configured under "
-                f"`wan_virtual_topologies.policies[name={input_policy.name}].internet_exit.policy` "
+                f"The internet exit policy {internet_exit_policy_name} configured under "
+                f"`wan_virtual_topologies.policies[name={policy_name}].internet_exit.policy` "
                 "is not defined under `cv_pathfinder_internet_exit_policies`."
             )
             raise AristaAvdInvalidInputsError(msg)
 
-        internet_exit_policy = self.inputs.cv_pathfinder_internet_exit_policies[internet_policy_name]
+        internet_exit_policy = self.inputs.cv_pathfinder_internet_exit_policies[internet_exit_policy_name]
 
-        # TODO: Adding to sets
-        # internet_exit_policy_names.add(internet_exit_policy_name)
-        # candidate_internet_exit_policies.append(internet_exit_policy)
-
+        # duplicate with some function in utils_wan.
         # TODO: Add support for port_channels
         local_wan_l3_interfaces = EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces(
             [
@@ -116,6 +87,14 @@ class RouterInternetExitMixin(Protocol):
         if internet_exit_policy.fallback_to_system_default:
             policy_exit_groups.append_new(name="system-default-exit-group")
 
+        if internet_exit_policy.type == "zscaler":
+            self._set_zscaler_ie_policy_ip_nat()
+            self._set_zscaler_ie_policy_acl()
+            self._set_zscaler_internet_exit_policy_ip_security(internet_exit_policy)
+            # set metadata
+            self.set_cv_pathfinder_metadata_zscaler_internet_exit_policy(internet_exit_policy, connections)
+        if internet_exit_policy.type == "direct":
+            self._set_direct_ie_policy_ip_nat()
+            self._set_direct_ie_policy_acl(internet_exit_policy, connections)
+
         self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)
-        # TODO: call this only for zscaler.
-        self._set_zscaler_internet_exit_policy_ip_securityip_security(internet_exit_policy)

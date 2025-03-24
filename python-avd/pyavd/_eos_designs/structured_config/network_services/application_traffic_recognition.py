@@ -7,13 +7,8 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
+from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdInvalidInputsError
-<<<<<<< HEAD
-from pyavd._utils import append_if_not_duplicate, get, get_item
-=======
-from pyavd._utils import get
->>>>>>> devel
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -25,16 +20,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
-
-    @structured_config_contributor
-    def application_traffic_recognition(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Set structured config for application_traffic_recognition if wan router."""
-        if not self.shared_utils.is_wan_router:
-            return
-
-        self._set_application_classification()
-
-        self._set_control_plane_application_profile()
 
     #  self._wan_control_plane_application_profile is defined in utils.py
     @cached_property
@@ -90,11 +75,16 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                   - name: PFX-LOCAL-VTEP-IP
                     prefix_values: [Pathfinder vtep_ip]
         """
-        # Adding the application-profile
-        if self._wan_control_plane_application_profile_name in self.structured_config.application_traffic_recognition.application_profiles:
+        # Adding the application-profile if not overriden
+        if (
+            self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile
+            in self.structured_config.application_traffic_recognition.application_profiles
+        ):
             return
 
-        application_profile_item = EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem(name=self._wan_control_plane_application_profile_name)
+        application_profile_item = EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem(
+            name=self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile
+        )
         application_profile_item.applications.append_new(name=self._wan_control_plane_application)
         self.structured_config.application_traffic_recognition.application_profiles.append(application_profile_item)
 
@@ -130,50 +120,44 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues([f"{self.shared_utils.vtep_ip}/32"]),
             )
 
-    def _set_application_classification(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
+    def _set_virtual_topology_application_classification(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        virtual_topology: EosDesigns.WanVirtualTopologies.PoliciesItem.ApplicationVirtualTopologiesItem
+        | EosDesigns.WanVirtualTopologies.PoliciesItem.DefaultVirtualTopology
+        | EosDesigns.WanVirtualTopologies.ControlPlaneVirtualTopology,
+        policy_name: str,
+    ) -> None:
         """
-        Based on the filtered policies local to the device, set the application-profiles relevant to the device in structured config.
+        Set the application-profiles relevant to the device in the policy in structured config.
 
         Supports only `application_classification.applications.ipv4_applications` for now.
 
         For applications - the existence cannot be verified as there are 4000+ applications built-in in the DPI engine used by EOS.
         """
-        # Application profiles first
         atr = EosCliConfigGen.ApplicationTrafficRecognition()
-        for policy in self._filtered_wan_policies:
-            if policy.get("is_default") and self._wan_control_plane_application_profile_name in self.inputs.application_classification.application_profiles:
-                application_profile_item = self.inputs.application_classification.application_profiles[self._wan_control_plane_application_profile_name]
-                atr.application_profiles.append(application_profile_item)
+        application_profile = virtual_topology.application_profile
+        if (
+            isinstance(virtual_topology, EosDesigns.WanVirtualTopologies.ControlPlaneVirtualTopology)
+            and virtual_topology.application_profile in self.inputs.application_classification.application_profiles
+        ):
+            application_profile_item = self.inputs.application_classification.application_profiles[virtual_topology.application_profile]
+            atr.application_profiles.append(application_profile_item)
 
-            for match in get(policy, "matches", []):
-                application_profile = get(match, "application_profile", required=True)
+        if application_profile not in self.inputs.application_classification.application_profiles:
+            if application_profile == self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile:
+                # Ignore for control plane as it could be injected later.
+                return
 
-                if application_profile not in self.inputs.application_classification.application_profiles:
-                    if application_profile == self._wan_control_plane_application_profile_name:
-                        # Ignore for control plane as it could be injected later.
-                        continue
+            msg = (
+                f"The application profile {application_profile} used in policy {policy_name} "
+                "is not defined in 'application_classification.application_profiles'."
+            )
+            raise AristaAvdInvalidInputsError(msg)
 
-                    msg = (
-                        f"The application profile {application_profile} used in policy {policy['name']} "
-                        "is not defined in 'application_classification.application_profiles'."
-                    )
-                    raise AristaAvdInvalidInputsError(msg)
-                application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
-                atr.application_profiles.append(application_profile_item)
+        application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
+        atr.application_profiles.append(application_profile_item)
 
-            if (default_match := policy.get("default_match")) is not None:
-                application_profile = get(default_match, "application_profile", default="default")
-                if application_profile != "default":
-                    if application_profile not in self.inputs.application_classification.application_profiles:
-                        msg = (
-                            f"The application profile {application_profile} used in policy {policy['name']} "
-                            "is not defined in 'application_classification.application_profiles'."
-                        )
-                        raise AristaAvdInvalidInputsError(msg)
-
-                    application_profile_item = self.inputs.application_classification.application_profiles[application_profile]
-                    atr.application_profiles.append(application_profile_item)
-
+        # TODO: check if we need the intermediate object
         self.structured_config.application_traffic_recognition.application_profiles.extend(atr.application_profiles)
 
         for application_profile in atr.application_profiles:

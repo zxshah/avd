@@ -58,9 +58,6 @@ class EthernetInterfacesMixin(Protocol):
         if missing_parent_interface_names := subif_parent_interface_names.difference(eth_int.name for eth_int in self.structured_config.ethernet_interfaces):
             self._set_subif_parent_interfaces(missing_parent_interface_names)
 
-        # Add interfaces used for Internet Exit policies
-        self._set_internet_exit_policy_interfaces()
-
     def _set_l3_port_channel_members(
         self: AvdStructuredConfigNetworkServicesProtocol,
         vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,

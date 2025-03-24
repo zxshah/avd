@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
+from pyavd._eos_designs.schema import EosDesigns
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -19,31 +19,16 @@ class MetadataMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    @structured_config_contributor
-    def metadata(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """
-        Set the metadata.cv_pathfinder for CV Pathfinder routers.
-
-        Pathfinders will always have applications since we have the default control plane apps.
-        Edge routers may have internet_exit_policies but not applications.
-        """
-        if not self.shared_utils.is_cv_pathfinder_router:
-            return
-        self.set_cv_pathfinder_metadata_internet_exit_policies()
-        self.set_cv_pathfinder_metadata_applications()
-
-    def set_cv_pathfinder_metadata_internet_exit_policies(
+    def set_cv_pathfinder_metadata_zscaler_internet_exit_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
+        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
+        connections: list[dict],
     ) -> None:
-        """Set the metadata.cv_pathfinder.internet_exit_policies if available."""
-        if not self._filtered_internet_exit_policies_and_connections:
+        """Set the metadata.cv_pathfinder.internet_exit_policies for the Zscaler policies if available."""
+        if internet_exit_policy.type != "zscaler":
             return
 
-        for internet_exit_policy, connections in self._filtered_internet_exit_policies_and_connections:
-            # Currently only supporting zscaler
-            if internet_exit_policy.type != "zscaler":
-                continue
-
+        for connection in connections:
             ufqdn, ipsec_key = self._get_ipsec_credentials(internet_exit_policy)
             exit_policy = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem(
                 name=internet_exit_policy.name,
@@ -63,12 +48,16 @@ class MetadataMixin(Protocol):
                     preference="Preferred" if connection["preference"] == "primary" else "Alternate",
                     endpoint=connection["endpoint"],
                 )
-            self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
+        self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
 
     def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Set the metadata.cv_pathfinder.applications if available."""
+        """Set the metadata.cv_pathfinder.applications if available.
+
+        This is called after the structured_config has been populated.
+        """
         if not self.shared_utils.is_cv_pathfinder_server or (atr := self.structured_config.application_traffic_recognition) is None:
             return
+
         applications = atr.applications
         user_defined_app_names = set(applications.ipv4_applications.keys())
         categories = atr.categories

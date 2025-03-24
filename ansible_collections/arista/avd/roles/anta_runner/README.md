@@ -186,16 +186,11 @@ anta_runner_dry_run: false
 
 ### Verbose Mode and Logging
 
-The `anta_runner` role supports default Ansible verbosity levels, controlled by the `-v` flag. With `-vvv`, comprehensive debug logs are generated, including:
+The `anta_runner` role supports default Ansible verbosity levels, controlled by the `-v` flag. With `-vvv`, information about tests being skipped from the AVD-generated catalogs is displayed at the console.
 
-- Information about tests being skipped from the AVD generation process and why
-- Full ANTA logs stored per batch in the `anta_runner_logs_dir` directory
+ANTA logs are also controlled by the verbosity level and stored per batch in the `anta_runner_logs_dir` directory. The directory is cleaned up at the start of each run.
 
-For example, to run with verbose logging:
-
-```shell
-ansible-playbook playbooks/fabric-validate.yml -vvv
-```
+To enable verbose logging, use the `-vvv` flag with the `ansible-playbook` command.
 
 ### Advanced Filtering Options
 

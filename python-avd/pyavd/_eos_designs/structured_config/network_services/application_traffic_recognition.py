@@ -75,7 +75,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                   - name: PFX-LOCAL-VTEP-IP
                     prefix_values: [Pathfinder vtep_ip]
         """
-        # Adding the application-profile if not overriden
+        # Adding the application-profile if not overridden
         if (
             self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile
             in self.structured_config.application_traffic_recognition.application_profiles

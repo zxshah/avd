@@ -3,7 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property, lru_cache
+from functools import cached_property
 from typing import TYPE_CHECKING, Literal, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
@@ -67,7 +67,6 @@ class UtilsWanMixin(Protocol):
 
     def _append_control_plane_virtual_topology(
         self: AvdStructuredConfigNetworkServicesProtocol,
-        policy: EosDesigns.WanVirtualTopologies.PoliciesItem,
         output_policy: EosCliConfigGen.RouterAdaptiveVirtualTopology.PoliciesItem | EosCliConfigGen.RouterPathSelection.PoliciesItem,
         output_vrf: EosCliConfigGen.RouterAdaptiveVirtualTopology.VrfsItem | EosCliConfigGen.RouterPathSelection.VrfsItem,
     ) -> None:
@@ -132,7 +131,7 @@ class UtilsWanMixin(Protocol):
         # Control plane
         if control_plane:
             output_policy.name = f"{output_policy.name}-WITH-CP"
-            self._append_control_plane_virtual_topology(policy, output_policy, output_vrf)
+            self._append_control_plane_virtual_topology(output_policy, output_vrf)
             index = 2
 
         # Normal entries
@@ -237,7 +236,7 @@ class UtilsWanMixin(Protocol):
         # Control Plane
         if control_plane:
             output_policy.name = f"{output_policy.name}-WITH-CP"
-            self._append_control_plane_virtual_topology(policy, output_policy, output_vrf)
+            self._append_control_plane_virtual_topology(output_policy, output_vrf)
 
         output_vrf.policy = output_policy.name
 
@@ -362,12 +361,22 @@ class UtilsWanMixin(Protocol):
             )
             raise AristaAvdInvalidInputsError(msg)
 
-    @lru_cache
+    local_internet_exit_connections: dict[str, bool] | None = None
+    """Poor-mans cache to only check local interfaces for an internet exit policy once."""
+
     def _internet_exit_policy_has_local_interfaces(self: AvdStructuredConfigNetworkServicesProtocol, ie_policy_name: str) -> bool:
         """Cached property stating if an internet exit is used locally."""
+        if self.local_internet_exit_connections and ie_policy_name in self.local_internet_exit_connections:
+            return self.local_internet_exit_connections[ie_policy_name]
+
         local_wan_l3_interfaces = EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces(
             [wan_interface for wan_interface in self.shared_utils.wan_interfaces if ie_policy_name in wan_interface.cv_pathfinder_internet_exit.policies]
         )
+        # Update the cache so we don't resolve again next time.
+        if self.local_internet_exit_connections is None:
+            self.local_internet_exit_connections = {}
+        self.local_internet_exit_connections[ie_policy_name] = bool(local_wan_l3_interfaces)
+
         return bool(local_wan_l3_interfaces)
 
     def _generate_wan_load_balance_policy(

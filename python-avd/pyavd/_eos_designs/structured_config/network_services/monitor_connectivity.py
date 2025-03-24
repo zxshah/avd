@@ -18,7 +18,7 @@ class MonitorConnectivityMixin(Protocol):
 
     def set_internet_exit_monitor_connectivity(self: AvdStructuredConfigNetworkServicesProtocol, connection: dict) -> None:
         """
-        Set the structured config for one connection
+        Set the structured config for one connection.
 
         Only used for CV Pathfinder edge routers today
         """

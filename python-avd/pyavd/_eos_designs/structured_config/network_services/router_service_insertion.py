@@ -20,7 +20,7 @@ class RouterServiceInsertionMixin(Protocol):
 
     def set_internet_exit_router_service_insertion(self: AvdStructuredConfigNetworkServicesProtocol, connection: dict) -> None:
         """
-        Set the structured config for router_service_insertion for one Internet Exit connection
+        Set the structured config for router_service_insertion for one Internet Exit connection.
 
         Only used for CV Pathfinder edge routers today
         """

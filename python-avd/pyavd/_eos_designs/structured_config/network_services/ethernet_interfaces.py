@@ -321,7 +321,9 @@ class EthernetInterfacesMixin(Protocol):
             self.structured_config.ethernet_interfaces.append(interface)
 
     # TODO: proper annotation or give the NAT profile name.
-    def set_internet_exit_connection_ethernet_interfaces(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy, connection: dict) -> None:
+    def set_internet_exit_connection_ethernet_interfaces(
+        self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem, connection: dict
+    ) -> None:
         # TODO: This should be moved to the place where we configure the same interface in underlay as this will clash between modules..
         if connection["type"] != "ethernet":
             return

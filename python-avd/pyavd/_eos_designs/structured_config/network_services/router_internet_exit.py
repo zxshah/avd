@@ -95,6 +95,6 @@ class RouterInternetExitMixin(Protocol):
             self.set_cv_pathfinder_metadata_zscaler_internet_exit_policy(internet_exit_policy, connections)
         if internet_exit_policy.type == "direct":
             self._set_direct_ie_policy_ip_nat()
-            self._set_direct_ie_policy_acl(internet_exit_policy, connections)
+            self._set_direct_ie_policy_acl(connections)
 
         self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)

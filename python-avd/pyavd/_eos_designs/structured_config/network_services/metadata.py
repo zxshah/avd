@@ -6,9 +6,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
-from pyavd._eos_designs.schema import EosDesigns
 
 if TYPE_CHECKING:
+    from pyavd._eos_designs.schema import EosDesigns
+
     from . import AvdStructuredConfigNetworkServicesProtocol
 
 
@@ -28,26 +29,25 @@ class MetadataMixin(Protocol):
         if internet_exit_policy.type != "zscaler":
             return
 
+        ufqdn, ipsec_key = self._get_ipsec_credentials(internet_exit_policy)
+        exit_policy = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem(
+            name=internet_exit_policy.name,
+            type=internet_exit_policy.type,
+            city=self._zscaler_endpoints.device_location.city,
+            country=self._zscaler_endpoints.device_location.country,
+            upload_bandwidth=internet_exit_policy.zscaler.upload_bandwidth,
+            download_bandwidth=internet_exit_policy.zscaler.download_bandwidth,
+            firewall=internet_exit_policy.zscaler.firewall.enabled,
+            ips_control=internet_exit_policy.zscaler.firewall.ips,
+            acceptable_use_policy=internet_exit_policy.zscaler.acceptable_use_policy,
+        )
+        exit_policy.vpn_credentials.append_new(fqdn=ufqdn, vpn_type="UFQDN", pre_shared_key=ipsec_key)
         for connection in connections:
-            ufqdn, ipsec_key = self._get_ipsec_credentials(internet_exit_policy)
-            exit_policy = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem(
-                name=internet_exit_policy.name,
-                type=internet_exit_policy.type,
-                city=self._zscaler_endpoints.device_location.city,
-                country=self._zscaler_endpoints.device_location.country,
-                upload_bandwidth=internet_exit_policy.zscaler.upload_bandwidth,
-                download_bandwidth=internet_exit_policy.zscaler.download_bandwidth,
-                firewall=internet_exit_policy.zscaler.firewall.enabled,
-                ips_control=internet_exit_policy.zscaler.firewall.ips,
-                acceptable_use_policy=internet_exit_policy.zscaler.acceptable_use_policy,
+            exit_policy.tunnels.append_new(
+                name=f"Tunnel{connection['tunnel_id']}",
+                preference="Preferred" if connection["preference"] == "primary" else "Alternate",
+                endpoint=connection["endpoint"],
             )
-            exit_policy.vpn_credentials.append_new(fqdn=ufqdn, vpn_type="UFQDN", pre_shared_key=ipsec_key)
-            for connection in connections:
-                exit_policy.tunnels.append_new(
-                    name=f"Tunnel{connection['tunnel_id']}",
-                    preference="Preferred" if connection["preference"] == "primary" else "Alternate",
-                    endpoint=connection["endpoint"],
-                )
         self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
 
     def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:

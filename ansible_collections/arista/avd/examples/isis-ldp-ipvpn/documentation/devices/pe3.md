@@ -474,10 +474,10 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| C1_VRF1 | 10.255.1.3:10 | connected<br>ospf |
-| C2_VRF1 | 10.255.1.3:20 | connected |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart |
+| --- | ------------------- | ------------ | ---------------- |
+| C1_VRF1 | 10.255.1.3:10 | connected<br>ospf | Restart-Time: -<br>Stalepath-Time: - |
+| C2_VRF1 | 10.255.1.3:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
 
 #### Router BGP Device Configuration
 

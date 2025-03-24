@@ -882,11 +882,11 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| BLUE | 192.168.255.8:100 | connected |
-| default | 192.168.255.8:1 | - |
-| RED | 192.168.255.8:101 | connected |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart |
+| --- | ------------------- | ------------ | ---------------- |
+| BLUE | 192.168.255.8:100 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| default | 192.168.255.8:1 | - | Restart-Time: -<br>Stalepath-Time: - |
+| RED | 192.168.255.8:101 | connected | Restart-Time: -<br>Stalepath-Time: - |
 
 #### Router BGP Device Configuration
 

@@ -1012,18 +1012,12 @@ ASN Notation: {{ router_bgp.as_notation | arista.avd.default('asplain') }}
 
 #### Router BGP VRFs
 
-{%         if router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list and router_bgp.vrfs | selectattr('graceful_restart.enabled', 'arista.avd.defined', true) | list %}
-| VRF | Route-Distinguisher | Redistribute | EVPN Multicast | Graceful Restart |
-| --- | ------------------- | ------------ | -------------- | ---------------- |
-{%         elif router_bgp.vrfs | selectattr('graceful_restart.enabled', 'arista.avd.defined', true) | list %}
+{%         if router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list %}
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
+| --- | ------------------- | ------------ | ---------------- | -------------- |
+{%         else %}
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-{%         elif router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list %}
-| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
-| --- | ------------------- | ------------ | -------------- |
-{%         else %}
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
 {%         endif %}
 {%         for vrf in router_bgp.vrfs | arista.avd.natural_sort('name') %}
 {%             set route_distinguisher = vrf.rd | arista.avd.default("-") %}
@@ -1042,14 +1036,10 @@ ASN Notation: {{ router_bgp.as_notation | arista.avd.default('asplain') }}
 {%             set graceful_out = [] %}
 {%             do graceful_out.append("Restart-Time: " ~ graceful_restart_time) %}
 {%             do graceful_out.append("Stalepath-Time: " ~ graceful_restart_stale) %}
-{%             if router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list and router_bgp.vrfs | selectattr('graceful_restart.enabled', 'arista.avd.defined', true) | list %}
-| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} | {{ multicast_out | join("<br>") }} | {{ graceful_out | join("<br>") }} |
-{%             elif router_bgp.vrfs | selectattr('graceful_restart.enabled', 'arista.avd.defined', true) | list %}
-| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} | {{ graceful_out | join("<br>") }} |
-{%             elif router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list %}
-| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} | {{ multicast_out | join("<br>") }} |
+{%             if router_bgp.vrfs | selectattr('evpn_multicast', 'arista.avd.defined', true) | list %}
+| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} | {{ graceful_out | join("<br>") }} | {{ multicast_out | join("<br>") }} |
 {%             else %}
-| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} |
+| {{ vrf.name }} | {{ route_distinguisher }} | {{ redistribute | join("<br>") }} | {{ graceful_out | join("<br>") }} |
 {%             endif %}
 {%         endfor %}
 {%     endif %}

@@ -533,9 +533,9 @@ router_bgp:
       import_match_failure_action: discard
   address_family_rtc:
     peer_groups:
-    - name: EVPN-OVERLAY-PEERS
-      activate: true
     - name: EVPN-OVERLAY-CORE
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
       activate: true
   address_family_ipv4:
     peer_groups:

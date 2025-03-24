@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import ipaddress
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Literal, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
@@ -330,8 +330,10 @@ class RouterBgpMixin(Protocol):
         if not self.inputs.evpn_overlay_bgp_rtc:
             return
         peer_groups = self.structured_config.router_bgp.address_family_rtc.peer_groups
+        peer_groups_evpn = EosCliConfigGen.RouterBgp.AddressFamilyRtc.PeerGroupsItem()
         if self.shared_utils.overlay_evpn_vxlan is True:
-            peer_groups.append_new(name=self.inputs.bgp_peer_groups.evpn_overlay_peers.name, activate=True)
+            peer_groups_evpn.name = self.inputs.bgp_peer_groups.evpn_overlay_peers.name
+            peer_groups_evpn.activate = True
 
         if self.shared_utils.overlay_routing_protocol == "ebgp":
             if self.shared_utils.node_config.evpn_gateway.evpn_l2.enabled or self.shared_utils.node_config.evpn_gateway.evpn_l3.enabled:
@@ -346,7 +348,7 @@ class RouterBgpMixin(Protocol):
             # Transposing the Jinja2 logic: if the evpn_overlay_core peer group is not
             # configured then the default_route_target is applied in the evpn_overlay_peers peer group.
             elif self.shared_utils.evpn_role == "server":
-                peer_groups.obtain(self.inputs.bgp_peer_groups.evpn_overlay_peers.name).default_route_target.only = True
+                peer_groups_evpn.default_route_target.only = True
 
         if self.shared_utils.overlay_routing_protocol == "ibgp":
             if self.shared_utils.overlay_mpls is True:
@@ -358,7 +360,9 @@ class RouterBgpMixin(Protocol):
                 peer_groups.append(peer_group_obj)
 
             if self.shared_utils.overlay_evpn_vxlan is True and (self.shared_utils.evpn_role == "server" or self.shared_utils.mpls_overlay_role == "server"):
-                peer_groups.obtain(self.inputs.bgp_peer_groups.evpn_overlay_peers.name).default_route_target.only = True
+                peer_groups_evpn.default_route_target.only = True
+        if peer_groups_evpn:
+            peer_groups.append(peer_groups_evpn)
 
     def _set_address_family_vpn_ipvx(self: AvdStructuredConfigOverlayProtocol, version: Literal[4, 6]) -> None:
         if (version == 4 and self.shared_utils.overlay_vpn_ipv4 is not True) or (version == 6 and self.shared_utils.overlay_vpn_ipv6 is not True):

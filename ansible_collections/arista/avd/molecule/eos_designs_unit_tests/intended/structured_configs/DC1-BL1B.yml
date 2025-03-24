@@ -435,9 +435,9 @@ router_bgp:
       expiry_timeout: 10
   address_family_rtc:
     peer_groups:
-    - name: EVPN-OVERLAY-PEERS
-      activate: true
     - name: EVPN-OVERLAY-CORE
+      activate: true
+    - name: EVPN-OVERLAY-PEERS
       activate: true
   address_family_ipv4:
     peer_groups:

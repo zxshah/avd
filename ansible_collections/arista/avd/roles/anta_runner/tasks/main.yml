@@ -13,6 +13,17 @@
   run_once: true
   register: avd_requirements
 
+- name: Clean up log directory
+  ansible.builtin.file:
+    path: "{{ anta_runner_logs_dir }}"
+    state: "{{ item }}"
+  loop:
+    - absent
+    - directory
+  delegate_to: localhost
+  run_once: true
+  check_mode: false
+
 - name: Create required output directories if not present
   when: avd_create_directories | arista.avd.default(true)
   ansible.builtin.file:
@@ -24,7 +35,6 @@
     - "{{ avd_catalogs_dir }}"
     - "{{ user_catalogs_dir }}"
     - "{{ anta_reports_dir }}"
-    - "{{ anta_runner_logs_dir }}"
   delegate_to: localhost
   run_once: true
   check_mode: false

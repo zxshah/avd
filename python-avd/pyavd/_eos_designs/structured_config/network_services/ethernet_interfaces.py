@@ -55,9 +55,6 @@ class EthernetInterfacesMixin(Protocol):
         if missing_parent_interface_names := subif_parent_interface_names.difference(eth_int.name for eth_int in self.structured_config.ethernet_interfaces):
             self._set_subif_parent_interfaces(missing_parent_interface_names)
 
-        # Add interfaces used for Internet Exit policies
-        self._set_internet_exit_policy_interfaces()
-
     def _set_l3_interfaces(
         self: AvdStructuredConfigNetworkServicesProtocol,
         vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
@@ -281,13 +278,12 @@ class EthernetInterfacesMixin(Protocol):
             interface.switchport.enabled = False
             self.structured_config.ethernet_interfaces.append(interface)
 
-    def _set_internet_exit_policy_interfaces(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Set the ethernet_interfaces with the interfaces defined for internet exit policies."""
-        # TODO: This should be moved to the place where we configure the same interface in underlay.
+    # TODO: proper annotation or give the NAT profile name.
+    def set_internet_exit_connection_ethernet_interfaces(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy, connection: dict) -> None:
+        # TODO: This should be moved to the place where we configure the same interface in underlay as this will clash between modules..
         # Need to get free of _filtered_internet_policies_and_connections.
-        for internet_exit_policy, connections in self._filtered_internet_exit_policies_and_connections:
-            for connection in connections:
-                if connection["type"] == "ethernet":
-                    self.structured_config.ethernet_interfaces.obtain(
-                        connection["source_interface"]
-                    ).ip_nat.service_profile = self.get_internet_exit_nat_profile_name(internet_exit_policy.type)
+        if connection["type"] != "ethernet":
+            return
+        interface = EosCliConfigGen.EthernetInterfacesItem(name=connection["source_interface"])
+        interface.ip_nat.service_profile = self.get_internet_exit_nat_profile_name(internet_exit_policy.type)
+        self.structured_config.ethernet_interfaces.append(interface)

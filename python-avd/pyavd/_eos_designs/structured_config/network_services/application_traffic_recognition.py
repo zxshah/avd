@@ -7,7 +7,7 @@ from functools import cached_property, partial
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._errors import AristaAvdInvalidInputsError
-from pyavd._utils import append_if_not_duplicate, get, get_item, strip_empties_from_dict
+from pyavd._utils import append_if_not_duplicate, get, get_item
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -26,11 +26,13 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         if not self.shared_utils.is_wan_router:
             return None
 
-        filtered_application_classification = self._filtered_application_classification()
+        # TODO: waiting for application_traffic_recognition refactor to merge
+        # filtered_application_classification = self._filtered_application_classification()
 
-        self._generate_control_plane_application_profile(filtered_application_classification)
+        # self._generate_control_plane_application_profile(filtered_application_classification)
 
-        return strip_empties_from_dict(filtered_application_classification)
+        # return strip_empties_from_dict(filtered_application_classification)
+        return None
 
     #  self._wan_control_plane_application_profile is defined in utils.py
     @cached_property

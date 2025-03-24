@@ -32,7 +32,7 @@
     | [<samp>&nbsp;&nbsp;trusted_keys</samp>](## "ntp.trusted_keys") | String |  |  |  | List of trusted-keys as string ex. 10-12,15. |
     | [<samp>&nbsp;&nbsp;serve</samp>](## "ntp.serve") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;all</samp>](## "ntp.serve.all") | Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enable</samp>](## "ntp.serve.all.enable") | Boolean |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ntp.serve.all.enabled") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrfs</samp>](## "ntp.serve.all.vrfs") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.all.vrfs.[].name") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;access_groups</samp>](## "ntp.serve.access_groups") | List, items: Dictionary |  |  |  |  |
@@ -90,7 +90,7 @@
       trusted_keys: <str>
       serve:
         all:
-          enable: <bool>
+          enabled: <bool>
           vrfs:
             - name: <str>
         access_groups:

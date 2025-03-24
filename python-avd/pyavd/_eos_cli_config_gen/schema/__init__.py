@@ -24665,14 +24665,14 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                 Vrfs._item_type = VrfsItem
 
-                _fields: ClassVar[dict] = {"enable": {"type": bool}, "vrfs": {"type": Vrfs}}
-                enable: bool | None
+                _fields: ClassVar[dict] = {"enabled": {"type": bool}, "vrfs": {"type": Vrfs}}
+                enabled: bool | None
                 vrfs: Vrfs
                 """Subclass of AvdList with `VrfsItem` items."""
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, enable: bool | None | UndefinedType = Undefined, vrfs: Vrfs | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, enabled: bool | None | UndefinedType = Undefined, vrfs: Vrfs | UndefinedType = Undefined) -> None:
                         """
                         All.
 
@@ -24680,7 +24680,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Subclass of AvdModel.
 
                         Args:
-                            enable: enable
+                            enabled: enabled
                             vrfs: Subclass of AvdList with `VrfsItem` items.
 
                         """

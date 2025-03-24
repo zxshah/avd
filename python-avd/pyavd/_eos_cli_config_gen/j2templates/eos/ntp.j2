@@ -63,7 +63,7 @@ ntp authenticate
 {{ ntp_server_cli }}
 {%     endfor %}
 {%     if ntp.serve is arista.avd.defined %}
-{%         if ntp.serve.all.enable is arista.avd.defined %}
+{%         if ntp.serve.all.enabled is arista.avd.defined(true) %}
 ntp serve all
 {%         endif %}
 {%         if ntp.serve.all.vrfs is arista.avd.defined %}

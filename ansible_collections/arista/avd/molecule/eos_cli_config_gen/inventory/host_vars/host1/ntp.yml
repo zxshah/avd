@@ -33,20 +33,20 @@ ntp:
       key_type: 8a
   serve:
     all:
-      enable: true
+      enabled: true
       vrfs:
         - name: default
         - name: MGMT
         - name: blue
     access_groups:
-    - name: test_ACL
-      vrf: MGMT
-    - name: test_ACL
-      vrf: BLUE
-    - name: default_ACL
-      vrf: default
+      - name: test_ACL
+        vrf: MGMT
+      - name: test_ACL
+        vrf: BLUE
+      - name: default_ACL
+        vrf: default
     ipv6_access_groups:
-    - name: test_ACL_v6
-      vrf: default
-    - name: test_ACL_v6
-      vrf: RED
+      - name: test_ACL_v6
+        vrf: default
+      - name: test_ACL_v6
+        vrf: RED

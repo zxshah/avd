@@ -111,7 +111,7 @@ keys:
           all:
             type: dict
             keys:
-              enable:
+              enabled:
                 type: bool
               vrfs:
                 type: list

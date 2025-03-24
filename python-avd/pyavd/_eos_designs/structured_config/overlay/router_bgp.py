@@ -361,7 +361,6 @@ class RouterBgpMixin(Protocol):
                 peer_groups.obtain(self.inputs.bgp_peer_groups.evpn_overlay_peers.name).default_route_target.only = True
 
     def _set_address_family_vpn_ipvx(self: AvdStructuredConfigOverlayProtocol, version: Literal[4, 6]) -> None:
-
         if (version == 4 and self.shared_utils.overlay_vpn_ipv4 is not True) or (version == 6 and self.shared_utils.overlay_vpn_ipv6 is not True):
             return
 

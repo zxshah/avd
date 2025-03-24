@@ -8,5 +8,6 @@ type: dict
 keys:
   underlay_ospf_graceful_restart:
     type: bool
+    # TODO AVD 6.0 : Flip the default to true
     default: false
     description: Enable graceful restart for OSPF underlay.

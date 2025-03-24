@@ -9703,6 +9703,43 @@ keys:
         description: List of trusted-keys as string ex. 10-12,15.
         convert_types:
         - int
+      serve:
+        type: dict
+        keys:
+          all:
+            type: dict
+            keys:
+              enable:
+                type: bool
+              vrfs:
+                type: list
+                items:
+                  type: dict
+                  keys:
+                    name:
+                      type: str
+          access_groups:
+            type: list
+            items:
+              type: dict
+              keys:
+                name:
+                  type: str
+                  required: true
+                vrf:
+                  type: str
+                  required: true
+          ipv6_access_groups:
+            type: list
+            items:
+              type: dict
+              keys:
+                name:
+                  type: str
+                  required: true
+                vrf:
+                  type: str
+                  required: true
   patch_panel:
     type: dict
     keys:

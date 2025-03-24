@@ -24609,6 +24609,141 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
         AuthenticationKeys._item_type = AuthenticationKeysItem
 
+        class Serve(AvdModel):
+            """Subclass of AvdModel."""
+
+            class All(AvdModel):
+                """Subclass of AvdModel."""
+
+                class VrfsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"name": {"type": str}}
+                    name: str | None
+
+                    if TYPE_CHECKING:
+
+                        def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                            """
+                            VrfsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                name: name
+
+                            """
+
+                class Vrfs(AvdList[VrfsItem]):
+                    """Subclass of AvdList with `VrfsItem` items."""
+
+                Vrfs._item_type = VrfsItem
+
+                _fields: ClassVar[dict] = {"enable": {"type": bool}, "vrfs": {"type": Vrfs}}
+                enable: bool | None
+                vrfs: Vrfs
+                """Subclass of AvdList with `VrfsItem` items."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, enable: bool | None | UndefinedType = Undefined, vrfs: Vrfs | UndefinedType = Undefined) -> None:
+                        """
+                        All.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            enable: enable
+                            vrfs: Subclass of AvdList with `VrfsItem` items.
+
+                        """
+
+            class AccessGroupsItem(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
+                name: str
+                vrf: str
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, name: str | UndefinedType = Undefined, vrf: str | UndefinedType = Undefined) -> None:
+                        """
+                        AccessGroupsItem.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            name: name
+                            vrf: vrf
+
+                        """
+
+            class AccessGroups(AvdList[AccessGroupsItem]):
+                """Subclass of AvdList with `AccessGroupsItem` items."""
+
+            AccessGroups._item_type = AccessGroupsItem
+
+            class Ipv6AccessGroupsItem(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
+                name: str
+                vrf: str
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, name: str | UndefinedType = Undefined, vrf: str | UndefinedType = Undefined) -> None:
+                        """
+                        Ipv6AccessGroupsItem.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            name: name
+                            vrf: vrf
+
+                        """
+
+            class Ipv6AccessGroups(AvdList[Ipv6AccessGroupsItem]):
+                """Subclass of AvdList with `Ipv6AccessGroupsItem` items."""
+
+            Ipv6AccessGroups._item_type = Ipv6AccessGroupsItem
+
+            _fields: ClassVar[dict] = {"all": {"type": All}, "access_groups": {"type": AccessGroups}, "ipv6_access_groups": {"type": Ipv6AccessGroups}}
+            all: All
+            """Subclass of AvdModel."""
+            access_groups: AccessGroups
+            """Subclass of AvdList with `AccessGroupsItem` items."""
+            ipv6_access_groups: Ipv6AccessGroups
+            """Subclass of AvdList with `Ipv6AccessGroupsItem` items."""
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    all: All | UndefinedType = Undefined,
+                    access_groups: AccessGroups | UndefinedType = Undefined,
+                    ipv6_access_groups: Ipv6AccessGroups | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    Serve.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        all: Subclass of AvdModel.
+                        access_groups: Subclass of AvdList with `AccessGroupsItem` items.
+                        ipv6_access_groups: Subclass of AvdList with `Ipv6AccessGroupsItem` items.
+
+                    """
+
         _fields: ClassVar[dict] = {
             "local_interface": {"type": LocalInterface},
             "servers": {"type": Servers},
@@ -24616,6 +24751,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "authenticate_servers_only": {"type": bool},
             "authentication_keys": {"type": AuthenticationKeys},
             "trusted_keys": {"type": str},
+            "serve": {"type": Serve},
         }
         local_interface: LocalInterface
         """Subclass of AvdModel."""
@@ -24627,6 +24763,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdIndexedList with `AuthenticationKeysItem` items. Primary key is `id` (`int`)."""
         trusted_keys: str | None
         """List of trusted-keys as string ex. 10-12,15."""
+        serve: Serve
+        """Subclass of AvdModel."""
 
         if TYPE_CHECKING:
 
@@ -24639,6 +24777,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 authenticate_servers_only: bool | None | UndefinedType = Undefined,
                 authentication_keys: AuthenticationKeys | UndefinedType = Undefined,
                 trusted_keys: str | None | UndefinedType = Undefined,
+                serve: Serve | UndefinedType = Undefined,
             ) -> None:
                 """
                 Ntp.
@@ -24653,6 +24792,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     authenticate_servers_only: authenticate_servers_only
                     authentication_keys: Subclass of AvdIndexedList with `AuthenticationKeysItem` items. Primary key is `id` (`int`).
                     trusted_keys: List of trusted-keys as string ex. 10-12,15.
+                    serve: Subclass of AvdModel.
 
                 """
 

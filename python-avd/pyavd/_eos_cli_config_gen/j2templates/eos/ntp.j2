@@ -66,21 +66,21 @@ ntp authenticate
 {%          if ntp.serve.all.enable is arista.avd.defined(true) %}
 ntp serve all
 {%          endif %}
-{%          for vrf in ntp.serve.all.vrfs | arista.avd.natural_sort('name') %}
-ntp serve all vrf {{ vrf }} 
+{%          for vrf in ntp.serve.all.vrfs | arista.avd.natural_sort(sort_key='name', ignore_case=false) %}
+ntp serve all vrf {{ vrf.name }} 
 {%          endfor %}
-{%          for acl in ntp.serve.access_groups | arista.avd.natural_sort('name') %}
+{%          for acl in ntp.serve.access_groups | arista.avd.natural_sort(sort_key='vrf', ignore_case=false) %}
 {%               if acl.vrf == 'default' %}
 ntp serve ip access-group {{ acl.name }} in
 {%                else %}
 ntp serve ip access-group {{ acl.name }} vrf {{ acl.vrf }} in
 {%                endif %}
 {%          endfor %}
-{%           for acl in ntp.serve.ipv6_access_groups | arista.avd.natural_sort('name') %}
+{%           for acl in ntp.serve.ipv6_access_groups | arista.avd.natural_sort(sort_key='vrf', ignore_case=false) %}
 {%                if acl.vrf == 'default' %}
-ntp serve ip access-group {{ acl.name }} in
+ntp serve ipv6 access-group {{ acl.name }} in
 {%                else  %}
-ntp serve ip access-group {{ acl.name }} vrf {{ acl.vrf }} in
+ntp serve ipv6 access-group {{ acl.name }} vrf {{ acl.vrf }} in
 {%                endif %}
 {%           endfor %}
 {%     endif %}

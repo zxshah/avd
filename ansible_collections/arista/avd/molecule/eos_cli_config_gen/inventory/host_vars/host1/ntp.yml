@@ -36,7 +36,8 @@ ntp:
       enable: true
       vrfs:
         - name: default
-          name: MGMT
+        - name: MGMT
+        - name: blue
     access_groups:
     - name: test_ACL
       vrf: MGMT

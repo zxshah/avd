@@ -23,16 +23,16 @@ class LinkTrackingGroupsMixin(Protocol):
 
     @cached_property
     def link_tracking_groups(self: SharedUtilsProtocol) -> EosCliConfigGen.LinkTrackingGroups | None:
-        if self.node_config.link_tracking.enabled:
-            link_tracking_groups = EosCliConfigGen.LinkTrackingGroups()
-            default_recovery_delay = default(self.platform_settings.reload_delay.mlag, 300)
-            if len(self.node_config.link_tracking.groups) > 0:
-                for lt_group in self.node_config.link_tracking.groups:
-                    link_tracking_groups.append_new(
-                        name=lt_group.name,
-                        links_minimum=lt_group.links_minimum,
-                        recovery_delay=default(lt_group.recovery_delay, default_recovery_delay),
-                    )
+        if not self.node_config.link_tracking.enabled:
+            return
 
-            return link_tracking_groups
-        return None
+        link_tracking_groups = EosCliConfigGen.LinkTrackingGroups()
+        default_recovery_delay = default(self.platform_settings.reload_delay.mlag, 300)
+        for lt_group in self.node_config.link_tracking.groups:
+            link_tracking_groups.append_new(
+                name=lt_group.name,
+                links_minimum=lt_group.links_minimum,
+                recovery_delay=default(lt_group.recovery_delay, default_recovery_delay),
+            )
+
+        return link_tracking_groups

@@ -360,10 +360,7 @@ class RouterBgpMixin(Protocol):
             if self.shared_utils.overlay_evpn_vxlan is True and (self.shared_utils.evpn_role == "server" or self.shared_utils.mpls_overlay_role == "server"):
                 peer_groups.obtain(self.inputs.bgp_peer_groups.evpn_overlay_peers.name).default_route_target.only = True
 
-    def _set_address_family_vpn_ipvx(self: AvdStructuredConfigOverlayProtocol, version: int) -> None:
-        if version not in [4, 6]:
-            msg = "_address_family_vpn_ipvx should be called with version 4 or 6 only"
-            raise AristaAvdError(msg)
+    def _set_address_family_vpn_ipvx(self: AvdStructuredConfigOverlayProtocol, version: Literal[4, 6]) -> None:
 
         if (version == 4 and self.shared_utils.overlay_vpn_ipv4 is not True) or (version == 6 and self.shared_utils.overlay_vpn_ipv6 is not True):
             return

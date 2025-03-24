@@ -62,4 +62,26 @@ ntp authenticate
 {%         endif %}
 {{ ntp_server_cli }}
 {%     endfor %}
+{%     if ntp.serve is arista.avd.defined %}
+{%          if ntp.serve.all.enable is arista.avd.defined(true) %}
+ntp serve all
+{%          endif %}
+{%          for vrf in ntp.serve.all.vrfs | arista.avd.natural_sort('name') %}
+ntp serve all vrf {{ vrf }} 
+{%          endfor %}
+{%          for acl in ntp.serve.access_groups | arista.avd.natural_sort('name') %}
+{%               if acl.vrf == 'default' %}
+ntp serve ip access-group {{ acl.name }} in
+{%                else %}
+ntp serve ip access-group {{ acl.name }} vrf {{ acl.vrf }} in
+{%                endif %}
+{%          endfor %}
+{%           for acl in ntp.serve.ipv6_access_groups | arista.avd.natural_sort('name') %}
+{%                if acl.vrf == 'default' %}
+ntp serve ip access-group {{ acl.name }} in
+{%                else  %}
+ntp serve ip access-group {{ acl.name }} vrf {{ acl.vrf }} in
+{%                endif %}
+{%           endfor %}
+{%     endif %}
 {% endif %}

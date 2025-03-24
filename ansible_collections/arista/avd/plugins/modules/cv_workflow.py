@@ -62,7 +62,8 @@ options:
     default: false
   strict_system_mac_address:
     description: |-
-      Controls behavior if input structured configuration contains devices with duplicated system_mac_address but unique serial_number values.
+      If `true`, raise an exception if the input structured configuration contains devices with a duplicated system_mac_address but unique serial_number values.
+      Otherwise, just issue a warning.
     type: bool
     default: false
   configlet_name_template:

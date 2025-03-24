@@ -680,10 +680,10 @@ ASN Notation: asplain
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute |
-| --- | ------------------- | ------------ |
-| TENANT_B_INTRA | 100.70.0.6:19 | connected |
-| TENANT_B_WAN | 100.70.0.6:20 | connected |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart |
+| --- | ------------------- | ------------ | ---------------- |
+| TENANT_B_INTRA | 100.70.0.6:19 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| TENANT_B_WAN | 100.70.0.6:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
 
 #### Router BGP Device Configuration
 

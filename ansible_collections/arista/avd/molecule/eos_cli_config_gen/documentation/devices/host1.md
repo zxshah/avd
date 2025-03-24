@@ -8180,20 +8180,20 @@ ASN Notation: asdot
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute | EVPN Multicast | Graceful Restart |
-| --- | ------------------- | ------------ | -------------- | ---------------- |
-| BLUE-C1 | 1.0.1.1:101 | static<br>ospf | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| RED-C1 | 1.0.1.1:102 | - | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A | 10.50.64.15:30001 | ospf<br>ospfv3<br>connected | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| TENANT_A_PROJECT01 | 192.168.255.3:11 | connected<br>static | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| TENANT_A_PROJECT02 | 192.168.255.3:12 | connected<br>static | IPv4: False<br>Transit: False | Restart-Time: 120<br>Stalepath-Time: 120 |
-| TENANT_A_PROJECT03 | 192.168.255.3:13 | - | IPv4: True<br>Transit: True | Restart-Time: -<br>Stalepath-Time: - |
-| TENANT_A_PROJECT04 | 192.168.255.3:14 | - | IPv4: True<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B | 10.50.64.15:30002 | - | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| VRF01 | - | user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| VRF02 | - | dynamic<br>user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| VRF03 | - | dynamic | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
-| YELLOW-C1 | 1.0.1.1:103 | - | IPv4: False<br>Transit: False | Restart-Time: -<br>Stalepath-Time: - |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
+| --- | ------------------- | ------------ | ---------------- | -------------- |
+| BLUE-C1 | 1.0.1.1:101 | static<br>ospf | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| RED-C1 | 1.0.1.1:102 | - | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| Tenant_A | 10.50.64.15:30001 | ospf<br>ospfv3<br>connected | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT01 | 192.168.255.3:11 | connected<br>static | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT02 | 192.168.255.3:12 | connected<br>static | Restart-Time: 120<br>Stalepath-Time: 120 | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT03 | 192.168.255.3:13 | - | Restart-Time: -<br>Stalepath-Time: - | IPv4: True<br>Transit: True |
+| TENANT_A_PROJECT04 | 192.168.255.3:14 | - | Restart-Time: -<br>Stalepath-Time: - | IPv4: True<br>Transit: False |
+| Tenant_B | 10.50.64.15:30002 | - | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| VRF01 | - | user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| VRF02 | - | dynamic<br>user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| VRF03 | - | dynamic | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
+| YELLOW-C1 | 1.0.1.1:103 | - | Restart-Time: -<br>Stalepath-Time: - | IPv4: False<br>Transit: False |
 
 #### Router BGP Session Trackers
 

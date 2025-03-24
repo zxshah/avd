@@ -439,7 +439,7 @@
     "categories": [
       "services"
     ],
-    "description": "Verifies the error disable recovery functionality."
+    "description": "Verifies the errdisable recovery reason, status, and interval."
   },
   {
     "name": "dc2-leaf1c",

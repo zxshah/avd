@@ -7,7 +7,7 @@
 
     | Variable | Type | Required | Default | Value Restrictions | Description |
     | -------- | ---- | -------- | ------- | ------------------ | ----------- |
-    | [<samp>serial_number</samp>](## "serial_number") | String |  |  |  | Serial Number of the device.<br>Used only for documentation and deployment purposes. It is used by the 'eos_config_deploy_cvp' and 'cv_deploy' roles.<br> |
+    | [<samp>serial_number</samp>](## "serial_number") | String |  |  |  | Serial Number of the device.<br>Used only for documentation and deployment purposes. It is used by the 'eos_config_deploy_cvp' and 'cv_deploy' roles. |
 
 === "YAML"
 

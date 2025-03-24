@@ -23,6 +23,7 @@
   delegate_to: localhost
   run_once: true
   check_mode: false
+  changed_when: false
 
 - name: Create required output directories if not present
   when: avd_create_directories | arista.avd.default(true)

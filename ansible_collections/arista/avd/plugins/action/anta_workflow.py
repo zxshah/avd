@@ -229,7 +229,7 @@ def run_anta(devices: list[str]) -> ResultManager:
         error_msg = f"ANTA process {process_name} for devices {joined_devices} failed with error: {error}"
         raise AnsibleActionFail(error_msg) from error
     else:
-        # Check if warnings occurred and notify via main logger
+        # Check if warnings/errors occurred in ANTA and notify via main logger
         if has_warnings_ref[0]:
             base_message = f"ANTA warnings/errors detected that could impact test results for devices {joined_devices}. "
             if anta_log_filename:

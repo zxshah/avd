@@ -62,7 +62,7 @@ def get_device_test_catalog(
     settings = settings or AvdCatalogGenerationSettings()
 
     start_time = perf_counter()
-    LOGGER.debug("<%s>: generating catalog with settings: %s", hostname, settings.model_dump(mode="json"))
+    LOGGER.info("<%s>: generating catalog with settings: %s", hostname, settings.model_dump(mode="json"))
 
     if settings.ignore_is_deployed is False and not structured_config.get("is_deployed", False):
         LOGGER.debug("<%s>: device is not deployed, returning an empty catalog", hostname)

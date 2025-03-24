@@ -78,9 +78,9 @@ class RouterInternetExitMixin(Protocol):
             # Recording the exit_group in the policy
             policy_exit_groups.append(exit_group)
             # TODO: change the connection dict and see if we can avoid to give policy.
+            self.set_internet_exit_tunnel_interface(internet_exit_policy, connection)
             self.set_internet_exit_monitor_connectivity(connection)
             self.set_internet_exit_connection_static_route(connection)
-            self.set_internet_exit_tunnel_interface(internet_exit_policy, connection)
             self.set_internet_exit_router_service_insertion(connection)
             self.set_internet_exit_connection_ethernet_interfaces(internet_exit_policy, connection)
 

@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import structured_config_contributor
-from pyavd._errors import AristaAvdError
-from pyavd._utils import get
+from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
+from pyavd._utils import get_ip_from_ip_prefix
 from pyavd.j2filters import natural_sort
 
 if TYPE_CHECKING:
@@ -45,6 +45,9 @@ class EthernetInterfacesMixin(Protocol):
                     # to only contain entries with our hostname
                     self._set_l3_interfaces(vrf, tenant, subif_parent_interface_names)
 
+                    # Member ethernet ports for Port-Channel interface
+                    self._set_l3_port_channel_members(vrf)
+
         if self.shared_utils.network_services_l1:
             for tenant in self.shared_utils.filtered_tenants:
                 if not tenant.point_to_point_services:
@@ -57,6 +60,46 @@ class EthernetInterfacesMixin(Protocol):
 
         # Add interfaces used for Internet Exit policies
         self._set_internet_exit_policy_interfaces()
+
+    def _set_l3_port_channel_members(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        vrf: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem,
+    ) -> None:
+        """Set the structured_config for ethernet_interfaces which are members of l3_port_channels."""
+        for l3_port_channel in vrf.l3_port_channels:
+            # sub-interface for l3_port_channel cannot have member eth ports
+            # skip any logic to generate member port config for such sub-interfaces
+            if "." in l3_port_channel.name:
+                continue
+
+            channel_group_id = l3_port_channel.name.removeprefix("Port-Channel")
+            for member_intf in l3_port_channel.member_interfaces:
+                interface_description = member_intf.description
+                # derive values for peer from parent L3 port-channel
+                # if not defined explicitly for member interface
+                peer = member_intf.peer if member_intf.peer else l3_port_channel.peer
+                if not interface_description:
+                    elems = [peer, member_intf.peer_interface]
+                    if elems:
+                        interface_description = "_".join([elem for elem in elems if elem])
+
+                ethernet_interface = EosCliConfigGen.EthernetInterfacesItem(
+                    name=member_intf.name,
+                    description=interface_description or None,
+                    peer_type="l3_port_channel_member",
+                    peer=peer or None,
+                    peer_interface=member_intf.peer_interface or None,
+                    shutdown=not l3_port_channel.enabled,
+                    speed=member_intf.speed if member_intf.speed else None,
+                )
+                ethernet_interface.channel_group.id = int(channel_group_id)
+                ethernet_interface.channel_group.mode = l3_port_channel.mode
+
+                if member_intf.structured_config:
+                    self.custom_structured_configs.nested.ethernet_interfaces.obtain(member_intf.name)._deepmerge(
+                        member_intf.structured_config, list_merge=self.custom_structured_configs.list_merge_strategy
+                    )
+                self.structured_config.ethernet_interfaces.append(ethernet_interface)
 
     def _set_l3_interfaces(
         self: AvdStructuredConfigNetworkServicesProtocol,
@@ -83,6 +126,9 @@ class EthernetInterfacesMixin(Protocol):
                     continue
 
                 interface_name = l3_interface.interfaces[node_index]
+                interface_ip = l3_interface.ip_addresses[node_index]
+                if "/" in interface_ip:
+                    interface_ip = get_ip_from_ip_prefix(interface_ip)
                 # if 'descriptions' is set, it is preferred
                 interface_description = l3_interface.descriptions[node_index] if l3_interface.descriptions else l3_interface.description
                 interface = EosCliConfigGen.EthernetInterfacesItem(
@@ -106,11 +152,23 @@ class EthernetInterfacesMixin(Protocol):
                 if self.inputs.fabric_sflow.l3_interfaces is not None:
                     interface.sflow.enable = self.inputs.fabric_sflow.l3_interfaces
 
-                if self._l3_interface_acls is not None:
-                    interface._update(
-                        access_group_in=get(self._l3_interface_acls, f"{interface_name}..ipv4_acl_in..name", separator=".."),
-                        access_group_out=get(self._l3_interface_acls, f"{interface_name}..ipv4_acl_out..name", separator=".."),
+                if l3_interface.ipv4_acl_in:
+                    acl = self.shared_utils.get_ipv4_acl(
+                        name=l3_interface.ipv4_acl_in,
+                        interface_name=interface_name,
+                        interface_ip=interface_ip,
                     )
+                    interface.access_group_in = acl.name
+                    self._set_ipv4_acl(acl)
+
+                if l3_interface.ipv4_acl_out:
+                    acl = self.shared_utils.get_ipv4_acl(
+                        name=l3_interface.ipv4_acl_out,
+                        interface_name=interface_name,
+                        interface_ip=interface_ip,
+                    )
+                    interface.access_group_out = acl.name
+                    self._set_ipv4_acl(acl)
 
                 if "." in interface_name:
                     # This is a subinterface so we need to ensure that the parent is created
@@ -173,7 +231,6 @@ class EthernetInterfacesMixin(Protocol):
                         raise AristaAvdError(msg)
 
                     interface.pim.ipv4.sparse_mode = True
-
                 self.structured_config.ethernet_interfaces.append(interface)
 
     def _set_point_to_point_interfaces(
@@ -181,9 +238,13 @@ class EthernetInterfacesMixin(Protocol):
         tenant: EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem,
         subif_parent_interface_names: set[str],
     ) -> None:
-        """Set the structured_config for ethernet_interfaces with the point-to-point interfaces defined under network_services."""
+        """
+        Set the structured_config for ethernet_interfaces with the point-to-point interfaces defined under network_services.
+
+        This makes sure that any added interface is not conflicting with an already existing interface.
+        """
         for point_to_point_service in tenant.point_to_point_services._natural_sorted():
-            for endpoint in point_to_point_service.endpoints:
+            for endpoint_index, endpoint in enumerate(point_to_point_service.endpoints):
                 # TODO: Filter port-to-point services in filtered_tenants
                 if self.shared_utils.hostname not in endpoint.nodes:
                     continue
@@ -191,6 +252,15 @@ class EthernetInterfacesMixin(Protocol):
                 for node_index, interface_name in enumerate(endpoint.interfaces):
                     if endpoint.nodes[node_index] != self.shared_utils.hostname:
                         continue
+
+                    if interface_name in self.structured_config.ethernet_interfaces:
+                        context = f"tenants[{tenant.name}].point_to_point_services[{point_to_point_service.name}].endpoints[{endpoint_index}]"
+                        msg = (
+                            "Found duplicate objects with conflicting data while generating configuration for Network Services "
+                            f"point-to-point EthernetInterfaces. Interface {interface_name} defined under {context} "
+                            f"conflicts with {self.structured_config.ethernet_interfaces[interface_name]._as_dict()}."
+                        )
+                        raise AristaAvdInvalidInputsError(msg)
 
                     if (port_channel_mode := endpoint.port_channel.mode) in ["active", "on"]:
                         first_interface_index = endpoint.nodes.index(self.shared_utils.hostname)
@@ -210,6 +280,15 @@ class EthernetInterfacesMixin(Protocol):
                         subif_parent_interface_names.add(interface_name)
                         for subif in point_to_point_service.subinterfaces:
                             subif_name = f"{interface_name}.{subif.number}"
+                            if subif_name in self.structured_config.ethernet_interfaces:
+                                context = f"tenants[{tenant.name}].point_to_point_services[{point_to_point_service.name}].endpoints[{endpoint_index}]"
+                                msg = (
+                                    "Found duplicate objects with conflicting data while generating configuration for Network Services "
+                                    f"point-to-point EthernetInterfaces. Interface {subif_name} defined under {context} "
+                                    f"conflicts with {self.structured_config.ethernet_interfaces[subif_name]._as_dict()}."
+                                )
+                                raise AristaAvdInvalidInputsError(msg)
+
                             interface = EosCliConfigGen.EthernetInterfacesItem(
                                 name=subif_name,
                                 peer_type="point_to_point_service",

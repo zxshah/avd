@@ -6,9 +6,10 @@ from __future__ import annotations
 from functools import cached_property
 from typing import TYPE_CHECKING, Literal, Protocol
 
+from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
-from pyavd._utils import get, get_ip_from_ip_prefix
+from pyavd._utils import get
 from pyavd._utils.password_utils.password import simple_7_encrypt
 from pyavd.j2filters import natural_sort, range_expand
 
@@ -71,6 +72,7 @@ class UtilsWanMixin(Protocol):
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
+            # TODO: remove as_dict and fix the rest of utils_wan in another PR
             vrf_policy = self._wan_virtual_topologies_policies[vrf.policy]._as_dict()
             vrf_policy["profile_prefix"] = vrf.policy
 
@@ -104,7 +106,7 @@ class UtilsWanMixin(Protocol):
             if (
                 load_balance_policy := self._generate_wan_load_balance_policy(
                     load_balance_policy_name,
-                    control_plane_virtual_topology._as_dict(),
+                    control_plane_virtual_topology,
                     policy["name"],
                 )
             ) is None:
@@ -134,7 +136,9 @@ class UtilsWanMixin(Protocol):
                 f"wan_virtual_topologies.policies[{policy['profile_prefix']}]."
                 f"application_virtual_topologies[{application_virtual_topology['application_profile']}]"
             )
-            load_balance_policy = self._generate_wan_load_balance_policy(load_balance_policy_name, application_virtual_topology, context_path)
+            # TODO: Refactor this once we get objects from policy object
+            avt_object = EosDesigns.WanVirtualTopologies.PoliciesItem.ApplicationVirtualTopologiesItem._from_dict(application_virtual_topology)
+            load_balance_policy = self._generate_wan_load_balance_policy(load_balance_policy_name, avt_object, context_path)
             if not load_balance_policy:
                 # Empty load balance policy so skipping
                 # TODO: Add "nodes" or similar under the profile and raise here
@@ -171,24 +175,19 @@ class UtilsWanMixin(Protocol):
             required=True,
             custom_error_msg=f"wan_virtual_topologies.policies[{policy['profile_prefix']}].default_virtual_toplogy.",
         )
+        # TODO: this should be removed in a future refactor
+        avt_object = EosDesigns.WanVirtualTopologies.PoliciesItem.DefaultVirtualTopology._from_dict(default_virtual_topology)
         # Separating default_match as it is used differently
         default_match = None
-        if not get(default_virtual_topology, "drop_unmatched", default=False):
-            name = get(
-                default_virtual_topology,
-                "name",
-                default=self._default_profile_name(policy["profile_prefix"], "DEFAULT"),
-            )
+        if not avt_object.drop_unmatched:
+            name = avt_object.name or self._default_profile_name(policy["profile_prefix"], "DEFAULT")
             context_path = f"wan_virtual_topologies.policies[{policy['profile_prefix']}].default_virtual_topology"
             # Verify that path_groups are set or raise
-            get(
-                default_virtual_topology,
-                "path_groups",
-                required=True,
-                custom_error_msg=f"Either 'drop_unmatched' or 'path_groups' must be set under '{context_path}'.",
-            )
+            if not avt_object.path_groups:
+                msg = (f"Either 'drop_unmatched' or 'path_groups' must be set under '{context_path}'.",)
+                raise AristaAvdInvalidInputsError(msg)
             load_balance_policy_name = self.shared_utils.generate_lb_policy_name(name)
-            load_balance_policy = self._generate_wan_load_balance_policy(load_balance_policy_name, default_virtual_topology, context_path)
+            load_balance_policy = self._generate_wan_load_balance_policy(load_balance_policy_name, avt_object, context_path)
             if not load_balance_policy:
                 msg = (
                     f"The `default_virtual_topology` path-groups configuration for `wan_virtual_topologies.policies[{policy['name']}]` produces "
@@ -196,10 +195,8 @@ class UtilsWanMixin(Protocol):
                     "`default_virtual_topology` path-groups."
                 )
                 raise AristaAvdError(msg)
-            application_profile = get(default_virtual_topology, "application_profile", default="default")
-
             default_match = {
-                "application_profile": application_profile,
+                "application_profile": "default",
                 "avt_profile": name,
                 "internet_exit_policy_name": get(default_virtual_topology, "internet_exit.policy"),
                 "traffic_class": get(default_virtual_topology, "traffic_class"),
@@ -219,7 +216,14 @@ class UtilsWanMixin(Protocol):
         policy["matches"] = matches
         policy["default_match"] = default_match
 
-    def _generate_wan_load_balance_policy(self: AvdStructuredConfigNetworkServicesProtocol, name: str, input_dict: dict, context_path: str) -> dict | None:
+    def _generate_wan_load_balance_policy(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        name: str,
+        input_topology: EosDesigns.WanVirtualTopologies.ControlPlaneVirtualTopology
+        | EosDesigns.WanVirtualTopologies.PoliciesItem.DefaultVirtualTopology
+        | EosDesigns.WanVirtualTopologies.PoliciesItem.ApplicationVirtualTopologiesItem,
+        context_path: str,
+    ) -> EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem | None:
         """
         Generate and return a router path-selection load-balance policy.
 
@@ -233,28 +237,25 @@ class UtilsWanMixin(Protocol):
         input_dict (dict): The dictionary containing the list of path-groups and their preference.
         context_path (str): Key used for context for error messages.
         """
-        wan_load_balance_policy = {
-            "name": name,
-            "path_groups": [],
-            **get(input_dict, "constraints", default={}),
-        }
+        wan_load_balance_policy = EosCliConfigGen.RouterPathSelection.LoadBalancePoliciesItem(
+            name=name,
+            jitter=input_topology.constraints.jitter,
+            latency=input_topology.constraints.latency,
+            loss_rate=input_topology.constraints.loss_rate,
+        )
 
-        if self.inputs.wan_mode == "cv-pathfinder":
-            wan_load_balance_policy["lowest_hop_count"] = get(input_dict, "lowest_hop_count")
-
-        # An entry is composed of a list of path-groups in `names` and a `priority`
-        policy_entries = get(input_dict, "path_groups", [])
+        if self.shared_utils.is_cv_pathfinder_router:
+            wan_load_balance_policy.lowest_hop_count = input_topology.lowest_hop_count
 
         # Using this flag while looping through all entries to keep track of any path group present on the remote host
         any_path_group_on_wan_ha_peer = self.shared_utils.wan_ha
 
-        for policy_entry in policy_entries:
+        for policy_entry in input_topology.path_groups:
             policy_entry_priority = None
-            if preference := get(policy_entry, "preference"):
-                policy_entry_priority = self._path_group_preference_to_eos_priority(preference, f"{context_path}[{policy_entry.get('names')}]")
+            if policy_entry.preference:
+                policy_entry_priority = self._path_group_preference_to_eos_priority(policy_entry.preference, f"{context_path}[{policy_entry.names}]")
 
-            entry_path_groups = policy_entry.get("names")
-            for path_group_name in entry_path_groups:
+            for path_group_name in policy_entry.names:
                 if (priority := policy_entry_priority) is None:
                     # No preference defined at the policy level, need to retrieve the default preference
                     if path_group_name not in self.inputs.wan_path_groups:
@@ -270,23 +271,21 @@ class UtilsWanMixin(Protocol):
                 if self.shared_utils.is_wan_client and path_group_name not in self.shared_utils.wan_local_path_group_names:
                     continue
 
-                path_group = {
-                    "name": path_group_name,
-                    "priority": priority if priority != 1 else None,
-                }
-
-                wan_load_balance_policy["path_groups"].append(path_group)
+                wan_load_balance_policy.path_groups.append_new(
+                    name=path_group_name,
+                    priority=priority if priority != 1 else None,
+                )
 
             # Updating peer path-groups tracking
-            any_path_group_on_wan_ha_peer = any_path_group_on_wan_ha_peer and set(self.shared_utils.wan_ha_peer_path_group_names).union(set(entry_path_groups))
+            any_path_group_on_wan_ha_peer = any_path_group_on_wan_ha_peer and set(self.shared_utils.wan_ha_peer_path_group_names).union(set(policy_entry.names))
 
-        if len(wan_load_balance_policy["path_groups"]) == 0 and not any_path_group_on_wan_ha_peer:
+        if len(wan_load_balance_policy.path_groups) == 0 and not any_path_group_on_wan_ha_peer:
             # The policy is empty, and either the site is not using HA or no path-group in the policy is present on the HA peer
             return None
 
         if self.shared_utils.wan_ha or self.shared_utils.is_cv_pathfinder_server:
             # Adding HA path-group with priority 1
-            wan_load_balance_policy["path_groups"].append({"name": self.inputs.wan_ha.lan_ha_path_group_name})
+            wan_load_balance_policy.path_groups.append_new(name=self.inputs.wan_ha.lan_ha_path_group_name)
 
         return wan_load_balance_policy
 
@@ -418,51 +417,6 @@ class UtilsWanMixin(Protocol):
             if any(wan_interface["connected_to_pathfinder"] for wan_interface in path_group._internal_data.interfaces)
         ]
 
-    @cached_property
-    def _svi_acls(self: AvdStructuredConfigNetworkServicesProtocol) -> dict[str, dict[str, dict]] | None:
-        """
-        Returns a dict of SVI ACLs.
-
-        <interface_name>: {
-            "ipv4_acl_in": <generated_ipv4_acl>,
-            "ipv4_acl_out": <generated_ipv4_acl>,
-        }
-
-        Only contains interfaces with ACLs and only the ACLs that are set,
-        so use `get(self._svi_acls, f"{interface_name}.ipv4_acl_in")` to get the value.
-        """
-        if not self.shared_utils.network_services_l3:
-            return None
-
-        svi_acls = {}
-        for tenant in self.shared_utils.filtered_tenants:
-            for vrf in tenant.vrfs:
-                for svi in vrf.svis:
-                    ipv4_acl_in = svi.ipv4_acl_in
-                    ipv4_acl_out = svi.ipv4_acl_out
-                    if ipv4_acl_in is None and ipv4_acl_out is None:
-                        continue
-
-                    interface_name = f"Vlan{svi.id}"
-                    interface_ip = svi.ip_address_virtual
-                    if interface_ip is not None and "/" in interface_ip:
-                        interface_ip = get_ip_from_ip_prefix(interface_ip)
-
-                    if ipv4_acl_in is not None:
-                        svi_acls.setdefault(interface_name, {})["ipv4_acl_in"] = self.shared_utils.get_ipv4_acl(
-                            name=ipv4_acl_in,
-                            interface_name=interface_name,
-                            interface_ip=interface_ip,
-                        )._as_dict()
-                    if ipv4_acl_out is not None:
-                        svi_acls.setdefault(interface_name, {})["ipv4_acl_out"] = self.shared_utils.get_ipv4_acl(
-                            name=ipv4_acl_out,
-                            interface_name=interface_name,
-                            interface_ip=interface_ip,
-                        )._as_dict()
-
-        return svi_acls
-
     def get_internet_exit_nat_profile_name(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]) -> str:
         if internet_exit_policy_type == "zscaler":
             return "NAT-IE-ZSCALER"
@@ -474,53 +428,6 @@ class UtilsWanMixin(Protocol):
     @cached_property
     def _filtered_internet_exit_policy_types(self: AvdStructuredConfigNetworkServicesProtocol) -> list:
         return sorted({internet_exit_policy.type for internet_exit_policy, _connections in self._filtered_internet_exit_policies_and_connections})
-
-    @cached_property
-    def _l3_interface_acls(self: AvdStructuredConfigNetworkServicesProtocol) -> dict | None:
-        """
-        Returns a dict of interfaces and ACLs set on the interfaces.
-
-        {
-            <interface_name>: {
-            "ipv4_acl_in": <generated_ipv4_acl>,
-            "ipv4_acl_out": <generated_ipv4_acl>,
-            }
-        }
-        Only contains interfaces with ACLs and only the ACLs that are set,
-        so use `get(self._l3_interface_acls, f"{interface_name}..ipv4_acl_in", separator="..")` to get the value.
-        """
-        if not self.shared_utils.network_services_l3:
-            return None
-
-        l3_interface_acls = {}
-        for tenant in self.shared_utils.filtered_tenants:
-            for vrf in tenant.vrfs:
-                for l3_interface in vrf.l3_interfaces:
-                    for interface_idx, interface in enumerate(l3_interface.interfaces):
-                        if l3_interface.nodes[interface_idx] != self.shared_utils.hostname:
-                            continue
-
-                        ipv4_acl_in = l3_interface.ipv4_acl_in
-                        ipv4_acl_out = l3_interface.ipv4_acl_out
-                        if ipv4_acl_in is None and ipv4_acl_out is None:
-                            continue
-                        interface_name = interface
-                        interface_ip: str | None = l3_interface.ip_addresses[interface_idx]
-                        if interface_ip is not None:
-                            interface_ip = get_ip_from_ip_prefix(interface_ip)
-                        if ipv4_acl_in is not None:
-                            l3_interface_acls.setdefault(interface_name, {})["ipv4_acl_in"] = self.shared_utils.get_ipv4_acl(
-                                name=ipv4_acl_in,
-                                interface_name=interface_name,
-                                interface_ip=interface_ip,
-                            )._as_dict()
-                        if ipv4_acl_out is not None:
-                            l3_interface_acls.setdefault(interface_name, {})["ipv4_acl_out"] = self.shared_utils.get_ipv4_acl(
-                                name=ipv4_acl_out,
-                                interface_name=interface_name,
-                                interface_ip=interface_ip,
-                            )._as_dict()
-        return l3_interface_acls
 
     @cached_property
     def _filtered_internet_exit_policies_and_connections(
@@ -734,7 +641,7 @@ class UtilsWanMixin(Protocol):
                         "exit_group": f"{policy_name}_{suffix}",
                         "preference": preference,
                         "suffix": suffix,
-                        "endpoint": zscaler_endpoint._as_dict(),
+                        "endpoint": zscaler_endpoint,
                     },
                 )
         return connections

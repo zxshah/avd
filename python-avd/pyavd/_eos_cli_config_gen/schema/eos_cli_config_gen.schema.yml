@@ -28,8 +28,19 @@ keys:
               group:
                 description: Group Name.
                 type: str
+                deprecation:
+                  warning: true
+                  new_key: methods.group
+                  remove_in_version: 6.0.0
               logging:
                 type: bool
+                deprecation:
+                  warning: true
+                  new_key: methods.method
+                  remove_in_version: 6.0.0
+              methods:
+                type: list
+                $ref: eos_cli_config_gen#/$defs/methods
           default:
             type: dict
             keys:
@@ -42,8 +53,19 @@ keys:
               group:
                 description: Group Name.
                 type: str
+                deprecation:
+                  warning: true
+                  new_key: methods.group
+                  remove_in_version: 6.0.0
               logging:
                 type: bool
+                deprecation:
+                  warning: true
+                  new_key: methods.method
+                  remove_in_version: 6.0.0
+              methods:
+                type: list
+                $ref: eos_cli_config_gen#/$defs/methods
       system:
         type: dict
         keys:
@@ -59,6 +81,13 @@ keys:
               group:
                 description: Group Name.
                 type: str
+                deprecation:
+                  warning: true
+                  new_key: methods.group
+                  remove_in_version: 6.0.0
+              methods:
+                type: list
+                $ref: eos_cli_config_gen#/$defs/methods
       dot1x:
         type: dict
         keys:
@@ -73,6 +102,24 @@ keys:
               group:
                 description: Group Name.
                 type: str
+                deprecation:
+                  warning: true
+                  new_key: methods.group
+                  remove_in_version: 6.0.0
+              methods:
+                type: list
+                min_length: 1
+                items:
+                  type: dict
+                  $ref: eos_cli_config_gen#/$defs/methods/items
+                  keys:
+                    multicast:
+                      type: bool
+                      description: 'Forward accounting packets to all servers within
+                        the specified group.
+
+                        This option is applicable only when the `method` key is explicitly
+                        set to `group`.'
       commands:
         type: dict
         keys:
@@ -96,8 +143,19 @@ keys:
                 group:
                   description: Group Name.
                   type: str
+                  deprecation:
+                    warning: true
+                    new_key: methods.group
+                    remove_in_version: 6.0.0
                 logging:
                   type: bool
+                  deprecation:
+                    warning: true
+                    new_key: methods.method
+                    remove_in_version: 6.0.0
+                methods:
+                  type: list
+                  $ref: eos_cli_config_gen#/$defs/methods
           default:
             type: list
             items:
@@ -118,8 +176,19 @@ keys:
                 group:
                   description: Group Name.
                   type: str
+                  deprecation:
+                    warning: true
+                    new_key: methods.group
+                    remove_in_version: 6.0.0
                 logging:
                   type: bool
+                  deprecation:
+                    warning: true
+                    new_key: methods.method
+                    remove_in_version: 6.0.0
+                methods:
+                  type: list
+                  $ref: eos_cli_config_gen#/$defs/methods
   aaa_authentication:
     type: dict
     keys:
@@ -137,6 +206,19 @@ keys:
               - "group MYGROUP none"
 
               - "group radius group MYGROUP local"
+
+              '
+          command_api:
+            type: str
+            description: 'Command-API authentication method(s) as a string.
+
+              This feature is not yet visible in EOS.
+
+              This feature only supports local authentication at the moment.
+
+              Examples:
+
+              - "local"
 
               '
           console:
@@ -462,6 +544,7 @@ keys:
                   name:
                     type: str
                     description: Application name.
+                    required: true
                   service:
                     type: str
                     description: 'Service Name.
@@ -589,6 +672,7 @@ keys:
                   name:
                     type: str
                     description: Application Name.
+                    required: true
                   service:
                     type: str
                     description: 'Service Name.
@@ -634,6 +718,7 @@ keys:
                   name:
                     type: str
                     description: Name of a category.
+                    required: true
                   service:
                     type: str
                     description: 'Service Name.
@@ -3368,6 +3453,26 @@ keys:
           - 'False'
           - 'true'
           - 'false'
+        spanning_tree_bpduguard_rate_limit:
+          type: dict
+          keys:
+            enabled:
+              type: bool
+              description: Enable/Disable rate limiter on this port.
+            count:
+              type: int
+              convert_types:
+              - str
+              description: Max number of BPDUs per timer interval.
+              min: 1
+              max: 20000
+            interval:
+              type: int
+              convert_types:
+              - str
+              description: Number of seconds in the BPDU input rate limiter timer.
+              min: 1
+              max: 15
         spanning_tree_guard:
           type: str
           valid_values:
@@ -6984,6 +7089,10 @@ keys:
               type: int
               convert_types:
               - str
+        hardware_forwarding_id:
+          type: bool
+          description: Enable hardware forwarding for the VRF where this loopback
+            interface belongs.
         eos_cli:
           type: str
           description: EOS CLI rendered directly on the loopback interface in the
@@ -7139,6 +7248,19 @@ keys:
                   type: bool
                   description: Allow transmit/receive of encrypted traffic using operational
                     SAK and block otherwise.
+            replay_protection:
+              type: dict
+              keys:
+                disabled:
+                  type: bool
+                  description: Disable replay protection.
+                window:
+                  type: int
+                  convert_types:
+                  - str
+                  min: 0
+                  max: 4294967295
+                  description: Set replay protection window size.
   maintenance:
     type: dict
     display_name: Maintenance Mode
@@ -7327,6 +7449,9 @@ keys:
                     '
                   convert_types:
                   - str
+                authorization_requests:
+                  type: bool
+                  description: Use per-RPC authorization.
           grpc_tunnels:
             type: list
             primary_key: name
@@ -9064,6 +9189,81 @@ keys:
                             type: str
                             convert_types:
                             - int
+  monitor_twamp:
+    documentation_options:
+      table: monitor-twamp
+    type: dict
+    keys:
+      twamp_light:
+        type: dict
+        keys:
+          reflector_defaults:
+            type: dict
+            keys:
+              listen_port:
+                type: int
+                min: 1
+                max: 65535
+                convert_types:
+                - str
+          sender_defaults:
+            type: dict
+            keys:
+              destination_port:
+                type: int
+                min: 1
+                max: 65535
+                convert_types:
+                - str
+              source_port:
+                type: int
+                min: 1
+                max: 65535
+                convert_types:
+                - str
+          sender_profiles:
+            type: list
+            primary_key: name
+            items:
+              type: dict
+              keys:
+                name:
+                  type: str
+                measurement_interval:
+                  type: int
+                  min: 1
+                  max: 255
+                  convert_types:
+                  - str
+                  description: Measurement interval in seconds.
+                measurement_samples:
+                  type: int
+                  min: 1
+                  max: 65535
+                  convert_types:
+                  - str
+                  description: Number of samples used to calculate TWAMP light metrics.
+                significance:
+                  type: dict
+                  keys:
+                    value:
+                      type: int
+                      required: true
+                      min: 1
+                      max: 1000000
+                      convert_types:
+                      - str
+                      description: Significance value in microseconds.
+                    offset:
+                      type: int
+                      required: true
+                      min: 1
+                      max: 999999
+                      convert_types:
+                      - str
+                      description: Offset in microseconds, used to round up calculated
+                        TWAMP light delay statistics. Must be lower than the significance
+                        value.
   mpls:
     type: dict
     keys:
@@ -12089,9 +12289,8 @@ keys:
                             - kbytes
                             - mbytes
                             - milliseconds
-                            description: 'Units to be used for the threshold values.
-
-                              This should be one of segments, byte, kbytes, mbytes.'
+                            - microseconds
+                            description: Units to be used for the threshold values.
                           min:
                             type: int
                             required: true
@@ -19024,6 +19223,7 @@ keys:
               type: str
             exit_groups:
               type: list
+              primary_key: name
               description: The exit groups that are configured under a policy are
                 strictly ordered, meaning an exit group appearing first has more priority
                 than the exit group that follows it.
@@ -19049,6 +19249,7 @@ keys:
               description: Fib default exit indicates that the flows that select this
                 exit will follow the default route available in the VRF of the flow.
             local_connections:
+              primary_key: name
               type: list
               description: 'Local connections refer to connections configured under
                 the `router_service_insertion`.
@@ -20852,6 +21053,88 @@ keys:
                                     type: int
                                     convert_types:
                                     - str
+      twamp_light_sender_profile:
+        type: str
+        description: Apply a twamp-light sender profile, defined under monitor_twamp.twamp_light.sender_profiles.
+      flex_algos:
+        type: list
+        primary_key: number
+        unique_keys:
+        - name
+        items:
+          type: dict
+          keys:
+            number:
+              type: int
+              min: 128
+              max: 255
+              description: Flex-algo number, must be unique across all flex-algo definitions.
+              convert_types:
+              - str
+            name:
+              type: str
+              required: true
+              description: Flex-algo name, must be unique across all flex-algo definitions.
+            administrative_group:
+              type: dict
+              keys:
+                include_all:
+                  type: str
+                  description: Comma-separated list of individual group numbers in
+                    decimal (0-127), hexadecimal, named or decimal range (A-B, where
+                    value of A must be less than the value of B) formats. Example.
+                    0xA,RED,31-33,127
+                  convert_types:
+                  - int
+                include_any:
+                  type: str
+                  description: Comma-separated list of individual group numbers in
+                    decimal (0-127), hexadecimal, named or decimal range (A-B, where
+                    value of A must be less than the value of B) formats. Example.
+                    0xA,RED,31-33,127
+                  convert_types:
+                  - int
+                exclude:
+                  type: str
+                  description: Comma-separated list of individual group numbers in
+                    decimal (0-127), hexadecimal, named or decimal range (A-B, where
+                    value of A must be less than the value of B) formats. Example.
+                    0xA,RED,31-33,127
+                  convert_types:
+                  - int
+            metric:
+              type: str
+              description: Metric can be specified as an integer or named type, 0
+                = igp-metric, 1 = min-delay, 2 = te-metric. Device CLI will show the
+                name regardless.
+              convert_types:
+              - int
+              valid_values:
+              - '0'
+              - '1'
+              - '2'
+              - igp-metric
+              - min-delay
+              - te-metric
+            priority:
+              type: int
+              convert_types:
+              - str
+              min: 0
+              max: 255
+            color:
+              type: int
+              convert_types:
+              - str
+              min: 0
+              max: 4294967295
+            srlg_exclude:
+              type: str
+              description: Comma-separated list of individual SRLG numbers in decimal
+                (0-4294967295), named or decimal range (A-B, where value of A must
+                be less than the value of B) formats. Example. 30-34,55,RED
+              convert_types:
+              - int
   service_routing_configuration_bgp:
     type: dict
     keys:
@@ -21597,6 +21880,9 @@ keys:
             - str
             min: 1
             max: 4094
+          access_list_bypass:
+            description: Bypass phone traffic from configured access-list.
+            type: bool
   switchport_port_security:
     type: dict
     keys:
@@ -22371,6 +22657,12 @@ keys:
         ip_nat:
           type: dict
           $ref: eos_cli_config_gen#/$defs/interface_ip_nat
+        dhcp_server_ipv4:
+          type: bool
+          description: Enable IPv4 DHCP server.
+        dhcp_server_ipv6:
+          type: bool
+          description: Enable IPv6 DHCP server.
         ipv6_enable:
           type: bool
         ipv6_address:
@@ -23166,6 +23458,24 @@ keys:
         type: dict
         $ref: eos_cli_config_gen#/keys/vxlan_interface/keys/vxlan1
 $defs:
+  methods:
+    type: list
+    min_length: 1
+    items:
+      type: dict
+      keys:
+        method:
+          type: str
+          required: true
+          valid_values:
+          - logging
+          - group
+        group:
+          type: str
+          description: 'Specify the server group to be used.
+
+            This option is applicable only when the `method` key is explicitly set
+            to `group`.'
   application_traffic_recognition_application:
     type: dict
     keys:

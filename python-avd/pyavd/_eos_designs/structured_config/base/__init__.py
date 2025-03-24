@@ -17,6 +17,7 @@ from pyavd._utils import default, get
 from pyavd.j2filters import natural_sort
 
 from .ntp import NtpMixin
+from .platform_mixin import PlatformMixin
 from .router_general import RouterGeneralMixin
 from .snmp_server import SnmpServerMixin
 from .utils import UtilsMixin
@@ -25,7 +26,7 @@ if TYPE_CHECKING:
     from pyavd._eos_designs.schema import EosDesigns
 
 
-class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMixin, UtilsMixin, StructuredConfigGeneratorProtocol, Protocol):
+class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMixin, PlatformMixin, UtilsMixin, StructuredConfigGeneratorProtocol, Protocol):
     """
     Protocol for the AvdStructuredConfig Class, which is imported by "get_structured_config" to render parts of the structured config.
 
@@ -405,32 +406,8 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if tcam_profile := self.shared_utils.platform_settings.tcam_profile:
             self.structured_config.tcam_profile.system = tcam_profile
 
-    @structured_config_contributor
-    def platform(self) -> None:
-        """
-        Platform set based on.
-
-        * platform_settings.lag_hardware_only,
-        * platform_settings.trident_forwarding_table_partition and switch.evpn_multicast facts
-        * data_plane_cpu_allocation_max.
-        """
-        if (lag_hardware_only := self.shared_utils.platform_settings.lag_hardware_only) is not None:
-            self.structured_config.platform.sand.lag.hardware_only = lag_hardware_only
-
-        trident_forwarding_table_partition = self.shared_utils.platform_settings.trident_forwarding_table_partition
-        if trident_forwarding_table_partition and self.shared_utils.evpn_multicast:
-            self.structured_config.platform.trident.forwarding_table_partition = trident_forwarding_table_partition
-
-        if (cpu_max_allocation := self.shared_utils.node_config.data_plane_cpu_allocation_max) is not None:
-            self.structured_config.platform.sfe.data_plane_cpu_allocation_max = cpu_max_allocation
-        elif self.shared_utils.is_wan_server:
-            # For AutoVPN Route Reflectors and Pathfinders, running on CloudEOS, setting
-            # this value is required for the solution to work.
-            msg = "For AutoVPN RRs and Pathfinders, 'data_plane_cpu_allocation_max' must be set"
-            raise AristaAvdInvalidInputsError(msg)
-
-    @structured_config_contributor
-    def mac_address_table(self) -> None:
+    @cached_property
+    def mac_address_table(self) -> dict | None:
         """mac_address_table set based on mac_address_table data-model."""
         self.structured_config.mac_address_table.aging_time = self.inputs.mac_address_table.aging_time
 

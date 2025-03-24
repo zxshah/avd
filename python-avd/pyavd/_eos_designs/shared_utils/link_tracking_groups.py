@@ -24,7 +24,7 @@ class LinkTrackingGroupsMixin(Protocol):
     @cached_property
     def link_tracking_groups(self: SharedUtilsProtocol) -> EosCliConfigGen.LinkTrackingGroups | None:
         if not self.node_config.link_tracking.enabled:
-            return
+            return None
 
         link_tracking_groups = EosCliConfigGen.LinkTrackingGroups()
         default_recovery_delay = default(self.platform_settings.reload_delay.mlag, 300)

@@ -6757,6 +6757,26 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
+        class NtpServe(AvdModel):
+            """Subclass of AvdModel."""
+
+            _fields: ClassVar[dict] = {"enabled": {"type": bool}}
+            enabled: bool
+
+            if TYPE_CHECKING:
+
+                def __init__(self, *, enabled: bool | UndefinedType = Undefined) -> None:
+                    """
+                    NtpServe.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        enabled: enabled
+
+                    """
+
         class TcpMssCeiling(AvdModel):
             """Subclass of AvdModel."""
 
@@ -11453,6 +11473,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ospf_message_digest_keys": {"type": OspfMessageDigestKeys},
             "pim": {"type": Pim},
             "mac_security": {"type": MacSecurity},
+            "ntp_serve": {"type": NtpServe},
             "tcp_mss_ceiling": {"type": TcpMssCeiling},
             "channel_group": {"type": ChannelGroup},
             "isis_enable": {"type": str},
@@ -11654,6 +11675,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         mac_security: MacSecurity
         """Subclass of AvdModel."""
+        ntp_serve: NtpServe
+        """Subclass of AvdModel."""
         tcp_mss_ceiling: TcpMssCeiling
         """
         The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
@@ -11847,6 +11870,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ospf_message_digest_keys: OspfMessageDigestKeys | UndefinedType = Undefined,
                 pim: Pim | UndefinedType = Undefined,
                 mac_security: MacSecurity | UndefinedType = Undefined,
+                ntp_serve: NtpServe | UndefinedType = Undefined,
                 tcp_mss_ceiling: TcpMssCeiling | UndefinedType = Undefined,
                 channel_group: ChannelGroup | UndefinedType = Undefined,
                 isis_enable: str | None | UndefinedType = Undefined,
@@ -12001,6 +12025,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ospf_message_digest_keys: Subclass of AvdIndexedList with `OspfMessageDigestKeysItem` items. Primary key is `id` (`int`).
                     pim: Subclass of AvdModel.
                     mac_security: Subclass of AvdModel.
+                    ntp_serve: Subclass of AvdModel.
                     tcp_mss_ceiling:
                        The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
                        of
@@ -26919,6 +26944,26 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
+        class NtpServe(AvdModel):
+            """Subclass of AvdModel."""
+
+            _fields: ClassVar[dict] = {"enabled": {"type": bool}}
+            enabled: bool
+
+            if TYPE_CHECKING:
+
+                def __init__(self, *, enabled: bool | UndefinedType = Undefined) -> None:
+                    """
+                    NtpServe.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        enabled: enabled
+
+                    """
+
         class VlanTranslationsItem(AvdModel):
             """Subclass of AvdModel."""
 
@@ -30447,6 +30492,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "bfd": {"type": Bfd},
             "service_policy": {"type": ServicePolicy},
             "mpls": {"type": Mpls},
+            "ntp_serve": {"type": NtpServe},
             "trunk_private_vlan_secondary": {"type": bool},
             "pvlan_mapping": {"type": str},
             "vlan_translations": {"type": VlanTranslations},
@@ -30595,6 +30641,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         service_policy: ServicePolicy
         """Subclass of AvdModel."""
         mpls: Mpls
+        """Subclass of AvdModel."""
+        ntp_serve: NtpServe
         """Subclass of AvdModel."""
         trunk_private_vlan_secondary: bool | None
         pvlan_mapping: str | None
@@ -30748,6 +30796,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 bfd: Bfd | UndefinedType = Undefined,
                 service_policy: ServicePolicy | UndefinedType = Undefined,
                 mpls: Mpls | UndefinedType = Undefined,
+                ntp_serve: NtpServe | UndefinedType = Undefined,
                 trunk_private_vlan_secondary: bool | None | UndefinedType = Undefined,
                 pvlan_mapping: str | None | UndefinedType = Undefined,
                 vlan_translations: VlanTranslations | UndefinedType = Undefined,
@@ -30872,6 +30921,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
                     mpls: Subclass of AvdModel.
+                    ntp_serve: Subclass of AvdModel.
                     trunk_private_vlan_secondary: trunk_private_vlan_secondary
                     pvlan_mapping: List of vlans as string.
                     vlan_translations: Subclass of AvdList with `VlanTranslationsItem` items.
@@ -62204,6 +62254,26 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
+        class NtpServe(AvdModel):
+            """Subclass of AvdModel."""
+
+            _fields: ClassVar[dict] = {"enabled": {"type": bool}}
+            enabled: bool
+
+            if TYPE_CHECKING:
+
+                def __init__(self, *, enabled: bool | UndefinedType = Undefined) -> None:
+                    """
+                    NtpServe.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        enabled: enabled
+
+                    """
+
         class Tags(AvdList[str]):
             """Subclass of AvdList with `str` items."""
 
@@ -62272,6 +62342,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ipv6_attached_host_route_export": {"type": Ipv6AttachedHostRouteExport},
             "bfd": {"type": Bfd},
             "service_policy": {"type": ServicePolicy},
+            "ntp_serve": {"type": NtpServe},
             "pvlan_mapping": {"type": str},
             "tenant": {"type": str},
             "tags": {"type": Tags},
@@ -62412,6 +62483,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         service_policy: ServicePolicy
         """Subclass of AvdModel."""
+        ntp_serve: NtpServe
+        """Subclass of AvdModel."""
         pvlan_mapping: str | None
         """List of VLANs as string."""
         tenant: str | None
@@ -62494,6 +62567,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ipv6_attached_host_route_export: Ipv6AttachedHostRouteExport | UndefinedType = Undefined,
                 bfd: Bfd | UndefinedType = Undefined,
                 service_policy: ServicePolicy | UndefinedType = Undefined,
+                ntp_serve: NtpServe | UndefinedType = Undefined,
                 pvlan_mapping: str | None | UndefinedType = Undefined,
                 tenant: str | None | UndefinedType = Undefined,
                 tags: Tags | UndefinedType = Undefined,
@@ -62594,6 +62668,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ipv6_attached_host_route_export: Subclass of AvdModel.
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
+                    ntp_serve: Subclass of AvdModel.
                     pvlan_mapping: List of VLANs as string.
                     tenant: Key only used for documentation or validation purposes.
                     tags:

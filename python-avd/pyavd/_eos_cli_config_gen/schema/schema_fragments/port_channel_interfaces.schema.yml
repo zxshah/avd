@@ -487,6 +487,12 @@ keys:
                   type: bool
                 igp_sync:
                   type: bool
+        ntp_serve:
+          type: dict
+          keys:
+            enabled: 
+              type: bool
+              required: true
         trunk_private_vlan_secondary:
           type: bool
           deprecation:

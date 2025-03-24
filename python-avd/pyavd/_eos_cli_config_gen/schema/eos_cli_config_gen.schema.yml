@@ -2880,6 +2880,12 @@ keys:
           keys:
             profile:
               type: str
+        ntp_serve:
+          type: dict
+          keys:
+            enabled:
+              type: bool
+              required: true
         tcp_mss_ceiling:
           type: dict
           description: 'The TCP MSS clamping feature involves clamping the maximum
@@ -10842,6 +10848,12 @@ keys:
                   type: bool
                 igp_sync:
                   type: bool
+        ntp_serve:
+          type: dict
+          keys:
+            enabled:
+              type: bool
+              required: true
         trunk_private_vlan_secondary:
           type: bool
           deprecation:
@@ -23159,6 +23171,12 @@ keys:
                 input:
                   type: str
                   description: Name of policy-map used for policy based routing.
+        ntp_serve:
+          type: dict
+          keys:
+            enabled:
+              type: bool
+              required: true
         pvlan_mapping:
           type: str
           description: List of VLANs as string.

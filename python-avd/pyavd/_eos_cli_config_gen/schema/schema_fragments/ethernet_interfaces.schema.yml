@@ -701,7 +701,7 @@ keys:
         ntp_serve:
           type: dict
           keys:
-            enabled: 
+            enabled:
               type: bool
               required: true
         tcp_mss_ceiling:

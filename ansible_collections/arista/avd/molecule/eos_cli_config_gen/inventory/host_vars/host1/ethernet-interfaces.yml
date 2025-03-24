@@ -563,6 +563,8 @@ ethernet_interfaces:
       ip: false
       ldp:
         interface: false
+    ntp_serve:
+      enabled: false
     # Test isis auth both sha
     isis_authentication:
       both:

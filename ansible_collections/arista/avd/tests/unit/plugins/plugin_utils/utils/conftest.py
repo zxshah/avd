@@ -4,6 +4,7 @@
 import pytest
 import logging
 
+
 @pytest.fixture
 def anta_record():
     """Create a log record from an ANTA library."""

@@ -711,8 +711,8 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| VRF10 | 10.255.128.15:10 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| VRF11 | 10.255.128.15:11 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| VRF10 | 10.255.128.15:10 | connected | - |
+| VRF11 | 10.255.128.15:11 | connected | - |
 
 #### Router BGP Device Configuration
 

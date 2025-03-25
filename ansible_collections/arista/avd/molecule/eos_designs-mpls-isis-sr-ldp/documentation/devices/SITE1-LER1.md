@@ -699,7 +699,7 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| TENANT_B_INTRA | 100.70.0.5:19 | connected<br>ospf | Restart-Time: -<br>Stalepath-Time: - |
+| TENANT_B_INTRA | 100.70.0.5:19 | connected<br>ospf | - |
 
 #### Router BGP Device Configuration
 

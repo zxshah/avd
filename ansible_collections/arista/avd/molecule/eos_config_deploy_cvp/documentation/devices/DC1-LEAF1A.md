@@ -581,8 +581,8 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| Tenant_A_APP_Zone | 192.168.255.5:12 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_WEB_Zone | 192.168.255.5:11 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| Tenant_A_APP_Zone | 192.168.255.5:12 | connected | - |
+| Tenant_A_WEB_Zone | 192.168.255.5:11 | connected | - |
 
 #### Router BGP Device Configuration
 

@@ -681,8 +681,8 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| VRF10 | 10.255.128.14:10 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| VRF11 | 10.255.128.14:11 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| VRF10 | 10.255.128.14:10 | connected | - |
+| VRF11 | 10.255.128.14:11 | connected | - |
 
 #### Router BGP Device Configuration
 

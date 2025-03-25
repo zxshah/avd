@@ -979,12 +979,12 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| Tenant_A_APP_Zone | 192.168.255.10:12 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_DB_Zone | 192.168.255.10:13 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_OP_Zone | 192.168.255.10:10 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_WEB_Zone | 192.168.255.10:11 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_OP_Zone | 192.168.255.10:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_C_OP_Zone | 192.168.255.10:30 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| Tenant_A_APP_Zone | 192.168.255.10:12 | connected | - |
+| Tenant_A_DB_Zone | 192.168.255.10:13 | connected | - |
+| Tenant_A_OP_Zone | 192.168.255.10:10 | connected | - |
+| Tenant_A_WEB_Zone | 192.168.255.10:11 | connected | - |
+| Tenant_B_OP_Zone | 192.168.255.10:20 | connected | - |
+| Tenant_C_OP_Zone | 192.168.255.10:30 | connected | - |
 
 #### Router BGP Device Configuration
 

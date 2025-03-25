@@ -637,9 +637,9 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| Tenant_A_WAN_Zone | 192.168.255.11:14 | connected<br>static | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_WAN_Zone | 192.168.255.11:21 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_C_WAN_Zone | 192.168.255.11:31 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| Tenant_A_WAN_Zone | 192.168.255.11:14 | connected<br>static | - |
+| Tenant_B_WAN_Zone | 192.168.255.11:21 | connected | - |
+| Tenant_C_WAN_Zone | 192.168.255.11:31 | connected | - |
 
 #### Router BGP Device Configuration
 

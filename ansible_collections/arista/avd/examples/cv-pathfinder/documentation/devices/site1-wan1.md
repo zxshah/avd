@@ -923,9 +923,9 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| BLUE | 192.168.255.3:100 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| default | 192.168.255.3:1 | - | Restart-Time: -<br>Stalepath-Time: - |
-| RED | 192.168.255.3:101 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| BLUE | 192.168.255.3:100 | connected | - |
+| default | 192.168.255.3:1 | - | - |
+| RED | 192.168.255.3:101 | connected | - |
 
 #### Router BGP Device Configuration
 

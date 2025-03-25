@@ -714,8 +714,8 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| BLUE | 192.168.255.9:100 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| RED | 192.168.255.9:101 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| BLUE | 192.168.255.9:100 | connected | - |
+| RED | 192.168.255.9:101 | connected | - |
 
 #### Router BGP Device Configuration
 

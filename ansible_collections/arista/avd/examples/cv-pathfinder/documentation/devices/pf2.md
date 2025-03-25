@@ -815,7 +815,7 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| default | 192.168.255.2:1 | - | Restart-Time: -<br>Stalepath-Time: - |
+| default | 192.168.255.2:1 | - | - |
 
 #### Router BGP Device Configuration
 

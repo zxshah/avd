@@ -676,11 +676,11 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| Tenant_A_WAN_Zone | 192.168.255.15:14 | connected<br>static | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_OP_Zone | 192.168.255.15:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_WAN_Zone | 192.168.255.15:21 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_C_WAN_Zone | 192.168.255.15:31 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_L3_VRF_Zone | 192.168.255.15:15 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| Tenant_A_WAN_Zone | 192.168.255.15:14 | connected<br>static | - |
+| Tenant_B_OP_Zone | 192.168.255.15:20 | connected | - |
+| Tenant_B_WAN_Zone | 192.168.255.15:21 | connected | - |
+| Tenant_C_WAN_Zone | 192.168.255.15:31 | connected | - |
+| Tenant_L3_VRF_Zone | 192.168.255.15:15 | connected | - |
 
 #### Router BGP Device Configuration
 

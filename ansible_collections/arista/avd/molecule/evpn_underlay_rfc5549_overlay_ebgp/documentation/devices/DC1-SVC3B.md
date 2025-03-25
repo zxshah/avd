@@ -1201,15 +1201,15 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| Tenant_A_APP_Zone | 192.168.255.9:12 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_DB_Zone | 192.168.255.9:13 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_OP_Zone | 192.168.255.9:10 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_WAN_Zone | 192.168.255.9:14 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_A_WEB_Zone | 192.168.255.9:11 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_OP_Zone | 192.168.255.9:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_B_WAN_Zone | 192.168.255.9:21 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_C_OP_Zone | 192.168.255.9:30 | connected | Restart-Time: -<br>Stalepath-Time: - |
-| Tenant_C_WAN_Zone | 192.168.255.9:31 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| Tenant_A_APP_Zone | 192.168.255.9:12 | connected | - |
+| Tenant_A_DB_Zone | 192.168.255.9:13 | connected | - |
+| Tenant_A_OP_Zone | 192.168.255.9:10 | connected | - |
+| Tenant_A_WAN_Zone | 192.168.255.9:14 | connected | - |
+| Tenant_A_WEB_Zone | 192.168.255.9:11 | connected | - |
+| Tenant_B_OP_Zone | 192.168.255.9:20 | connected | - |
+| Tenant_B_WAN_Zone | 192.168.255.9:21 | connected | - |
+| Tenant_C_OP_Zone | 192.168.255.9:30 | connected | - |
+| Tenant_C_WAN_Zone | 192.168.255.9:31 | connected | - |
 
 #### Router BGP Device Configuration
 

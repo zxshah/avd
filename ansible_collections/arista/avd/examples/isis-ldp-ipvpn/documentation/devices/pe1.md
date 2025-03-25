@@ -487,8 +487,8 @@ ASN Notation: asplain
 
 | VRF | Route-Distinguisher | Redistribute | Graceful Restart |
 | --- | ------------------- | ------------ | ---------------- |
-| C1_VRF1 | 10.255.1.1:10 | connected<br>ospf | Restart-Time: -<br>Stalepath-Time: - |
-| C2_VRF1 | 10.255.1.1:20 | connected | Restart-Time: -<br>Stalepath-Time: - |
+| C1_VRF1 | 10.255.1.1:10 | connected<br>ospf | - |
+| C2_VRF1 | 10.255.1.1:20 | connected | - |
 
 #### Router BGP Device Configuration
 

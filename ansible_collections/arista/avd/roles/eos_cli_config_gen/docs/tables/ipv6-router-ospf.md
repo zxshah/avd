@@ -10,28 +10,28 @@
     | [<samp>ipv6_router_ospf</samp>](## "ipv6_router_ospf") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;process_ids</samp>](## "ipv6_router_ospf.process_ids") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;id</samp>](## "ipv6_router_ospf.process_ids.[].id") | Integer | Required, Unique |  |  | OSPF process ID. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ipv6_router_ospf.process_ids.[].vrf") | String |  |  |  | VRF name for OSPF process. Must be unique across all OSPFv3 instance. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ipv6_router_ospf.process_ids.[].vrf") | String |  |  |  | VRF name for OSPF process. Must be unique across all OSPFv3 instances. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;router_id</samp>](## "ipv6_router_ospf.process_ids.[].router_id") | String |  |  |  | IPv4 Address. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;redistribute</samp>](## "ipv6_router_ospf.process_ids.[].redistribute") | Dictionary |  |  |  | Redistribute routes with OSPFv3. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bgp</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.include_leaked") | Boolean |  |  |  | Include following routes while redistributing. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.bgp.include_leaked") | Boolean |  |  |  | Include leaked routes while redistributing. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;connected</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.connected") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.connected.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.connected.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.connected.include_leaked") | Boolean |  |  |  | Include following routes while redistributing. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.connected.include_leaked") | Boolean |  |  |  | Include leaked routes while redistributing. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isis</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;isis_level</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis.isis_level") | String |  |  | Valid Values:<br>- <code>level-1</code><br>- <code>level-2</code><br>- <code>level-1-2</code> | Redistribute IS-IS route level. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis.include_leaked") | Boolean |  |  |  | Include following routes while redistributing. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.isis.include_leaked") | Boolean |  |  |  | Include leaked routes while redistributing. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ospfv3</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.enabled") | Boolean |  |  |  | Redistribute OSPFv3 routes. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match_external</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_external") | Dictionary |  |  |  | Redistribute OSPFv3 routes learned from external sources. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_external.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_external.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_external.include_leaked") | Boolean |  |  |  | Include following routes while redistributing. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_external.include_leaked") | Boolean |  |  |  | Include leaked routes while redistributing. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;match_internal</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_internal") | Dictionary |  |  |  | Redistribute OSPFv3 routes learned from internal sources. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_internal.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.ospfv3.match_internal.route_map") | String |  |  |  |  |
@@ -42,7 +42,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;static</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.static") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.static.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.static.route_map") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.static.include_leaked") | Boolean |  |  |  | Include following routes while redistributing. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;include_leaked</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.static.include_leaked") | Boolean |  |  |  | Include leaked routes while redistributing. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dhcp</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp.enabled") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;route_map</samp>](## "ipv6_router_ospf.process_ids.[].redistribute.dhcp.route_map") | String |  |  |  |  |
@@ -57,7 +57,7 @@
           # OSPF process ID.
         - id: <int; required; unique>
 
-          # VRF name for OSPF process. Must be unique across all OSPFv3 instance.
+          # VRF name for OSPF process. Must be unique across all OSPFv3 instances.
           vrf: <str>
 
           # IPv4 Address.
@@ -69,13 +69,13 @@
               enabled: <bool; required>
               route_map: <str>
 
-              # Include following routes while redistributing.
+              # Include leaked routes while redistributing.
               include_leaked: <bool>
             connected:
               enabled: <bool; required>
               route_map: <str>
 
-              # Include following routes while redistributing.
+              # Include leaked routes while redistributing.
               include_leaked: <bool>
             isis:
               enabled: <bool; required>
@@ -84,7 +84,7 @@
               isis_level: <str; "level-1" | "level-2" | "level-1-2">
               route_map: <str>
 
-              # Include following routes while redistributing.
+              # Include leaked routes while redistributing.
               include_leaked: <bool>
             ospfv3:
 
@@ -96,7 +96,7 @@
                 enabled: <bool; required>
                 route_map: <str>
 
-                # Include following routes while redistributing.
+                # Include leaked routes while redistributing.
                 include_leaked: <bool>
 
               # Redistribute OSPFv3 routes learned from internal sources.
@@ -113,7 +113,7 @@
               enabled: <bool; required>
               route_map: <str>
 
-              # Include following routes while redistributing.
+              # Include leaked routes while redistributing.
               include_leaked: <bool>
             dhcp:
               enabled: <bool; required>

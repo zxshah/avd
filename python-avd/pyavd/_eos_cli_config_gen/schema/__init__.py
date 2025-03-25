@@ -16395,7 +16395,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     enabled: bool
                     route_map: str | None
                     include_leaked: bool | None
-                    """Include following routes while redistributing."""
+                    """Include leaked routes while redistributing."""
 
                     if TYPE_CHECKING:
 
@@ -16415,7 +16415,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             Args:
                                 enabled: enabled
                                 route_map: route_map
-                                include_leaked: Include following routes while redistributing.
+                                include_leaked: Include leaked routes while redistributing.
 
                             """
 
@@ -16426,7 +16426,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     enabled: bool
                     route_map: str | None
                     include_leaked: bool | None
-                    """Include following routes while redistributing."""
+                    """Include leaked routes while redistributing."""
 
                     if TYPE_CHECKING:
 
@@ -16446,7 +16446,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             Args:
                                 enabled: enabled
                                 route_map: route_map
-                                include_leaked: Include following routes while redistributing.
+                                include_leaked: Include leaked routes while redistributing.
 
                             """
 
@@ -16464,7 +16464,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     """Redistribute IS-IS route level."""
                     route_map: str | None
                     include_leaked: bool | None
-                    """Include following routes while redistributing."""
+                    """Include leaked routes while redistributing."""
 
                     if TYPE_CHECKING:
 
@@ -16486,7 +16486,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                 enabled: enabled
                                 isis_level: Redistribute IS-IS route level.
                                 route_map: route_map
-                                include_leaked: Include following routes while redistributing.
+                                include_leaked: Include leaked routes while redistributing.
 
                             """
 
@@ -16500,7 +16500,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         enabled: bool
                         route_map: str | None
                         include_leaked: bool | None
-                        """Include following routes while redistributing."""
+                        """Include leaked routes while redistributing."""
 
                         if TYPE_CHECKING:
 
@@ -16520,7 +16520,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                 Args:
                                     enabled: enabled
                                     route_map: route_map
-                                    include_leaked: Include following routes while redistributing.
+                                    include_leaked: Include leaked routes while redistributing.
 
                                 """
 
@@ -16639,7 +16639,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     enabled: bool
                     route_map: str | None
                     include_leaked: bool | None
-                    """Include following routes while redistributing."""
+                    """Include leaked routes while redistributing."""
 
                     if TYPE_CHECKING:
 
@@ -16659,7 +16659,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             Args:
                                 enabled: enabled
                                 route_map: route_map
-                                include_leaked: Include following routes while redistributing.
+                                include_leaked: Include leaked routes while redistributing.
 
                             """
 
@@ -16744,7 +16744,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             id: int
             """OSPF process ID."""
             vrf: str | None
-            """VRF name for OSPF process. Must be unique across all OSPFv3 instance."""
+            """VRF name for OSPF process. Must be unique across all OSPFv3 instances."""
             router_id: str | None
             """IPv4 Address."""
             redistribute: Redistribute
@@ -16775,7 +16775,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     Args:
                         id: OSPF process ID.
-                        vrf: VRF name for OSPF process. Must be unique across all OSPFv3 instance.
+                        vrf: VRF name for OSPF process. Must be unique across all OSPFv3 instances.
                         router_id: IPv4 Address.
                         redistribute:
                            Redistribute routes with OSPFv3.

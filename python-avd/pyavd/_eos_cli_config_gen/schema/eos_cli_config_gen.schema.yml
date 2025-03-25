@@ -6490,7 +6490,7 @@ keys:
             vrf:
               type: str
               description: VRF name for OSPF process. Must be unique across all OSPFv3
-                instance.
+                instances.
               convert_types:
               - int
             router_id:
@@ -6509,7 +6509,7 @@ keys:
                     route_map:
                       type: str
                     include_leaked:
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                       type: bool
                 connected:
                   type: dict
@@ -6520,7 +6520,7 @@ keys:
                     route_map:
                       type: str
                     include_leaked:
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                       type: bool
                 isis:
                   type: dict
@@ -6538,7 +6538,7 @@ keys:
                     route_map:
                       type: str
                     include_leaked:
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                       type: bool
                 ospfv3:
                   type: dict
@@ -6557,7 +6557,7 @@ keys:
                         route_map:
                           type: str
                         include_leaked:
-                          description: Include following routes while redistributing.
+                          description: Include leaked routes while redistributing.
                           type: bool
                     match_internal:
                       description: Redistribute OSPFv3 routes learned from internal
@@ -6591,7 +6591,7 @@ keys:
                       type: str
                     include_leaked:
                       type: bool
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                 dhcp:
                   type: dict
                   keys:

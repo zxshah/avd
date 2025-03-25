@@ -3822,8 +3822,8 @@ interface Dps1
 | Ethernet64 | DHCP server interface | - | 192.168.42.42/24 | default | - | - | - | - |
 | Ethernet65 | Multiple VRIDs | - | 192.0.2.2/25 | default | - | False | - | - |
 | Ethernet66 | Multiple VRIDs and tracking | - | 192.0.2.2/25 | default | - | False | - | - |
-| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | **default | **- | **- | **- | **- |
-| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | **default | **- | **- | **- | **- |
+| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | *default | *- | *- | *- | *- |
+| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | *default | *- | *- | *- | *- |
 | Ethernet81/3 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 | Ethernet81/4 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 
@@ -4104,6 +4104,8 @@ interface Ethernet2
    storm-control all level 10
    spanning-tree bpduguard disable
    spanning-tree bpdufilter disable
+   spanning-tree bpduguard rate-limit enable
+   spanning-tree bpduguard rate-limit count 10 interval 3
 !
 interface Ethernet3
    !! testing single line comment
@@ -4140,6 +4142,8 @@ interface Ethernet3
    ptp vlan 2
    no priority-flow-control
    spanning-tree guard root
+   spanning-tree bpduguard rate-limit disable
+   spanning-tree bpduguard rate-limit count 10
    switchport backup-link Ethernet4
    !
    sync-e
@@ -4172,6 +4176,7 @@ interface Ethernet4
    switchport port-security violation protect
    priority-flow-control on
    spanning-tree guard none
+   spanning-tree bpduguard rate-limit count 10 interval 15
 !
 interface Ethernet5
    description Molecule Routing

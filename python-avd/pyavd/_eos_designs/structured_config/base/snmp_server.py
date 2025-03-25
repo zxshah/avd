@@ -194,7 +194,7 @@ class SnmpServerMixin(Protocol):
         local_interfaces = self._build_source_interfaces(
             source_interfaces_inputs.mgmt_interface,
             source_interfaces_inputs.inband_mgmt_interface,
-            "SNMP",
+            error_context="SNMP",
             output_type=EosCliConfigGen.SnmpServer.LocalInterfaces,
         )
         self.structured_config.snmp_server.local_interfaces = local_interfaces

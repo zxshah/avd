@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING, Literal, Protocol, TypeVar
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
-from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
+from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
 from pyavd._utils import Undefined, default, get_ip_from_pool
 
 if TYPE_CHECKING:
@@ -119,10 +119,16 @@ class UtilsMixin(Protocol):
         # Set descriptions or fallback to list with None values
         descriptions = p2p_link.descriptions or [None, None]
 
+        try:
+            ip_idx = ip[index]
+        except IndexError as exc:
+            msg = "IP_pools cannot allocate more than 2 ips but it can be done manually"
+            raise AristaAvdError(msg) from exc
+
         data = {
             "peer": peer,
             "peer_type": peer_type,
-            "ip": ip[index],
+            "ip": ip_idx,
             "peer_ip": ip[peer_index],
             "bgp_as": str(bgp_as[index]) if index < len(bgp_as) and bgp_as[index] else None,
             "peer_bgp_as": str(bgp_as[peer_index]) if peer_index < len(bgp_as) and bgp_as[peer_index] else None,
@@ -259,7 +265,11 @@ class UtilsMixin(Protocol):
                 )
 
         if p2p_link.ip:
-            interface.ip_address = p2p_link.ip[index]
+            try:
+                interface.ip_address = p2p_link.ip[index]
+            except IndexError as exc:
+                msg = "IP_pools cannot allocate more than 2 ips but it can be done manually"
+                raise AristaAvdError(msg) from exc
 
         if p2p_link.include_in_underlay_protocol:
             if p2p_link.underlay_multicast and self.shared_utils.underlay_multicast:

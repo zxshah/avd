@@ -61,8 +61,7 @@ class UtilsWanMixin(Protocol):
             append_policy(vrf_policy, vrf, control_plane=vrf.name == "default")
 
         # Add Application Traffic Recognition after all policies have been taken care off
-        # TODO: but this in a better place.
-        self._set_control_plane_application_profile()
+        # TODO: put this in a better place.
         self.set_cv_pathfinder_metadata_applications()
 
     def _append_control_plane_virtual_topology(

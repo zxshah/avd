@@ -45240,7 +45240,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"enabled": {"type": bool}, "restart_time": {"type": int}, "stalepath_time": {"type": int}}
-                enabled: bool | None
+                enabled: bool
                 restart_time: int | None
                 """Number of seconds."""
                 stalepath_time: int | None
@@ -45251,7 +45251,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     def __init__(
                         self,
                         *,
-                        enabled: bool | None | UndefinedType = Undefined,
+                        enabled: bool | UndefinedType = Undefined,
                         restart_time: int | None | UndefinedType = Undefined,
                         stalepath_time: int | None | UndefinedType = Undefined,
                     ) -> None:

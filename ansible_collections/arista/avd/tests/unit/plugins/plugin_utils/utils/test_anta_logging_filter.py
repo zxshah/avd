@@ -1,6 +1,7 @@
 # Copyright (c) 2025 Arista Networks, Inc.
 # Use of this source code is governed by the Apache License 2.0
 # that can be found in the LICENSE file.
+"""Unit tests for the anta_logging_filter module."""
 import logging
 
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import AntaLoggingFilter

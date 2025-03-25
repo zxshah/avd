@@ -9,7 +9,7 @@ from ansible.vars.hostvars import HostVarsVars
 
 from ansible_collections.arista.avd.plugins.plugin_utils.utils import ActionHostVars
 
-from .conftest import MinimalActionPlugin
+from conftest import MinimalActionPlugin
 
 
 class TestActionHostVars:

@@ -279,7 +279,7 @@ class FilteredTenantsMixin(Protocol):
             msg = f"Profile '{profile_name}' applied under SVI '{context}' does not exist in `svi_profiles`."
             raise AristaAvdInvalidInputsError(msg)
 
-        svi_profile = self.inputs.svi_profiles[profile_name]
+        svi_profile = self.inputs.svi_profiles[profile_name]._deepcopy()
         if svi_profile.parent_profile:
             if svi_profile.parent_profile not in self.inputs.svi_profiles:
                 msg = f"Profile '{svi_profile.parent_profile}' applied under SVI Profile '{profile_name}' does not exist in `svi_profiles`."

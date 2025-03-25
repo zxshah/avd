@@ -298,13 +298,14 @@ class RouterBgpMixin(Protocol):
             return
 
         peer_groups = self.structured_config.router_bgp.address_family_link_state.peer_groups
-        peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True)
+        peer_group_obj = EosCliConfigGen.RouterBgp.AddressFamilyLinkState.PeerGroupsItem(name=self.inputs.bgp_peer_groups.wan_overlay_peers.name, activate=True)
 
         if self.shared_utils.is_cv_pathfinder_server:
             self.structured_config.router_bgp.address_family_link_state.path_selection.roles._update(consumer=True, propagator=True)
-            peer_groups.obtain(self.inputs.bgp_peer_groups.wan_overlay_peers.name).missing_policy.direction_out_action = "deny"
+            peer_group_obj.missing_policy.direction_out_action = "deny"
         else:  # other roles are transit / edge
             self.structured_config.router_bgp.address_family_link_state.path_selection.roles.producer = True
+        peer_groups.append(peer_group_obj)
 
         if self._is_wan_server_with_peers:
             peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=True)

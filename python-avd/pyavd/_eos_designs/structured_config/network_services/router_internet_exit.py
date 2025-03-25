@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
-from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
+from pyavd._errors import AristaAvdInvalidInputsError
 from pyavd.j2filters import range_expand
 
 if TYPE_CHECKING:
@@ -68,73 +68,29 @@ class RouterInternetExitMixin(Protocol):
             # TODO: Decide if we should raise here instead
             return
 
-        # fetch connections associated with given internet exit policy that applies to one or more wan interfaces
-        # TODO: set the connections better
-        connections = self.get_internet_exit_connections(internet_exit_policy, local_wan_l3_interfaces)
+        # enabling monitor connectivity
+        self.structured_config.monitor_connectivity.shutdown = False
+        # enabling router_service_insertion once
+        self.structured_config.router_service_insertion.enabled = True
+
+        if internet_exit_policy.type == "direct":
+            self._set_direct_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
+        elif internet_exit_policy.type == "zscaler":
+            self._set_zscaler_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
+
+    def _set_direct_internet_exit_policy(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
+        local_wan_l3_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
+    ) -> None:
+        """TODO."""
         policy_exit_groups = EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroups()
-        for connection in connections:
-            exit_group = EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroupsItem(name=connection["exit_group"])
-            self.structured_config.router_internet_exit.exit_groups.obtain(connection["exit_group"]).local_connections.append_new(name=connection["name"])
+        """Track the exit groups for the Internet Exit policy."""
 
-            # Recording the exit_group in the policy
-            policy_exit_groups.append(exit_group)
-            # TODO: change the connection dict and see if we can avoid to give policy.
-            self.set_internet_exit_tunnel_interface(internet_exit_policy, connection)
-            self.set_internet_exit_monitor_connectivity(connection)
-            self.set_internet_exit_connection_static_route(connection)
-            self.set_internet_exit_router_service_insertion(connection)
-            self.set_internet_exit_connection_ethernet_interfaces(internet_exit_policy, connection)
+        direct_ie_acl_interface_ips: set[str] = set()
+        """Set of Interface IPs configure for the direct Internet Exit ACL if any."""
 
-        if internet_exit_policy.fallback_to_system_default:
-            policy_exit_groups.append_new(name="system-default-exit-group")
-
-        if internet_exit_policy.type == "zscaler":
-            self._set_zscaler_ie_policy_ip_nat()
-            self._set_zscaler_ie_policy_acl()
-            self._set_zscaler_internet_exit_policy_ip_security(internet_exit_policy)
-            # set metadata
-            self.set_cv_pathfinder_metadata_zscaler_internet_exit_policy(internet_exit_policy, connections)
-        if internet_exit_policy.type == "direct":
-            self._set_direct_ie_policy_ip_nat()
-            self._set_direct_ie_policy_acl(connections)
-
-        self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)
-
-    def get_internet_exit_connections(
-        self: AvdStructuredConfigNetworkServicesProtocol,
-        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
-        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
-    ) -> list:
-        """
-        Return a list of connections (dicts) for the given internet_exit_policy.
-
-        These are useful for easy creation of connectivity-monitor, service-insertion connections, exit-groups, tunnels etc.
-        """
-        if internet_exit_policy.type == "direct":
-            return self.get_direct_internet_exit_connections(internet_exit_policy, local_interfaces)
-
-        if internet_exit_policy.type == "zscaler":
-            return self.get_zscaler_internet_exit_connections(internet_exit_policy, local_interfaces)
-
-        msg = f"Unsupported type '{internet_exit_policy.type}' found in cv_pathfinder_internet_exit[name={internet_exit_policy.name}]."
-        raise AristaAvdError(msg)
-
-    def get_direct_internet_exit_connections(
-        self: AvdStructuredConfigNetworkServicesProtocol,
-        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
-        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
-    ) -> list[dict]:
-        """Return a list of connections (dicts) for the given internet_exit_policy of type direct."""
-        if internet_exit_policy.type != "direct":
-            return []
-
-        connections = []
-
-        # Build internet exit connection for each local interface (wan_interface)
-        for wan_interface in local_interfaces:
-            if internet_exit_policy.name not in wan_interface.cv_pathfinder_internet_exit.policies:
-                continue
-
+        for wan_interface in local_wan_l3_interfaces:
             if not wan_interface.peer_ip:
                 msg = (
                     f"{wan_interface.name} peer_ip needs to be set. When using wan interface "
@@ -150,54 +106,52 @@ class RouterInternetExitMixin(Protocol):
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
-            sanitized_interface_name = self.shared_utils.sanitize_interface_name(wan_interface.name)
-            connections.append(
-                {
-                    "type": "ethernet",
-                    "name": f"IE-{sanitized_interface_name}",
-                    "source_interface_ip_address": ip_address,
-                    "monitor_name": f"IE-{sanitized_interface_name}",
-                    "monitor_host": wan_interface.peer_ip,
-                    "next_hop": wan_interface.peer_ip,
-                    "source_interface": wan_interface.name,
-                    "description": f"Internet Exit {internet_exit_policy.name}",
-                    "exit_group": f"{internet_exit_policy.name}",
-                },
-            )
-        return connections
+            if not ip_address:
+                msg = f"{wan_interface.name} ip_address or dhcp_ip needs to be set when using WAN interface for 'direct' type Internet Exit."
+                raise AristaAvdInvalidInputsError(msg)
 
-    def get_zscaler_internet_exit_connections(
+            connection_name = f"IE-{self.shared_utils.sanitize_interface_name(wan_interface.name)}"
+            description = f"Internet Exit {internet_exit_policy.name}"
+
+            self.set_direct_ie_monitor_connectivity(
+                interface_name=wan_interface.name,
+                monitor_name=connection_name,
+                description=description,
+                monitor_host=wan_interface.peer_ip,
+            )
+            self.set_direct_ie_router_service_insertion(monitor_name=connection_name, source_interface=wan_interface.name, next_hop=wan_interface.peer_ip)
+            self.set_direct_ie_connection_ethernet_interfaces(source_interface=wan_interface.name)
+            direct_ie_acl_interface_ips.add(ip_address)
+
+            # Adding exit group
+            policy_exit_groups.append_new(name=internet_exit_policy.name)
+            self.structured_config.router_internet_exit.exit_groups.obtain(internet_exit_policy.name).local_connections.append_new(name=connection_name)
+
+        if internet_exit_policy.fallback_to_system_default:
+            policy_exit_groups.append_new(name="system-default-exit-group")
+
+        self._set_direct_ie_policy_ip_nat()
+        self._set_direct_ie_policy_acl(direct_ie_acl_interface_ips)
+
+        self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)
+
+    def _set_zscaler_internet_exit_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
         internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
-        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
-    ) -> list:
-        """Return a list of connections (dicts) for the given internet_exit_policy of type zscaler."""
-        if internet_exit_policy.type != "zscaler":
-            return []
+        local_wan_l3_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
+    ) -> None:
+        """TODO."""
+        policy_exit_groups = EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroups()
+        """Track the exit groups for the Internet Exit policy."""
+        metadata_tunnels = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem.Tunnels()
+        """Object to keep track of tunnel metadata for Zscaler Intermet Exit Policy."""
 
-        policy_name = internet_exit_policy.name
-
-        cloud_name = self._zscaler_endpoints.cloud_name
-        connections = []
-
-        # Build internet exit connection for each local interface (wan_interface)
-        for wan_interface in local_interfaces:
-            if policy_name not in wan_interface.cv_pathfinder_internet_exit.policies:
-                continue
-
-            interface_policy_config = wan_interface.cv_pathfinder_internet_exit.policies[policy_name]
-
+        for wan_interface in local_wan_l3_interfaces:
             if not wan_interface.peer_ip:
                 msg = f"The configured internet-exit policy requires `peer_ip` configured under the WAN Interface {wan_interface.name}."
                 raise AristaAvdInvalidInputsError(msg)
 
-            connection_base = {
-                "type": "tunnel",
-                "source_interface": wan_interface.name,
-                "next_hop": wan_interface.peer_ip,
-                # Accepting SonarLint issue: The URL is just for verifying connectivity. No data is passed.
-                "monitor_url": f"http://gateway.{cloud_name}.net/vpntest",  # NOSONAR
-            }
+            interface_policy_config = wan_interface.cv_pathfinder_internet_exit.policies[internet_exit_policy.name]
 
             if interface_policy_config.tunnel_interface_numbers is None:
                 msg = (
@@ -206,37 +160,56 @@ class RouterInternetExitMixin(Protocol):
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
-            tunnel_id_range = range_expand(interface_policy_config.tunnel_interface_numbers)
+            tunnel_id_range: list[int] = range_expand(interface_policy_config.tunnel_interface_numbers)
 
             zscaler_endpoints = (self._zscaler_endpoints.primary, self._zscaler_endpoints.secondary, self._zscaler_endpoints.tertiary)
             for index, zscaler_endpoint in enumerate(zscaler_endpoints):
                 if not zscaler_endpoint:
                     continue
 
+                tunnel_id = tunnel_id_range[index]
                 preference = ("primary", "secondary", "tertiary")[index]
-
                 # PRI, SEC, TER used for groups
                 # TODO: consider if we should use DC names as group suffix.
                 suffix = preference[0:3].upper()
 
-                destination_ip = zscaler_endpoint.ip_address
-                tunnel_id = tunnel_id_range[index]
-                connections.append(
-                    {
-                        **connection_base,
-                        "name": f"IE-Tunnel{tunnel_id}",
-                        "monitor_name": f"IE-Tunnel{tunnel_id}",
-                        "monitor_host": destination_ip,
-                        "tunnel_id": tunnel_id,
-                        # Using Loopback0 as source interface as using the WAN interface causes issues for DPS.
-                        "tunnel_ip_address": "unnumbered Loopback0",
-                        "tunnel_destination_ip": destination_ip,
-                        "ipsec_profile": f"IE-{policy_name}-PROFILE",
-                        "description": f"Internet Exit {policy_name} {suffix}",
-                        "exit_group": f"{policy_name}_{suffix}",
-                        "preference": preference,
-                        "suffix": suffix,
-                        "endpoint": zscaler_endpoint,
-                    },
+                connection_name = f"IE-Tunnel{tunnel_id}"
+                description = f"Internet Exit {internet_exit_policy.name} {suffix}"
+
+                self.set_zscaler_ie_tunnel_interface(
+                    tunnel_id=tunnel_id,
+                    description=description,
+                    source_interface=wan_interface.name,
+                    destination=zscaler_endpoint.ip_address,
+                    ipsec_profile=f"IE-{internet_exit_policy.name}-PROFILE",
                 )
-        return connections
+                self.set_zscaler_ie_monitor_connectivity(
+                    tunnel_id=tunnel_id, monitor_name=f"IE-Tunnel{tunnel_id}", description=description, monitor_host=zscaler_endpoint.ip_address
+                )
+                self.set_zscaler_ie_connection_static_route(
+                    destination_ip=zscaler_endpoint.ip_address, name=f"IE-ZSCALER-{suffix}", next_hop=wan_interface.peer_ip
+                )
+                self.set_zscaler_ie_router_service_insertion(monitor_name=connection_name, tunnel_id=tunnel_id)
+
+                # set metadata
+                metadata_tunnels.append_new(
+                    name=f"Tunnel{tunnel_id}",
+                    preference="Preferred" if preference == "primary" else "Alternate",
+                    # TODO: type error
+                    endpoint=zscaler_endpoint,
+                )
+
+                # Adding exit group
+                exit_group_name = f"{internet_exit_policy.name}_{suffix}"
+                policy_exit_groups.append_new(name=exit_group_name)
+                self.structured_config.router_internet_exit.exit_groups.obtain(exit_group_name).local_connections.append_new(name=connection_name)
+
+        if internet_exit_policy.fallback_to_system_default:
+            policy_exit_groups.append_new(name="system-default-exit-group")
+
+        self._set_zscaler_ie_policy_ip_nat()
+        self._set_zscaler_ie_policy_acl()
+        self._set_zscaler_internet_exit_policy_ip_security(internet_exit_policy)
+        self.set_cv_pathfinder_metadata_zscaler_internet_exit_policy(internet_exit_policy, metadata_tunnels)
+
+        self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)

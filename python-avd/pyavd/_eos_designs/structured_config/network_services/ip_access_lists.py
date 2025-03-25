@@ -31,25 +31,27 @@ class IpAccesslistsMixin(Protocol):
         """
         self.structured_config.ip_access_lists.append(ipv4_acl._cast_as(EosCliConfigGen.IpAccessListsItem))
 
-    def _set_direct_ie_policy_acl(self: AvdStructuredConfigNetworkServicesProtocol, connections: list) -> None:
-        # TODO: this is replicated
+    def _set_direct_ie_policy_acl(self: AvdStructuredConfigNetworkServicesProtocol, interface_ips: set[str]) -> None:
+        """
+        Configure an IP access list for the Direct Internet policy.
+
+        Args:
+            interface_ips: a set of IP address to configure on the ACL.
+        """
         acls = self._acl_internet_exit_user_defined("direct")
         if acls:
             self.structured_config.ip_access_lists.append(acls._cast_as(EosCliConfigGen.IpAccessListsItem))
             return
 
-        interface_ips = set()
-        for connection in connections:
-            interface_ips.add(connection["source_interface_ip_address"])
-
         if interface_ips:
             acl = EosCliConfigGen.IpAccessListsItem(name=self.get_internet_exit_nat_acl_name("direct"))
-            interface_ips = sorted(interface_ips)
-            i = 0
-            for i, interface_ip in enumerate(interface_ips):
-                acl.entries.append_new(sequence=10 + i * 10, action="deny", protocol="ip", source=get_ip_from_ip_prefix(interface_ip), destination="any")
+            i = 1
+            for i, interface_ip in enumerate(sorted(interface_ips), start=1):
+                acl.entries.append_new(sequence=i * 10, action="deny", protocol="ip", source=get_ip_from_ip_prefix(interface_ip), destination="any")
+
+            # Last permit IP any any entry
             acl.entries.append_new(
-                sequence=20 + i * 10,
+                sequence=10 + i * 10,
                 action="permit",
                 protocol="ip",
                 source="any",
@@ -59,7 +61,7 @@ class IpAccesslistsMixin(Protocol):
             self.structured_config.ip_access_lists.append(acl)
 
     def _set_zscaler_ie_policy_acl(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        # TODO: this is replicated
+        """Configure an IP access list for the Zscaler Internet policy."""
         acls = self._acl_internet_exit_user_defined("zscaler")
         if acls:
             self.structured_config.ip_access_lists.append(acls._cast_as(EosCliConfigGen.IpAccessListsItem))

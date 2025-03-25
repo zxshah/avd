@@ -59,15 +59,10 @@ class StaticRoutesMixin(Protocol):
 
                         self.structured_config.static_routes.append_unique(static_route_item)
 
-    def set_internet_exit_connection_static_route(self: AvdStructuredConfigNetworkServicesProtocol, connection: dict) -> None:
-        """
-        Set the static route for one Internet Exit connection.
-
-        TODO: Connection should not be a dict.
-        """
-        if connection["type"] == "tunnel":
-            self.structured_config.static_routes.append_new(
-                destination_address_prefix=f"{connection['tunnel_destination_ip']}/32",
-                name=f"IE-ZSCALER-{connection['suffix']}",
-                gateway=connection["next_hop"],
-            )
+    def set_zscaler_ie_connection_static_route(self: AvdStructuredConfigNetworkServicesProtocol, destination_ip: str, name: str, next_hop: str) -> None:
+        """Set the static route for one Zscaler Internet Exit connection."""
+        self.structured_config.static_routes.append_new(
+            destination_address_prefix=f"{destination_ip}/32",
+            name=name,
+            gateway=next_hop,
+        )

@@ -23,12 +23,9 @@ class MetadataMixin(Protocol):
     def set_cv_pathfinder_metadata_zscaler_internet_exit_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
         internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
-        connections: list[dict],
+        tunnels_metadata: EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem.Tunnels,
     ) -> None:
         """Set the metadata.cv_pathfinder.internet_exit_policies for the Zscaler policies if available."""
-        if internet_exit_policy.type != "zscaler":
-            return
-
         ufqdn, ipsec_key = self._get_ipsec_credentials(internet_exit_policy)
         exit_policy = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem(
             name=internet_exit_policy.name,
@@ -40,14 +37,10 @@ class MetadataMixin(Protocol):
             firewall=internet_exit_policy.zscaler.firewall.enabled,
             ips_control=internet_exit_policy.zscaler.firewall.ips,
             acceptable_use_policy=internet_exit_policy.zscaler.acceptable_use_policy,
+            tunnels=tunnels_metadata,
         )
         exit_policy.vpn_credentials.append_new(fqdn=ufqdn, vpn_type="UFQDN", pre_shared_key=ipsec_key)
-        for connection in connections:
-            exit_policy.tunnels.append_new(
-                name=f"Tunnel{connection['tunnel_id']}",
-                preference="Preferred" if connection["preference"] == "primary" else "Alternate",
-                endpoint=connection["endpoint"],
-            )
+
         self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
 
     def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:

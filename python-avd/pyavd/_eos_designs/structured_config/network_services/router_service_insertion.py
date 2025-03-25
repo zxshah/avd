@@ -18,24 +18,24 @@ class RouterServiceInsertionMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    def set_internet_exit_router_service_insertion(self: AvdStructuredConfigNetworkServicesProtocol, connection: dict) -> None:
+    def set_zscaler_ie_router_service_insertion(self: AvdStructuredConfigNetworkServicesProtocol, monitor_name: str, tunnel_id: int) -> None:
         """
-        Set the structured config for router_service_insertion for one Internet Exit connection.
+        Set the structured config for router_service_insertion for one Zscaler Internet Exit connection.
 
         Only used for CV Pathfinder edge routers today
         """
-        # TODO: Do not use dict
-        service_connection = EosCliConfigGen.RouterServiceInsertion.ConnectionsItem(
-            name=connection["name"], monitor_connectivity_host=connection["monitor_name"]
-        )
-
-        if connection["type"] == "tunnel":
-            service_connection.tunnel_interface.primary = f"Tunnel{connection['tunnel_id']}"
-
-        elif connection["type"] == "ethernet":
-            service_connection.ethernet_interface._update(name=connection["source_interface"], next_hop=connection["next_hop"])
-
+        service_connection = EosCliConfigGen.RouterServiceInsertion.ConnectionsItem(name=monitor_name, monitor_connectivity_host=monitor_name)
+        service_connection.tunnel_interface.primary = f"Tunnel{tunnel_id}"
         self.structured_config.router_service_insertion.connections.append(service_connection)
 
-        # TODO: This is done once per connection so should be moved somewhere else
-        self.structured_config.router_service_insertion.enabled = True
+    def set_direct_ie_router_service_insertion(
+        self: AvdStructuredConfigNetworkServicesProtocol, monitor_name: str, source_interface: str, next_hop: str
+    ) -> None:
+        """
+        Set the structured config for router_service_insertion for one Direct Internet Exit connection.
+
+        Only used for CV Pathfinder edge routers today
+        """
+        service_connection = EosCliConfigGen.RouterServiceInsertion.ConnectionsItem(name=monitor_name, monitor_connectivity_host=monitor_name)
+        service_connection.ethernet_interface._update(name=source_interface, next_hop=next_hop)
+        self.structured_config.router_service_insertion.connections.append(service_connection)

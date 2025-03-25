@@ -320,13 +320,8 @@ class EthernetInterfacesMixin(Protocol):
             interface.switchport.enabled = False
             self.structured_config.ethernet_interfaces.append(interface)
 
-    # TODO: proper annotation or give the NAT profile name.
-    def set_internet_exit_connection_ethernet_interfaces(
-        self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem, connection: dict
-    ) -> None:
+    def set_direct_ie_connection_ethernet_interfaces(self: AvdStructuredConfigNetworkServicesProtocol, source_interface: str) -> None:
         # TODO: This should be moved to the place where we configure the same interface in underlay as this will clash between modules..
-        if connection["type"] != "ethernet":
-            return
-        interface = EosCliConfigGen.EthernetInterfacesItem(name=connection["source_interface"])
-        interface.ip_nat.service_profile = self.get_internet_exit_nat_profile_name(internet_exit_policy.type)
+        interface = EosCliConfigGen.EthernetInterfacesItem(name=source_interface)
+        interface.ip_nat.service_profile = self.get_internet_exit_nat_profile_name("direct")
         self.structured_config.ethernet_interfaces.append(interface)

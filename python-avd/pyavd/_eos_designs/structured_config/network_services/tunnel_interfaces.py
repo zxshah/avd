@@ -8,8 +8,6 @@ from typing import TYPE_CHECKING, Protocol
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 
 if TYPE_CHECKING:
-    from pyavd._eos_designs.schema import EosDesigns
-
     from . import AvdStructuredConfigNetworkServicesProtocol
 
 
@@ -20,29 +18,31 @@ class TunnelInterfacesMixin(Protocol):
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
 
-    def set_internet_exit_tunnel_interface(
-        self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem, connection: dict
+    def set_zscaler_ie_tunnel_interface(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        tunnel_id: int,
+        description: str,
+        source_interface: str,
+        destination: str,
+        ipsec_profile: str,
     ) -> None:
         """
-        Set structured config for one tunnel_interface for an Internet Exit connection.
+        Set structured config for one tunnel_interface for a Zscaler Internet Exit connection.
 
         Only used for CV Pathfinder edge routers today
         """
-        if connection["type"] != "tunnel":
-            return
-
         tunnel_interface = EosCliConfigGen.TunnelInterfacesItem(
-            name=f"Tunnel{connection['tunnel_id']}",
-            description=connection["description"],
+            name=f"Tunnel{tunnel_id}",
+            description=description,
             mtu=1394,  # TODO: do not hardcode
-            ip_address=connection["tunnel_ip_address"],
+            # Using Loopback0 as source interface as using the WAN interface causes issues for DPS.
+            ip_address="unnumbered Loopback0",
             tunnel_mode="ipsec",  # TODO: do not hardcode
-            source_interface=connection["source_interface"],
-            destination=connection["tunnel_destination_ip"],
-            ipsec_profile=connection["ipsec_profile"],
+            source_interface=source_interface,
+            destination=destination,
+            ipsec_profile=ipsec_profile,
         )
 
-        if internet_exit_policy.type == "zscaler":
-            tunnel_interface.nat_profile = self.get_internet_exit_nat_profile_name(internet_exit_policy.type)
+        tunnel_interface.nat_profile = self.get_internet_exit_nat_profile_name("zscaler")
 
         self.structured_config.tunnel_interfaces.append(tunnel_interface)

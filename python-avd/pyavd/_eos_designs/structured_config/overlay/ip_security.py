@@ -124,7 +124,7 @@ class IpSecurityMixin(Protocol):
     def _set_ipsec_parameters(self: AvdStructuredConfigOverlayProtocol) -> None:
         """
         Set parameters relevant to all ipsec connections.
-        
+
         Note: Duplicated in network_services/ip_security.py.
         """
         if self.inputs.ipsec_settings.bind_connection_to_interface:

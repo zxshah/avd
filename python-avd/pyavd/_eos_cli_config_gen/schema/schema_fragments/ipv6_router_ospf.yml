@@ -73,7 +73,7 @@ keys:
                     route_map:
                       type: str
                     include_leaked:
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                       type: bool
                 ospfv3:
                   type: dict

@@ -29,9 +29,9 @@ LOGGER = getLogger(__name__)
 RECORDING_DIR = Path(__file__).parent / "api_recordings"
 
 
-def get_recording_file(route: str, request: IProtoMessage) -> Path:
+def get_recording_file(route: str, request: IProtoMessage, cv_server: str) -> Path:
     digest = sha1(str(request).encode("UTF-8"), usedforsecurity=False).hexdigest()
-    recording_file = RECORDING_DIR / Path(route.strip("/")) / f"{digest}.json"
+    recording_file = RECORDING_DIR / Path(route.strip("/")) / cv_server / f"{digest}.json"
     if environ.get("RECORDING"):
         recording_file.parent.mkdir(parents=True, exist_ok=True)
     return recording_file
@@ -51,9 +51,9 @@ class RecordingServiceStub(ServiceStub):
         metadata: MetadataLike | None = None,
     ) -> T_Message:
         LOGGER.info("Recording API request: %s", request)
-        recording_file = get_recording_file(route, request)
+        recording_file = get_recording_file(route, request, cv_server=self.channel._host)
         result = await super()._unary_unary(route, request, response_type, timeout=timeout, deadline=deadline, metadata=metadata)
-        recording_file.write_text(result.to_json())
+        recording_file.write_text(result.to_json(indent=4))
         return result
 
     async def _unary_stream(
@@ -67,10 +67,10 @@ class RecordingServiceStub(ServiceStub):
         metadata: MetadataLike | None = None,
     ) -> AsyncIterator[T_Message]:
         LOGGER.info("Recording API request: %s", request)
-        recording_file = get_recording_file(route, request)
+        recording_file = get_recording_file(route, request, cv_server=self.channel._host)
         messages_as_json = []
         async for message in super()._unary_stream(route, request, response_type, timeout=timeout, deadline=deadline, metadata=metadata):
-            messages_as_json.append(message.to_json())
+            messages_as_json.append(message.to_json(indent=4))
             yield message
 
         result = f"[{', '.join(messages_as_json)}]"
@@ -88,7 +88,7 @@ class MockedServiceStub(ServiceStub):
         **_kwargs: Any,
     ) -> T_Message:
         LOGGER.info("Playing back recording for API request: %s", request)
-        recording_file = get_recording_file(route, request)
+        recording_file = get_recording_file(route, request, cv_server=self.channel._host)
         if not recording_file.exists():
             raise FileNotFoundError(recording_file, "for request", request)
         recording = recording_file.read_text()
@@ -102,7 +102,7 @@ class MockedServiceStub(ServiceStub):
         **_kwargs: Any,
     ) -> AsyncIterator[T_Message]:
         LOGGER.info("Playing back recording for API request: %s", request)
-        recording_file = get_recording_file(route, request)
+        recording_file = get_recording_file(route, request, cv_server=self.channel._host)
         if not recording_file.exists():
             raise FileNotFoundError(recording_file, "for request", request)
         recording = recording_file.read_text()
@@ -112,10 +112,13 @@ class MockedServiceStub(ServiceStub):
 
 async def mocked_cv_client_aenter(self: CVClient) -> CVClient:
     class MockedChannel:
+        def __init__(self, host: str | None = None) -> None:
+            self._host = host
+
         def close(self) -> None:
             pass
 
-    self._channel = MockedChannel()
+    self._channel = MockedChannel(host=self._servers[0])
     self._cv_version = None
     self._metadata = {}
     return self

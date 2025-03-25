@@ -27,28 +27,30 @@ async def cv_client() -> AsyncGenerator[CVClient, None]:
     """
     Instance of CVClient.
 
-    If CVAAS_AAWG_CI environment variable is set, but RECORDING environment variable is not set,
-    this will return a proper instance of CVClient connected to cv-staging with the token.
+    If CV_ACCESS_TOKEN environment variable is set, but RECORDING environment variable is not set,
+    this will return a proper instance of CVClient connected to CloudVision with the token.
 
-    If CVAAS_AAWG_CI environment variable is set, but RECORDING environment variable is set,
-    this will return an instance of CVClient connected to cv-staging with the token where all API calls will be recorded.
+    If CV_ACCESS_TOKEN environment variable is set, but RECORDING environment variable is set,
+    this will return an instance of CVClient connected to CloudVision with the token where all API calls will be recorded.
 
     Otherwise this will return an instance of CVClient where API calls are mocked using previously recorded API messages.
     """
-    if token := environ.get("CVAAS_AAWG_CI"):
-        LOGGER.info("Running in online mode connecting to cv-staging.")
+    cv_server = environ.get("CV_SERVER") or "www.cv-prod-us-central1-c.arista.io"
+
+    if token := environ.get("CV_ACCESS_TOKEN"):
+        LOGGER.info("Running in online mode connecting to %s.", cv_server)
         if environ.get("RECORDING"):
             LOGGER.info("Mocking ServiceStub to RecordingServiceStub")
             with patch("aristaproto.ServiceStub", new=RecordingServiceStub):
                 from pyavd._cv.client import CVClient
 
-                async with CVClient("www.cv-staging.corp.arista.io", token=token) as cv_client:
+                async with CVClient(servers=cv_server, token=token) as cv_client:
                     yield cv_client
 
         else:
             from pyavd._cv.client import CVClient
 
-            async with CVClient("www.cv-staging.corp.arista.io", token=token) as cv_client:
+            async with CVClient(servers=cv_server, token=token) as cv_client:
                 yield cv_client
 
     else:
@@ -56,7 +58,7 @@ async def cv_client() -> AsyncGenerator[CVClient, None]:
             from pyavd._cv.client import CVClient
 
             with patch("pyavd._cv.client.CVClient.__aenter__", new=mocked_cv_client_aenter):
-                async with CVClient("www.cv-staging.corp.arista.io", token=token) as cv_client:
+                async with CVClient(servers=cv_server, token=token) as cv_client:
                     yield cv_client
 
         return

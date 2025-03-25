@@ -91,7 +91,7 @@ keys:
                         route_map:
                           type: str
                         include_leaked:
-                          description: Include following routes while redistributing.
+                          description: Include leaked routes while redistributing.
                           type: bool
                     match_internal:
                       description: Redistribute OSPFv3 routes learned from internal sources.

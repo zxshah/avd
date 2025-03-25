@@ -106,6 +106,7 @@ keys:
         convert_types:
           - int
       serve:
+        description: Enable Serving NTP to clients
         type: dict
         keys:
           all:
@@ -122,6 +123,7 @@ keys:
                       type: str
           access_groups:
             type: list
+            description: Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
             items:
               type: dict
               keys:
@@ -131,8 +133,10 @@ keys:
                 vrf:
                   type: str
                   required: true
+                  description: Use 'default' to add ACL to the default VRF
           ipv6_access_groups:
             type: list
+            description: IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
             items:
               type: dict
               keys:
@@ -142,3 +146,4 @@ keys:
                 vrf:
                   type: str
                   required: true
+                  description: Use 'default' to add ACL to the default VRF

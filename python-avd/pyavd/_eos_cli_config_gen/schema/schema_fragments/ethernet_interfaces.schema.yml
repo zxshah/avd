@@ -700,6 +700,7 @@ keys:
               type: str
         ntp_serve:
           type: dict
+          description: Enable/disable serving NTP to clients
           keys:
             enabled:
               type: bool

@@ -11676,7 +11676,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         mac_security: MacSecurity
         """Subclass of AvdModel."""
         ntp_serve: NtpServe
-        """Subclass of AvdModel."""
+        """
+        Enable/disable serving NTP to clients
+
+        Subclass of AvdModel.
+        """
         tcp_mss_ceiling: TcpMssCeiling
         """
         The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
@@ -12025,7 +12029,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ospf_message_digest_keys: Subclass of AvdIndexedList with `OspfMessageDigestKeysItem` items. Primary key is `id` (`int`).
                     pim: Subclass of AvdModel.
                     mac_security: Subclass of AvdModel.
-                    ntp_serve: Subclass of AvdModel.
+                    ntp_serve:
+                       Enable/disable serving NTP to clients
+
+                       Subclass of AvdModel.
                     tcp_mss_ceiling:
                        The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
                        of
@@ -24691,6 +24698,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
                 name: str
                 vrf: str
+                """Use 'default' to add ACL to the default VRF"""
 
                 if TYPE_CHECKING:
 
@@ -24703,7 +24711,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         Args:
                             name: name
-                            vrf: vrf
+                            vrf: Use 'default' to add ACL to the default VRF
 
                         """
 
@@ -24718,6 +24726,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
                 name: str
                 vrf: str
+                """Use 'default' to add ACL to the default VRF"""
 
                 if TYPE_CHECKING:
 
@@ -24730,7 +24739,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         Args:
                             name: name
-                            vrf: vrf
+                            vrf: Use 'default' to add ACL to the default VRF
 
                         """
 
@@ -24743,9 +24752,19 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             all: All
             """Subclass of AvdModel."""
             access_groups: AccessGroups
-            """Subclass of AvdList with `AccessGroupsItem` items."""
+            """
+            Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
+            the 'in' direction.
+
+            Subclass of AvdList with `AccessGroupsItem` items.
+            """
             ipv6_access_groups: Ipv6AccessGroups
-            """Subclass of AvdList with `Ipv6AccessGroupsItem` items."""
+            """
+            IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
+            applied in the 'in' direction.
+
+            Subclass of AvdList with `Ipv6AccessGroupsItem` items.
+            """
 
             if TYPE_CHECKING:
 
@@ -24764,8 +24783,16 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     Args:
                         all: Subclass of AvdModel.
-                        access_groups: Subclass of AvdList with `AccessGroupsItem` items.
-                        ipv6_access_groups: Subclass of AvdList with `Ipv6AccessGroupsItem` items.
+                        access_groups:
+                           Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
+                           the 'in' direction.
+
+                           Subclass of AvdList with `AccessGroupsItem` items.
+                        ipv6_access_groups:
+                           IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
+                           applied in the 'in' direction.
+
+                           Subclass of AvdList with `Ipv6AccessGroupsItem` items.
 
                     """
 
@@ -24789,7 +24816,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         trusted_keys: str | None
         """List of trusted-keys as string ex. 10-12,15."""
         serve: Serve
-        """Subclass of AvdModel."""
+        """
+        Enable Serving NTP to clients
+
+        Subclass of AvdModel.
+        """
 
         if TYPE_CHECKING:
 
@@ -24817,7 +24848,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     authenticate_servers_only: authenticate_servers_only
                     authentication_keys: Subclass of AvdIndexedList with `AuthenticationKeysItem` items. Primary key is `id` (`int`).
                     trusted_keys: List of trusted-keys as string ex. 10-12,15.
-                    serve: Subclass of AvdModel.
+                    serve:
+                       Enable Serving NTP to clients
+
+                       Subclass of AvdModel.
 
                 """
 
@@ -30643,7 +30677,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         mpls: Mpls
         """Subclass of AvdModel."""
         ntp_serve: NtpServe
-        """Subclass of AvdModel."""
+        """
+        Enable/disable serving NTP to clients
+
+        Subclass of AvdModel.
+        """
         trunk_private_vlan_secondary: bool | None
         pvlan_mapping: str | None
         """List of vlans as string."""
@@ -30921,7 +30959,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
                     mpls: Subclass of AvdModel.
-                    ntp_serve: Subclass of AvdModel.
+                    ntp_serve:
+                       Enable/disable serving NTP to clients
+
+                       Subclass of AvdModel.
                     trunk_private_vlan_secondary: trunk_private_vlan_secondary
                     pvlan_mapping: List of vlans as string.
                     vlan_translations: Subclass of AvdList with `VlanTranslationsItem` items.
@@ -62484,7 +62525,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         service_policy: ServicePolicy
         """Subclass of AvdModel."""
         ntp_serve: NtpServe
-        """Subclass of AvdModel."""
+        """
+        Enable/disable serving NTP to clients
+
+        Subclass of AvdModel.
+        """
         pvlan_mapping: str | None
         """List of VLANs as string."""
         tenant: str | None
@@ -62668,7 +62713,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ipv6_attached_host_route_export: Subclass of AvdModel.
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
-                    ntp_serve: Subclass of AvdModel.
+                    ntp_serve:
+                       Enable/disable serving NTP to clients
+
+                       Subclass of AvdModel.
                     pvlan_mapping: List of VLANs as string.
                     tenant: Key only used for documentation or validation purposes.
                     tags:

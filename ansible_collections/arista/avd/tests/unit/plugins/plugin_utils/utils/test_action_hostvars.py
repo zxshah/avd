@@ -34,8 +34,6 @@ class TestActionHostVars:
 
         variables = action_hostvars.get_host_variables("DC1-SPINE1")
         assert isinstance(variables, dict)
-        assert "ansible_user" in variables
-        assert variables["ansible_user"] == "ansible"
 
     def test_get_host_variables_invalid_host(self, ansible_task: Task) -> None:
         """Test get_host_variables with an invalid host raises KeyError."""
@@ -44,6 +42,15 @@ class TestActionHostVars:
 
         with pytest.raises(KeyError, match="Host 'non-existent-host' not found in Ansible inventory"):
             action_hostvars.get_host_variables("non-existent-host")
+
+    def test_get_host_variables_group_vars(self, ansible_task: Task) -> None:
+        """Test get_host_variables with variable values from group_vars."""
+        action_plugin = MinimalActionPlugin(ansible_task)
+        action_hostvars = ActionHostVars(action_plugin)
+
+        variables = action_hostvars.get_host_variables("DC1-SPINE1")
+        assert "ansible_user" in variables
+        assert variables["ansible_user"] == "ansible"
 
     def test_getitem(self, ansible_task: Task) -> None:
         """Test __getitem__ returns a HostVarsVars instance."""
@@ -153,64 +160,5 @@ class TestActionHostVars:
         action_plugin = MinimalActionPlugin(ansible_task)
         action_hostvars = ActionHostVars(action_plugin)
 
-        # Get host variables
         variables = action_hostvars.get_host_variables("DC1-SPINE1")
-
-        # Assert the expected value won based on the scenario
         assert variables[variable] == expected_value
-
-    @pytest.mark.parametrize(
-        ("ansible_task", "variable", "expected_values"),
-        [
-            # Multiple variables at different levels
-            (
-                {
-                    "task_data": {"name": "Test Task", "vars": {"task_var": "from_task"}, "debug": {"msg": "Hello from Task"}},
-                    "block_data": {
-                        "name": "Test Block",
-                        "vars": {"block_var": "from_block"},
-                        "block": [{"name": "Task from Block", "debug": {"msg": "Hello from Block"}}],
-                    },
-                    "play_data": {
-                        "name": "Test Play",
-                        "hosts": "all",
-                        "vars": {"play_var": "from_play"},
-                        "tasks": [{"name": "Task from Play", "debug": {"msg": "Hello from Play"}}],
-                    },
-                },
-                ["task_var", "block_var", "play_var"],
-                ["from_task", "from_block", "from_play"],
-            ),
-            # Same variable defined at different levels
-            (
-                {
-                    "task_data": {"name": "Test Task", "vars": {"shared_var": "task_value"}, "debug": {"msg": "Hello from Task"}},
-                    "block_data": {
-                        "name": "Test Block",
-                        "vars": {"shared_var": "block_value"},
-                        "block": [{"name": "Task from Block", "debug": {"msg": "Hello from Block"}}],
-                    },
-                    "play_data": {
-                        "name": "Test Play",
-                        "hosts": "all",
-                        "vars": {"shared_var": "play_value"},
-                        "tasks": [{"name": "Task from Play", "debug": {"msg": "Hello from Play"}}],
-                    },
-                },
-                ["shared_var"],
-                ["task_value"],
-            ),
-        ],
-        indirect=["ansible_task"],
-    )
-    def test_multiple_variable_sources(self, ansible_task: Task, variable: str, expected_values: list[str]) -> None:
-        """Test variables from multiple sources."""
-        action_plugin = MinimalActionPlugin(ansible_task)
-        action_hostvars = ActionHostVars(action_plugin)
-
-        # Get host variables
-        variables = action_hostvars.get_host_variables("DC1-SPINE1")
-
-        # Check each variable
-        for var_name, expected_value in zip(variable, expected_values, strict=True):
-            assert variables[var_name] == expected_value

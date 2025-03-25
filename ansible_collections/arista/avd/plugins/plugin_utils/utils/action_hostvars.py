@@ -28,7 +28,6 @@ class ActionHostVars(Mapping):
         self.loader: DataLoader = self.task.get_loader()
         self.variable_manager: VariableManager = self.task.get_variable_manager()
         self.inventory: InventoryManager = self.variable_manager._inventory
-        self._cache = {}
 
     def __getitem__(self, hostname: str) -> HostVarsVars:
         """Get variables for a host with template processing."""
@@ -37,23 +36,17 @@ class ActionHostVars(Mapping):
 
     def get_host_variables(self, hostname: str) -> dict:
         """Get raw variables for a specific host with proper context."""
-        if hostname in self._cache:
-            return self._cache[hostname]
-
         host = self.inventory.get_host(hostname)
         if host is None:
             msg = f"Host '{hostname}' not found in Ansible inventory"
             raise KeyError(msg)
 
-        variables = self.variable_manager.get_vars(
+        return self.variable_manager.get_vars(
             play=self.play,
             host=host,
             task=self.task,
             include_hostvars=False,
         )
-
-        self._cache[hostname] = variables
-        return variables
 
     def __contains__(self, hostname: str) -> bool:
         """Check if a hostname exists in the inventory."""
@@ -66,18 +59,3 @@ class ActionHostVars(Mapping):
     def __len__(self) -> int:
         """Return the number of hosts in the inventory."""
         return len(self.inventory.hosts)
-
-    def get_subset(self, hostnames: list[str], variables: list[str] | None = None) -> dict:
-        """Get a dictionary of {hostname: {var: value}} for specified hosts and vars."""
-        result = {}
-
-        for hostname in hostnames:
-            host_hostvars = self[hostname]
-
-            if variables:
-                # Filter to just the requested variables
-                result[hostname] = {var: host_hostvars.get(var) for var in variables}
-            else:
-                result[hostname] = dict(host_hostvars)
-
-        return result

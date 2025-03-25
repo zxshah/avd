@@ -39,7 +39,7 @@ LOGGING_LEVELS = ["DEBUG", "INFO", "ERROR", "WARNING", "CRITICAL"]
 
 ANSIBLE_HTTPAPI_CONNECTION_DOC = "https://docs.ansible.com/ansible/latest/collections/ansible/netcommon/httpapi_connection.html"
 
-ANSIBLE_VARS = [
+ANSIBLE_CONNECTION_VARS = [
     "inventory_hostname",
     "ansible_host",
     "ansible_user",
@@ -50,8 +50,6 @@ ANSIBLE_VARS = [
     "ansible_become_password",
     "ansible_httpapi_port",
     "ansible_httpapi_use_ssl",
-    "anta_tags",
-    "is_deployed",
 ]
 
 ARGUMENT_SPEC = {
@@ -115,13 +113,13 @@ ARGUMENT_SPEC = {
 STRUCTURED_CONFIGS: dict[str, dict[str, Any]] | None = None
 MINIMAL_STRUCTURED_CONFIGS: dict[str, MinimalStructuredConfig] | None = None
 PLUGIN_ARGS: dict[str, Any] | None = None
-ANSIBLE_VARS_MAP: dict[str, dict[str, Any]] | None = None
+ANSIBLE_VARS: dict[str, dict[str, Any]] | None = None
 USER_CATALOG: AntaCatalog | None = None
 
 
 class ActionModule(ActionBase):
     def run(self, tmp: Any = None, task_vars: dict | None = None) -> dict:
-        global STRUCTURED_CONFIGS, MINIMAL_STRUCTURED_CONFIGS, PLUGIN_ARGS, ANSIBLE_VARS_MAP, USER_CATALOG  # noqa: PLW0603
+        global STRUCTURED_CONFIGS, MINIMAL_STRUCTURED_CONFIGS, PLUGIN_ARGS, ANSIBLE_VARS, USER_CATALOG  # noqa: PLW0603
 
         self._supports_check_mode = False
 
@@ -154,10 +152,10 @@ class ActionModule(ActionBase):
             msg = "'device_list' cannot be empty"
             raise AnsibleActionFail(msg)
 
-        # Get the required Ansible variables for each device in the device list
+        # Get the required Ansible variables for each device
         action_hostvars = ActionHostVars(self)
-        ANSIBLE_VARS_MAP = action_hostvars.get_subset(device_list, ANSIBLE_VARS)
-        deployed_devices = [device for device, variables in ANSIBLE_VARS_MAP.items() if get(variables, "is_deployed", default=True)]
+        ANSIBLE_VARS = get_ansible_vars(device_list, action_hostvars)
+        deployed_devices = list(ANSIBLE_VARS.keys())
 
         generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")
         structured_config_dir = get(PLUGIN_ARGS, "avd_catalogs.structured_config_dir")
@@ -262,6 +260,28 @@ def build_reports(batch_results: list[ResultManager], report_settings: dict) -> 
             file.write(result_manager.json)
 
 
+def get_ansible_vars(device_list: list[str], hostvars: ActionHostVars) -> dict[str, dict[str, Any]]:
+    """Get the required Ansible variables from the hostvars for each device."""
+    device_vars = {}
+
+    for device in device_list:
+        host_hostvars = hostvars[device]
+
+        # Since we can run ANTA without any structured configs, i.e., only using user-defined catalogs,
+        # we honor the `is_deployed` flag in the hostvars to skip devices that are not deployed.
+        if get(host_hostvars, "is_deployed", default=True) is False:
+            LOGGER.info("skipping %s - device marked as not deployed", device)
+            continue
+
+        # Adding the Ansible connection variables following the HTTPAPI connection plugin settings
+        device_vars[device] = {key: get(host_hostvars, key) for key in ANSIBLE_CONNECTION_VARS}
+
+        # Same as above, we also honor the `anta_tags` variable if provided in the hostvars
+        device_vars[device]["anta_tags"] = get(host_hostvars, "anta_tags")
+
+    return device_vars
+
+
 def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaInventory, AntaCatalog]:
     """Build the ANTA objects required to run an ANTA batch."""
     # Create the ANTA objects
@@ -333,7 +353,7 @@ def build_anta_device(device: str) -> AsyncEOSDevice:
     # Required settings to create the AsyncEOSDevice object
     required_settings = ["host", "username", "password"]
 
-    device_vars = ANSIBLE_VARS_MAP[device]
+    device_vars = ANSIBLE_VARS[device]
 
     device_settings = {
         "name": device,
@@ -392,7 +412,7 @@ def load_user_catalogs(catalogs_dir: str) -> AntaCatalog:
     return AntaCatalog.merge_catalogs(catalogs)
 
 
-def load_structured_configs(device_list: list[str], structured_config_dir: str, structured_config_suffix: str) -> dict:
+def load_structured_configs(device_list: list[str], structured_config_dir: str, structured_config_suffix: str) -> dict[str, Any]:
     """Load the structured configurations for the devices in the provided list from the given directory."""
     return {device: load_one_structured_config(device, structured_config_dir, structured_config_suffix) for device in device_list}
 

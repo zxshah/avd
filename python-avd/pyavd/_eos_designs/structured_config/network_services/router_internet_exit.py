@@ -7,7 +7,8 @@ from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
-from pyavd._errors import AristaAvdInvalidInputsError
+from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
+from pyavd.j2filters import range_expand
 
 if TYPE_CHECKING:
     from . import AvdStructuredConfigNetworkServicesProtocol
@@ -98,3 +99,144 @@ class RouterInternetExitMixin(Protocol):
             self._set_direct_ie_policy_acl(connections)
 
         self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)
+
+    def get_internet_exit_connections(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
+        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
+    ) -> list:
+        """
+        Return a list of connections (dicts) for the given internet_exit_policy.
+
+        These are useful for easy creation of connectivity-monitor, service-insertion connections, exit-groups, tunnels etc.
+        """
+        if internet_exit_policy.type == "direct":
+            return self.get_direct_internet_exit_connections(internet_exit_policy, local_interfaces)
+
+        if internet_exit_policy.type == "zscaler":
+            return self.get_zscaler_internet_exit_connections(internet_exit_policy, local_interfaces)
+
+        msg = f"Unsupported type '{internet_exit_policy.type}' found in cv_pathfinder_internet_exit[name={internet_exit_policy.name}]."
+        raise AristaAvdError(msg)
+
+    def get_direct_internet_exit_connections(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
+        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
+    ) -> list[dict]:
+        """Return a list of connections (dicts) for the given internet_exit_policy of type direct."""
+        if internet_exit_policy.type != "direct":
+            return []
+
+        connections = []
+
+        # Build internet exit connection for each local interface (wan_interface)
+        for wan_interface in local_interfaces:
+            if internet_exit_policy.name not in wan_interface.cv_pathfinder_internet_exit.policies:
+                continue
+
+            if not wan_interface.peer_ip:
+                msg = (
+                    f"{wan_interface.name} peer_ip needs to be set. When using wan interface "
+                    "for direct type internet exit, peer_ip is used for nexthop, and connectivity monitoring."
+                )
+                raise AristaAvdInvalidInputsError(msg)
+
+            # wan interface ip will be used for acl, hence raise error if ip is not available
+            if (ip_address := wan_interface.ip_address) == "dhcp" and not (ip_address := wan_interface.dhcp_ip):
+                msg = (
+                    f"{wan_interface.name} 'dhcp_ip' needs to be set. When using WAN interface for 'direct' type Internet exit, "
+                    "'dhcp_ip' is used in the NAT ACL."
+                )
+                raise AristaAvdInvalidInputsError(msg)
+
+            sanitized_interface_name = self.shared_utils.sanitize_interface_name(wan_interface.name)
+            connections.append(
+                {
+                    "type": "ethernet",
+                    "name": f"IE-{sanitized_interface_name}",
+                    "source_interface_ip_address": ip_address,
+                    "monitor_name": f"IE-{sanitized_interface_name}",
+                    "monitor_host": wan_interface.peer_ip,
+                    "next_hop": wan_interface.peer_ip,
+                    "source_interface": wan_interface.name,
+                    "description": f"Internet Exit {internet_exit_policy.name}",
+                    "exit_group": f"{internet_exit_policy.name}",
+                },
+            )
+        return connections
+
+    def get_zscaler_internet_exit_connections(
+        self: AvdStructuredConfigNetworkServicesProtocol,
+        internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
+        local_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
+    ) -> list:
+        """Return a list of connections (dicts) for the given internet_exit_policy of type zscaler."""
+        if internet_exit_policy.type != "zscaler":
+            return []
+
+        policy_name = internet_exit_policy.name
+
+        cloud_name = self._zscaler_endpoints.cloud_name
+        connections = []
+
+        # Build internet exit connection for each local interface (wan_interface)
+        for wan_interface in local_interfaces:
+            if policy_name not in wan_interface.cv_pathfinder_internet_exit.policies:
+                continue
+
+            interface_policy_config = wan_interface.cv_pathfinder_internet_exit.policies[policy_name]
+
+            if not wan_interface.peer_ip:
+                msg = f"The configured internet-exit policy requires `peer_ip` configured under the WAN Interface {wan_interface.name}."
+                raise AristaAvdInvalidInputsError(msg)
+
+            connection_base = {
+                "type": "tunnel",
+                "source_interface": wan_interface.name,
+                "next_hop": wan_interface.peer_ip,
+                # Accepting SonarLint issue: The URL is just for verifying connectivity. No data is passed.
+                "monitor_url": f"http://gateway.{cloud_name}.net/vpntest",  # NOSONAR
+            }
+
+            if interface_policy_config.tunnel_interface_numbers is None:
+                msg = (
+                    f"{wan_interface.name}.cv_pathfinder_internet_exit.policies[{internet_exit_policy.name}]."
+                    "tunnel_interface_numbers needs to be set, when using wan interface for zscaler type internet exit."
+                )
+                raise AristaAvdInvalidInputsError(msg)
+
+            tunnel_id_range = range_expand(interface_policy_config.tunnel_interface_numbers)
+
+            zscaler_endpoints = (self._zscaler_endpoints.primary, self._zscaler_endpoints.secondary, self._zscaler_endpoints.tertiary)
+            for index, zscaler_endpoint in enumerate(zscaler_endpoints):
+                if not zscaler_endpoint:
+                    continue
+
+                preference = ("primary", "secondary", "tertiary")[index]
+
+                # PRI, SEC, TER used for groups
+                # TODO: consider if we should use DC names as group suffix.
+                suffix = preference[0:3].upper()
+
+                destination_ip = zscaler_endpoint.ip_address
+                tunnel_id = tunnel_id_range[index]
+                connections.append(
+                    {
+                        **connection_base,
+                        "name": f"IE-Tunnel{tunnel_id}",
+                        "monitor_name": f"IE-Tunnel{tunnel_id}",
+                        "monitor_host": destination_ip,
+                        "tunnel_id": tunnel_id,
+                        # Using Loopback0 as source interface as using the WAN interface causes issues for DPS.
+                        "tunnel_ip_address": "unnumbered Loopback0",
+                        "tunnel_destination_ip": destination_ip,
+                        "ipsec_profile": f"IE-{policy_name}-PROFILE",
+                        "description": f"Internet Exit {policy_name} {suffix}",
+                        "exit_group": f"{policy_name}_{suffix}",
+                        "preference": preference,
+                        "suffix": suffix,
+                        "endpoint": zscaler_endpoint,
+                    },
+                )
+        return connections

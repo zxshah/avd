@@ -123,7 +123,7 @@ keys:
                       type: str
                     include_leaked:
                       type: bool
-                      description: Include following routes while redistributing.
+                      description: Include leaked routes while redistributing.
                 dhcp:
                   type: dict
                   keys:

@@ -122,6 +122,10 @@ class IpSecurityMixin(Protocol):
         self.structured_config.ip_security.key_controller.profile = profile_name
 
     def _set_ipsec_parameters(self: AvdStructuredConfigOverlayProtocol) -> None:
-        """Set parameters relevant to all ipsec connections."""
+        """
+        Set parameters relevant to all ipsec connections.
+        
+        Note: Duplicated in network_services/ip_security.py.
+        """
         if self.inputs.ipsec_settings.bind_connection_to_interface:
             self.structured_config.ip_security.connection_tx_interface_match_source_ip = True

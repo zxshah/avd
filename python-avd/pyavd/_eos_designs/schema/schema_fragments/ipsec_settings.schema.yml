@@ -8,7 +8,7 @@ type: dict
 keys:
   ipsec_settings:
     documentation_options:
-      table: ipsec-settings
+      table: wan-settings
     description: |-
       Settings applicable to all IPsec connections.
     type: dict

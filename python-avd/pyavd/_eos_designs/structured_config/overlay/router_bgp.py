@@ -126,7 +126,7 @@ class RouterBgpMixin(Protocol):
                 peer_groups.append(evpn_overlay_peer_group)
 
             # RR Overlay peer group rendered either for MPLS route servers
-            if self._mpls_role == "server":
+            if self._is_mpls_server is True:
                 rr_overlay_peer_group = self._generate_base_peer_group("mpls", "rr_overlay_peers")
                 rr_overlay_peer_group.remote_as = self.shared_utils.bgp_as
                 peer_groups.append(rr_overlay_peer_group)
@@ -188,7 +188,7 @@ class RouterBgpMixin(Protocol):
             if self.shared_utils.overlay_mpls is True:
                 peer_groups.append_new(name=self.inputs.bgp_peer_groups.mpls_overlay_peers.name, activate=False)
 
-            if self._mpls_role == "server":
+            if self._is_mpls_server is True:
                 peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=False)
 
         if self.shared_utils.overlay_ipvpn_gateway is True:
@@ -234,7 +234,7 @@ class RouterBgpMixin(Protocol):
                 if self.shared_utils.overlay_ler is True:
                     self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_source_interface = "Loopback0"
 
-                if self._mpls_role == "server":
+                if self._is_mpls_server is True:
                     peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True)
 
             # TODO: this is written for matching either evpn_mpls or evpn_vlxan based for iBGP see if we cannot make this better.
@@ -546,28 +546,33 @@ class RouterBgpMixin(Protocol):
                 )
                 neighbors.append(neighbor)
             else:
-                # Found a matching name for this remote gateway in the inventory
-                neighbor = self._create_neighbor(
-                    get(
+                bgp_as = peer_facts.get("bgp_as")
+                ip_address = get(
                         peer_facts,
                         "overlay.peering_address",
                         required=True,
                         custom_error_msg=f"switch.overlay.peering_address for {remote_peer_name} is required.",
-                    ),
-                    remote_peer_name,
-                    self.inputs.bgp_peer_groups.evpn_overlay_core.name,
-                    peer_facts.get("bgp_as"),
-                    "Loopback0",
-                )
-                # Apply potential override if present in the input variables
-                if remote_peer.bgp_as:
-                    neighbor.remote_as = remote_peer.bgp_as
-                if remote_peer.ip_address:
-                    neighbor.ip_address = remote_peer.ip_address
+                    )
 
-                if neighbor.remote_as is None or neighbor.ip_address is None:
+                # Apply potential override if present in the input variables
+                if remote_peer.bgp_as is not None:
+                    bgp_as = remote_peer.bgp_as
+
+                if remote_peer.ip_address is not None:
+                    ip_address = remote_peer.ip_address
+
+                if bgp_as is None or ip_address is None:
                     msg = f"The EVPN Gateway remote peer '{remote_peer_name}' is missing either a `bpg_as` or an `ip_address`."
                     raise AristaAvdError(msg)
+
+                # Found a matching name for this remote gateway in the inventory
+                neighbor = self._create_neighbor(
+                    ip_address,
+                    remote_peer_name,
+                    self.inputs.bgp_peer_groups.evpn_overlay_core.name,
+                    bgp_as,
+                    "Loopback0",
+                )
 
                 neighbors.append(neighbor)
 
@@ -590,7 +595,7 @@ class RouterBgpMixin(Protocol):
             neighbors.append(neighbor)
 
     def _set_mpls_route_clients(self: AvdStructuredConfigOverlayProtocol, neighbors: EosCliConfigGen.RouterBgp.Neighbors) -> None:
-        if self._mpls_role != "server":
+        if self._is_mpls_server is not True:
             return
 
         for avd_peer in self._avd_overlay_peers:
@@ -641,7 +646,7 @@ class RouterBgpMixin(Protocol):
             neighbors.append(neighbor)
 
     def _set_mpls_rr_peers(self: AvdStructuredConfigOverlayProtocol, neighbors: EosCliConfigGen.RouterBgp.Neighbors) -> None:
-        if self._mpls_role != "server":
+        if self._is_mpls_server is not True:
             return
 
         for route_reflector in natural_sort(get(self._hostvars, "switch.mpls_route_reflectors", default=[])):

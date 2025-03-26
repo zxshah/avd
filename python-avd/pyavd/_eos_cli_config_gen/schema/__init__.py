@@ -24685,15 +24685,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 _fields: ClassVar[dict] = {"enabled": {"type": bool}, "access_group": {"type": str}, "ipv6_access_group": {"type": str}, "vrfs": {"type": Vrfs}}
                 enabled: bool
                 access_group: str | None
-                """
-                Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
-                the 'in' direction.
-                """
+                """Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction."""
                 ipv6_access_group: str | None
-                """
-                Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
-                applied in the 'in' direction.
-                """
+                """Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction."""
                 vrfs: Vrfs
                 """Subclass of AvdList with `VrfsItem` items."""
 
@@ -24715,12 +24709,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         Args:
                             enabled: enabled
-                            access_group:
-                               Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
-                               the 'in' direction.
-                            ipv6_access_group:
-                               Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
-                               applied in the 'in' direction.
+                            access_group: Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
+                            ipv6_access_group: Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
                             vrfs: Subclass of AvdList with `VrfsItem` items.
 
                         """

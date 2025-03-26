@@ -33,8 +33,8 @@
     | [<samp>&nbsp;&nbsp;serve</samp>](## "ntp.serve") | Dictionary |  |  |  | Enable Serving NTP to clients |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;all</samp>](## "ntp.serve.all") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ntp.serve.all.enabled") | Boolean | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.all.access_group") | String |  |  |  | Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.all.ipv6_access_group") | String |  |  |  | Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.all.access_group") | String |  |  |  | Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.all.ipv6_access_group") | String |  |  |  | Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrfs</samp>](## "ntp.serve.all.vrfs") | List, items: Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.all.vrfs.[].name") | String | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.all.vrfs.[].access_group") | String |  |  |  |  |
@@ -92,10 +92,10 @@
         all:
           enabled: <bool; required>
 
-          # Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+          # Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
           access_group: <str>
 
-          # Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+          # Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
           ipv6_access_group: <str>
           vrfs:
             - name: <str; required>

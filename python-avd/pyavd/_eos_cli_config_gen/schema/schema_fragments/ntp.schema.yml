@@ -117,10 +117,10 @@ keys:
                 required: true
               access_group:
                 type: str
-                description: Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+                description: Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
               ipv6_access_group:
                 type: str
-                description: Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+                description: Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
               vrfs:
                 type: list
                 items:

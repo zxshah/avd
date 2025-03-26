@@ -223,6 +223,11 @@ class RouterBgpMixin(Protocol):
                     if self.shared_utils.platform_settings.feature_support.all_active_multihoming is False:
                         msg = "The All Active Multihoming resiliency model is not supported by this platform, refer to platform_settings -> feature_support"
                         raise AristaAvdError(msg)
+                    if self.shared_utils.overlay_ipvpn_gateway is True:
+                        msg = "The All Active Multihoming resiliency model is not compatible along the IPVPN Gateway model"
+                        raise AristaAvdError(msg)
+                    if self.shared_utils.node_config.evpn_gateway.all_active_multihoming.enable_d_path is True:
+                        self.structured_config.router_bgp.bgp.bestpath.d_path = True
                     evpn_ethernet_segment = EosCliConfigGen.RouterBgp.AddressFamilyEvpn.EvpnEthernetSegmentItem(
                         domain="all",
                         identifier=self.shared_utils.node_config.evpn_gateway.all_active_multihoming.evpn_ethernet_segment.identifier,
@@ -277,7 +282,7 @@ class RouterBgpMixin(Protocol):
             if self.inputs.evpn_import_pruning:
                 self.structured_config.router_bgp.address_family_evpn.route.import_match_failure_action = "discard"
 
-        if self.shared_utils.overlay_dpath is True and self.shared_utils.overlay_ipvpn_gateway is True:
+        if self.shared_utils.overlay_dpath is True:
             self.structured_config.router_bgp.address_family_evpn.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.evpn_domain_id
 
         if self.shared_utils.is_wan_server:
@@ -403,7 +408,7 @@ class RouterBgpMixin(Protocol):
             if self.shared_utils.mpls_overlay_role == "server":
                 af_vpn.peer_groups.append_new(name=self.inputs.bgp_peer_groups.rr_overlay_peers.name, activate=True)
 
-        if self.shared_utils.overlay_dpath is True and self.shared_utils.overlay_ipvpn_gateway:
+        if self.shared_utils.overlay_dpath is True:
             af_vpn.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.ipvpn_domain_id
 
     def _create_neighbor(

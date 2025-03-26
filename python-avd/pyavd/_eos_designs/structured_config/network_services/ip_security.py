@@ -23,11 +23,7 @@ class IpSecurityMixin(Protocol):
     def _set_zscaler_internet_exit_policy_ip_security(
         self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem
     ) -> None:
-        """ip_security set based on cv_pathfinder_internet_exit_policies."""
-        # Currently we only need ipsec for zscaler.
-        if internet_exit_policy.type != "zscaler":
-            return
-
+        """Set ip_security in structued_config for the given internet_exit_policy."""
         policy_name = internet_exit_policy.name
         encrypt_traffic = internet_exit_policy.zscaler.encrypt_traffic
         ike_policy_name = f"IE-{policy_name}-IKE-POLICY"

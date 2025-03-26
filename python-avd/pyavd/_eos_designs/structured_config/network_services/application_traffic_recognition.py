@@ -47,7 +47,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             else:
                 msg = (
                     f"The application profile {virtual_topology.application_profile} used in policy {policy_name} "
-                    "is not defined in 'application_classification.application_profiles'."
+                    "is undefined in 'application_classification.application_profiles'."
                 )
                 raise AristaAvdInvalidInputsError(msg)
 

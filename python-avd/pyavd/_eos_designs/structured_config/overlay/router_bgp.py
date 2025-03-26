@@ -548,11 +548,11 @@ class RouterBgpMixin(Protocol):
             else:
                 bgp_as = peer_facts.get("bgp_as")
                 ip_address = get(
-                        peer_facts,
-                        "overlay.peering_address",
-                        required=True,
-                        custom_error_msg=f"switch.overlay.peering_address for {remote_peer_name} is required.",
-                    )
+                    peer_facts,
+                    "overlay.peering_address",
+                    required=True,
+                    custom_error_msg=f"switch.overlay.peering_address for {remote_peer_name} is required.",
+                )
 
                 # Apply potential override if present in the input variables
                 if remote_peer.bgp_as is not None:

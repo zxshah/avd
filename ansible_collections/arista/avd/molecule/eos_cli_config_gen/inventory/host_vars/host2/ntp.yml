@@ -2,16 +2,3 @@
 ### NTP tests for authenticate
 ntp:
   authenticate: true
-  serve:
-    all:
-      enabled: false
-      ipv6_access_group: test_ACL_v6
-      vrfs:
-        - name: RED
-          access_group: test_ACL
-        - name: PINK
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6
-        - name: 1
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6

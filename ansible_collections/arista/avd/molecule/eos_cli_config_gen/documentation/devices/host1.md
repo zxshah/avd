@@ -560,18 +560,6 @@ ntp server 10.1.1.2 prefer
 ntp server 20.20.20.1 key <removed>
 ntp server ie.pool.ntp.org iburst key <removed>
 ntp serve all
-ntp serve all vrf BLUE
-ntp serve all vrf PINK
-ntp serve all vrf RED
-ntp serve all vrf default
-ntp serve ip access-group test_ACL vrf BLUE in
-ntp serve ip access-group test_ACL vrf PINK in
-ntp serve ip access-group test_ACL vrf RED in
-ntp serve ip access-group test_ACL in
-ntp serve ipv6 access-group test_ACL_v6 vrf BLUE in
-ntp serve ipv6 access-group test_ACL_v6 vrf PINK in
-ntp serve ipv6 access-group test_ACL_v6 vrf RED in
-ntp serve ipv6 access-group test_ACL_v6 in
 ```
 
 ### PTP

@@ -34,18 +34,3 @@ ntp:
   serve:
     all:
       enabled: true
-      access_group: test_ACL
-      ipv6_access_group: test_ACL_v6
-      vrfs:
-        - name: default
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6
-        - name: default
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6
-        - name: BLUE
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6
-        - name: PINK
-          access_group: test_ACL
-          ipv6_access_group: test_ACL_v6

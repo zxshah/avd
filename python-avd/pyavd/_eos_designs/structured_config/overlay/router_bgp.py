@@ -689,7 +689,6 @@ class RouterBgpMixin(Protocol):
                     ),
                     avd_peer,
                     self.inputs.bgp_peer_groups.rr_overlay_peers.name,
-                    peer_facts.get("bgp_as"),
-                    "Loopback0",
+                    overlay_peering_interface="Loopback0",
                 )
                 neighbors.append(neighbor)

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 from ansible.vars.hostvars import HostVarsVars
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from ansible.inventory.manager import InventoryManager
     from ansible.parsing.dataloader import DataLoader
     from ansible.playbook.play import Play

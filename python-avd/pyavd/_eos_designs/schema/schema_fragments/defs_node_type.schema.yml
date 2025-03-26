@@ -674,16 +674,16 @@ $defs:
                   enabled:
                     description: Enable Active Active Multihoming resiliency model.
                     type: bool
-                    default: false
+                    required: true
                   enable_d_path:
                     description: Enable D-path for use with BGP bestpath selection algorithm.
                     type: bool
                     default: true
-                  domain_identifier:
+                  evpn_domain_id_local:
                     description: ASN(asplain):local_admin or ASN(asdot):local_admin notation
                     type: str
                     required: true
-                  domain_identifier_remote:
+                  evpn_domain_id_remote:
                     description: ASN(asplain):local_admin or ASN(asdot):local_admin notation
                     type: str
                     required: true

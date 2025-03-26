@@ -229,10 +229,10 @@ class RouterBgpMixin(Protocol):
                         route_target_import=self.shared_utils.node_config.evpn_gateway.all_active_multihoming.evpn_ethernet_segment.rt_import,
                     )
                     self.structured_config.router_bgp.address_family_evpn.domain_identifier = (
-                        self.shared_utils.node_config.evpn_gateway.all_active_multihoming.domain_identifier
+                        self.shared_utils.node_config.evpn_gateway.all_active_multihoming.evpn_domain_id_local
                     )
                     self.structured_config.router_bgp.address_family_evpn.domain_identifier_remote = (
-                        self.shared_utils.node_config.evpn_gateway.all_active_multihoming.domain_identifier_remote
+                        self.shared_utils.node_config.evpn_gateway.all_active_multihoming.evpn_domain_id_remote
                     )
                     self.structured_config.router_bgp.address_family_evpn.evpn_ethernet_segment.append(evpn_ethernet_segment)
 

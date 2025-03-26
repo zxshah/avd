@@ -8058,7 +8058,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8086,7 +8086,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).
@@ -8582,7 +8582,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8610,7 +8610,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).
@@ -9599,7 +9599,6 @@ class EosDesigns(EosDesignsRootModel):
                 "bgp_update_wait_install": {"type": bool, "default": True},
                 "bgp_update_wait_for_convergence": {"type": bool, "default": True},
                 "platform_sfe_interface_profile": {"type": PlatformSfeInterfaceProfile},
-                "all_active_multihoming": {"type": bool, "default": False},
             }
             queue_monitor_length_notify: bool
             """Default value: `True`"""
@@ -9642,12 +9641,6 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdModel.
             """
-            all_active_multihoming: bool
-            """
-            Supports the configuration for the all-active EVPN gateway redundancy model.
-
-            Default value: `False`
-            """
 
             if TYPE_CHECKING:
 
@@ -9661,7 +9654,6 @@ class EosDesigns(EosDesignsRootModel):
                     bgp_update_wait_install: bool | UndefinedType = Undefined,
                     bgp_update_wait_for_convergence: bool | UndefinedType = Undefined,
                     platform_sfe_interface_profile: PlatformSfeInterfaceProfile | UndefinedType = Undefined,
-                    all_active_multihoming: bool | UndefinedType = Undefined,
                 ) -> None:
                     """
                     FeatureSupport.
@@ -9694,7 +9686,6 @@ class EosDesigns(EosDesignsRootModel):
                            Support for Platform SFE Interface Profiles.
 
                            Subclass of AvdModel.
-                        all_active_multihoming: Supports the configuration for the all-active EVPN gateway redundancy model.
 
                     """
 
@@ -9916,7 +9907,6 @@ class EosDesigns(EosDesignsRootModel):
                 "bgp_update_wait_install": {"type": bool, "default": True},
                 "bgp_update_wait_for_convergence": {"type": bool, "default": True},
                 "platform_sfe_interface_profile": {"type": PlatformSfeInterfaceProfile},
-                "all_active_multihoming": {"type": bool, "default": False},
             }
             queue_monitor_length_notify: bool
             """Default value: `True`"""
@@ -9959,12 +9949,6 @@ class EosDesigns(EosDesignsRootModel):
 
             Subclass of AvdModel.
             """
-            all_active_multihoming: bool
-            """
-            Supports the configuration for the all-active EVPN gateway redundancy model.
-
-            Default value: `False`
-            """
 
             if TYPE_CHECKING:
 
@@ -9978,7 +9962,6 @@ class EosDesigns(EosDesignsRootModel):
                     bgp_update_wait_install: bool | UndefinedType = Undefined,
                     bgp_update_wait_for_convergence: bool | UndefinedType = Undefined,
                     platform_sfe_interface_profile: PlatformSfeInterfaceProfile | UndefinedType = Undefined,
-                    all_active_multihoming: bool | UndefinedType = Undefined,
                 ) -> None:
                     """
                     FeatureSupport.
@@ -10011,7 +9994,6 @@ class EosDesigns(EosDesignsRootModel):
                            Support for Platform SFE Interface Profiles.
 
                            Subclass of AvdModel.
-                        all_active_multihoming: Supports the configuration for the all-active EVPN gateway redundancy model.
 
                     """
 

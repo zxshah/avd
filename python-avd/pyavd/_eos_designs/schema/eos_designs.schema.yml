@@ -2651,7 +2651,7 @@ keys:
             l1:
               type: bool
               default: false
-              description: ??
+              description: Point-to-point services
             l2:
               type: bool
               default: false
@@ -3416,11 +3416,6 @@ keys:
                   convert_types:
                   - str
                   description: Maximum rx_queue count supported on any interface.
-            all_active_multihoming:
-              type: bool
-              default: false
-              description: Supports the configuration for the all-active EVPN gateway
-                redundancy model.
         management_interface:
           type: str
           default: Management1

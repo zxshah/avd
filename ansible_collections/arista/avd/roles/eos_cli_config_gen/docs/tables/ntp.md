@@ -32,15 +32,13 @@
     | [<samp>&nbsp;&nbsp;trusted_keys</samp>](## "ntp.trusted_keys") | String |  |  |  | List of trusted-keys as string ex. 10-12,15. |
     | [<samp>&nbsp;&nbsp;serve</samp>](## "ntp.serve") | Dictionary |  |  |  | Enable Serving NTP to clients |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;all</samp>](## "ntp.serve.all") | Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ntp.serve.all.enabled") | Boolean |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "ntp.serve.all.enabled") | Boolean | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.all.access_group") | String |  |  |  | Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.all.ipv6_access_group") | String |  |  |  | Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrfs</samp>](## "ntp.serve.all.vrfs") | List, items: Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.all.vrfs.[].name") | String |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;access_groups</samp>](## "ntp.serve.access_groups") | List, items: Dictionary |  |  |  | Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.access_groups.[].name") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ntp.serve.access_groups.[].vrf") | String | Required |  |  | Use 'default' to add ACL to the default VRF |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_groups</samp>](## "ntp.serve.ipv6_access_groups") | List, items: Dictionary |  |  |  | IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.ipv6_access_groups.[].name") | String | Required |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;vrf</samp>](## "ntp.serve.ipv6_access_groups.[].vrf") | String | Required |  |  | Use 'default' to add ACL to the default VRF |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.all.vrfs.[].name") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.all.vrfs.[].access_group") | String |  |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.all.vrfs.[].ipv6_access_group") | String |  |  |  |  |
 
 === "YAML"
 
@@ -92,21 +90,15 @@
       # Enable Serving NTP to clients
       serve:
         all:
-          enabled: <bool>
+          enabled: <bool; required>
+
+          # Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+          access_group: <str>
+
+          # Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
+          ipv6_access_group: <str>
           vrfs:
-            - name: <str>
-
-        # Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
-        access_groups:
-          - name: <str; required>
-
-            # Use 'default' to add ACL to the default VRF
-            vrf: <str; required>
-
-        # IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in the 'in' direction.
-        ipv6_access_groups:
-          - name: <str; required>
-
-            # Use 'default' to add ACL to the default VRF
-            vrf: <str; required>
+            - name: <str; required>
+              access_group: <str>
+              ipv6_access_group: <str>
     ```

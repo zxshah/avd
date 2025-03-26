@@ -24650,12 +24650,20 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 class VrfsItem(AvdModel):
                     """Subclass of AvdModel."""
 
-                    _fields: ClassVar[dict] = {"name": {"type": str}}
-                    name: str | None
+                    _fields: ClassVar[dict] = {"name": {"type": str}, "access_group": {"type": str}, "ipv6_access_group": {"type": str}}
+                    name: str
+                    access_group: str | None
+                    ipv6_access_group: str | None
 
                     if TYPE_CHECKING:
 
-                        def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                        def __init__(
+                            self,
+                            *,
+                            name: str | UndefinedType = Undefined,
+                            access_group: str | None | UndefinedType = Undefined,
+                            ipv6_access_group: str | None | UndefinedType = Undefined,
+                        ) -> None:
                             """
                             VrfsItem.
 
@@ -24664,6 +24672,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                             Args:
                                 name: name
+                                access_group: access_group
+                                ipv6_access_group: ipv6_access_group
 
                             """
 
@@ -24672,14 +24682,31 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                 Vrfs._item_type = VrfsItem
 
-                _fields: ClassVar[dict] = {"enabled": {"type": bool}, "vrfs": {"type": Vrfs}}
-                enabled: bool | None
+                _fields: ClassVar[dict] = {"enabled": {"type": bool}, "access_group": {"type": str}, "ipv6_access_group": {"type": str}, "vrfs": {"type": Vrfs}}
+                enabled: bool
+                access_group: str | None
+                """
+                Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
+                the 'in' direction.
+                """
+                ipv6_access_group: str | None
+                """
+                Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
+                applied in the 'in' direction.
+                """
                 vrfs: Vrfs
                 """Subclass of AvdList with `VrfsItem` items."""
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, enabled: bool | None | UndefinedType = Undefined, vrfs: Vrfs | UndefinedType = Undefined) -> None:
+                    def __init__(
+                        self,
+                        *,
+                        enabled: bool | UndefinedType = Undefined,
+                        access_group: str | None | UndefinedType = Undefined,
+                        ipv6_access_group: str | None | UndefinedType = Undefined,
+                        vrfs: Vrfs | UndefinedType = Undefined,
+                    ) -> None:
                         """
                         All.
 
@@ -24688,93 +24715,23 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         Args:
                             enabled: enabled
+                            access_group:
+                               Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
+                               the 'in' direction.
+                            ipv6_access_group:
+                               Standard IPv6 ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
+                               applied in the 'in' direction.
                             vrfs: Subclass of AvdList with `VrfsItem` items.
 
                         """
 
-            class AccessGroupsItem(AvdModel):
-                """Subclass of AvdModel."""
-
-                _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
-                name: str
-                vrf: str
-                """Use 'default' to add ACL to the default VRF"""
-
-                if TYPE_CHECKING:
-
-                    def __init__(self, *, name: str | UndefinedType = Undefined, vrf: str | UndefinedType = Undefined) -> None:
-                        """
-                        AccessGroupsItem.
-
-
-                        Subclass of AvdModel.
-
-                        Args:
-                            name: name
-                            vrf: Use 'default' to add ACL to the default VRF
-
-                        """
-
-            class AccessGroups(AvdList[AccessGroupsItem]):
-                """Subclass of AvdList with `AccessGroupsItem` items."""
-
-            AccessGroups._item_type = AccessGroupsItem
-
-            class Ipv6AccessGroupsItem(AvdModel):
-                """Subclass of AvdModel."""
-
-                _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
-                name: str
-                vrf: str
-                """Use 'default' to add ACL to the default VRF"""
-
-                if TYPE_CHECKING:
-
-                    def __init__(self, *, name: str | UndefinedType = Undefined, vrf: str | UndefinedType = Undefined) -> None:
-                        """
-                        Ipv6AccessGroupsItem.
-
-
-                        Subclass of AvdModel.
-
-                        Args:
-                            name: name
-                            vrf: Use 'default' to add ACL to the default VRF
-
-                        """
-
-            class Ipv6AccessGroups(AvdList[Ipv6AccessGroupsItem]):
-                """Subclass of AvdList with `Ipv6AccessGroupsItem` items."""
-
-            Ipv6AccessGroups._item_type = Ipv6AccessGroupsItem
-
-            _fields: ClassVar[dict] = {"all": {"type": All}, "access_groups": {"type": AccessGroups}, "ipv6_access_groups": {"type": Ipv6AccessGroups}}
+            _fields: ClassVar[dict] = {"all": {"type": All}}
             all: All
             """Subclass of AvdModel."""
-            access_groups: AccessGroups
-            """
-            Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
-            the 'in' direction.
-
-            Subclass of AvdList with `AccessGroupsItem` items.
-            """
-            ipv6_access_groups: Ipv6AccessGroups
-            """
-            IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
-            applied in the 'in' direction.
-
-            Subclass of AvdList with `Ipv6AccessGroupsItem` items.
-            """
 
             if TYPE_CHECKING:
 
-                def __init__(
-                    self,
-                    *,
-                    all: All | UndefinedType = Undefined,
-                    access_groups: AccessGroups | UndefinedType = Undefined,
-                    ipv6_access_groups: Ipv6AccessGroups | UndefinedType = Undefined,
-                ) -> None:
+                def __init__(self, *, all: All | UndefinedType = Undefined) -> None:
                     """
                     Serve.
 
@@ -24783,16 +24740,6 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     Args:
                         all: Subclass of AvdModel.
-                        access_groups:
-                           Standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are applied in
-                           the 'in' direction.
-
-                           Subclass of AvdList with `AccessGroupsItem` items.
-                        ipv6_access_groups:
-                           IPv6 standard ACL to apply to NTP serve. Only one ACL per VRF can be configured. All ACLs are
-                           applied in the 'in' direction.
-
-                           Subclass of AvdList with `Ipv6AccessGroupsItem` items.
 
                     """
 

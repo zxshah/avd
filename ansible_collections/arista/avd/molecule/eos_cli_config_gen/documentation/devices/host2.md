@@ -186,6 +186,15 @@ interface Management1
 ```eos
 !
 ntp authenticate
+ntp serve all vrf 1
+ntp serve all vrf PINK
+ntp serve all vrf RED
+ntp serve ip access-group test_ACL vrf 1 in
+ntp serve ip access-group test_ACL vrf PINK in
+ntp serve ip access-group test_ACL vrf RED in
+ntp serve ipv6 access-group test_ACL_v6 vrf 1 in
+ntp serve ipv6 access-group test_ACL_v6 vrf PINK in
+ntp serve ipv6 access-group test_ACL_v6 in
 ```
 
 ### PTP

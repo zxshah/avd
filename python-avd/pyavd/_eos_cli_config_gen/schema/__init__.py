@@ -27,11 +27,50 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             class Console(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"method": {"type": str}, "group": {"type": str}}
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self, *, method: Literal["logging", "group"] | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}, "methods": {"type": Methods}}
                 type: Literal["none", "start-stop", "stop-only"]
                 group: str | None
                 """Group Name."""
                 logging: bool | None
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
@@ -41,6 +80,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         type: Literal["none", "start-stop", "stop-only"] | UndefinedType = Undefined,
                         group: str | None | UndefinedType = Undefined,
                         logging: bool | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         Console.
@@ -52,17 +92,57 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             type: type
                             group: Group Name.
                             logging: logging
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
             class Default(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"method": {"type": str}, "group": {"type": str}}
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self, *, method: Literal["logging", "group"] | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}, "methods": {"type": Methods}}
                 type: Literal["none", "start-stop", "stop-only"] | None
                 group: str | None
                 """Group Name."""
                 logging: bool | None
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
@@ -72,6 +152,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         type: Literal["none", "start-stop", "stop-only"] | None | UndefinedType = Undefined,
                         group: str | None | UndefinedType = Undefined,
                         logging: bool | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         Default.
@@ -83,6 +164,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             type: type
                             group: Group Name.
                             logging: logging
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
@@ -113,10 +195,49 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             class Default(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"method": {"type": str}, "group": {"type": str}}
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self, *, method: Literal["logging", "group"] | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "methods": {"type": Methods}}
                 type: Literal["none", "start-stop", "stop-only"] | None
                 group: str | None
                 """Group Name."""
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
@@ -125,6 +246,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         *,
                         type: Literal["none", "start-stop", "stop-only"] | None | UndefinedType = Undefined,
                         group: str | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         Default.
@@ -135,6 +257,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Args:
                             type: type
                             group: Group Name.
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
@@ -162,15 +285,72 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             class Default(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"multicast": {"type": bool}, "method": {"type": str}, "group": {"type": str}}
+                    multicast: bool | None
+                    """
+                    Forward accounting packets to all servers within the specified group.
+                    This option is applicable only
+                    when the `method` key is explicitly set to `group`.
+                    """
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            multicast: bool | None | UndefinedType = Undefined,
+                            method: Literal["logging", "group"] | UndefinedType = Undefined,
+                            group: str | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                multicast:
+                                   Forward accounting packets to all servers within the specified group.
+                                   This option is applicable only
+                                   when the `method` key is explicitly set to `group`.
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {"type": {"type": str}, "group": {"type": str}, "methods": {"type": Methods}}
                 type: Literal["start-stop", "stop-only"] | None
                 group: str | None
                 """Group Name."""
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
                     def __init__(
-                        self, *, type: Literal["start-stop", "stop-only"] | None | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        self,
+                        *,
+                        type: Literal["start-stop", "stop-only"] | None | UndefinedType = Undefined,
+                        group: str | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         Default.
@@ -181,6 +361,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Args:
                             type: type
                             group: Group Name.
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
@@ -208,13 +389,58 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             class ConsoleItem(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"commands": {"type": str}, "type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"method": {"type": str}, "group": {"type": str}}
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self, *, method: Literal["logging", "group"] | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {
+                    "commands": {"type": str},
+                    "type": {"type": str},
+                    "group": {"type": str},
+                    "logging": {"type": bool},
+                    "methods": {"type": Methods},
+                }
                 commands: str | None
                 """Privilege level 'all' or 0-15. Ensure that if ranges are used, they do not overlap with one another."""
                 type: Literal["none", "start-stop", "stop-only"] | None
                 group: str | None
                 """Group Name."""
                 logging: bool | None
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
@@ -225,6 +451,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         type: Literal["none", "start-stop", "stop-only"] | None | UndefinedType = Undefined,
                         group: str | None | UndefinedType = Undefined,
                         logging: bool | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         ConsoleItem.
@@ -237,6 +464,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             type: type
                             group: Group Name.
                             logging: logging
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
@@ -248,13 +476,58 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             class DefaultItem(AvdModel):
                 """Subclass of AvdModel."""
 
-                _fields: ClassVar[dict] = {"commands": {"type": str}, "type": {"type": str}, "group": {"type": str}, "logging": {"type": bool}}
+                class MethodsItem(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"method": {"type": str}, "group": {"type": str}}
+                    method: Literal["logging", "group"]
+                    group: str | None
+                    """
+                    Specify the server group to be used.
+                    This option is applicable only when the `method` key is
+                    explicitly set to `group`.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self, *, method: Literal["logging", "group"] | UndefinedType = Undefined, group: str | None | UndefinedType = Undefined
+                        ) -> None:
+                            """
+                            MethodsItem.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                method: method
+                                group:
+                                   Specify the server group to be used.
+                                   This option is applicable only when the `method` key is
+                                   explicitly set to `group`.
+
+                            """
+
+                class Methods(AvdList[MethodsItem]):
+                    """Subclass of AvdList with `MethodsItem` items."""
+
+                Methods._item_type = MethodsItem
+
+                _fields: ClassVar[dict] = {
+                    "commands": {"type": str},
+                    "type": {"type": str},
+                    "group": {"type": str},
+                    "logging": {"type": bool},
+                    "methods": {"type": Methods},
+                }
                 commands: str | None
                 """Privilege level 'all' or 0-15. Ensure that if ranges are used, they do not overlap with one another."""
                 type: Literal["none", "start-stop", "stop-only"] | None
                 group: str | None
                 """Group Name."""
                 logging: bool | None
+                methods: Methods
+                """Subclass of AvdList with `MethodsItem` items."""
 
                 if TYPE_CHECKING:
 
@@ -265,6 +538,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         type: Literal["none", "start-stop", "stop-only"] | None | UndefinedType = Undefined,
                         group: str | None | UndefinedType = Undefined,
                         logging: bool | None | UndefinedType = Undefined,
+                        methods: Methods | UndefinedType = Undefined,
                     ) -> None:
                         """
                         DefaultItem.
@@ -277,6 +551,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             type: type
                             group: Group Name.
                             logging: logging
+                            methods: Subclass of AvdList with `MethodsItem` items.
 
                         """
 
@@ -346,7 +621,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class Login(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"default": {"type": str}, "console": {"type": str}}
+            _fields: ClassVar[dict] = {"default": {"type": str}, "command_api": {"type": str}, "console": {"type": str}}
             default: str | None
             """
             Login authentication method(s) as a string.
@@ -354,6 +629,15 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             - "group tacacs+ local"
             - "group MYGROUP none"
             - "group radius group MYGROUP local"
+            """
+            command_api: str | None
+            """
+            Command-API authentication method(s) as a string.
+            This feature is not yet visible in EOS.
+            This
+            feature only supports local authentication at the moment.
+            Examples:
+            - "local"
             """
             console: str | None
             """
@@ -367,7 +651,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
             if TYPE_CHECKING:
 
-                def __init__(self, *, default: str | None | UndefinedType = Undefined, console: str | None | UndefinedType = Undefined) -> None:
+                def __init__(
+                    self,
+                    *,
+                    default: str | None | UndefinedType = Undefined,
+                    command_api: str | None | UndefinedType = Undefined,
+                    console: str | None | UndefinedType = Undefined,
+                ) -> None:
                     """
                     Login.
 
@@ -381,6 +671,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            - "group tacacs+ local"
                            - "group MYGROUP none"
                            - "group radius group MYGROUP local"
+                        command_api:
+                           Command-API authentication method(s) as a string.
+                           This feature is not yet visible in EOS.
+                           This
+                           feature only supports local authentication at the moment.
+                           Examples:  # fmt: skip
+                           - "local"
                         console:
                            Console authentication method(s) as a string.
                            Examples:  # fmt: skip
@@ -1182,7 +1479,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}, "service": {"type": str}}
-                name: str | None
+                name: str
                 """Application name."""
                 service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"] | None
                 """
@@ -1199,7 +1496,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     def __init__(
                         self,
                         *,
-                        name: str | None | UndefinedType = Undefined,
+                        name: str | UndefinedType = Undefined,
                         service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"]
                         | None
                         | UndefinedType = Undefined,
@@ -1768,7 +2065,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}, "service": {"type": str}}
-                name: str | None
+                name: str
                 """Application Name."""
                 service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"] | None
                 """
@@ -1785,7 +2082,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     def __init__(
                         self,
                         *,
-                        name: str | None | UndefinedType = Undefined,
+                        name: str | UndefinedType = Undefined,
                         service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"]
                         | None
                         | UndefinedType = Undefined,
@@ -1822,7 +2119,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}, "service": {"type": str}}
-                name: str | None
+                name: str
                 """Name of a category."""
                 service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"] | None
                 """
@@ -1839,7 +2136,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     def __init__(
                         self,
                         *,
-                        name: str | None | UndefinedType = Undefined,
+                        name: str | UndefinedType = Undefined,
                         service: Literal["audio-video", "chat", "default", "file-transfer", "networking-protocols", "peer-to-peer", "software-update"]
                         | None
                         | UndefinedType = Undefined,
@@ -8358,6 +8655,39 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
+        class SpanningTreeBpduguardRateLimit(AvdModel):
+            """Subclass of AvdModel."""
+
+            _fields: ClassVar[dict] = {"enabled": {"type": bool}, "count": {"type": int}, "interval": {"type": int}}
+            enabled: bool | None
+            """Enable/Disable rate limiter on this port."""
+            count: int | None
+            """Max number of BPDUs per timer interval."""
+            interval: int | None
+            """Number of seconds in the BPDU input rate limiter timer."""
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    enabled: bool | None | UndefinedType = Undefined,
+                    count: int | None | UndefinedType = Undefined,
+                    interval: int | None | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    SpanningTreeBpduguardRateLimit.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        enabled: Enable/Disable rate limiter on this port.
+                        count: Max number of BPDUs per timer interval.
+                        interval: Number of seconds in the BPDU input rate limiter timer.
+
+                    """
+
         class PriorityFlowControl(AvdModel):
             """Subclass of AvdModel."""
 
@@ -11150,6 +11480,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "qos": {"type": Qos},
             "spanning_tree_bpdufilter": {"type": str},
             "spanning_tree_bpduguard": {"type": str},
+            "spanning_tree_bpduguard_rate_limit": {"type": SpanningTreeBpduguardRateLimit},
             "spanning_tree_guard": {"type": str},
             "spanning_tree_portfast": {"type": str},
             "vmtracer": {"type": bool},
@@ -11384,6 +11715,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         spanning_tree_bpdufilter: Literal["enabled", "disabled", "True", "False", "true", "false"] | None
         spanning_tree_bpduguard: Literal["enabled", "disabled", "True", "False", "true", "false"] | None
+        spanning_tree_bpduguard_rate_limit: SpanningTreeBpduguardRateLimit
+        """Subclass of AvdModel."""
         spanning_tree_guard: Literal["loop", "root", "disabled"] | None
         spanning_tree_portfast: Literal["edge", "network"] | None
         vmtracer: bool | None
@@ -11541,6 +11874,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 qos: Qos | UndefinedType = Undefined,
                 spanning_tree_bpdufilter: Literal["enabled", "disabled", "True", "False", "true", "false"] | None | UndefinedType = Undefined,
                 spanning_tree_bpduguard: Literal["enabled", "disabled", "True", "False", "true", "false"] | None | UndefinedType = Undefined,
+                spanning_tree_bpduguard_rate_limit: SpanningTreeBpduguardRateLimit | UndefinedType = Undefined,
                 spanning_tree_guard: Literal["loop", "root", "disabled"] | None | UndefinedType = Undefined,
                 spanning_tree_portfast: Literal["edge", "network"] | None | UndefinedType = Undefined,
                 vmtracer: bool | None | UndefinedType = Undefined,
@@ -11707,6 +12041,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     qos: Subclass of AvdModel.
                     spanning_tree_bpdufilter: spanning_tree_bpdufilter
                     spanning_tree_bpduguard: spanning_tree_bpduguard
+                    spanning_tree_bpduguard_rate_limit: Subclass of AvdModel.
                     spanning_tree_guard: spanning_tree_guard
                     spanning_tree_portfast: spanning_tree_portfast
                     vmtracer: vmtracer
@@ -17358,6 +17693,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "isis_metric": {"type": int},
             "isis_network_point_to_point": {"type": bool},
             "node_segment": {"type": NodeSegment},
+            "hardware_forwarding_id": {"type": bool},
             "eos_cli": {"type": str},
         }
         name: str
@@ -17386,6 +17722,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         isis_network_point_to_point: bool | None
         node_segment: NodeSegment
         """Subclass of AvdModel."""
+        hardware_forwarding_id: bool | None
+        """Enable hardware forwarding for the VRF where this loopback interface belongs."""
         eos_cli: str | None
         """EOS CLI rendered directly on the loopback interface in the final EOS configuration."""
 
@@ -17411,6 +17749,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 isis_metric: int | None | UndefinedType = Undefined,
                 isis_network_point_to_point: bool | None | UndefinedType = Undefined,
                 node_segment: NodeSegment | UndefinedType = Undefined,
+                hardware_forwarding_id: bool | None | UndefinedType = Undefined,
                 eos_cli: str | None | UndefinedType = Undefined,
             ) -> None:
                 """
@@ -17437,6 +17776,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     isis_metric: isis_metric
                     isis_network_point_to_point: isis_network_point_to_point
                     node_segment: Subclass of AvdModel.
+                    hardware_forwarding_id: Enable hardware forwarding for the VRF where this loopback interface belongs.
                     eos_cli: EOS CLI rendered directly on the loopback interface in the final EOS configuration.
 
                 """
@@ -17786,6 +18126,30 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
+            class ReplayProtection(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"disabled": {"type": bool}, "window": {"type": int}}
+                disabled: bool | None
+                """Disable replay protection."""
+                window: int | None
+                """Set replay protection window size."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, disabled: bool | None | UndefinedType = Undefined, window: int | None | UndefinedType = Undefined) -> None:
+                        """
+                        ReplayProtection.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            disabled: Disable replay protection.
+                            window: Set replay protection window size.
+
+                        """
+
             _fields: ClassVar[dict] = {
                 "name": {"type": str},
                 "cipher": {"type": str},
@@ -17794,6 +18158,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "sci": {"type": bool},
                 "l2_protocols": {"type": L2Protocols},
                 "traffic_unprotected": {"type": TrafficUnprotected},
+                "replay_protection": {"type": ReplayProtection},
             }
             name: str
             """Profile-Name."""
@@ -17806,6 +18171,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             l2_protocols: L2Protocols
             """Subclass of AvdModel."""
             traffic_unprotected: TrafficUnprotected
+            """Subclass of AvdModel."""
+            replay_protection: ReplayProtection
             """Subclass of AvdModel."""
 
             if TYPE_CHECKING:
@@ -17820,6 +18187,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     sci: bool | None | UndefinedType = Undefined,
                     l2_protocols: L2Protocols | UndefinedType = Undefined,
                     traffic_unprotected: TrafficUnprotected | UndefinedType = Undefined,
+                    replay_protection: ReplayProtection | UndefinedType = Undefined,
                 ) -> None:
                     """
                     ProfilesItem.
@@ -17835,6 +18203,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         sci: sci
                         l2_protocols: Subclass of AvdModel.
                         traffic_unprotected: Subclass of AvdModel.
+                        replay_protection: Subclass of AvdModel.
 
                     """
 
@@ -18255,6 +18624,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     "notification_timestamp": {"type": str},
                     "ip_access_group": {"type": str},
                     "port": {"type": int},
+                    "authorization_requests": {"type": bool},
                 }
                 name: str
                 """Transport name."""
@@ -18281,6 +18651,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 Make sure to update the control-plane ACL accordingly in order for the service to be
                 reachable by external applications.
                 """
+                authorization_requests: bool | None
+                """Use per-RPC authorization."""
 
                 if TYPE_CHECKING:
 
@@ -18293,6 +18665,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         notification_timestamp: Literal["send-time", "last-change-time"] | None | UndefinedType = Undefined,
                         ip_access_group: str | None | UndefinedType = Undefined,
                         port: int | None | UndefinedType = Undefined,
+                        authorization_requests: bool | None | UndefinedType = Undefined,
                     ) -> None:
                         """
                         GrpcItem.
@@ -18318,6 +18691,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                GNMI port.
                                Make sure to update the control-plane ACL accordingly in order for the service to be
                                reachable by external applications.
+                            authorization_requests: Use per-RPC authorization.
 
                         """
 
@@ -23098,6 +23472,185 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                        Subclass of AvdIndexedList with `ProfilesItem` items. Primary key is
                        `name` (`str`).
                     sample_policies: Subclass of AvdIndexedList with `SamplePoliciesItem` items. Primary key is `name` (`str`).
+
+                """
+
+    class MonitorTwamp(AvdModel):
+        """Subclass of AvdModel."""
+
+        class TwampLight(AvdModel):
+            """Subclass of AvdModel."""
+
+            class ReflectorDefaults(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"listen_port": {"type": int}}
+                listen_port: int | None
+
+                if TYPE_CHECKING:
+
+                    def __init__(self, *, listen_port: int | None | UndefinedType = Undefined) -> None:
+                        """
+                        ReflectorDefaults.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            listen_port: listen_port
+
+                        """
+
+            class SenderDefaults(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"destination_port": {"type": int}, "source_port": {"type": int}}
+                destination_port: int | None
+                source_port: int | None
+
+                if TYPE_CHECKING:
+
+                    def __init__(
+                        self, *, destination_port: int | None | UndefinedType = Undefined, source_port: int | None | UndefinedType = Undefined
+                    ) -> None:
+                        """
+                        SenderDefaults.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            destination_port: destination_port
+                            source_port: source_port
+
+                        """
+
+            class SenderProfilesItem(AvdModel):
+                """Subclass of AvdModel."""
+
+                class Significance(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"value": {"type": int}, "offset": {"type": int}}
+                    value: int
+                    """Significance value in microseconds."""
+                    offset: int
+                    """
+                    Offset in microseconds, used to round up calculated TWAMP light delay statistics. Must be lower than
+                    the significance value.
+                    """
+
+                    if TYPE_CHECKING:
+
+                        def __init__(self, *, value: int | UndefinedType = Undefined, offset: int | UndefinedType = Undefined) -> None:
+                            """
+                            Significance.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                value: Significance value in microseconds.
+                                offset:
+                                   Offset in microseconds, used to round up calculated TWAMP light delay statistics. Must be lower than
+                                   the significance value.
+
+                            """
+
+                _fields: ClassVar[dict] = {
+                    "name": {"type": str},
+                    "measurement_interval": {"type": int},
+                    "measurement_samples": {"type": int},
+                    "significance": {"type": Significance},
+                }
+                name: str
+                measurement_interval: int | None
+                """Measurement interval in seconds."""
+                measurement_samples: int | None
+                """Number of samples used to calculate TWAMP light metrics."""
+                significance: Significance
+                """Subclass of AvdModel."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(
+                        self,
+                        *,
+                        name: str | UndefinedType = Undefined,
+                        measurement_interval: int | None | UndefinedType = Undefined,
+                        measurement_samples: int | None | UndefinedType = Undefined,
+                        significance: Significance | UndefinedType = Undefined,
+                    ) -> None:
+                        """
+                        SenderProfilesItem.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            name: name
+                            measurement_interval: Measurement interval in seconds.
+                            measurement_samples: Number of samples used to calculate TWAMP light metrics.
+                            significance: Subclass of AvdModel.
+
+                        """
+
+            class SenderProfiles(AvdIndexedList[str, SenderProfilesItem]):
+                """Subclass of AvdIndexedList with `SenderProfilesItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
+
+            SenderProfiles._item_type = SenderProfilesItem
+
+            _fields: ClassVar[dict] = {
+                "reflector_defaults": {"type": ReflectorDefaults},
+                "sender_defaults": {"type": SenderDefaults},
+                "sender_profiles": {"type": SenderProfiles},
+            }
+            reflector_defaults: ReflectorDefaults
+            """Subclass of AvdModel."""
+            sender_defaults: SenderDefaults
+            """Subclass of AvdModel."""
+            sender_profiles: SenderProfiles
+            """Subclass of AvdIndexedList with `SenderProfilesItem` items. Primary key is `name` (`str`)."""
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    reflector_defaults: ReflectorDefaults | UndefinedType = Undefined,
+                    sender_defaults: SenderDefaults | UndefinedType = Undefined,
+                    sender_profiles: SenderProfiles | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    TwampLight.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        reflector_defaults: Subclass of AvdModel.
+                        sender_defaults: Subclass of AvdModel.
+                        sender_profiles: Subclass of AvdIndexedList with `SenderProfilesItem` items. Primary key is `name` (`str`).
+
+                    """
+
+        _fields: ClassVar[dict] = {"twamp_light": {"type": TwampLight}}
+        twamp_light: TwampLight
+        """Subclass of AvdModel."""
+
+        if TYPE_CHECKING:
+
+            def __init__(self, *, twamp_light: TwampLight | UndefinedType = Undefined) -> None:
+                """
+                MonitorTwamp.
+
+
+                Subclass of AvdModel.
+
+                Args:
+                    twamp_light: Subclass of AvdModel.
 
                 """
 
@@ -31066,11 +31619,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             "max_probability": {"type": int},
                             "weight": {"type": int},
                         }
-                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"]
-                        """
-                        Units to be used for the threshold values.
-                        This should be one of segments, byte, kbytes, mbytes.
-                        """
+                        units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"]
+                        """Units to be used for the threshold values."""
                         min: int
                         """Random-detect ECN minimum-threshold."""
                         max: int
@@ -31085,7 +31635,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             def __init__(
                                 self,
                                 *,
-                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds"] | UndefinedType = Undefined,
+                                units: Literal["segments", "bytes", "kbytes", "mbytes", "milliseconds", "microseconds"] | UndefinedType = Undefined,
                                 min: int | UndefinedType = Undefined,
                                 max: int | UndefinedType = Undefined,
                                 max_probability: int | None | UndefinedType = Undefined,
@@ -31098,9 +31648,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                                 Subclass of AvdModel.
 
                                 Args:
-                                    units:
-                                       Units to be used for the threshold values.
-                                       This should be one of segments, byte, kbytes, mbytes.
+                                    units: Units to be used for the threshold values.
                                     min: Random-detect ECN minimum-threshold.
                                     max: Random-detect ECN maximum-threshold.
                                     max_probability: Random-detect ECN maximum mark probability.
@@ -50905,11 +51453,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}}
-                name: str | None
+                name: str
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, name: str | UndefinedType = Undefined) -> None:
                         """
                         ExitGroupsItem.
 
@@ -50921,8 +51469,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class ExitGroups(AvdList[ExitGroupsItem]):
-                """Subclass of AvdList with `ExitGroupsItem` items."""
+            class ExitGroups(AvdIndexedList[str, ExitGroupsItem]):
+                """Subclass of AvdIndexedList with `ExitGroupsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             ExitGroups._item_type = ExitGroupsItem
 
@@ -50933,8 +51483,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             The exit groups that are configured under a policy are strictly ordered, meaning an exit group
             appearing first has more priority than the exit group that follows it.
 
-            Subclass of AvdList with
-            `ExitGroupsItem` items.
+            Subclass of AvdIndexedList
+            with `ExitGroupsItem` items. Primary key is `name` (`str`).
             """
 
             if TYPE_CHECKING:
@@ -50952,8 +51502,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            The exit groups that are configured under a policy are strictly ordered, meaning an exit group
                            appearing first has more priority than the exit group that follows it.
 
-                           Subclass of AvdList with
-                           `ExitGroupsItem` items.
+                           Subclass of AvdIndexedList
+                           with `ExitGroupsItem` items. Primary key is `name` (`str`).
 
                     """
 
@@ -50971,11 +51521,11 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}}
-                name: str | None
+                name: str
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, name: str | None | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, name: str | UndefinedType = Undefined) -> None:
                         """
                         LocalConnectionsItem.
 
@@ -50987,8 +51537,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class LocalConnections(AvdList[LocalConnectionsItem]):
-                """Subclass of AvdList with `LocalConnectionsItem` items."""
+            class LocalConnections(AvdIndexedList[str, LocalConnectionsItem]):
+                """Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             LocalConnections._item_type = LocalConnectionsItem
 
@@ -51006,7 +51558,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             insertion module reports the health of the connection and the exit will qualify for use only when it
             is healthy.
 
-            Subclass of AvdList with `LocalConnectionsItem` items.
+            Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name`
+            (`str`).
             """
 
             if TYPE_CHECKING:
@@ -51035,7 +51588,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            insertion module reports the health of the connection and the exit will qualify for use only when it
                            is healthy.
 
-                           Subclass of AvdList with `LocalConnectionsItem` items.
+                           Subclass of AvdIndexedList with `LocalConnectionsItem` items. Primary key is `name`
+                           (`str`).
 
                     """
 
@@ -55959,12 +56513,142 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
-        _fields: ClassVar[dict] = {"enabled": {"type": bool}, "router_id": {"type": RouterId}, "segment_routing": {"type": SegmentRouting}}
+        class FlexAlgosItem(AvdModel):
+            """Subclass of AvdModel."""
+
+            class AdministrativeGroup(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {"include_all": {"type": str}, "include_any": {"type": str}, "exclude": {"type": str}}
+                include_all: str | None
+                """
+                Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+                """
+                include_any: str | None
+                """
+                Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+                """
+                exclude: str | None
+                """
+                Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+                """
+
+                if TYPE_CHECKING:
+
+                    def __init__(
+                        self,
+                        *,
+                        include_all: str | None | UndefinedType = Undefined,
+                        include_any: str | None | UndefinedType = Undefined,
+                        exclude: str | None | UndefinedType = Undefined,
+                    ) -> None:
+                        """
+                        AdministrativeGroup.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            include_all:
+                               Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                               range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+                            include_any:
+                               Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                               range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+                            exclude:
+                               Comma-separated list of individual group numbers in decimal (0-127), hexadecimal, named or decimal
+                               range (A-B, where value of A must be less than the value of B) formats. Example. 0xA,RED,31-33,127
+
+                        """
+
+            _fields: ClassVar[dict] = {
+                "number": {"type": int},
+                "name": {"type": str},
+                "administrative_group": {"type": AdministrativeGroup},
+                "metric": {"type": str},
+                "priority": {"type": int},
+                "color": {"type": int},
+                "srlg_exclude": {"type": str},
+            }
+            number: int
+            """Flex-algo number, must be unique across all flex-algo definitions."""
+            name: str
+            """Flex-algo name, must be unique across all flex-algo definitions."""
+            administrative_group: AdministrativeGroup
+            """Subclass of AvdModel."""
+            metric: Literal["0", "1", "2", "igp-metric", "min-delay", "te-metric"] | None
+            """
+            Metric can be specified as an integer or named type, 0 = igp-metric, 1 = min-delay, 2 = te-metric.
+            Device CLI will show the name regardless.
+            """
+            priority: int | None
+            color: int | None
+            srlg_exclude: str | None
+            """
+            Comma-separated list of individual SRLG numbers in decimal (0-4294967295), named or decimal range
+            (A-B, where value of A must be less than the value of B) formats. Example. 30-34,55,RED
+            """
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    number: int | UndefinedType = Undefined,
+                    name: str | UndefinedType = Undefined,
+                    administrative_group: AdministrativeGroup | UndefinedType = Undefined,
+                    metric: Literal["0", "1", "2", "igp-metric", "min-delay", "te-metric"] | None | UndefinedType = Undefined,
+                    priority: int | None | UndefinedType = Undefined,
+                    color: int | None | UndefinedType = Undefined,
+                    srlg_exclude: str | None | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    FlexAlgosItem.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        number: Flex-algo number, must be unique across all flex-algo definitions.
+                        name: Flex-algo name, must be unique across all flex-algo definitions.
+                        administrative_group: Subclass of AvdModel.
+                        metric:
+                           Metric can be specified as an integer or named type, 0 = igp-metric, 1 = min-delay, 2 = te-metric.
+                           Device CLI will show the name regardless.
+                        priority: priority
+                        color: color
+                        srlg_exclude:
+                           Comma-separated list of individual SRLG numbers in decimal (0-4294967295), named or decimal range
+                           (A-B, where value of A must be less than the value of B) formats. Example. 30-34,55,RED
+
+                    """
+
+        class FlexAlgos(AvdIndexedList[int, FlexAlgosItem]):
+            """Subclass of AvdIndexedList with `FlexAlgosItem` items. Primary key is `number` (`int`)."""
+
+            _primary_key: ClassVar[str] = "number"
+
+        FlexAlgos._item_type = FlexAlgosItem
+
+        _fields: ClassVar[dict] = {
+            "enabled": {"type": bool},
+            "router_id": {"type": RouterId},
+            "segment_routing": {"type": SegmentRouting},
+            "twamp_light_sender_profile": {"type": str},
+            "flex_algos": {"type": FlexAlgos},
+        }
         enabled: bool
         router_id: RouterId
         """Subclass of AvdModel."""
         segment_routing: SegmentRouting
         """Subclass of AvdModel."""
+        twamp_light_sender_profile: str | None
+        """Apply a twamp-light sender profile, defined under monitor_twamp.twamp_light.sender_profiles."""
+        flex_algos: FlexAlgos
+        """Subclass of AvdIndexedList with `FlexAlgosItem` items. Primary key is `number` (`int`)."""
 
         if TYPE_CHECKING:
 
@@ -55974,6 +56658,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 enabled: bool | UndefinedType = Undefined,
                 router_id: RouterId | UndefinedType = Undefined,
                 segment_routing: SegmentRouting | UndefinedType = Undefined,
+                twamp_light_sender_profile: str | None | UndefinedType = Undefined,
+                flex_algos: FlexAlgos | UndefinedType = Undefined,
             ) -> None:
                 """
                 RouterTrafficEngineering.
@@ -55985,6 +56671,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     enabled: enabled
                     router_id: Subclass of AvdModel.
                     segment_routing: Subclass of AvdModel.
+                    twamp_light_sender_profile: Apply a twamp-light sender profile, defined under monitor_twamp.twamp_light.sender_profiles.
+                    flex_algos: Subclass of AvdIndexedList with `FlexAlgosItem` items. Primary key is `number` (`int`).
 
                 """
 
@@ -57702,11 +58390,13 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         class Phone(AvdModel):
             """Subclass of AvdModel."""
 
-            _fields: ClassVar[dict] = {"cos": {"type": int}, "trunk": {"type": str}, "vlan": {"type": int}}
+            _fields: ClassVar[dict] = {"cos": {"type": int}, "trunk": {"type": str}, "vlan": {"type": int}, "access_list_bypass": {"type": bool}}
             cos: int | None
             trunk: Literal["tagged", "untagged"] | None
             vlan: int | None
             """VLAN ID."""
+            access_list_bypass: bool | None
+            """Bypass phone traffic from configured access-list."""
 
             if TYPE_CHECKING:
 
@@ -57716,6 +58406,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     cos: int | None | UndefinedType = Undefined,
                     trunk: Literal["tagged", "untagged"] | None | UndefinedType = Undefined,
                     vlan: int | None | UndefinedType = Undefined,
+                    access_list_bypass: bool | None | UndefinedType = Undefined,
                 ) -> None:
                     """
                     Phone.
@@ -57727,6 +58418,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         cos: cos
                         trunk: trunk
                         vlan: VLAN ID.
+                        access_list_bypass: Bypass phone traffic from configured access-list.
 
                     """
 
@@ -61401,6 +62093,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ip_helpers": {"type": IpHelpers},
             "ip_dhcp_relay_all_subnets": {"type": bool},
             "ip_nat": {"type": IpNat},
+            "dhcp_server_ipv4": {"type": bool},
+            "dhcp_server_ipv6": {"type": bool},
             "ipv6_enable": {"type": bool},
             "ipv6_address": {"type": str},
             "ipv6_address_virtuals": {"type": Ipv6AddressVirtuals},
@@ -61485,6 +62179,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field."""
         ip_nat: IpNat
         """Subclass of AvdModel."""
+        dhcp_server_ipv4: bool | None
+        """Enable IPv4 DHCP server."""
+        dhcp_server_ipv6: bool | None
+        """Enable IPv6 DHCP server."""
         ipv6_enable: bool | None
         ipv6_address: str | None
         """IPv6_address/Mask."""
@@ -61617,6 +62315,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ip_helpers: IpHelpers | UndefinedType = Undefined,
                 ip_dhcp_relay_all_subnets: bool | None | UndefinedType = Undefined,
                 ip_nat: IpNat | UndefinedType = Undefined,
+                dhcp_server_ipv4: bool | None | UndefinedType = Undefined,
+                dhcp_server_ipv6: bool | None | UndefinedType = Undefined,
                 ipv6_enable: bool | None | UndefinedType = Undefined,
                 ipv6_address: str | None | UndefinedType = Undefined,
                 ipv6_address_virtuals: Ipv6AddressVirtuals | UndefinedType = Undefined,
@@ -61694,6 +62394,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                        `ip_helper` (`str`).
                     ip_dhcp_relay_all_subnets: Allow forwarding requests with secondary IP addresses in the gateway address "giaddr" field.
                     ip_nat: Subclass of AvdModel.
+                    dhcp_server_ipv4: Enable IPv4 DHCP server.
+                    dhcp_server_ipv6: Enable IPv6 DHCP server.
                     ipv6_enable: ipv6_enable
                     ipv6_address: IPv6_address/Mask.
                     ipv6_address_virtuals:
@@ -63018,6 +63720,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         "monitor_sessions": {"type": MonitorSessions},
         "monitor_telemetry_influx": {"type": MonitorTelemetryInflux},
         "monitor_telemetry_postcard_policy": {"type": MonitorTelemetryPostcardPolicy},
+        "monitor_twamp": {"type": MonitorTwamp},
         "mpls": {"type": Mpls},
         "ntp": {"type": Ntp},
         "patch_panel": {"type": PatchPanel},
@@ -63464,6 +64167,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
     """Subclass of AvdModel."""
     monitor_telemetry_postcard_policy: MonitorTelemetryPostcardPolicy
     """Subclass of AvdModel."""
+    monitor_twamp: MonitorTwamp
+    """Subclass of AvdModel."""
     mpls: Mpls
     """Subclass of AvdModel."""
     ntp: Ntp
@@ -63757,6 +64462,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             monitor_sessions: MonitorSessions | UndefinedType = Undefined,
             monitor_telemetry_influx: MonitorTelemetryInflux | UndefinedType = Undefined,
             monitor_telemetry_postcard_policy: MonitorTelemetryPostcardPolicy | UndefinedType = Undefined,
+            monitor_twamp: MonitorTwamp | UndefinedType = Undefined,
             mpls: Mpls | UndefinedType = Undefined,
             ntp: Ntp | UndefinedType = Undefined,
             patch_panel: PatchPanel | UndefinedType = Undefined,
@@ -64066,6 +64772,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 monitor_sessions: Subclass of AvdIndexedList with `MonitorSessionsItem` items. Primary key is `name` (`str`).
                 monitor_telemetry_influx: Subclass of AvdModel.
                 monitor_telemetry_postcard_policy: Subclass of AvdModel.
+                monitor_twamp: Subclass of AvdModel.
                 mpls: Subclass of AvdModel.
                 ntp: Subclass of AvdModel.
                 patch_panel: Subclass of AvdModel.

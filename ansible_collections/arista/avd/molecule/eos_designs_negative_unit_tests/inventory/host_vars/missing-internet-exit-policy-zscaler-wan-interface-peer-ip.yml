@@ -1,5 +1,5 @@
 ---
-# Testing missing defined application-profile
+# Testing missing interface peer IP for Zscaler internet exit policy
 wan_mode: cv-pathfinder
 # Disabling underlay for tests
 underlay_routing_protocol: none
@@ -39,7 +39,7 @@ wan_ipsec_profiles:
 default_node_types:
   - node_type: wan_router
     match_hostnames:
-      - "missing-application-classification.*"
+      - "missing-internet-exit-policy.*"
 
 wan_router:
   defaults:
@@ -48,7 +48,7 @@ wan_router:
     filter:
       always_include_vrfs_in_tenants: [TenantA]
   nodes:
-    - name: missing-application-classification-application-profile
+    - name: missing-internet-exit-policy-zscaler-wan-interface-peer-ip
       cv_pathfinder_region: AVD_Land_West
       cv_pathfinder_site: Site422
       id: 1
@@ -58,6 +58,11 @@ wan_router:
           wan_circuit_id: 666
           dhcp_accept_default_route: true
           ip_address: dhcp
+          # missing peer-ip for zscaler Internet Exit policy
+          cv_pathfinder_internet_exit:
+            policies:
+              - name: ZSCALER-EXIT-POLICY-1
+                tunnel_interface_numbers: 100-102
 
 wan_path_groups:
   - name: INET
@@ -89,12 +94,19 @@ wan_virtual_topologies:
           id: 42
           path_groups:
             - names: [INET]
+          internet_exit:
+            policy: ZSCALER-EXIT-POLICY-1
 
 application_classification:
   application_profiles:
-    # Application profile TEST does not exist
-    - name: OTHER-TEST
+    - name: TEST
+
+cv_pathfinder_internet_exit_policies:
+  - name: ZSCALER-EXIT-POLICY-1
+    type: zscaler
+    zscaler:
+      domain_name: test.local
+      ipsec_key_salt: THIS_SHOULD_BE_VAULTED
 
 expected_error_message: >-
-  The application profile TEST used in policy DEFAULT-POLICY is undefined
-  in 'application_classification.application_profiles'.
+  The configured internet-exit policy requires `peer_ip` configured under the WAN Interface Ethernet1.

@@ -1,5 +1,5 @@
 ---
-# Testing missing defined prefix-set
+# Testing missing defined port-set
 wan_mode: cv-pathfinder
 # Disabling underlay for tests
 underlay_routing_protocol: none

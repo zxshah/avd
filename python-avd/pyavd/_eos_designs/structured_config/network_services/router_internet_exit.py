@@ -75,7 +75,7 @@ class RouterInternetExitMixin(Protocol):
 
         if internet_exit_policy.type == "direct":
             self._set_direct_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
-        elif internet_exit_policy.type == "zscaler":
+        else:  # internet_exit_policy.type == "zscaler"
             self._set_zscaler_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
 
     def _set_direct_internet_exit_policy(
@@ -106,7 +106,8 @@ class RouterInternetExitMixin(Protocol):
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
-            if not ip_address:
+            if not ip_address:  # pragma: no cover
+                # This cannot raise in theory as it is currently caught in underlay so we can't test it with our scenarii.
                 msg = f"{wan_interface.name} ip_address or dhcp_ip needs to be set when using WAN interface for 'direct' type Internet Exit."
                 raise AristaAvdInvalidInputsError(msg)
 

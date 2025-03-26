@@ -1,5 +1,5 @@
 ---
-# Testing missing defined application-profile
+# Testing missing interface peer IP for direct internet exit policy
 wan_mode: cv-pathfinder
 # Disabling underlay for tests
 underlay_routing_protocol: none
@@ -39,7 +39,7 @@ wan_ipsec_profiles:
 default_node_types:
   - node_type: wan_router
     match_hostnames:
-      - "missing-application-classification.*"
+      - "missing-internet-exit-policy.*"
 
 wan_router:
   defaults:
@@ -48,7 +48,7 @@ wan_router:
     filter:
       always_include_vrfs_in_tenants: [TenantA]
   nodes:
-    - name: missing-application-classification-application-profile
+    - name: missing-internet-exit-policy-direct-wan-interface-peer-ip
       cv_pathfinder_region: AVD_Land_West
       cv_pathfinder_site: Site422
       id: 1
@@ -56,8 +56,11 @@ wan_router:
         - name: Ethernet1
           wan_carrier: ATT
           wan_circuit_id: 666
-          dhcp_accept_default_route: true
-          ip_address: dhcp
+          ip_address: 10.10.10.10/24
+          # missing peer_ip for internet exit.
+          cv_pathfinder_internet_exit:
+            policies:
+              - name: DIRECT-EXIT-POLICY-1
 
 wan_path_groups:
   - name: INET
@@ -89,12 +92,18 @@ wan_virtual_topologies:
           id: 42
           path_groups:
             - names: [INET]
+          internet_exit:
+            policy: DIRECT-EXIT-POLICY-1
 
 application_classification:
   application_profiles:
-    # Application profile TEST does not exist
-    - name: OTHER-TEST
+    - name: TEST
+
+cv_pathfinder_internet_exit_policies:
+  - name: DIRECT-EXIT-POLICY-1
+    fallback_to_system_default: false
+    type: direct
 
 expected_error_message: >-
-  The application profile TEST used in policy DEFAULT-POLICY is undefined
-  in 'application_classification.application_profiles'.
+  Ethernet1 peer_ip needs to be set. When using wan interface for direct type internet exit,
+  peer_ip is used for nexthop, and connectivity monitoring.

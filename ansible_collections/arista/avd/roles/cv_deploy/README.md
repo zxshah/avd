@@ -252,7 +252,7 @@ Presence of the same `serial_number` or `system_mac_address` values in structure
 To eliminate this risk, this role will always raise an error and will terminate its execution before updating CloudVision in the following cases:
 
 - Structured configuration files of two or more targeted devices have the same `serial_number` (values of `system_mac_address` are not important in this case).
-- Structured configuration files of two or more targeted devices have the same `system_mac_address` and have `serial_number` values unset.
+- Structured configuration files of two or more targeted devices have the same `system_mac_address` and at least one of these devices has an unset `serial_number` value.
 
 By default, this role will warn the user about inconsistencies in the structured configuration files in the following case:
 

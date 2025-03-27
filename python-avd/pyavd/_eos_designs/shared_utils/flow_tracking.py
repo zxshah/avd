@@ -28,6 +28,8 @@ if TYPE_CHECKING:
         | EosDesigns.FabricFlowTracking.DpsInterfaces
         | EosDesigns.FabricFlowTracking.Uplinks
         | EosDesigns.FabricFlowTracking.Downlinks
+        | UndefinedType
+        | None
     )
 
     T_FlowTracker = TypeVar(
@@ -60,6 +62,9 @@ class FlowTrackingMixin(Protocol):
             case EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.L3InterfacesItem.FlowTracking():
                 enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_interfaces.enabled)
                 name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_interfaces.name)
+            case EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.L3PortChannelsItem.FlowTracking():
+                enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_port_channels.enabled)
+                name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_port_channels.name)
             case EosDesigns.CoreInterfaces.P2pLinksItem.FlowTracking():
                 enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.core_interfaces.enabled)
                 name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.core_interfaces.name)
@@ -83,6 +88,11 @@ class FlowTrackingMixin(Protocol):
             ):
                 enabled: bool = flow_tracking.enabled
                 name: str = flow_tracking.name
+            case UndefinedType() | None:
+                return None
+            case _:
+                msg = "Invalid flow_tracking type: %s"
+                raise TypeError(msg, type(flow_tracking))
 
         if not enabled:
             return None
@@ -102,6 +112,9 @@ class FlowTrackingMixin(Protocol):
             case EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.L3InterfacesItem.FlowTracking():
                 enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_interfaces.enabled)
                 name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_interfaces.name)
+            case EosDesigns._DynamicKeys.DynamicNetworkServicesItem.NetworkServicesItem.VrfsItem.L3PortChannelsItem.FlowTracking():
+                enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_port_channels.enabled)
+                name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_port_channels.name)
             case EosDesigns.CoreInterfaces.P2pLinksItem.FlowTracking():
                 enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.core_interfaces.enabled)
                 name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.core_interfaces.name)
@@ -114,6 +127,9 @@ class FlowTrackingMixin(Protocol):
             case EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3InterfacesItem.FlowTracking():
                 enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_interfaces.enabled)
                 name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_interfaces.name)
+            case EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3PortChannelsItem.FlowTracking():
+                enabled: bool = default(flow_tracking.enabled, self.inputs.fabric_flow_tracking.l3_port_channels.enabled)
+                name: str = default(flow_tracking.name, self.inputs.fabric_flow_tracking.l3_port_channels.name)
             case (
                 EosDesigns.FabricFlowTracking.MlagInterfaces()
                 | EosDesigns.FabricFlowTracking.DpsInterfaces()
@@ -122,6 +138,11 @@ class FlowTrackingMixin(Protocol):
             ):
                 enabled: bool = flow_tracking.enabled
                 name: str = flow_tracking.name
+            case UndefinedType() | None:
+                return Undefined
+            case _:
+                msg = "Invalid flow_tracking type: %s"
+                raise TypeError(msg, type(flow_tracking))
 
         if not enabled:
             return Undefined

@@ -19,11 +19,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_overlay_address_families</samp>](## "custom_node_type_keys.[].default_overlay_address_families") | List, items: String |  | `['evpn']` |  | Set the default overlay address families.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "custom_node_type_keys.[].default_overlay_address_families.[]") | String |  |  | Value is converted to lower case.<br>Valid Values:<br>- <code>evpn</code><br>- <code>vpn-ipv4</code><br>- <code>vpn-ipv6</code> |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_evpn_encapsulation</samp>](## "custom_node_type_keys.[].default_evpn_encapsulation") | String |  | `vxlan` | Value is converted to lower case.<br>Valid Values:<br>- <code>mpls</code><br>- <code>vxlan</code> | Set the default evpn encapsulation.<br> |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_wan_role</samp>](## "custom_node_type_keys.[].default_wan_role") | String |  |  | Valid Values:<br>- <code>client</code><br>- <code>server</code> | Set the default WAN role.<br><br>This is used both for AutoVPN and Pathfinder designs.<br>That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.<br>`server` indicates that the router is a route-reflector.<br><br>Only supported if `overlay_routing_protocol` is set to `ibgp`.<br> |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_wan_role</samp>](## "custom_node_type_keys.[].default_wan_role") | String |  |  | Valid Values:<br>- <code>client</code><br>- <code>server</code> | Set the default WAN role.<br><br>This is used both for AutoVPN and Pathfinder designs.<br>That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.<br>`server` indicates that the router is a route-reflector.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_flow_tracker_type</samp>](## "custom_node_type_keys.[].default_flow_tracker_type") | String |  | `sampled` | Valid Values:<br>- <code>sampled</code><br>- <code>hardware</code> | Set the default flow tracker type. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;mlag_support</samp>](## "custom_node_type_keys.[].mlag_support") | Boolean |  | `False` |  | Can this node type support mlag. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;network_services</samp>](## "custom_node_type_keys.[].network_services") | Dictionary |  |  |  | Will network services be deployed on this node type. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l1</samp>](## "custom_node_type_keys.[].network_services.l1") | Boolean |  | `False` |  | ?? |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l1</samp>](## "custom_node_type_keys.[].network_services.l1") | Boolean |  | `False` |  | Point-to-point services |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l2</samp>](## "custom_node_type_keys.[].network_services.l2") | Boolean |  | `False` |  | Vlans |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l3</samp>](## "custom_node_type_keys.[].network_services.l3") | Boolean |  | `False` |  | VRFs, SVIs (if l2 is true).<br>Only supported with underlay_router.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;underlay_router</samp>](## "custom_node_type_keys.[].underlay_router") | Boolean |  | `True` |  | Is this node type a L3 device. |
@@ -69,11 +69,11 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_overlay_address_families</samp>](## "node_type_keys.[].default_overlay_address_families") | List, items: String |  | `['evpn']` |  | Set the default overlay address families.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&lt;str&gt;</samp>](## "node_type_keys.[].default_overlay_address_families.[]") | String |  |  | Value is converted to lower case.<br>Valid Values:<br>- <code>evpn</code><br>- <code>vpn-ipv4</code><br>- <code>vpn-ipv6</code> |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_evpn_encapsulation</samp>](## "node_type_keys.[].default_evpn_encapsulation") | String |  | `vxlan` | Value is converted to lower case.<br>Valid Values:<br>- <code>mpls</code><br>- <code>vxlan</code> | Set the default evpn encapsulation.<br> |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_wan_role</samp>](## "node_type_keys.[].default_wan_role") | String |  |  | Valid Values:<br>- <code>client</code><br>- <code>server</code> | Set the default WAN role.<br><br>This is used both for AutoVPN and Pathfinder designs.<br>That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.<br>`server` indicates that the router is a route-reflector.<br><br>Only supported if `overlay_routing_protocol` is set to `ibgp`.<br> |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_wan_role</samp>](## "node_type_keys.[].default_wan_role") | String |  |  | Valid Values:<br>- <code>client</code><br>- <code>server</code> | Set the default WAN role.<br><br>This is used both for AutoVPN and Pathfinder designs.<br>That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.<br>`server` indicates that the router is a route-reflector.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;default_flow_tracker_type</samp>](## "node_type_keys.[].default_flow_tracker_type") | String |  | `sampled` | Valid Values:<br>- <code>sampled</code><br>- <code>hardware</code> | Set the default flow tracker type. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;mlag_support</samp>](## "node_type_keys.[].mlag_support") | Boolean |  | `False` |  | Can this node type support mlag. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;network_services</samp>](## "node_type_keys.[].network_services") | Dictionary |  |  |  | Will network services be deployed on this node type. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l1</samp>](## "node_type_keys.[].network_services.l1") | Boolean |  | `False` |  | ?? |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l1</samp>](## "node_type_keys.[].network_services.l1") | Boolean |  | `False` |  | Point-to-point services |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l2</samp>](## "node_type_keys.[].network_services.l2") | Boolean |  | `False` |  | Vlans |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;l3</samp>](## "node_type_keys.[].network_services.l3") | Boolean |  | `False` |  | VRFs, SVIs (if l2 is true).<br>Only supported with underlay_router.<br> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;underlay_router</samp>](## "node_type_keys.[].underlay_router") | Boolean |  | `True` |  | Is this node type a L3 device. |
@@ -155,8 +155,6 @@
         # This is used both for AutoVPN and Pathfinder designs.
         # That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
         # `server` indicates that the router is a route-reflector.
-        #
-        # Only supported if `overlay_routing_protocol` is set to `ibgp`.
         default_wan_role: <str; "client" | "server">
 
         # Set the default flow tracker type.
@@ -168,7 +166,7 @@
         # Will network services be deployed on this node type.
         network_services:
 
-          # ??
+          # Point-to-point services
           l1: <bool; default=False>
 
           # Vlans
@@ -335,8 +333,6 @@
         # This is used both for AutoVPN and Pathfinder designs.
         # That means if `wan_mode` root key is set to `autovpn` or `cv-pathfinder`.
         # `server` indicates that the router is a route-reflector.
-        #
-        # Only supported if `overlay_routing_protocol` is set to `ibgp`.
         default_wan_role: <str; "client" | "server">
 
         # Set the default flow tracker type.
@@ -348,7 +344,7 @@
         # Will network services be deployed on this node type.
         network_services:
 
-          # ??
+          # Point-to-point services
           l1: <bool; default=False>
 
           # Vlans

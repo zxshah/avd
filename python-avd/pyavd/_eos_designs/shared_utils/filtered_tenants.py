@@ -68,12 +68,9 @@ class FilteredTenantsMixin(Protocol):
             for tenant in filtered_tenants:
                 if "default" not in tenant.vrfs:
                     continue
-                if "evpn" not in tenant.vrfs["default"].address_families:
-                    msg = "WAN configuration requires EVPN to be enabled for VRF 'default'. Got 'address_families: {vrf_default['address_families']}."
-                    raise AristaAvdError(msg)
                 if self.inputs.underlay_filter_peer_as:
                     msg = "WAN configuration is not compatible with 'underlay_filter_peer_as'"
-                    raise AristaAvdError
+                    raise AristaAvdError(msg)
                 break
 
         return filtered_tenants._natural_sorted()
@@ -203,6 +200,7 @@ class FilteredTenantsMixin(Protocol):
             vrf.l3_interfaces = vrf.l3_interfaces._filtered(
                 lambda l3_interface: bool(self.hostname in l3_interface.nodes and l3_interface.ip_addresses and l3_interface.interfaces)
             )
+            vrf.l3_port_channels = vrf.l3_port_channels._filtered(lambda l3_port_channel: bool(self.hostname == l3_port_channel.node))
             vrf.loopbacks = vrf.loopbacks._filtered(lambda loopback: loopback.node == self.hostname)
 
             if self.vtep is True:
@@ -241,7 +239,7 @@ class FilteredTenantsMixin(Protocol):
                 lambda rt: bool((not rt.nodes or self.hostname in rt.nodes) and rt.address_family and rt.route_target and rt.type in ["import", "export"])
             )
 
-            if vrf.svis or vrf.l3_interfaces or vrf.loopbacks or self.is_forced_vrf(vrf, tenant.name):
+            if vrf.svis or vrf.l3_interfaces or vrf.loopbacks or vrf.l3_port_channels or self.is_forced_vrf(vrf, tenant.name):
                 filtered_vrfs.append(vrf)
 
             if tenant_evpn_vlan_bundle := tenant.evpn_vlan_bundle:
@@ -415,6 +413,7 @@ class FilteredTenantsMixin(Protocol):
 
         Otherwise we will autodetect:
         - If the VRF is part of an overlay we will configure BGP for it.
+        - If the VRF is on a WAN router, we will configure BGP for it.
         - If any BGP peers are configured we will configure BGP for it.
         - If uplink type is p2p_vrfs and the vrf is included in uplink VRFs.
         """
@@ -427,5 +426,6 @@ class FilteredTenantsMixin(Protocol):
                 vrf_address_families,
                 vrf.bgp_peers,
                 (self.uplink_type == "p2p-vrfs" and vrf.name in (self.get_switch_fact("uplink_switch_vrfs", required=False) or [])),
+                self.is_wan_vrf(vrf),
             ]
         )

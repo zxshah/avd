@@ -56,7 +56,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
             msg = f"Expecting 'data' as a 'Sequence' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
 
-        cls_items = cast(Iterable[T_AvdModel], (coerce_type(item, cls._item_type) for item in data))
+        cls_items = cast("Iterable[T_AvdModel]", (coerce_type(item, cls._item_type) for item in data))
         return cls(cls_items)
 
     def __init__(self, items: Iterable[T_AvdModel] = ()) -> None:
@@ -91,6 +91,9 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
     def __setitem__(self, key: T_PrimaryKey, value: T_AvdModel) -> None:
         self._items[key] = value
 
+    def __delitem__(self, key: T_PrimaryKey) -> None:
+        del self._items[key]
+
     def __eq__(self, other: object) -> bool:
         return self._compare(other)
 
@@ -109,7 +112,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
     def obtain(self, key: T_PrimaryKey) -> T_AvdModel:
         """Return item with given primary key, autocreating if missing."""
         if key not in self._items:
-            item_type = cast(T_AvdModel, self._item_type)
+            item_type = cast("T_AvdModel", self._item_type)
             self._items[key] = item_type._from_dict({self._primary_key: key})
         return self._items[key]
 

@@ -4526,19 +4526,14 @@ keys:
     documentation_options:
       table: fabric-settings
     type: bool
-    description: 'Enable Multicast in the underlay on all p2p uplink interfaces and
-      mlag l3 peer interface.
+    description: 'Enable Protocol Independent Multicast sparse mode in the underlay
+      on all p2p uplink interfaces, mlag l3 peer interface and core interfaces.
 
       Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
 
-      No other configuration is added, so the underlay will only support Source-Specific
-      Multicast (SSM).
-
-      The configuration is intended to be used as multicast underlay for EVPN OISM
-      overlay.
+      This also enables "router multicast | ipv4 routing".
 
       '
-    default: false
   underlay_multicast_anycast_rp:
     documentation_options:
       table: fabric-settings
@@ -10466,6 +10461,15 @@ $defs:
           description: Enable PIM sparse mode. Requires `include_in_underlay_protocol`
             and the global `underlay_multicast` to be `true`.
           default: false
+          deprecation:
+            removed: false
+            warning: true
+            new_key: p2p_links.underlay_multicast_pim_sm
+            remove_in_version: 6.0.0
+        underlay_multicast_pim_sm:
+          type: bool
+          description: Enable/Disable Protocol Independent Multicast sparse mode.
+            Requires the global `underlay_multicast_pim_sm` to be `true`.
         underlay_multicast_ipv4_static:
           description: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
           type: bool

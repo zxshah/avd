@@ -1170,6 +1170,7 @@ class EosDesigns(EosDesignsRootModel):
                 "ptp": {"type": Ptp},
                 "sflow": {"type": bool},
                 "underlay_multicast": {"type": bool, "default": False},
+                "underlay_multicast_pim_sm": {"type": bool},
                 "underlay_multicast_ipv4_static": {"type": bool, "default": False},
                 "flow_tracking": {"type": FlowTracking},
                 "qos_profile": {"type": str},
@@ -1279,6 +1280,11 @@ class EosDesigns(EosDesignsRootModel):
 
             Default value: `False`
             """
+            underlay_multicast_pim_sm: bool | None
+            """
+            Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+            `underlay_multicast_pim_sm` to be `true`.
+            """
             underlay_multicast_ipv4_static: bool
             """
             Enable multicast ipv4 static on p2p uplink ethernet interfaces.
@@ -1346,6 +1352,7 @@ class EosDesigns(EosDesignsRootModel):
                     ptp: Ptp | UndefinedType = Undefined,
                     sflow: bool | None | UndefinedType = Undefined,
                     underlay_multicast: bool | UndefinedType = Undefined,
+                    underlay_multicast_pim_sm: bool | None | UndefinedType = Undefined,
                     underlay_multicast_ipv4_static: bool | UndefinedType = Undefined,
                     flow_tracking: FlowTracking | UndefinedType = Undefined,
                     qos_profile: str | None | UndefinedType = Undefined,
@@ -1419,6 +1426,9 @@ class EosDesigns(EosDesignsRootModel):
                         underlay_multicast:
                            Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast`
                            to be `true`.
+                        underlay_multicast_pim_sm:
+                           Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+                           `underlay_multicast_pim_sm` to be `true`.
                         underlay_multicast_ipv4_static: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
                         flow_tracking:
                            Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
@@ -1720,6 +1730,7 @@ class EosDesigns(EosDesignsRootModel):
                 "ptp": {"type": Ptp},
                 "sflow": {"type": bool},
                 "underlay_multicast": {"type": bool, "default": False},
+                "underlay_multicast_pim_sm": {"type": bool},
                 "underlay_multicast_ipv4_static": {"type": bool, "default": False},
                 "flow_tracking": {"type": FlowTracking},
                 "qos_profile": {"type": str},
@@ -1829,6 +1840,11 @@ class EosDesigns(EosDesignsRootModel):
 
             Default value: `False`
             """
+            underlay_multicast_pim_sm: bool | None
+            """
+            Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+            `underlay_multicast_pim_sm` to be `true`.
+            """
             underlay_multicast_ipv4_static: bool
             """
             Enable multicast ipv4 static on p2p uplink ethernet interfaces.
@@ -1896,6 +1912,7 @@ class EosDesigns(EosDesignsRootModel):
                     ptp: Ptp | UndefinedType = Undefined,
                     sflow: bool | None | UndefinedType = Undefined,
                     underlay_multicast: bool | UndefinedType = Undefined,
+                    underlay_multicast_pim_sm: bool | None | UndefinedType = Undefined,
                     underlay_multicast_ipv4_static: bool | UndefinedType = Undefined,
                     flow_tracking: FlowTracking | UndefinedType = Undefined,
                     qos_profile: str | None | UndefinedType = Undefined,
@@ -1969,6 +1986,9 @@ class EosDesigns(EosDesignsRootModel):
                         underlay_multicast:
                            Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast`
                            to be `true`.
+                        underlay_multicast_pim_sm:
+                           Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+                           `underlay_multicast_pim_sm` to be `true`.
                         underlay_multicast_ipv4_static: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
                         flow_tracking:
                            Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
@@ -5058,6 +5078,7 @@ class EosDesigns(EosDesignsRootModel):
                 "ptp": {"type": Ptp},
                 "sflow": {"type": bool},
                 "underlay_multicast": {"type": bool, "default": False},
+                "underlay_multicast_pim_sm": {"type": bool},
                 "underlay_multicast_ipv4_static": {"type": bool, "default": False},
                 "flow_tracking": {"type": FlowTracking},
                 "qos_profile": {"type": str},
@@ -5167,6 +5188,11 @@ class EosDesigns(EosDesignsRootModel):
 
             Default value: `False`
             """
+            underlay_multicast_pim_sm: bool | None
+            """
+            Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+            `underlay_multicast_pim_sm` to be `true`.
+            """
             underlay_multicast_ipv4_static: bool
             """
             Enable multicast ipv4 static on p2p uplink ethernet interfaces.
@@ -5234,6 +5260,7 @@ class EosDesigns(EosDesignsRootModel):
                     ptp: Ptp | UndefinedType = Undefined,
                     sflow: bool | None | UndefinedType = Undefined,
                     underlay_multicast: bool | UndefinedType = Undefined,
+                    underlay_multicast_pim_sm: bool | None | UndefinedType = Undefined,
                     underlay_multicast_ipv4_static: bool | UndefinedType = Undefined,
                     flow_tracking: FlowTracking | UndefinedType = Undefined,
                     qos_profile: str | None | UndefinedType = Undefined,
@@ -5307,6 +5334,9 @@ class EosDesigns(EosDesignsRootModel):
                         underlay_multicast:
                            Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast`
                            to be `true`.
+                        underlay_multicast_pim_sm:
+                           Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+                           `underlay_multicast_pim_sm` to be `true`.
                         underlay_multicast_ipv4_static: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
                         flow_tracking:
                            Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
@@ -5608,6 +5638,7 @@ class EosDesigns(EosDesignsRootModel):
                 "ptp": {"type": Ptp},
                 "sflow": {"type": bool},
                 "underlay_multicast": {"type": bool, "default": False},
+                "underlay_multicast_pim_sm": {"type": bool},
                 "underlay_multicast_ipv4_static": {"type": bool, "default": False},
                 "flow_tracking": {"type": FlowTracking},
                 "qos_profile": {"type": str},
@@ -5717,6 +5748,11 @@ class EosDesigns(EosDesignsRootModel):
 
             Default value: `False`
             """
+            underlay_multicast_pim_sm: bool | None
+            """
+            Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+            `underlay_multicast_pim_sm` to be `true`.
+            """
             underlay_multicast_ipv4_static: bool
             """
             Enable multicast ipv4 static on p2p uplink ethernet interfaces.
@@ -5784,6 +5820,7 @@ class EosDesigns(EosDesignsRootModel):
                     ptp: Ptp | UndefinedType = Undefined,
                     sflow: bool | None | UndefinedType = Undefined,
                     underlay_multicast: bool | UndefinedType = Undefined,
+                    underlay_multicast_pim_sm: bool | None | UndefinedType = Undefined,
                     underlay_multicast_ipv4_static: bool | UndefinedType = Undefined,
                     flow_tracking: FlowTracking | UndefinedType = Undefined,
                     qos_profile: str | None | UndefinedType = Undefined,
@@ -5857,6 +5894,9 @@ class EosDesigns(EosDesignsRootModel):
                         underlay_multicast:
                            Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast`
                            to be `true`.
+                        underlay_multicast_pim_sm:
+                           Enable/Disable Protocol Independent Multicast sparse mode. Requires the global
+                           `underlay_multicast_pim_sm` to be `true`.
                         underlay_multicast_ipv4_static: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
                         flow_tracking:
                            Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
@@ -57011,7 +57051,7 @@ class EosDesigns(EosDesignsRootModel):
         "underlay_l2_ethernet_description": {"type": str, "default": "L2_{peer}_{peer_interface}"},
         "underlay_l2_port_channel_description": {"type": str, "default": "L2_{peer_node_group_or_peer}_{peer_interface}"},
         "underlay_multicast": {"type": bool, "default": False},
-        "underlay_multicast_pim_sm": {"type": bool, "default": False},
+        "underlay_multicast_pim_sm": {"type": bool},
         "underlay_multicast_anycast_rp": {"type": UnderlayMulticastAnycastRp},
         "underlay_multicast_rps": {"type": UnderlayMulticastRps},
         "underlay_ospf_area": {"type": str, "default": "0.0.0.0"},
@@ -58629,16 +58669,13 @@ class EosDesigns(EosDesignsRootModel):
 
     Default value: `False`
     """
-    underlay_multicast_pim_sm: bool
+    underlay_multicast_pim_sm: bool | None
     """
-    Enable Multicast in the underlay on all p2p uplink interfaces and mlag l3 peer interface.
-    Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
-    No other
-    configuration is added, so the underlay will only support Source-Specific Multicast (SSM).
-    The
-    configuration is intended to be used as multicast underlay for EVPN OISM overlay.
-
-    Default value: `False`
+    Enable Protocol Independent Multicast sparse mode in the underlay on all p2p uplink interfaces, mlag
+    l3 peer interface and core interfaces.
+    Specifically PIM Sparse-Mode will be configured on all routed
+    underlay interfaces.
+    This also enables "router multicast | ipv4 routing".
     """
     underlay_multicast_anycast_rp: UnderlayMulticastAnycastRp
     """
@@ -59024,7 +59061,7 @@ class EosDesigns(EosDesignsRootModel):
             underlay_l2_ethernet_description: str | UndefinedType = Undefined,
             underlay_l2_port_channel_description: str | UndefinedType = Undefined,
             underlay_multicast: bool | UndefinedType = Undefined,
-            underlay_multicast_pim_sm: bool | UndefinedType = Undefined,
+            underlay_multicast_pim_sm: bool | None | UndefinedType = Undefined,
             underlay_multicast_anycast_rp: UnderlayMulticastAnycastRp | UndefinedType = Undefined,
             underlay_multicast_rps: UnderlayMulticastRps | UndefinedType = Undefined,
             underlay_ospf_area: str | UndefinedType = Undefined,
@@ -60203,12 +60240,11 @@ class EosDesigns(EosDesignsRootModel):
                    The
                    configuration is intended to be used as multicast underlay for EVPN OISM overlay.
                 underlay_multicast_pim_sm:
-                   Enable Multicast in the underlay on all p2p uplink interfaces and mlag l3 peer interface.
-                   Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
-                   No other
-                   configuration is added, so the underlay will only support Source-Specific Multicast (SSM).
-                   The
-                   configuration is intended to be used as multicast underlay for EVPN OISM overlay.
+                   Enable Protocol Independent Multicast sparse mode in the underlay on all p2p uplink interfaces, mlag
+                   l3 peer interface and core interfaces.
+                   Specifically PIM Sparse-Mode will be configured on all routed
+                   underlay interfaces.
+                   This also enables "router multicast | ipv4 routing".
                 underlay_multicast_anycast_rp:
                    If multiple nodes are configured under 'underlay_multicast_rps.[].nodes' for the same RP address,
                    they will be configured

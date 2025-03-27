@@ -62,7 +62,7 @@ class UnderlayMixin(Protocol):
         return self.inputs.underlay_multicast and self.underlay_router
 
     @cached_property
-    def underlay_multicast_pim_sm(self: SharedUtilsProtocol) -> bool:
+    def underlay_multicast_pim_sm(self: SharedUtilsProtocol) -> bool | None:
         return self.inputs.underlay_multicast_pim_sm and self.underlay_router
 
     @cached_property

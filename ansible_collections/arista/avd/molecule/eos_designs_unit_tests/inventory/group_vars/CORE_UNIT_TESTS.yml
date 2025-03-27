@@ -197,25 +197,25 @@ core_interfaces:
       ptp:
         enabled: true
 
-    # P2P core links with underlay_multicast(pim-sparse) enabled.
+    # P2P core links with underlay_multicast_pim_sm(pim-sparse) enabled.
     - nodes: [ core-4-multicast, peer1 ]
       id: 10
       as: [65001, 65002]
       interfaces: [ Ethernet1, Ethernet1 ]
       include_in_underlay_protocol: true
-      underlay_multicast: true
+      underlay_multicast_pim_sm: true
       ip_pool: underlay_pool
 
-     # P2P core links with underlay_multicast(pim-sparse) disabled.
+     # P2P core links with underlay_multicast_pim_sm(pim-sparse) disabled.
     - nodes: [ core-4-multicast, peer2 ]
       id: 11
       as: [65001, 65003]
       interfaces: [ Ethernet2, Ethernet2 ]
       include_in_underlay_protocol: true
-      underlay_multicast: false
+      underlay_multicast_pim_sm: false
       ip_pool: underlay_pool
 
-    # P2P core links with underlay_multicast(pim-sparse) default.
+    # P2P core links with underlay_multicast_pim_sm(pim-sparse) default.
     - nodes: [ core-4-multicast, peer3 ]
       id: 12
       as: [65001, 65004]

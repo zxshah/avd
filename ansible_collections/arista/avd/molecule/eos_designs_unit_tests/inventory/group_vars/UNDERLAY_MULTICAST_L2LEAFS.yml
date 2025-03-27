@@ -2,7 +2,7 @@
 
 type: l2leaf
 
-underlay_multicast: true
+underlay_multicast_pim_sm: true
 
 l2leaf:
   defaults:

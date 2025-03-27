@@ -1,1 +1,1 @@
-underlay_multicast: true
+underlay_multicast_pim_sm: true

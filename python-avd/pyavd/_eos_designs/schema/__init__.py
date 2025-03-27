@@ -57011,6 +57011,7 @@ class EosDesigns(EosDesignsRootModel):
         "underlay_l2_ethernet_description": {"type": str, "default": "L2_{peer}_{peer_interface}"},
         "underlay_l2_port_channel_description": {"type": str, "default": "L2_{peer_node_group_or_peer}_{peer_interface}"},
         "underlay_multicast": {"type": bool, "default": False},
+        "underlay_multicast_pim_sm": {"type": bool, "default": False},
         "underlay_multicast_anycast_rp": {"type": UnderlayMulticastAnycastRp},
         "underlay_multicast_rps": {"type": UnderlayMulticastRps},
         "underlay_ospf_area": {"type": str, "default": "0.0.0.0"},
@@ -58628,6 +58629,17 @@ class EosDesigns(EosDesignsRootModel):
 
     Default value: `False`
     """
+    underlay_multicast_pim_sm: bool
+    """
+    Enable Multicast in the underlay on all p2p uplink interfaces and mlag l3 peer interface.
+    Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
+    No other
+    configuration is added, so the underlay will only support Source-Specific Multicast (SSM).
+    The
+    configuration is intended to be used as multicast underlay for EVPN OISM overlay.
+
+    Default value: `False`
+    """
     underlay_multicast_anycast_rp: UnderlayMulticastAnycastRp
     """
     If multiple nodes are configured under 'underlay_multicast_rps.[].nodes' for the same RP address,
@@ -59012,6 +59024,7 @@ class EosDesigns(EosDesignsRootModel):
             underlay_l2_ethernet_description: str | UndefinedType = Undefined,
             underlay_l2_port_channel_description: str | UndefinedType = Undefined,
             underlay_multicast: bool | UndefinedType = Undefined,
+            underlay_multicast_pim_sm: bool | UndefinedType = Undefined,
             underlay_multicast_anycast_rp: UnderlayMulticastAnycastRp | UndefinedType = Undefined,
             underlay_multicast_rps: UnderlayMulticastRps | UndefinedType = Undefined,
             underlay_ospf_area: str | UndefinedType = Undefined,
@@ -60183,6 +60196,13 @@ class EosDesigns(EosDesignsRootModel):
                    By default the description is templated from the peer's node group (for MLAG or EVPN
                    A/A) or hostname and port-channel interface of the peer.
                 underlay_multicast:
+                   Enable Multicast in the underlay on all p2p uplink interfaces and mlag l3 peer interface.
+                   Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
+                   No other
+                   configuration is added, so the underlay will only support Source-Specific Multicast (SSM).
+                   The
+                   configuration is intended to be used as multicast underlay for EVPN OISM overlay.
+                underlay_multicast_pim_sm:
                    Enable Multicast in the underlay on all p2p uplink interfaces and mlag l3 peer interface.
                    Specifically PIM Sparse-Mode will be configured on all routed underlay interfaces.
                    No other

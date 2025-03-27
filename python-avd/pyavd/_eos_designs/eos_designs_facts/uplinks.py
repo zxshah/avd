@@ -196,6 +196,9 @@ class UplinksMixin(Protocol):
         if self.shared_utils.underlay_multicast is True and uplink_switch_facts.shared_utils.underlay_multicast is True:
             uplink["underlay_multicast"] = True
 
+        if self.shared_utils.underlay_multicast_pim_sm is True and uplink_switch_facts.shared_utils.underlay_multicast_pim_sm is True:
+            uplink["underlay_multicast_pim_sm"] = True
+
         if self.inputs.underlay_rfc5549:
             uplink["ipv6_enable"] = True
         else:

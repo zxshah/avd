@@ -75,8 +75,9 @@ class EosDesignsFactsProtocol(MlagMixin, ShortEsiMixin, OverlayMixin, WanMixin, 
         if "evpn" not in self.shared_utils.overlay_address_families:
             return None
         if self.inputs.evpn_multicast and self.shared_utils.vtep:
-            if not (self.shared_utils.underlay_multicast and self.shared_utils.igmp_snooping_enabled):
-                msg = "'evpn_multicast: True' is only supported in combination with 'underlay_multicast: True' and 'igmp_snooping_enabled : True'"
+            if not ((self.shared_utils.underlay_multicast or self.shared_utils.underlay_multicast_pim_sm) and self.shared_utils.igmp_snooping_enabled):
+                msg = "'evpn_multicast: True' is only supported in combination with 'underlay_multicast: True' or 'underlay_multicast_pim_sm: True'"
+                " and 'igmp_snooping_enabled : True'"
                 raise AristaAvdError(msg)
 
             if self.shared_utils.mlag and self.shared_utils.overlay_rd_type_admin_subfield == self._mlag_peer_facts.shared_utils.overlay_rd_type_admin_subfield:

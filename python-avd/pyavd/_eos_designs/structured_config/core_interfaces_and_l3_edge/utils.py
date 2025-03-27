@@ -262,7 +262,7 @@ class UtilsMixin(Protocol):
             interface.ip_address = p2p_link.ip[index]
 
         if p2p_link.include_in_underlay_protocol:
-            if p2p_link.underlay_multicast and self.shared_utils.underlay_multicast:
+            if p2p_link.underlay_multicast and (self.shared_utils.underlay_multicast or self.shared_utils.underlay_multicast_pim_sm):
                 interface.pim.ipv4.sparse_mode = True
 
             if (self.inputs.underlay_rfc5549 and p2p_link.routing_protocol != "ebgp") or p2p_link.ipv6_enable is True:

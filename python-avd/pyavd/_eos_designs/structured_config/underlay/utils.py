@@ -84,6 +84,7 @@ class UtilsMixin(Protocol):
                         "short_esi": get(uplink, "peer_short_esi"),
                         "mlag": get(uplink, "peer_mlag"),
                         "underlay_multicast": get(uplink, "underlay_multicast"),
+                        "underlay_multicast_pim_sm": get(uplink, "underlay_multicast_pim_sm"),
                         "ipv6_enable": get(uplink, "ipv6_enable"),
                         "sflow": {"enable": self.inputs.fabric_sflow.downlinks},
                         "flow_tracking": downlinks_flow_tracking,

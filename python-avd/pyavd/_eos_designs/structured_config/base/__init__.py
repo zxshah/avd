@@ -207,7 +207,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     @cached_property
     def router_multicast(self) -> dict | None:
         """router_multicast set based on underlay_multicast, underlay_router and switch.evpn_multicast facts."""
-        if not self.shared_utils.underlay_multicast:
+        if not (self.shared_utils.underlay_multicast or self.shared_utils.underlay_multicast_pim_sm):
             return None
 
         router_multicast = {"ipv4": {"routing": True}}

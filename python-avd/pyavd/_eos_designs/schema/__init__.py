@@ -8088,7 +8088,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8116,7 +8116,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).
@@ -8612,7 +8612,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8640,7 +8640,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).

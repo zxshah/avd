@@ -88,8 +88,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             paths=self.inputs.bgp_maximum_paths or default_maximum_paths, ecmp=self.inputs.bgp_ecmp or default_ecmp
         )
 
-        if redistribute_routes := self._router_bgp_redistribute_routes:
-            self.structured_config.router_bgp.redistribute = redistribute_routes
+        if self.shared_utils.underlay_bgp or self.shared_utils.is_wan_router or self.shared_utils.l3_bgp_neighbors:
+            self.structured_config.router_bgp.redistribute.connected.enabled = True
+            if (self.shared_utils.overlay_routing_protocol != "none" or self.shared_utils.is_wan_router) and self.inputs.underlay_filter_redistribute_connected:
+                # Use route-map for redistribution
+                self.structured_config.router_bgp.redistribute.connected.route_map = "RM-CONN-2-BGP"
 
         if self.inputs.bgp_update_wait_for_convergence and platform_bgp_update_wait_for_convergence:
             self.structured_config.router_bgp.updates.wait_for_convergence = True

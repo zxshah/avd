@@ -3,14 +3,14 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
-from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
 
 if TYPE_CHECKING:
     from typing import TypeVar
+
+    from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 
     from . import AvdStructuredConfigBaseProtocol
 
@@ -76,17 +76,3 @@ class UtilsMixin(Protocol):
             )
 
         return source_interfaces
-
-    @cached_property
-    def _router_bgp_redistribute_routes(self: AvdStructuredConfigBaseProtocol) -> EosCliConfigGen.RouterBgp.Redistribute | None:
-        """Return redistribute route settings for router bgp."""
-        if not (self.shared_utils.underlay_bgp or self.shared_utils.is_wan_router or self.shared_utils.l3_bgp_neighbors):
-            return None
-
-        redistribute_route = EosCliConfigGen.RouterBgp.Redistribute()
-        redistribute_route.connected.enabled = True
-        if (self.shared_utils.overlay_routing_protocol != "none" or self.shared_utils.is_wan_router) and self.inputs.underlay_filter_redistribute_connected:
-            # Use route-map for redistribution
-            redistribute_route.connected.route_map = "RM-CONN-2-BGP"
-
-        return redistribute_route

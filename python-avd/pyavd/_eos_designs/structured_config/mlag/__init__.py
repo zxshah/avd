@@ -65,6 +65,10 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
             no_autostate=True,
             mtu=self.shared_utils.p2p_uplinks_mtu,
         )
+        if default(self.shared_utils.underlay_multicast_pim_mlag, self.shared_utils.underlay_multicast_pim_enabled):
+            main_vlan_interface.pim.ipv4.sparse_mode = True
+        if default(self.shared_utils.underlay_multicast_static_mlag, self.shared_utils.underlay_multicast_static_enabled):
+            main_vlan_interface.multicast.ipv4.static = True
 
         if self.shared_utils.node_config.mlag_peer_vlan_structured_config:
             self.custom_structured_configs.nested.vlan_interfaces.obtain(main_vlan_interface_name)._deepmerge(
@@ -100,6 +104,10 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
             shutdown=False,
             mtu=self.shared_utils.p2p_uplinks_mtu,
         )
+        if default(self.shared_utils.underlay_multicast_pim_mlag, self.shared_utils.underlay_multicast_pim_enabled):
+            l3_vlan_interface.pim.ipv4.sparse_mode = True
+        if default(self.shared_utils.underlay_multicast_static_mlag, self.shared_utils.underlay_multicast_static_enabled):
+            l3_vlan_interface.multicast.ipv4.static = True
         if not self.inputs.underlay_rfc5549:
             l3_vlan_interface.ip_address = f"{self.shared_utils.mlag_l3_ip}/{self.inputs.fabric_ip_addressing.mlag.ipv4_prefix_length}"
 
@@ -135,6 +143,9 @@ class AvdStructuredConfigMlag(StructuredConfigGenerator):
                 )
         if self.shared_utils.underlay_multicast or self.shared_utils.underlay_multicast_pim_sm:
             vlan_interface.pim.ipv4.sparse_mode = True
+
+        if self.shared_utils.underlay_multicast_static:
+            vlan_interface.multicast.ipv4.static = True
 
         if self.inputs.underlay_rfc5549:
             vlan_interface.ipv6_enable = True

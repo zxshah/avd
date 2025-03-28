@@ -164,10 +164,9 @@ $defs:
         underlay_multicast_pim_sm:
           type: bool
           description: Enable/Disable Protocol Independent Multicast sparse mode. Requires the global `underlay_multicast_pim_sm` to be `true`.
-        underlay_multicast_ipv4_static:
-          description: Enable multicast ipv4 static on p2p uplink ethernet interfaces.
+        underlay_multicast_static:
+          description: Enable/Disable static Protocol Independent Multicast. Requires the global `underlay_multicast_static` to be `true`.
           type: bool
-          default: false
         flow_tracking:
           type: dict
           $ref: "eos_designs#/$defs/flow_tracking_link"

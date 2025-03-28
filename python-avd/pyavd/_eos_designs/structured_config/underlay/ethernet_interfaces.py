@@ -48,7 +48,17 @@ class EthernetInterfacesMixin(Protocol):
                 speed=link.get("speed", Undefined),
                 shutdown=self.inputs.shutdown_interfaces_towards_undeployed_peers and not link["peer_is_deployed"],
             )
+            if self.shared_utils.underlay_multicast_pim_uplinks:
+                if ethernet_interface.name in self.shared_utils.underlay_multicast_pim_uplinks:
+                    ethernet_interface.pim.ipv4.sparse_mode = True
+            elif self.shared_utils.underlay_multicast_pim_enabled:
+                ethernet_interface.pim.ipv4.sparse_mode = True
 
+            if self.shared_utils.underlay_multicast_static_uplinks:
+                if ethernet_interface.name in self.shared_utils.underlay_multicast_static_uplinks:
+                    ethernet_interface.multicast.ipv4.static = True
+            elif self.shared_utils.underlay_multicast_static_enabled:
+                ethernet_interface.multicast.ipv4.static = True
             # L3 interface
             # Used for p2p uplinks as well as main interface for p2p-vrfs.
             if link["type"] == "underlay_p2p":
@@ -137,6 +147,9 @@ class EthernetInterfacesMixin(Protocol):
 
                 if link.get("underlay_multicast") is True or link.get("underlay_multicast_pim_sm") is True:
                     ethernet_interface.pim.ipv4.sparse_mode = True
+
+                if link.get("underlay_multicast_static") is True:
+                    ethernet_interface.multicast.ipv4.static = True
 
                 # DHCP server settings (primarily used for ZTP)
                 if link.get("ip_address") is not None and "unnumbered" not in link["ip_address"].lower() and link.get("dhcp_server"):

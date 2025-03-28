@@ -9,6 +9,9 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.153.1/31
+  multicast:
+    ipv4:
+      static: true
   peer: underlay_filter_peer_as_evpn_2
   peer_interface: Ethernet1
   peer_type: l3leaf
@@ -19,6 +22,9 @@ ethernet_interfaces:
   shutdown: false
   mtu: 9214
   ip_address: 192.168.153.3/31
+  pim:
+    ipv4:
+      sparse_mode: true
   peer: underlay_filter_peer_as_evpn_3
   peer_interface: Ethernet1
   peer_type: l3leaf

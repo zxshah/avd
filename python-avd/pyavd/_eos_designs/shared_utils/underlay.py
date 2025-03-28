@@ -66,6 +66,10 @@ class UnderlayMixin(Protocol):
         return self.inputs.underlay_multicast_pim_sm and self.underlay_router
 
     @cached_property
+    def underlay_multicast_static(self: SharedUtilsProtocol) -> bool | None:
+        return self.inputs.underlay_multicast_static and self.underlay_router
+
+    @cached_property
     def underlay_multicast_rp_interfaces(self: SharedUtilsProtocol) -> list[EosCliConfigGen.LoopbackInterfacesItem] | None:
         if not (self.underlay_multicast or self.underlay_multicast_pim_sm) or not self.inputs.underlay_multicast_rps:
             return None
@@ -86,4 +90,40 @@ class UnderlayMixin(Protocol):
         if underlay_multicast_rp_interfaces:
             return underlay_multicast_rp_interfaces
 
+        return None
+
+    @cached_property
+    def underlay_multicast_pim_enabled(self: SharedUtilsProtocol) -> bool | None:
+        if self.node_config.underlay_multicast.pim_sm.enabled:
+            return True
+        return None
+
+    @cached_property
+    def underlay_multicast_pim_uplinks(self: SharedUtilsProtocol) -> list[str] | None:
+        if not self.node_config.underlay_multicast.pim_sm.uplinks:
+            return None
+        return [str(interface) for interface in self.node_config.underlay_multicast.pim_sm.uplinks]
+
+    @cached_property
+    def underlay_multicast_pim_mlag(self: SharedUtilsProtocol) -> bool | None:
+        if self.node_config.underlay_multicast.pim_sm.mlag:
+            return True
+        return None
+
+    @cached_property
+    def underlay_multicast_static_enabled(self: SharedUtilsProtocol) -> bool | None:
+        if self.node_config.underlay_multicast.static.enabled:
+            return True
+        return None
+
+    @cached_property
+    def underlay_multicast_static_uplinks(self: SharedUtilsProtocol) -> list[str] | None:
+        if not self.node_config.underlay_multicast.static.uplinks:
+            return None
+        return [str(interface) for interface in self.node_config.underlay_multicast.static.uplinks]
+
+    @cached_property
+    def underlay_multicast_static_mlag(self: SharedUtilsProtocol) -> bool | None:
+        if self.node_config.underlay_multicast.static.mlag:
+            return True
         return None

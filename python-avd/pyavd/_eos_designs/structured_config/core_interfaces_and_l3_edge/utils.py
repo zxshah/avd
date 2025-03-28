@@ -260,8 +260,7 @@ class UtilsMixin(Protocol):
 
         if p2p_link.ip:
             interface.ip_address = p2p_link.ip[index]
-
-        if p2p_link.underlay_multicast_pim_sm and self.shared_utils.underlay_multicast_pim_sm:
+        if (p2p_link.underlay_multicast_pim_sm and self.shared_utils.underlay_multicast_pim_sm) or self.shared_utils.underlay_multicast_pim_enabled:
             interface.pim.ipv4.sparse_mode = True
 
         if p2p_link.include_in_underlay_protocol:

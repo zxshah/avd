@@ -48,7 +48,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sflow</samp>](## "l3_edge.p2p_links_profiles.[].sflow") | Boolean |  |  |  | Enable sFlow. Overrides `fabric_sflow` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast</samp>](## "l3_edge.p2p_links_profiles.[].underlay_multicast") <span style="color:red">deprecated</span> | Boolean |  | `False` |  | Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast` to be `true`.<span style="color:red">This key is deprecated. Support will be removed in AVD version 6.0.0. Use <samp>p2p_links.underlay_multicast_pim_sm</samp> instead.</span> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_pim_sm</samp>](## "l3_edge.p2p_links_profiles.[].underlay_multicast_pim_sm") | Boolean |  |  |  | Enable/Disable Protocol Independent Multicast sparse mode. Requires the global `underlay_multicast_pim_sm` to be `true`. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_ipv4_static</samp>](## "l3_edge.p2p_links_profiles.[].underlay_multicast_ipv4_static") | Boolean |  | `False` |  | Enable multicast ipv4 static on p2p uplink ethernet interfaces. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_static</samp>](## "l3_edge.p2p_links_profiles.[].underlay_multicast_static") | Boolean |  |  |  | Enable/Disable static Protocol Independent Multicast. Requires the global `underlay_multicast_static` to be `true`. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "l3_edge.p2p_links_profiles.[].flow_tracking") | Dictionary |  |  |  | Enable flow-tracking. Overrides `fabric_flow_tracking` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "l3_edge.p2p_links_profiles.[].flow_tracking.enabled") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "l3_edge.p2p_links_profiles.[].flow_tracking.name") | String |  |  |  | Flow tracker name as defined in flow_tracking_settings. |
@@ -101,7 +101,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sflow</samp>](## "l3_edge.p2p_links.[].sflow") | Boolean |  |  |  | Enable sFlow. Overrides `fabric_sflow` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast</samp>](## "l3_edge.p2p_links.[].underlay_multicast") <span style="color:red">deprecated</span> | Boolean |  | `False` |  | Enable PIM sparse mode. Requires `include_in_underlay_protocol` and the global `underlay_multicast` to be `true`.<span style="color:red">This key is deprecated. Support will be removed in AVD version 6.0.0. Use <samp>p2p_links.underlay_multicast_pim_sm</samp> instead.</span> |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_pim_sm</samp>](## "l3_edge.p2p_links.[].underlay_multicast_pim_sm") | Boolean |  |  |  | Enable/Disable Protocol Independent Multicast sparse mode. Requires the global `underlay_multicast_pim_sm` to be `true`. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_ipv4_static</samp>](## "l3_edge.p2p_links.[].underlay_multicast_ipv4_static") | Boolean |  | `False` |  | Enable multicast ipv4 static on p2p uplink ethernet interfaces. |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;underlay_multicast_static</samp>](## "l3_edge.p2p_links.[].underlay_multicast_static") | Boolean |  |  |  | Enable/Disable static Protocol Independent Multicast. Requires the global `underlay_multicast_static` to be `true`. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flow_tracking</samp>](## "l3_edge.p2p_links.[].flow_tracking") | Dictionary |  |  |  | Enable flow-tracking. Overrides `fabric_flow_tracking` setting. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enabled</samp>](## "l3_edge.p2p_links.[].flow_tracking.enabled") | Boolean |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;name</samp>](## "l3_edge.p2p_links.[].flow_tracking.name") | String |  |  |  | Flow tracker name as defined in flow_tracking_settings. |
@@ -246,8 +246,8 @@
           # Enable/Disable Protocol Independent Multicast sparse mode. Requires the global `underlay_multicast_pim_sm` to be `true`.
           underlay_multicast_pim_sm: <bool>
 
-          # Enable multicast ipv4 static on p2p uplink ethernet interfaces.
-          underlay_multicast_ipv4_static: <bool; default=False>
+          # Enable/Disable static Protocol Independent Multicast. Requires the global `underlay_multicast_static` to be `true`.
+          underlay_multicast_static: <bool>
 
           # Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
           flow_tracking:
@@ -411,8 +411,8 @@
           # Enable/Disable Protocol Independent Multicast sparse mode. Requires the global `underlay_multicast_pim_sm` to be `true`.
           underlay_multicast_pim_sm: <bool>
 
-          # Enable multicast ipv4 static on p2p uplink ethernet interfaces.
-          underlay_multicast_ipv4_static: <bool; default=False>
+          # Enable/Disable static Protocol Independent Multicast. Requires the global `underlay_multicast_static` to be `true`.
+          underlay_multicast_static: <bool>
 
           # Enable flow-tracking. Overrides `fabric_flow_tracking` setting.
           flow_tracking:

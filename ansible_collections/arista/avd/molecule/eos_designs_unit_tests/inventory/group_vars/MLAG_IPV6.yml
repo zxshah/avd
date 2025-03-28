@@ -11,6 +11,11 @@ l3leaf:
     vtep_loopback_ipv4_pool: 192.168.254.0/24
     platform: vEOS-LAB
     mlag_interfaces: [Ethernet5, Ethernet6]
+    underlay_multicast:
+      pim_sm:
+        mlag: true
+      static:
+        mlag: true
   node_groups:
     - group: MLAG_IPV6
       bgp_as: 65001
@@ -18,6 +23,12 @@ l3leaf:
         - name: MLAG_IPV6_L3LEAF1A
           id: 3
           mgmt_ip: 192.168.201.116/24
+          underlay_multicast:
+            pim_sm:
+              mlag: false
         - name: MLAG_IPV6_L3LEAF1B
           id: 4
           mgmt_ip: 192.168.201.117/24
+          underlay_multicast:
+            static:
+              mlag: false

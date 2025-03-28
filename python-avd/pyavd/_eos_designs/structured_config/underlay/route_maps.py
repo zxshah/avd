@@ -91,6 +91,7 @@ class RouteMapsMixin(Protocol):
             self.structured_config.route_maps.append_new(name="RM-CONN-2-BGP", sequence_numbers=sequence_numbers)
 
         if self.inputs.underlay_filter_peer_as:
+            # using set comprehension with `{}` to remove duplicates and then run natural_sort to convert to list.
             underlay_filter_peer_as_route_maps_asns = natural_sort({link["peer_bgp_as"] for link in self._underlay_links if link["type"] == "underlay_p2p"})
             # RM-BGP-AS{{ asn }}-OUT
             for asn in underlay_filter_peer_as_route_maps_asns:

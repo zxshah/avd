@@ -69,7 +69,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
                 if cls.__name__.startswith("Dynamic")
                 else data_source.create_descendant(PathIndexedListKey(index, item_key, item[item_key]))
             )
-            cls_items.append(cast(Iterable[T_AvdModel], (coerce_type(item, cls._item_type, data_source=child_data_source))))
+            cls_items.append(cast("Iterable[T_AvdModel]", (coerce_type(item, cls._item_type, data_source=child_data_source))))
 
         return cls(cls_items, source=data_source)
 
@@ -129,7 +129,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
     def obtain(self, key: T_PrimaryKey) -> T_AvdModel:
         """Return item with given primary key, autocreating if missing."""
         if key not in self._items:
-            item_type = cast(T_AvdModel, self._item_type)
+            item_type = cast("T_AvdModel", self._item_type)
             self._items[key] = item_type._from_dict({self._primary_key: key})
         return self._items[key]
 

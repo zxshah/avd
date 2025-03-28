@@ -17,6 +17,8 @@ from .avd_model import AvdModel
 from .input_path import InputPath
 
 if TYPE_CHECKING:
+    from typing_extensions import Self
+
     from pyavd._eos_designs.schema import EosDesigns
 
     T = TypeVar("T", bound="EosDesignsRootModel")
@@ -27,8 +29,8 @@ SKIP_KEYS = ["custom_structured_configuration_list_merge", "custom_structured_co
 class EosDesignsRootModel(AvdModel):
     @classmethod
     def _from_dict(
-        cls: type[T], data: Mapping, data_source: InputPath | None = None, *, keep_extra_keys: bool = False, load_custom_structured_config: bool = True
-    ) -> T:
+        cls, data: Mapping, data_source: InputPath | None = None, *, keep_extra_keys: bool = False, load_custom_structured_config: bool = True
+    ) -> Self:
         """
         Returns a new instance loaded with the data from the given dict.
 

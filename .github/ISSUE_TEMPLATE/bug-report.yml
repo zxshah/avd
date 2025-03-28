@@ -24,12 +24,12 @@ body:
       label: Which component(s) of AVD impacted
       multiple: true
       options:
-        - eos_designs
-        - eos_cli_config_gen
-        - eos_validate_state
-        - cv_deploy
         - anta_runner
+        - cv_deploy
+        - eos_cli_config_gen
         - eos_config_deploy_cvp
+        - eos_designs
+        - eos_validate_state
         - PyAVD
         - others
 

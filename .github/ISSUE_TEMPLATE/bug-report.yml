@@ -26,14 +26,31 @@ body:
       options:
         - eos_designs
         - eos_cli_config_gen
-        - cvp_configlet_upload
-        - dhcp_provisioner
-        - eos_config_deploy_cvp
-        - eos_config_deploy_eapi
-        - eos_snapshot
         - eos_validate_state
-        - new components
+        - cv_deploy
+        - anta_runner
+        - eos_config_deploy_cvp
+        - PyAVD
         - others
+
+  - type: textarea
+    id: versions
+    attributes:
+      label: Component versions
+      description: Please provide the AVD, Ansible, and Python version. e.g provide pip freeze output.
+      render: shell
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: How do you run AVD ?
+      multiple: false
+      options:
+        - System Python environment
+        - Python virtual environment (e.g. venv/uv)
+        - AVD container
+        - RedHat AAP / Ansible execution environments
+        - Other
 
   - type: dropdown
     id: runner
@@ -45,6 +62,7 @@ body:
         - Ansible CLI with AVD Runner
         - Ansible AWX/Tower/AAP
         - PyAVD
+        - CV Workflows
 
   - type: textarea
     id: step-to-reproduce

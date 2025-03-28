@@ -35,7 +35,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.access_group") | String |  |  |  | Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.ipv6_access_group") | String |  |  |  | Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;vrfs</samp>](## "ntp.serve.vrfs") | List, items: Dictionary |  |  |  |  |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.vrfs.[].name") | String | Required |  |  |  |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;name</samp>](## "ntp.serve.vrfs.[].name") | String | Required, Unique |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;serve_all</samp>](## "ntp.serve.vrfs.[].serve_all") | Boolean | Required |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;access_group</samp>](## "ntp.serve.vrfs.[].access_group") | String |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv6_access_group</samp>](## "ntp.serve.vrfs.[].ipv6_access_group") | String |  |  |  |  |
@@ -97,7 +97,7 @@
         # Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
         ipv6_access_group: <str>
         vrfs:
-          - name: <str; required>
+          - name: <str; required; unique>
             serve_all: <bool; required>
             access_group: <str>
             ipv6_access_group: <str>

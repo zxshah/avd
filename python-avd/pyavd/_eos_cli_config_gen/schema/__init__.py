@@ -24655,8 +24655,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class Vrfs(AvdList[VrfsItem]):
-                """Subclass of AvdList with `VrfsItem` items."""
+            class Vrfs(AvdIndexedList[str, VrfsItem]):
+                """Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             Vrfs._item_type = VrfsItem
 
@@ -24667,7 +24669,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             ipv6_access_group: str | None
             """Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction."""
             vrfs: Vrfs
-            """Subclass of AvdList with `VrfsItem` items."""
+            """Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`)."""
 
             if TYPE_CHECKING:
 
@@ -24689,7 +24691,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         serve_all: serve_all
                         access_group: Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
                         ipv6_access_group: Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
-                        vrfs: Subclass of AvdList with `VrfsItem` items.
+                        vrfs: Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`).
 
                     """
 

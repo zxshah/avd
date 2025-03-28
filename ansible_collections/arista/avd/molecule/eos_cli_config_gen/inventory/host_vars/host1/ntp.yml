@@ -32,5 +32,4 @@ ntp:
       key: "$BYk2Sjahe+D9T7uDgIItSA==$JTw5JOAPcYEo0O2hsvsxFQ==$C7wmpXOo"
       key_type: 8a
   serve:
-    all:
-      enabled: true
+    serve_all: true

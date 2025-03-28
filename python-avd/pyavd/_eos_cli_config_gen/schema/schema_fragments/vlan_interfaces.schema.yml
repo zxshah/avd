@@ -616,12 +616,8 @@ keys:
                   type: str
                   description: Name of policy-map used for policy based routing.
         ntp_serve:
-          type: dict
+          type: bool
           description: Enable/disable serving NTP to clients
-          keys:
-            enabled:
-              type: bool
-              required: true
         pvlan_mapping:
           type: str
           description: List of VLANs as string.

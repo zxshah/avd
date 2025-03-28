@@ -264,9 +264,9 @@ interface {{ vlan_interface.name }}
 {%         include 'eos/interface-ip-nat.j2' %}
 {%     endif %}
 {%     if vlan_interface.ntp_serve is arista.avd.defined %}
-{%         if vlan_interface.ntp_serve.enabled is arista.avd.defined(true) %}
+{%         if vlan_interface.ntp_serve is arista.avd.defined(true) %}
    ntp serve
-{%         elif vlan_interface.ntp_serve.enabled is arista.avd.defined(false) %}
+{%         elif vlan_interface.ntp_serve is arista.avd.defined(false) %}
    no ntp serve
 {%         endif %}
 {%     endif %}

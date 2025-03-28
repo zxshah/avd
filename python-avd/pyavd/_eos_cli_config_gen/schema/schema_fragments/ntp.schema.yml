@@ -123,6 +123,7 @@ keys:
                 description: Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
               vrfs:
                 type: list
+                primary_key: name
                 items:
                   type: dict
                   keys:

@@ -1382,6 +1382,7 @@ aaa group server tacacs+ TACACS2
 | Type | Sub-type | User Stores |
 | ---- | -------- | ---------- |
 | Login | default | group TACACS local |
+| Login | command-api | local |
 | Login | console | local |
 
 AAA Authentication on-failure log has been enabled
@@ -1396,6 +1397,7 @@ Policy lockout has been enabled. After **3** failed login attempts within **900*
 
 ```eos
 aaa authentication login default group TACACS local
+aaa authentication login command-api local
 aaa authentication login console local
 aaa authentication enable default group TACACS local
 aaa authentication dot1x default group RADIUS1
@@ -1865,6 +1867,7 @@ dhcp server vrf VRF01
 | -------------- | --------- | --------- |
 | Ethernet64 | True | True |
 | Port-Channel112 | True | True |
+| Vlan2002 | True | True |
 
 ## System Boot Settings
 
@@ -3819,8 +3822,8 @@ interface Dps1
 | Ethernet64 | DHCP server interface | - | 192.168.42.42/24 | default | - | - | - | - |
 | Ethernet65 | Multiple VRIDs | - | 192.0.2.2/25 | default | - | False | - | - |
 | Ethernet66 | Multiple VRIDs and tracking | - | 192.0.2.2/25 | default | - | False | - | - |
-| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | **default | **- | **- | **- | **- |
-| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | **default | **- | **- | **- | **- |
+| Ethernet80 | LAG Member | 17 | *192.0.2.3/31 | *default | *- | *- | *- | *- |
+| Ethernet81/2 | LAG Member LACP fallback LLDP ZTP VLAN | 112 | *dhcp | *default | *- | *- | *- | *- |
 | Ethernet81/3 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 | Ethernet81/4 | Traffic Engineering Interface | - | 100.64.127.0/31 | default | - | False | - | - |
 
@@ -4101,6 +4104,8 @@ interface Ethernet2
    storm-control all level 10
    spanning-tree bpduguard disable
    spanning-tree bpdufilter disable
+   spanning-tree bpduguard rate-limit enable
+   spanning-tree bpduguard rate-limit count 10 interval 3
 !
 interface Ethernet3
    !! testing single line comment
@@ -4137,6 +4142,8 @@ interface Ethernet3
    ptp vlan 2
    no priority-flow-control
    spanning-tree guard root
+   spanning-tree bpduguard rate-limit disable
+   spanning-tree bpduguard rate-limit count 10
    switchport backup-link Ethernet4
    !
    sync-e
@@ -4169,6 +4176,7 @@ interface Ethernet4
    switchport port-security violation protect
    priority-flow-control on
    spanning-tree guard none
+   spanning-tree bpduguard rate-limit count 10 interval 15
 !
 interface Ethernet5
    description Molecule Routing
@@ -5953,6 +5961,7 @@ interface Loopback100
    description TENANT_A_PROJECT02_VTEP_DIAGNOSTICS
    vrf TENANT_A_PROJECT02
    ip address 10.1.255.3/32
+   hardware forwarding id
 ```
 
 ### Tunnel Interfaces
@@ -6565,6 +6574,8 @@ interface Vlan2002
    no autostate
    vrf Tenant_B
    ip verify unicast source reachable-via rx
+   dhcp server ipv4
+   dhcp server ipv6
    isis enable EVPN_UNDERLAY
    isis bfd
    isis authentication mode md5 rx-disabled
@@ -8169,20 +8180,20 @@ ASN Notation: asdot
 
 #### Router BGP VRFs
 
-| VRF | Route-Distinguisher | Redistribute | EVPN Multicast |
-| --- | ------------------- | ------------ | -------------- |
-| BLUE-C1 | 1.0.1.1:101 | static<br>ospf | IPv4: False<br>Transit: False |
-| RED-C1 | 1.0.1.1:102 | - | IPv4: False<br>Transit: False |
-| Tenant_A | 10.50.64.15:30001 | ospf<br>ospfv3<br>connected | IPv4: False<br>Transit: False |
-| TENANT_A_PROJECT01 | 192.168.255.3:11 | connected<br>static | IPv4: False<br>Transit: False |
-| TENANT_A_PROJECT02 | 192.168.255.3:12 | connected<br>static | IPv4: False<br>Transit: False |
-| TENANT_A_PROJECT03 | 192.168.255.3:13 | - | IPv4: True<br>Transit: True |
-| TENANT_A_PROJECT04 | 192.168.255.3:14 | - | IPv4: True<br>Transit: False |
-| Tenant_B | 10.50.64.15:30002 | - | IPv4: False<br>Transit: False |
-| VRF01 | - | user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | IPv4: False<br>Transit: False |
-| VRF02 | - | dynamic<br>user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | IPv4: False<br>Transit: False |
-| VRF03 | - | dynamic | IPv4: False<br>Transit: False |
-| YELLOW-C1 | 1.0.1.1:103 | - | IPv4: False<br>Transit: False |
+| VRF | Route-Distinguisher | Redistribute | Graceful Restart | EVPN Multicast |
+| --- | ------------------- | ------------ | ---------------- | -------------- |
+| BLUE-C1 | 1.0.1.1:101 | static<br>ospf | - | IPv4: False<br>Transit: False |
+| RED-C1 | 1.0.1.1:102 | - | - | IPv4: False<br>Transit: False |
+| Tenant_A | 10.50.64.15:30001 | ospf<br>ospfv3<br>connected | - | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT01 | 192.168.255.3:11 | connected<br>static | - | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT02 | 192.168.255.3:12 | connected<br>static | True (120s) | IPv4: False<br>Transit: False |
+| TENANT_A_PROJECT03 | 192.168.255.3:13 | - | - | IPv4: True<br>Transit: True |
+| TENANT_A_PROJECT04 | 192.168.255.3:14 | - | - | IPv4: True<br>Transit: False |
+| Tenant_B | 10.50.64.15:30002 | - | - | IPv4: False<br>Transit: False |
+| VRF01 | - | user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | - | IPv4: False<br>Transit: False |
+| VRF02 | - | dynamic<br>user<br>static<br>rip<br>ospf<br>ospfv3<br>isis<br>connected<br>bgp<br>attached_host | - | IPv4: False<br>Transit: False |
+| VRF03 | - | dynamic | - | IPv4: False<br>Transit: False |
+| YELLOW-C1 | 1.0.1.1:103 | - | - | IPv4: False<br>Transit: False |
 
 #### Router BGP Session Trackers
 
@@ -9082,6 +9093,9 @@ router bgp 65101
       route-target export evpn 12:12
       router-id 192.168.255.3
       timers bgp 5 15
+      graceful-restart restart-time 120
+      graceful-restart stalepath-time 120
+      graceful-restart
       neighbor 10.255.251.1 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.255.251.1 next-hop-self
       neighbor 10.255.251.1 description ABCDEFG
@@ -11813,9 +11827,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes128-gcm | 100 | 30 | True | allow |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes128-gcm | 100 | 30 | True | allow | - | - |
 
 ###### Keys
 
@@ -11835,9 +11849,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| - | - | - | - | allow active-sak |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| - | - | - | - | allow active-sak | True | - |
 
 ###### Keys
 
@@ -11849,9 +11863,9 @@ FIPS restrictions enabled.
 
 ###### Settings
 
-| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback |
-| ------ | ------------------- | ------------ | --- | ---------------------------- |
-| aes256-gcm-xpn | - | - | - | drop |
+| Cipher | Key-Server Priority | Rekey-Period | SCI | Traffic Unprotected Fallback | Replay Protection Disabled | Replay Protection Window |
+| ------ | ------------------- | ------------ | --- | ---------------------------- | -------------------------- | ------------------------ |
+| aes256-gcm-xpn | - | - | - | drop | - | 20000 |
 
 ###### Keys
 
@@ -11881,11 +11895,13 @@ mac security
    profile A2
       key 1234b 7 <removed>
       traffic unprotected allow active-sak
+      replay protection disabled
    !
    profile A3
       cipher aes256-gcm-xpn
       key ab 7 <removed>
       traffic unprotected drop
+      replay protection window 20000
 ```
 
 ### Traffic Policies information

@@ -101,16 +101,16 @@ class UtilsWanMixin(Protocol):
                 name=self._wan_control_plane_profile_name,
                 load_balance_policy=load_balance_policy.name,
             )
+
+            # Handling Internet Exit
             if control_plane_virtual_topology.internet_exit.policy:
                 self._verify_internet_exit_policy(control_plane_virtual_topology.internet_exit.policy, output_policy.name)
                 if self._internet_exit_policy_has_local_interfaces(control_plane_virtual_topology.internet_exit.policy):
                     profile.internet_exit_policy = control_plane_virtual_topology.internet_exit.policy
+                self._set_internet_exit_policy(control_plane_virtual_topology, output_policy.name)
 
             self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
             output_vrf.profiles.append_new(name=self._wan_control_plane_profile_name, id=254)
-
-            # Handling Internet Exit
-            self._set_internet_exit_policy(control_plane_virtual_topology, output_policy.name)
 
         # Add load_balance_policy
         self.structured_config.router_path_selection.load_balance_policies.append(load_balance_policy)

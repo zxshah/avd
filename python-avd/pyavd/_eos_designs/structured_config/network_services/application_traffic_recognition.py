@@ -259,7 +259,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         application = EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem(name=self._wan_control_plane_application)
         if self.shared_utils.is_wan_client:
             application.dest_prefix_set_name = self._wan_cp_app_dst_prefix
-        elif self.shared_utils.is_wan_server:
+        else:  # self.shared_utils.is_wan_server
             application.src_prefix_set_name = self._wan_cp_app_src_prefix
 
         return application

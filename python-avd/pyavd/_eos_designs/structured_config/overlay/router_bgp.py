@@ -600,7 +600,7 @@ class RouterBgpMixin(Protocol):
         if not self.shared_utils.overlay_mpls or not self.inputs.bgp_mesh_pes:
             return
 
-        for fabric_switch in self.shared_utils.all_fabric_devices:
+        for fabric_switch in natural_sort(self.shared_utils.all_fabric_devices):
             if self._mpls_route_reflectors is not None and fabric_switch in self._mpls_route_reflectors:
                 continue
             if fabric_switch == self.shared_utils.hostname:

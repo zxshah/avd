@@ -8058,7 +8058,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8086,7 +8086,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).
@@ -8582,7 +8582,7 @@ class EosDesigns(EosDesignsRootModel):
             _fields: ClassVar[dict] = {"l1": {"type": bool, "default": False}, "l2": {"type": bool, "default": False}, "l3": {"type": bool, "default": False}}
             l1: bool
             """
-            ??
+            Point-to-point services
 
             Default value: `False`
             """
@@ -8610,7 +8610,7 @@ class EosDesigns(EosDesignsRootModel):
                     Subclass of AvdModel.
 
                     Args:
-                        l1: ??
+                        l1: Point-to-point services
                         l2: Vlans
                         l3:
                            VRFs, SVIs (if l2 is true).
@@ -56988,6 +56988,7 @@ class EosDesigns(EosDesignsRootModel):
         "underlay_ospf_area": {"type": str, "default": "0.0.0.0"},
         "underlay_ospf_authentication": {"type": UnderlayOspfAuthentication},
         "underlay_ospf_bfd_enable": {"type": bool, "default": False},
+        "underlay_ospf_graceful_restart": {"type": bool, "default": False},
         "underlay_ospf_max_lsa": {"type": int, "default": 12000},
         "underlay_ospf_process_id": {"type": int, "default": 100},
         "underlay_rfc5549": {"type": bool, "default": False},
@@ -58636,6 +58637,12 @@ class EosDesigns(EosDesignsRootModel):
     """Subclass of AvdModel."""
     underlay_ospf_bfd_enable: bool
     """Default value: `False`"""
+    underlay_ospf_graceful_restart: bool
+    """
+    Enable graceful restart for OSPF underlay.
+
+    Default value: `False`
+    """
     underlay_ospf_max_lsa: int
     """Default value: `12000`"""
     underlay_ospf_process_id: int
@@ -58982,6 +58989,7 @@ class EosDesigns(EosDesignsRootModel):
             underlay_ospf_area: str | UndefinedType = Undefined,
             underlay_ospf_authentication: UnderlayOspfAuthentication | UndefinedType = Undefined,
             underlay_ospf_bfd_enable: bool | UndefinedType = Undefined,
+            underlay_ospf_graceful_restart: bool | UndefinedType = Undefined,
             underlay_ospf_max_lsa: int | UndefinedType = Undefined,
             underlay_ospf_process_id: int | UndefinedType = Undefined,
             underlay_rfc5549: bool | UndefinedType = Undefined,
@@ -60183,6 +60191,7 @@ class EosDesigns(EosDesignsRootModel):
                 underlay_ospf_area: underlay_ospf_area
                 underlay_ospf_authentication: Subclass of AvdModel.
                 underlay_ospf_bfd_enable: underlay_ospf_bfd_enable
+                underlay_ospf_graceful_restart: Enable graceful restart for OSPF underlay.
                 underlay_ospf_max_lsa: underlay_ospf_max_lsa
                 underlay_ospf_process_id: underlay_ospf_process_id
                 underlay_rfc5549:

@@ -395,6 +395,7 @@ class RouterBgpMixin(Protocol):
         remote_as: str | None = None,
         overlay_peering_interface: str | None = None,
     ) -> EosCliConfigGen.RouterBgp.NeighborsItem:
+        """Returns a BGP neighbor."""
         neighbor = EosCliConfigGen.RouterBgp.NeighborsItem(
             ip_address=ip_address,
             peer_group=peer_group,

@@ -384,7 +384,7 @@ jobs:
             3.13
       - name: "Install Python requirements"
         run: |
-          pip install "ansible-core<2.19.0" -r .github/requirements-ci-dev.txt --upgrade
+          pip install --user https://github.com/ansible/ansible/archive/devel.tar.gz -r .github/requirements-ci-dev.txt --upgrade
       - name: "Run ansible-test sanity"
         run: |
           cd ansible_collections/arista/avd/

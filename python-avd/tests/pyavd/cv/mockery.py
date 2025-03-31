@@ -73,10 +73,6 @@ async def recording_unary_stream(
     recording_file.write_text(result)
 
 
-# class MockedServiceStub(ServiceStub):
-#     """Subclass of ServiceStub which mocks all API calls responding from JSON files."""
-
-
 async def playback_unary_unary(
     self: ServiceStub,
     route: str,

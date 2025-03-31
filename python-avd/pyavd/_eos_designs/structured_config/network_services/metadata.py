@@ -25,7 +25,13 @@ class MetadataMixin(Protocol):
         internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
         tunnels_metadata: EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem.Tunnels,
     ) -> None:
-        """Set the metadata.cv_pathfinder.internet_exit_policies for the Zscaler policies if available."""
+        """
+        Set the metadata.cv_pathfinder.internet_exit_policies for the Zscaler policies if available.
+
+        Args:
+            internet_exit_policy: The Zscaler internet exit policy to set metadata for.
+            tunnels_metadata: the list of per-tunnel metadata pre-computed by the caller.
+        """
         ufqdn, ipsec_key = self._get_ipsec_credentials(internet_exit_policy)
         exit_policy = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem(
             name=internet_exit_policy.name,

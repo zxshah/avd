@@ -93,22 +93,25 @@ class RouterInternetExitMixin(Protocol):
         for wan_interface in local_wan_l3_interfaces:
             if not wan_interface.peer_ip:
                 msg = (
-                    f"{wan_interface.name} peer_ip needs to be set. When using wan interface "
-                    "for direct type internet exit, peer_ip is used for nexthop, and connectivity monitoring."
+                    f"'l3_interfaces[name={wan_interface.name}].peer_ip` needs to be set. When using WAN interface "
+                    "for direct type Internet exit, 'peer_ip' is used for nexthop, and connectivity monitoring."
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
             # wan interface ip will be used for acl, hence raise error if ip is not available
             if (ip_address := wan_interface.ip_address) == "dhcp" and not (ip_address := wan_interface.dhcp_ip):
                 msg = (
-                    f"{wan_interface.name} 'dhcp_ip' needs to be set. When using WAN interface for 'direct' type Internet exit, "
+                    f"'l3_interfaces[name={wan_interface.name}].dhcp_ip' needs to be set. When using WAN interface for 'direct' type Internet exit, "
                     "'dhcp_ip' is used in the NAT ACL."
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
             if not ip_address:  # pragma: no cover
                 # This cannot raise in theory as it is currently caught in underlay so we can't test it with our scenarii.
-                msg = f"{wan_interface.name} ip_address or dhcp_ip needs to be set when using WAN interface for 'direct' type Internet Exit."
+                msg = (
+                    f"l3_interfaces[name={wan_interface.name}].ip_address' or 'dhcp_ip' needs to be set when using WAN interface for 'direct' "
+                    "type Internet Exit."
+                )
                 raise AristaAvdInvalidInputsError(msg)
 
             connection_name = f"IE-{self.shared_utils.sanitize_interface_name(wan_interface.name)}"
@@ -131,8 +134,7 @@ class RouterInternetExitMixin(Protocol):
         if internet_exit_policy.fallback_to_system_default:
             policy_exit_groups.append_new(name="system-default-exit-group")
 
-        self._set_direct_ie_policy_ip_nat()
-        self._set_direct_ie_policy_acl(direct_ie_acl_interface_ips)
+        self._set_direct_ie_policy_ip_nat(direct_ie_acl_interface_ips)
 
         self.structured_config.router_internet_exit.policies.append_new(name=internet_exit_policy.name, exit_groups=policy_exit_groups)
 
@@ -209,7 +211,6 @@ class RouterInternetExitMixin(Protocol):
             policy_exit_groups.append_new(name="system-default-exit-group")
 
         self._set_zscaler_ie_policy_ip_nat()
-        self._set_zscaler_ie_policy_acl()
         self._set_zscaler_internet_exit_policy_ip_security(internet_exit_policy)
         self.set_cv_pathfinder_metadata_zscaler_internet_exit_policy(internet_exit_policy, metadata_tunnels)
 

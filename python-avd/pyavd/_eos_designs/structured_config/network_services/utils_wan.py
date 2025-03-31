@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import TYPE_CHECKING, Literal, Protocol
+from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
@@ -60,8 +60,7 @@ class UtilsWanMixin(Protocol):
             # TODO: it seems we could set multiple time the same policy here so need to check
             append_policy(vrf_policy, vrf, control_plane=vrf.name == "default")
 
-        # Add Application Traffic Recognition after all policies have been taken care off
-        # TODO: put this in a better place.
+        # Add Application Traffic Recognition metadata after all policies have been taken care off.
         self.set_cv_pathfinder_metadata_applications()
 
     def _append_control_plane_virtual_topology(
@@ -123,6 +122,7 @@ class UtilsWanMixin(Protocol):
         *,
         control_plane: bool = False,
     ) -> EosCliConfigGen.RouterPathSelection.PoliciesItem:
+        """Add a router path-selection policy to the strutcured_config."""
         index = 1
         output_policy = EosCliConfigGen.RouterPathSelection.PoliciesItem(name=policy.name)
         output_vrf = EosCliConfigGen.RouterPathSelection.VrfsItem(name=vrf.name)
@@ -140,15 +140,8 @@ class UtilsWanMixin(Protocol):
             load_balance_policy = self._generate_wan_load_balance_policy(name, application_virtual_topology, context_path)
             if not load_balance_policy:
                 # Empty load balance policy so skipping
-                # TODO: Add "nodes" or similar under the profile and raise here
-                # if the node is set and there are no matching path groups.
+                # TODO: Add "nodes" or similar under the profile and raise here if the node is set and there are no matching path groups.
                 continue
-
-            if not application_virtual_topology.application_profile:
-                # TODO: fix message
-                # application_profile = application_virtual_topology, "application_profile", required=True)
-                msg = "TODO required"
-                raise AristaAvdInvalidInputsError(msg)
 
             output_policy.rules.append_new(
                 id=10 * index,
@@ -181,7 +174,6 @@ class UtilsWanMixin(Protocol):
             # Add load_balance_policy
             self.structured_config.router_path_selection.load_balance_policies.append(load_balance_policy)
 
-        # TODO: handle below
         if not output_policy.rules and not output_policy.default_match:
             # The policy is empty but should be assigned to a VRF
             msg = (
@@ -193,29 +185,6 @@ class UtilsWanMixin(Protocol):
         self.structured_config.router_path_selection.policies.append(output_policy)
         return output_policy
 
-    def _verify_policy_default_match(self: AvdStructuredConfigNetworkServicesProtocol, policy: EosDesigns.WanVirtualTopologies.PoliciesItem) -> None:
-        """
-        Verifies the policy has a proper default_match definition.
-
-        Checks that:
-            * the default_virtual_topology is defined.
-            * either drop_unmatched must be set or some path_groups must be defined.
-
-        Raises:
-            AristaAvdInvalidInputsError: if any criteria is not met.
-        """
-        if not policy.default_virtual_topology:
-            msg = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_toplogy."
-            raise AristaAvdInvalidInputsError(msg)
-
-        if not policy.default_virtual_topology.drop_unmatched:
-            context_path = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_topology"
-            # Verify that path_groups are set or raise
-            # TODO: this functionality could be added to schema
-            if not policy.default_virtual_topology.path_groups:
-                msg = f"Either 'drop_unmatched' or 'path_groups' must be set under '{context_path}'."
-                raise AristaAvdInvalidInputsError(msg)
-
     def _append_cv_pathfinder_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,
         policy: EosDesigns.WanVirtualTopologies.PoliciesItem,
@@ -223,11 +192,7 @@ class UtilsWanMixin(Protocol):
         *,
         control_plane: bool = False,
     ) -> None:
-        """
-        TODO.
-
-        Add policy to the output.
-        """
+        """Add a router adaptive-virtual-topology policy to the strutcured_config."""
         output_policy = EosCliConfigGen.RouterAdaptiveVirtualTopology.PoliciesItem(name=policy.name)
         # Maybe set it directly
         output_vrf = EosCliConfigGen.RouterAdaptiveVirtualTopology.VrfsItem(name=vrf.name)
@@ -250,12 +215,6 @@ class UtilsWanMixin(Protocol):
                 # TODO: Add "nodes" or similar under the profile and raise here
                 # if the node is set and there are no matching path groups.
                 continue
-
-            if not application_virtual_topology.application_profile:
-                # TODO: fix message
-                # application_profile = application_virtual_topology, "application_profile", required=True)
-                msg = "TODO required"
-                raise AristaAvdInvalidInputsError(msg)
 
             if not application_virtual_topology.id:
                 msg = (
@@ -284,16 +243,15 @@ class UtilsWanMixin(Protocol):
                 name=name,
                 load_balance_policy=load_balance_policy.name,
             )
-            # TODO: refactor filtered_internet_exit_policies_and_connections
             if application_virtual_topology.internet_exit.policy:
                 self._verify_internet_exit_policy(application_virtual_topology.internet_exit.policy, policy.name)
                 if self._internet_exit_policy_has_local_interfaces(application_virtual_topology.internet_exit.policy):
                     profile.internet_exit_policy = application_virtual_topology.internet_exit.policy
 
-            self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
+                # Handling Internet Exit
+                self._set_internet_exit_policy(application_virtual_topology, output_policy.name)
 
-            # Handling Internet Exit
-            self._set_internet_exit_policy(application_virtual_topology, output_policy.name)
+            self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
 
         # default match
         self._verify_policy_default_match(policy)
@@ -327,13 +285,12 @@ class UtilsWanMixin(Protocol):
                 self._verify_internet_exit_policy(policy.default_virtual_topology.internet_exit.policy, policy.name)
                 if self._internet_exit_policy_has_local_interfaces(policy.default_virtual_topology.internet_exit.policy):
                     profile.internet_exit_policy = policy.default_virtual_topology.internet_exit.policy
+                # Handling Internet Exit
+                self._set_internet_exit_policy(policy.default_virtual_topology, output_policy.name)
             self.structured_config.router_adaptive_virtual_topology.profiles.append(profile)
+
             output_vrf.profiles.append_new(id=1, name=name)
 
-            # Handling Internet Exit
-            self._set_internet_exit_policy(policy.default_virtual_topology, output_policy.name)
-
-        # TODO: handle below
         if not output_policy.matches:
             # The policy is empty but should be assigned to a VRF
             msg = (
@@ -344,6 +301,29 @@ class UtilsWanMixin(Protocol):
 
         self.structured_config.router_adaptive_virtual_topology.policies.append(output_policy)
         self.structured_config.router_adaptive_virtual_topology.vrfs.append(output_vrf)
+
+    def _verify_policy_default_match(self: AvdStructuredConfigNetworkServicesProtocol, policy: EosDesigns.WanVirtualTopologies.PoliciesItem) -> None:
+        """
+        Verifies the policy has a proper default_match definition.
+
+        Checks that:
+            * the default_virtual_topology is defined.
+            * either drop_unmatched must be set or some path_groups must be defined.
+
+        Raises:
+            AristaAvdInvalidInputsError: if any criteria is not met.
+        """
+        if not policy.default_virtual_topology:
+            msg = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_toplogy."
+            raise AristaAvdInvalidInputsError(msg)
+
+        if not policy.default_virtual_topology.drop_unmatched:
+            context_path = f"wan_virtual_topologies.policies[{policy.name}].default_virtual_topology"
+            # Verify that path_groups are set or raise
+            # TODO: this functionality could be added to schema
+            if not policy.default_virtual_topology.path_groups:
+                msg = f"Either 'drop_unmatched' or 'path_groups' must be set under '{context_path}'."
+                raise AristaAvdInvalidInputsError(msg)
 
     def _verify_internet_exit_policy(self: AvdStructuredConfigNetworkServicesProtocol, ie_policy_name: str, policy_name: str) -> None:
         """Check if the Internet Exit policy name is configured.
@@ -535,7 +515,8 @@ class UtilsWanMixin(Protocol):
         """
         Helper function to consistently return the default name of a profile.
 
-        Returns {profile_name}-{application_profile}
+        Returns:
+            str: {profile_name}-{application_profile}
         """
         return f"{profile_name}-{application_profile}"
 
@@ -574,12 +555,6 @@ class UtilsWanMixin(Protocol):
         """Control plane profile name."""
         vrf_default_policy_name = self._filtered_wan_vrfs["default"].policy
         return self._wan_control_plane_virtual_topology.name or f"{vrf_default_policy_name}-CONTROL-PLANE"
-
-    def get_internet_exit_nat_profile_name(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]) -> str:
-        return "NAT-IE-ZSCALER" if internet_exit_policy_type == "zscaler" else "NAT-IE-DIRECT"
-
-    def get_internet_exit_nat_acl_name(self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy_type: Literal["zscaler", "direct"]) -> str:
-        return f"ACL-{self.get_internet_exit_nat_profile_name(internet_exit_policy_type)}"
 
     def _get_ipsec_credentials(
         self: AvdStructuredConfigNetworkServicesProtocol, internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem

@@ -3,8 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from functools import cached_property
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Final, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
@@ -20,6 +19,10 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
     Class should only be used as Mixin to a AvdStructuredConfig class.
     """
+
+    DEFAULT_WAN_CONTROL_PLANE_APPLICATION_NAME: Final[str] = "APP-CONTROL-PLANE"
+    DEFAULT_WAN_CONTROL_PLANE_APP_DST_PREFIX_NAME: Final[str] = "PFX-PATHFINDERS"
+    DEFAULT_WAN_CONTROL_PLANE_APP_SRC_PREFIX_NAME: Final[str] = "PFX-LOCAL-VTEP-IP"
 
     def _set_virtual_topology_application_classification(
         self: AvdStructuredConfigNetworkServicesProtocol,
@@ -94,7 +97,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             if application.name in self.inputs.application_classification.applications.ipv4_applications:
                 atr.applications.ipv4_applications.append(self.inputs.application_classification.applications.ipv4_applications[application.name])
 
-            elif is_control_plane_vt and application.name == self._wan_control_plane_application:
+            elif is_control_plane_vt and application.name == self.DEFAULT_WAN_CONTROL_PLANE_APPLICATION_NAME:
                 # the default Control Plane application profile has one application.
                 atr.applications.ipv4_applications.append(self.get_default_control_plane_application())
 
@@ -157,8 +160,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         if prefix_set_name in self.inputs.application_classification.field_sets.ipv4_prefixes:
             atr.field_sets.ipv4_prefixes.append(self.inputs.application_classification.field_sets.ipv4_prefixes[prefix_set_name])
         elif is_control_plane_vt and (
-            (self.shared_utils.is_wan_client and prefix_set_name == self._wan_cp_app_dst_prefix)
-            or (self.shared_utils.is_wan_server and prefix_set_name == self._wan_cp_app_src_prefix)
+            (self.shared_utils.is_wan_client and prefix_set_name == self.DEFAULT_WAN_CONTROL_PLANE_APP_DST_PREFIX_NAME)
+            or (self.shared_utils.is_wan_server and prefix_set_name == self.DEFAULT_WAN_CONTROL_PLANE_APP_SRC_PREFIX_NAME)
         ):
             # use default prefix-set
             atr.field_sets.ipv4_prefixes.append(self.get_default_control_plane_prefix_set())
@@ -192,18 +195,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         atr.field_sets.l4_ports.append(self.inputs.application_classification.field_sets.l4_ports[port_set_name])
 
-    @cached_property
-    def _wan_control_plane_application(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
-        return "APP-CONTROL-PLANE"
-
-    @cached_property
-    def _wan_cp_app_dst_prefix(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
-        return "PFX-PATHFINDERS"
-
-    @cached_property
-    def _wan_cp_app_src_prefix(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
-        return "PFX-LOCAL-VTEP-IP"
-
     def get_default_control_plane_application_profile(
         self: AvdStructuredConfigNetworkServicesProtocol,
     ) -> EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem:
@@ -223,7 +214,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         application_profile = EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem(
             name=self.inputs.wan_virtual_topologies.control_plane_virtual_topology.application_profile
         )
-        application_profile.applications.append_new(name=self._wan_control_plane_application)
+        application_profile.applications.append_new(name=self.DEFAULT_WAN_CONTROL_PLANE_APPLICATION_NAME)
         return application_profile
 
     def get_default_control_plane_application(
@@ -249,11 +240,11 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                     src_prefix_set_name: PFX-LOCAL-VTEP-IP
 
         """
-        application = EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem(name=self._wan_control_plane_application)
+        application = EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem(name=self.DEFAULT_WAN_CONTROL_PLANE_APPLICATION_NAME)
         if self.shared_utils.is_wan_client:
-            application.dest_prefix_set_name = self._wan_cp_app_dst_prefix
+            application.dest_prefix_set_name = self.DEFAULT_WAN_CONTROL_PLANE_APP_DST_PREFIX_NAME
         else:  # self.shared_utils.is_wan_server
-            application.src_prefix_set_name = self._wan_cp_app_src_prefix
+            application.src_prefix_set_name = self.DEFAULT_WAN_CONTROL_PLANE_APP_SRC_PREFIX_NAME
 
         return application
 
@@ -284,10 +275,10 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         """
         if self.shared_utils.is_wan_client:
-            name = self._wan_cp_app_dst_prefix
+            name = self.DEFAULT_WAN_CONTROL_PLANE_APP_DST_PREFIX_NAME
             prefix_set_values = [f"{wan_rs.vtep_ip}/32" for wan_rs in self.shared_utils.filtered_wan_route_servers]
         else:  # self.shared_utils.is_wan_server:
-            name = self._wan_cp_app_src_prefix
+            name = self.DEFAULT_WAN_CONTROL_PLANE_APP_SRC_PREFIX_NAME
             prefix_set_values = [f"{self.shared_utils.vtep_ip}/32"]
 
         return EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem(

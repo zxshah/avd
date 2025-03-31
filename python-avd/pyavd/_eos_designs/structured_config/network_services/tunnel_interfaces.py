@@ -43,6 +43,6 @@ class TunnelInterfacesMixin(Protocol):
             ipsec_profile=ipsec_profile,
         )
 
-        tunnel_interface.nat_profile = self.get_internet_exit_nat_profile_name("zscaler")
+        tunnel_interface.nat_profile = self.INTERNET_EXIT_ZSCALER_NAT_PROFILE_NAME
 
         self.structured_config.tunnel_interfaces.append(tunnel_interface)

@@ -493,27 +493,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             ttl=self.shared_utils.node_config.ptp.ttl,
             domain=default(self.shared_utils.node_config.ptp.domain, default_ptp_domain),
         )
-        monitor = self.shared_utils.node_config.ptp.monitor._as_dict(include_default_values=True)
-        self.structured_config.ptp.monitor.enabled = get(monitor, "enabled")
-        self.structured_config.ptp.monitor.threshold._update(
-            offset_from_master=get(monitor, "threshold.offset_from_master"), mean_path_delay=get(monitor, "threshold.mean_path_delay")
-        )
-        self.structured_config.ptp.monitor.threshold.drop._update(
-            offset_from_master=get(monitor, "threshold.drop.offset_from_master"), mean_path_delay=get(monitor, "threshold.drop.mean_path_delay")
-        )
-
-        self.structured_config.ptp.monitor.missing_message.intervals._update(
-            announce=get(monitor, "missing_message.intervals.announce"),
-            follow_up=get(monitor, "missing_message.intervals.follow_up"),
-            sync=get(monitor, "missing_message.intervals.sync"),
-        )
-        self.structured_config.ptp.monitor.missing_message.sequence_ids._update(
-            enabled=get(monitor, "missing_message.sequence_ids.enabled"),
-            announce=get(monitor, "missing_message.sequence_ids.announce"),
-            delay_resp=get(monitor, "missing_message.sequence_ids.delay_resp"),
-            follow_up=get(monitor, "missing_message.sequence_ids.follow_up"),
-            sync=get(monitor, "missing_message.sequence_ids.sync"),
-        )
+        self.structured_config.ptp.monitor = self.shared_utils.node_config.ptp.monitor._cast_as(EosCliConfigGen.Ptp.Monitor)
 
         self.structured_config.ptp.source.ip = self.shared_utils.node_config.ptp.source_ip
         self.structured_config.ptp.message_type.general.dscp = self.shared_utils.node_config.ptp.dscp.general_messages

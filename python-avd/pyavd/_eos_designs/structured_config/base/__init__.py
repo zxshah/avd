@@ -107,7 +107,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             self.structured_config.router_bgp.neighbors.append_new(
                 ip_address=neighbor_info["ip_address"],
                 remote_as=neighbor_info["remote_as"],
-                description=neighbor_info["description"] if neighbor_info["description"] else None,
+                description=neighbor_info["description"] or None,
                 route_map_in=get(neighbor_info, "route_map_in"),
                 route_map_out=get(neighbor_info, "route_map_out"),
             )
@@ -250,7 +250,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
     @structured_config_contributor
     def vlan_internal_order(self) -> None:
-        """vlan_internal_order set based on internal_vlan_order data-model."""
+        """
+        vlan_internal_order set based on internal_vlan_order data-model.
+        
+        TODO: Add platform_setting to control this.
+        """
         if self.shared_utils.wan_role:
             return
 
@@ -612,7 +616,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
                 # set no advertise is set only for WAN neighbors, which will also have prefix_list_in
                 if neighbor.get("set_no_advertise"):
-                    sequence_number.set = EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Set(["community no-advertise additive"])
+                    sequence_number.set.append("community no-advertise additive")
 
                 route_maps_item.sequence_numbers.append(sequence_number)
                 self.structured_config.route_maps.append(route_maps_item)
@@ -632,7 +636,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
             self.structured_config.route_maps.append(route_maps_item)
 
-    @cached_property
+    @structured_config_contributor
     def struct_cfgs(self) -> None:
         if self.shared_utils.platform_settings.structured_config:
             self.custom_structured_configs.root.append(self.shared_utils.platform_settings.structured_config)

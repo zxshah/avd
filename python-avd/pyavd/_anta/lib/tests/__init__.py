@@ -31,13 +31,24 @@ from anta.tests.routing.bgp import VerifyBGPPeerSession
 from anta.tests.routing.generic import VerifyRoutingProtocolModel
 from anta.tests.security import VerifyAPIHttpsSSL, VerifySpecificIPSecConn
 from anta.tests.stun import VerifyStunClientTranslation
-from anta.tests.system import VerifyNTP, VerifyReloadCause
+from anta.tests.system import (
+    VerifyAgentLogs,
+    VerifyCoredump,
+    VerifyFileSystemUtilization,
+    VerifyMaintenance,
+    VerifyMemoryUtilization,
+    VerifyNTP,
+    VerifyReloadCause,
+)
 
 __all__ = [
     "VerifyAPIHttpsSSL",
     "VerifyAVTRole",
+    "VerifyAgentLogs",
     "VerifyBGPPeerSession",
+    "VerifyCoredump",
     "VerifyEnvironmentSystemCooling",
+    "VerifyFileSystemUtilization",
     "VerifyIllegalLACP",
     "VerifyInterfaceDiscards",
     "VerifyInterfaceErrDisabled",
@@ -45,6 +56,8 @@ __all__ = [
     "VerifyInterfaceUtilization",
     "VerifyInterfacesStatus",
     "VerifyLLDPNeighbors",
+    "VerifyMaintenance",
+    "VerifyMemoryUtilization",
     "VerifyMlagConfigSanity",
     "VerifyMlagDualPrimary",
     "VerifyMlagInterfaces",

@@ -43,7 +43,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         if virtual_topology.application_profile not in self.inputs.application_classification.application_profiles:
             if is_control_plane_vt:
                 # use default application profile
-                atr.application_profiles.append(self.default_control_plane_application_profile())
+                atr.application_profiles.append(self.get_default_control_plane_application_profile())
             else:
                 msg = (
                     f"The application profile {virtual_topology.application_profile} used in policy {policy_name} "
@@ -54,47 +54,49 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         else:
             atr.application_profiles.append(self.inputs.application_classification.application_profiles[virtual_topology.application_profile])
 
-        # set the application-profiles in structured_config
-        self.structured_config.application_traffic_recognition.application_profiles.extend(atr.application_profiles)
+        # set the applications and categories in the atr object.
+        self._update_applications_and_categories(atr, is_control_plane_vt=is_control_plane_vt)
+        # Set categories and applications in structured config
 
-        # set the applications and categories in structured_config and populate atr object with them for further processing
-        self._set_applications_and_categories(atr, is_control_plane_vt=is_control_plane_vt)
+        # Update the field sets from applications in the atr object
+        self._update_field_sets(atr, is_control_plane_vt=is_control_plane_vt)
 
-        # set the field sets from applications in structured config and populate the atr object
-        self._set_field_sets(atr, is_control_plane_vt=is_control_plane_vt)
+        # deepmerge the atr object in the structured_config
+        self.structured_config.application_traffic_recognition._deepmerge(atr)
 
-    def _set_applications_and_categories(
+    def _update_applications_and_categories(
         self: AvdStructuredConfigNetworkServicesProtocol, atr: EosCliConfigGen.ApplicationTrafficRecognition, *, is_control_plane_vt: bool
     ) -> None:
         """
-        Set the IPv4 applications and categories in strutcured config based on the Application Profiles in atr.
+        Update the IPv4 applications and categories in the atr based on the Application Profile in atr.
 
-        Also update the atr object to be used further
+        The way the module is build, there is only one Application-profile in the atr object.
 
         Args:
             atr: The ApplicationTrafficRecognition object local to the module to track the set objects
             is_control_plane_vt: Indicates if we are setting up the ApplicationTrafficRecognition for Control-Plane Virtual Topology
         """
-        # TODO: The way the code is not organise, there can be only one application profile in atr
-        for application_profile in atr.application_profiles:
-            for category in application_profile.categories:
-                if category.name not in self.inputs.application_classification.categories:
-                    msg = (
-                        f"The application profile {application_profile.name} uses the category {category.name} "
-                        "undefined in 'application_classification.categories'."
-                    )
-                    raise AristaAvdInvalidInputsError(msg)
+        application_profile = next(iter(atr.application_profiles))
 
-                atr.categories.append(self.inputs.application_classification.categories[category.name])
+        # Categories in application profile
+        for category in application_profile.categories:
+            if category.name not in self.inputs.application_classification.categories:
+                msg = (
+                    f"The application profile {application_profile.name} uses the category {category.name} "
+                    "undefined in 'application_classification.categories'."
+                )
+                raise AristaAvdInvalidInputsError(msg)
 
-            # Applications in application profiles
-            for application in application_profile.applications:
-                if application.name in self.inputs.application_classification.applications.ipv4_applications:
-                    atr.applications.ipv4_applications.append(self.inputs.application_classification.applications.ipv4_applications[application.name])
+            atr.categories.append(self.inputs.application_classification.categories[category.name])
 
-                elif is_control_plane_vt and application.name == self._wan_control_plane_application:
-                    # the default Control Plane application profile has one application.
-                    atr.applications.ipv4_applications.append(self.default_control_plane_application())
+        # Applications in application profiles
+        for application in application_profile.applications:
+            if application.name in self.inputs.application_classification.applications.ipv4_applications:
+                atr.applications.ipv4_applications.append(self.inputs.application_classification.applications.ipv4_applications[application.name])
+
+            elif is_control_plane_vt and application.name == self._wan_control_plane_application:
+                # the default Control Plane application profile has one application.
+                atr.applications.ipv4_applications.append(self.get_default_control_plane_application())
 
         # Applications in categories
         for category in atr.categories:
@@ -102,17 +104,11 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if application.name in self.inputs.application_classification.applications.ipv4_applications:
                     atr.applications.ipv4_applications.append(self.inputs.application_classification.applications.ipv4_applications[application.name])
 
-        # Set in structured config
-        self.structured_config.application_traffic_recognition.categories.extend(atr.categories)
-        self.structured_config.application_traffic_recognition.applications.ipv4_applications.extend(atr.applications.ipv4_applications)
-
-    def _set_field_sets(
+    def _update_field_sets(
         self: AvdStructuredConfigNetworkServicesProtocol, atr: EosCliConfigGen.ApplicationTrafficRecognition, *, is_control_plane_vt: bool
     ) -> None:
         """
-        Set the IPv4 prefix and port field sets in strutcured config based on the IPv4 Applications in atr.
-
-        Also update the atr object to be used further
+        Update the IPv4 prefix and port field sets in the atr object base on the IPv4 Applications in atr.
 
         Args:
             atr: The ApplicationTrafficRecognition object local to the module to track the set objects
@@ -135,9 +131,6 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 if not port_set_name:
                     continue
                 self._update_port_set(atr, port_set_name, application.name)
-
-        self.structured_config.application_traffic_recognition.field_sets.ipv4_prefixes.extend(atr.field_sets.ipv4_prefixes)
-        self.structured_config.application_traffic_recognition.field_sets.l4_ports.extend(atr.field_sets.l4_ports)
 
     def _update_prefix_set(
         self: AvdStructuredConfigNetworkServicesProtocol,
@@ -168,7 +161,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             or (self.shared_utils.is_wan_server and prefix_set_name == self._wan_cp_app_src_prefix)
         ):
             # use default prefix-set
-            atr.field_sets.ipv4_prefixes.append(self.default_control_plane_prefix_set())
+            atr.field_sets.ipv4_prefixes.append(self.get_default_control_plane_prefix_set())
         else:
             msg = (
                 f"The IPv4 prefix field set {prefix_set_name} used in the application {application_name} "
@@ -211,7 +204,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
     def _wan_cp_app_src_prefix(self: AvdStructuredConfigNetworkServicesProtocol) -> str:
         return "PFX-LOCAL-VTEP-IP"
 
-    def default_control_plane_application_profile(
+    def get_default_control_plane_application_profile(
         self: AvdStructuredConfigNetworkServicesProtocol,
     ) -> EosCliConfigGen.ApplicationTrafficRecognition.ApplicationProfilesItem:
         """
@@ -233,7 +226,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         application_profile.applications.append_new(name=self._wan_control_plane_application)
         return application_profile
 
-    def default_control_plane_application(
+    def get_default_control_plane_application(
         self: AvdStructuredConfigNetworkServicesProtocol,
     ) -> EosCliConfigGen.ApplicationTrafficRecognition.Applications.Ipv4ApplicationsItem:
         """
@@ -264,7 +257,7 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         return application
 
-    def default_control_plane_prefix_set(
+    def get_default_control_plane_prefix_set(
         self: AvdStructuredConfigNetworkServicesProtocol,
     ) -> EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem:
         """
@@ -291,17 +284,12 @@ class ApplicationTrafficRecognitionMixin(Protocol):
 
         """
         if self.shared_utils.is_wan_client:
-            pathfinder_vtep_ips = [f"{wan_rs.vtep_ip}/32" for wan_rs in self.shared_utils.filtered_wan_route_servers]
+            name = self._wan_cp_app_dst_prefix
+            prefix_set_values = [f"{wan_rs.vtep_ip}/32" for wan_rs in self.shared_utils.filtered_wan_route_servers]
+        else:  # self.shared_utils.is_wan_server:
+            name = self._wan_cp_app_src_prefix
+            prefix_set_values = [f"{self.shared_utils.vtep_ip}/32"]
 
-            return EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem(
-                name=self._wan_cp_app_dst_prefix,
-                prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues(
-                    pathfinder_vtep_ips,
-                ),
-            )
-
-        # self.shared_utils.is_wan_server:
         return EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem(
-            name=self._wan_cp_app_src_prefix,
-            prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues([f"{self.shared_utils.vtep_ip}/32"]),
+            name=name, prefix_values=EosCliConfigGen.ApplicationTrafficRecognition.FieldSets.Ipv4PrefixesItem.PrefixValues(prefix_set_values)
         )

@@ -53,6 +53,8 @@ class LoopbackInterfacesMixin(Protocol):
                         loopback_interface_item.vrf = vrf.name
                     if loopback.ospf.enabled and vrf.ospf.enabled:
                         loopback_interface_item.ospf_area = loopback.ospf.area
+                    if loopback.hardware_forwarding:
+                        loopback_interface_item.hardware_forwarding_id = True
                     self._set_virtual_source_nat_for_vrf_loopback(loopback_interface_item)
                     self.structured_config.loopback_interfaces.append(loopback_interface_item)
 

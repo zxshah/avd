@@ -77,12 +77,3 @@
         anta_reports_dir: "{{ root_dir }}/anta/reports/user_defined_catalogs_with_tags_run"
         anta_runner_tags: ["border_leaf"]
       run_once: true
-
-    - name: Clean-up ANTA logs directory after all runs
-      delegate_to: 127.0.0.1
-      ansible.builtin.file:
-        path: "{{ anta_runner_logs_dir }}"
-        state: absent
-        mode: "0o775"
-      changed_when: false
-      run_once: true

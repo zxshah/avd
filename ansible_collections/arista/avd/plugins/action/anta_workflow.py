@@ -213,36 +213,31 @@ def run_anta(devices: list[str]) -> ResultManager:
     joined_devices = ", ".join(devices)
     process_name = current_process().name
 
-    try:
-        # Setup process logging and get warning tracker
-        has_warnings_ref, anta_log_filename = setup_process_logging()
+    # Setup process logging and get warning tracker
+    has_warnings_ref, anta_log_filename = setup_process_logging()
 
-        # Build the objects required to run ANTA
-        result_manager, inventory, catalog = build_anta_runner_objects(devices)
-        tags = set(get(PLUGIN_ARGS, "runner.tags", default=[])) or None
+    # Build the objects required to run ANTA
+    result_manager, inventory, catalog = build_anta_runner_objects(devices)
+    tags = set(get(PLUGIN_ARGS, "runner.tags", default=[])) or None
 
-        # Run ANTA
-        LOGGER.info("running ANTA in process %s for devices: %s", process_name, joined_devices)
-        run(anta_runner(result_manager, inventory, catalog, tags=tags, dry_run=get(PLUGIN_ARGS, "runner.dry_run")))
-    except Exception as error:
-        # Catch any uncaught exceptions in the process and fail the task
-        error_msg = f"ANTA process {process_name} for devices {joined_devices} failed with error: {error}"
-        raise AnsibleActionFail(error_msg) from error
-    else:
-        # Check if warnings/errors occurred in ANTA and notify via main logger
-        # ANTA errors are typically handled properly within ANTA by marking impacted
-        # tests as errors or failures, so we don't need to fail the task here
-        if has_warnings_ref[0]:
-            base_message = f"ANTA warnings/errors detected that could impact test results for devices {joined_devices}. "
-            if anta_log_filename:
-                base_message += f"See '{anta_log_filename}' for details."
-                LOGGER.warning(base_message)
-            else:
-                base_message += "No log directory was provided to save ANTA logs."
-                LOGGER.warning(base_message)
+    # Run ANTA
+    LOGGER.info("running ANTA in process %s for devices: %s", process_name, joined_devices)
+    run(anta_runner(result_manager, inventory, catalog, tags=tags, dry_run=get(PLUGIN_ARGS, "runner.dry_run")))
 
-        LOGGER.info("ANTA process %s completed for devices: %s", process_name, joined_devices)
-        return result_manager
+    # Check if warnings/errors occurred in ANTA and notify via main logger
+    # ANTA errors are typically handled properly within ANTA by marking impacted
+    # tests as errors or failures, so we don't need to fail the task here
+    if has_warnings_ref[0]:
+        base_message = f"ANTA warnings/errors detected that could impact test results for devices {joined_devices}. "
+        if anta_log_filename:
+            base_message += f"See '{anta_log_filename}' for details."
+            LOGGER.warning(base_message)
+        else:
+            base_message += "No log directory was provided to save ANTA logs."
+            LOGGER.warning(base_message)
+
+    LOGGER.info("ANTA process %s completed for devices: %s", process_name, joined_devices)
+    return result_manager
 
 
 def build_reports(batch_results: Iterator[ResultManager], report_settings: dict) -> None:
@@ -539,7 +534,7 @@ def setup_process_logging() -> tuple[list[bool], str | None]:
 
         # Setup ANTA log file that captures all ANTA logs at the current log level
         anta_log_filename = f"{anta_logs_dir}/anta_{timestamp}_{process_name}.log"
-        anta_handler = logging.FileHandler(anta_log_filename)
+        anta_handler = logging.FileHandler(anta_log_filename, delay=True)
         anta_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         anta_handler.setFormatter(anta_formatter)
 

@@ -153,8 +153,8 @@ class ActionModule(ActionBase):
             raise AnsibleActionFail(msg)
 
         # Get the required Ansible variables for each device
-        action_hostvars = ActionPluginVars(self)
-        ANSIBLE_VARS = get_ansible_vars(device_list, action_hostvars)
+        action_plugin_vars = ActionPluginVars(self)
+        ANSIBLE_VARS = get_ansible_vars(device_list, action_plugin_vars)
         deployed_devices = list(ANSIBLE_VARS.keys())
 
         generate_avd_catalogs = get(PLUGIN_ARGS, "avd_catalogs.enabled")

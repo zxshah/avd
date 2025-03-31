@@ -31,7 +31,6 @@ class ActionPluginVars:
         self.loader: DataLoader = self.task.get_loader()
         self.variable_manager: VariableManager = self.task.get_variable_manager()
         self.inventory: InventoryManager = self.variable_manager._inventory
-        self.templar = self.action_plugin._te
 
     def __getitem__(self, hostname: str) -> HostVarsVars:
         """Provides dictionary-like access to a host's variables, processed for templates.

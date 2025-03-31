@@ -335,7 +335,7 @@ class MiscMixin(Protocol):
         prefix_lists: EosCliConfigGen.PrefixLists,
         route_maps: EosCliConfigGen.RouteMaps,
     ) -> None:
-        if isinstance(interface, EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces):
+        if isinstance(interface, EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3InterfacesItem):
             schema_key = "l3_interfaces"
             description_function = self.interface_descriptions.underlay_ethernet_interface
             peer_interface = interface.peer_interface

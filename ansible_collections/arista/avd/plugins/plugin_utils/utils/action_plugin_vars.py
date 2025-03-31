@@ -3,7 +3,6 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from collections.abc import Iterator, Mapping
 from typing import TYPE_CHECKING
 
 from ansible.vars.hostvars import HostVarsVars
@@ -17,25 +16,50 @@ if TYPE_CHECKING:  # pragma: no cover
     from ansible.vars.manager import VariableManager
 
 
-class ActionHostVars(Mapping):
-    """Ansible HostVars replacement that respects action plugin context for variable precedence."""
+class ActionPluginVars:
+    """Provides access to Ansible host variables resolved for the current action plugin context."""
 
     def __init__(self, action_plugin: ActionBase) -> None:
-        """Initialize with an Ansible action plugin instance."""
+        """Initializes the accessor with an Ansible action plugin instance to capture context.
+
+        Args:
+            action_plugin: The Ansible ActionBase plugin instance currently executing.
+        """
         self.action_plugin: ActionBase = action_plugin
         self.task: Task = action_plugin._task
         self.play: Play = self.task.get_play()
         self.loader: DataLoader = self.task.get_loader()
         self.variable_manager: VariableManager = self.task.get_variable_manager()
         self.inventory: InventoryManager = self.variable_manager._inventory
+        self.templar = self.action_plugin._te
 
     def __getitem__(self, hostname: str) -> HostVarsVars:
-        """Get variables for a host with template processing."""
-        variables = self.get_host_variables(hostname)
+        """Provides dictionary-like access to a host's variables, processed for templates.
+
+        Args:
+            hostname: The name of the host.
+
+        Returns:
+            A HostVarsVars object wrapping the host's variables for templating.
+
+        Raises:
+            KeyError: If the hostname is not found.
+        """
+        variables = self._get_raw_variables(hostname)
         return HostVarsVars(variables=variables, loader=self.loader)
 
-    def get_host_variables(self, hostname: str) -> dict:
-        """Get raw variables for a specific host with proper context."""
+    def _get_raw_variables(self, hostname: str) -> dict:
+        """Retrieves the raw variables for a specific host using the captured context.
+
+        Args:
+            hostname: The name of the host for which to retrieve variables.
+
+        Returns:
+            A dictionary containing the host's variables.
+
+        Raises:
+            KeyError: If the specified hostname is not found in the inventory.
+        """
         host = self.inventory.get_host(hostname)
         if host is None:
             msg = f"Host '{hostname}' not found in Ansible inventory"
@@ -47,15 +71,3 @@ class ActionHostVars(Mapping):
             task=self.task,
             include_hostvars=False,
         )
-
-    def __contains__(self, hostname: str) -> bool:
-        """Check if a hostname exists in the inventory."""
-        return self.inventory.get_host(hostname) is not None
-
-    def __iter__(self) -> Iterator[str]:
-        """Iterate over all hostnames in the inventory."""
-        yield from self.inventory.hosts
-
-    def __len__(self) -> int:
-        """Return the number of hosts in the inventory."""
-        return len(self.inventory.hosts)

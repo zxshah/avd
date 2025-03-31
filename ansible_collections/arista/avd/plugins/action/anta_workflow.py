@@ -17,7 +17,7 @@ import yaml
 from ansible.errors import AnsibleActionFail
 from ansible.plugins.action import ActionBase, display
 
-from ansible_collections.arista.avd.plugins.plugin_utils.utils import ActionHostVars, PythonToAnsibleHandler
+from ansible_collections.arista.avd.plugins.plugin_utils.utils import ActionPluginVars, PythonToAnsibleHandler
 
 if TYPE_CHECKING:
     from pyavd.api._anta import MinimalStructuredConfig
@@ -153,7 +153,7 @@ class ActionModule(ActionBase):
             raise AnsibleActionFail(msg)
 
         # Get the required Ansible variables for each device
-        action_hostvars = ActionHostVars(self)
+        action_hostvars = ActionPluginVars(self)
         ANSIBLE_VARS = get_ansible_vars(device_list, action_hostvars)
         deployed_devices = list(ANSIBLE_VARS.keys())
 
@@ -260,26 +260,26 @@ def build_reports(batch_results: list[ResultManager], report_settings: dict) -> 
             file.write(result_manager.json)
 
 
-def get_ansible_vars(device_list: list[str], hostvars: ActionHostVars) -> dict[str, dict[str, Any]]:
-    """Get the required Ansible variables from the hostvars for each device."""
-    device_vars = {}
+def get_ansible_vars(device_list: list[str], action_plugin_vars: ActionPluginVars) -> dict[str, dict[str, Any]]:
+    """Get the required Ansible variables from the Action plugin variables for each device."""
+    ansible_vars = {}
 
     for device in device_list:
-        host_hostvars = hostvars[device]
+        device_vars = action_plugin_vars[device]
 
         # Since we can run ANTA without any structured configs, i.e., only using user-defined catalogs,
         # we honor the `is_deployed` flag in the hostvars to skip devices that are not deployed.
-        if get(host_hostvars, "is_deployed", default=True) is False:
+        if get(device_vars, "is_deployed", default=True) is False:
             LOGGER.info("skipping %s - device marked as not deployed", device)
             continue
 
         # Adding the Ansible connection variables following the HTTPAPI connection plugin settings
-        device_vars[device] = {key: get(host_hostvars, key) for key in ANSIBLE_CONNECTION_VARS}
+        ansible_vars[device] = {key: get(device_vars, key) for key in ANSIBLE_CONNECTION_VARS}
 
         # Same as above, we also honor the `anta_tags` variable if provided in the hostvars
-        device_vars[device]["anta_tags"] = get(host_hostvars, "anta_tags")
+        ansible_vars[device]["anta_tags"] = get(device_vars, "anta_tags")
 
-    return device_vars
+    return ansible_vars
 
 
 def build_anta_runner_objects(devices: list[str]) -> tuple[ResultManager, AntaInventory, AntaCatalog]:

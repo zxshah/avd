@@ -21156,6 +21156,8 @@ keys:
               convert_types:
               - int
   serial_number:
+    documentation_settings:
+      table: metadata
     description: 'Serial Number of the device.
 
       Used only for documentation and deployment purposes. It is used by the ''eos_config_deploy_cvp''

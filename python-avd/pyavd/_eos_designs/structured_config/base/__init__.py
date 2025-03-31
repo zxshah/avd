@@ -252,7 +252,7 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
     def vlan_internal_order(self) -> None:
         """
         vlan_internal_order set based on internal_vlan_order data-model.
-        
+
         TODO: Add platform_setting to control this.
         """
         if self.shared_utils.wan_role:

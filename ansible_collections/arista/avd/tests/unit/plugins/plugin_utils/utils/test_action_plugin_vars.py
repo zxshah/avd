@@ -27,7 +27,7 @@ class TestActionPluginVars:
         assert action_plugin_vars.variable_manager == ansible_task.get_variable_manager()
         assert action_plugin_vars.inventory == ansible_task.get_variable_manager()._inventory
 
-    def test__get_raw_variables_valid_host(self, ansible_task: Task) -> None:
+    def test_get_raw_variables_valid_host(self, ansible_task: Task) -> None:
         """Test _get_raw_variables with a valid host."""
         action_plugin = MinimalActionPlugin(ansible_task)
         action_plugin_vars = ActionPluginVars(action_plugin)
@@ -35,7 +35,7 @@ class TestActionPluginVars:
         variables = action_plugin_vars._get_raw_variables("DC1-SPINE1")
         assert isinstance(variables, dict)
 
-    def test__get_host_variables_invalid_host(self, ansible_task: Task) -> None:
+    def test_get_raw_variables_invalid_host(self, ansible_task: Task) -> None:
         """Test _get_raw_variables with an invalid host raises KeyError."""
         action_plugin = MinimalActionPlugin(ansible_task)
         action_plugin_vars = ActionPluginVars(action_plugin)
@@ -43,7 +43,7 @@ class TestActionPluginVars:
         with pytest.raises(KeyError, match="Host 'non-existent-host' not found in Ansible inventory"):
             action_plugin_vars._get_raw_variables("non-existent-host")
 
-    def test__get_raw_variables_group_vars(self, ansible_task: Task) -> None:
+    def test_get_raw_variables_group_vars(self, ansible_task: Task) -> None:
         """Test _get_raw_variables with variable values from group_vars."""
         action_plugin = MinimalActionPlugin(ansible_task)
         action_plugin_vars = ActionPluginVars(action_plugin)

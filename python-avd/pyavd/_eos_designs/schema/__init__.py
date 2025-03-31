@@ -18629,10 +18629,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -18671,10 +18671,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 
@@ -22697,10 +22697,10 @@ class EosDesigns(EosDesignsRootModel):
                             """
                             all_active_multihoming: AllActiveMultihoming
                             """
-                            Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                            Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                            IPVPN Gateway.
 
-                            Subclass
-                            of AvdModel.
+                            Subclass of AvdModel.
                             """
 
                             if TYPE_CHECKING:
@@ -22739,10 +22739,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                            Subclass of AvdModel.
                                         all_active_multihoming:
-                                           Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                           Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                           IPVPN Gateway.
 
-                                           Subclass
-                                           of AvdModel.
+                                           Subclass of AvdModel.
 
                                     """
 
@@ -26745,10 +26745,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -26787,10 +26787,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 
@@ -30840,10 +30840,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -30882,10 +30882,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 
@@ -41614,10 +41614,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -41656,10 +41656,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 
@@ -45682,10 +45682,10 @@ class EosDesigns(EosDesignsRootModel):
                             """
                             all_active_multihoming: AllActiveMultihoming
                             """
-                            Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                            Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                            IPVPN Gateway.
 
-                            Subclass
-                            of AvdModel.
+                            Subclass of AvdModel.
                             """
 
                             if TYPE_CHECKING:
@@ -45724,10 +45724,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                            Subclass of AvdModel.
                                         all_active_multihoming:
-                                           Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                           Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                           IPVPN Gateway.
 
-                                           Subclass
-                                           of AvdModel.
+                                           Subclass of AvdModel.
 
                                     """
 
@@ -49730,10 +49730,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -49772,10 +49772,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 
@@ -53825,10 +53825,10 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         all_active_multihoming: AllActiveMultihoming
                         """
-                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                        Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                        IPVPN Gateway.
 
-                        Subclass
-                        of AvdModel.
+                        Subclass of AvdModel.
                         """
 
                         if TYPE_CHECKING:
@@ -53867,10 +53867,10 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     all_active_multihoming:
-                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG.
+                                       Enable Active Active Multihoming architecture for EVPN Gateways. Not supported with MLAG or with
+                                       IPVPN Gateway.
 
-                                       Subclass
-                                       of AvdModel.
+                                       Subclass of AvdModel.
 
                                 """
 

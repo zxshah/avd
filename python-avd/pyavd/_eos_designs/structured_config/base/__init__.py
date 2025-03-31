@@ -492,12 +492,47 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
             priority2=priority2,
             ttl=self.shared_utils.node_config.ptp.ttl,
             domain=default(self.shared_utils.node_config.ptp.domain, default_ptp_domain),
+            monitor=self.get_ptp_monitor(),
         )
-        self.structured_config.ptp.monitor = self.shared_utils.node_config.ptp.monitor._cast_as(EosCliConfigGen.Ptp.Monitor)
 
         self.structured_config.ptp.source.ip = self.shared_utils.node_config.ptp.source_ip
         self.structured_config.ptp.message_type.general.dscp = self.shared_utils.node_config.ptp.dscp.general_messages
         self.structured_config.ptp.message_type.event.dscp = self.shared_utils.node_config.ptp.dscp.event_messages
+
+    def get_ptp_monitor(self) -> EosCliConfigGen.Ptp.Monitor:
+        """
+        Return the Ptp Monitor configuration based on the NodeConfig.
+
+        Cannot use global _case_as because of the default values in EosDesigns.
+        """
+        node_config_ptp_monitor = self.shared_utils.node_config.ptp.monitor
+
+        # Here _cast_as is not possible because there are default
+        ptp_monitor = EosCliConfigGen.Ptp.Monitor(enabled=node_config_ptp_monitor.enabled)
+        # Threshold
+        ptp_monitor.threshold._update(
+            offset_from_master=node_config_ptp_monitor.threshold.offset_from_master,
+            mean_path_delay=node_config_ptp_monitor.threshold.mean_path_delay,
+        )
+        ptp_monitor.threshold.drop._update(
+            offset_from_master=node_config_ptp_monitor.threshold.drop.offset_from_master,
+            mean_path_delay=node_config_ptp_monitor.threshold.drop.mean_path_delay,
+        )
+        # Missing message
+        ptp_monitor.missing_message.intervals = EosCliConfigGen.Ptp.Monitor.MissingMessage.Intervals(
+            announce=node_config_ptp_monitor.missing_message.intervals.announce,
+            follow_up=node_config_ptp_monitor.missing_message.intervals.follow_up,
+            sync=node_config_ptp_monitor.missing_message.intervals.sync,
+        )
+        ptp_monitor.missing_message.sequence_ids = EosCliConfigGen.Ptp.Monitor.MissingMessage.SequenceIds(
+            enabled=node_config_ptp_monitor.missing_message.sequence_ids.enabled,
+            announce=node_config_ptp_monitor.missing_message.sequence_ids.announce,
+            delay_resp=node_config_ptp_monitor.missing_message.sequence_ids.delay_resp,
+            follow_up=node_config_ptp_monitor.missing_message.sequence_ids.follow_up,
+            sync=node_config_ptp_monitor.missing_message.sequence_ids.sync,
+        )
+
+        return ptp_monitor
 
     @structured_config_contributor
     def eos_cli(self) -> None:

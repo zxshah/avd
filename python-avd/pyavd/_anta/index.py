@@ -60,9 +60,6 @@ AVD_TEST_INDEX: list[TestSpec] = [
         input_factory=VerifyInterfacesStatusInputFactory,
     ),
     TestSpec(
-        test_class=VerifyMaintenance,
-    ),
-    TestSpec(
         test_class=VerifyPortChannels,
         conditional_keys=[StructuredConfigKey.PORT_CHANNEL_INTERFACES],
     ),

@@ -356,15 +356,19 @@ class MiscMixin(Protocol):
             msg = f"BGP is enabled but 'bgp.ipv4_prefix_list_in' is not configured for '{context}'."
             raise AristaAvdInvalidInputsError(msg)
 
-        description = interface.description or description_function(
-            InterfaceDescriptionData(
-                shared_utils=self,
-                interface=interface.name,
-                peer=interface.peer,
-                peer_interface=peer_interface,
-                wan_carrier=interface.wan_carrier,
-                wan_circuit_id=interface.wan_circuit_id,
-            ),
+        description = (
+            interface.description
+            or description_function(
+                InterfaceDescriptionData(
+                    shared_utils=self,
+                    interface=interface.name,
+                    peer=interface.peer,
+                    peer_interface=peer_interface,
+                    wan_carrier=interface.wan_carrier,
+                    wan_circuit_id=interface.wan_circuit_id,
+                ),
+            )
+            or None
         )
 
         neighbor = EosCliConfigGen.RouterBgp.NeighborsItem(
@@ -376,8 +380,9 @@ class MiscMixin(Protocol):
         # TODO: Remove when reviewing in Github
         # This used to check for "or set_no_advertise" which was equivalent to "is_wan_interface"
         # Above we raise if is_wan_interface but the In prefix list is not set so the OR was redundant.
-        if interface.bgp.ipv4_prefix_list_in and interface.bgp.ipv4_prefix_list_in not in prefix_lists:
-            prefix_lists.append(self.get_prefix_list(interface.bgp.ipv4_prefix_list_in))
+        if interface.bgp.ipv4_prefix_list_in:
+            if interface.bgp.ipv4_prefix_list_in not in prefix_lists:
+                prefix_lists.append(self.get_prefix_list(interface.bgp.ipv4_prefix_list_in))
             rm_in_name = f"RM-BGP-{neighbor.ip_address}-IN"
             neighbor.route_map_in = rm_in_name
             route_maps.append(self.get_l3_bgp_route_map_in(rm_in_name, interface.bgp.ipv4_prefix_list_in, no_advertise=is_wan_interface))

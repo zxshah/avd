@@ -13,7 +13,7 @@ from pyavd._eos_designs.structured_config.structured_config_generator import (
     structured_config_contributor,
 )
 from pyavd._errors import AristaAvdInvalidInputsError
-from pyavd._utils import default, get
+from pyavd._utils import default
 from pyavd.j2filters import natural_sort
 
 from .ntp import NtpMixin

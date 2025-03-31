@@ -611,9 +611,9 @@ interface {{ ethernet_interface.name }}
 {%         endif %}
 {%     endif %}
 {%     if ethernet_interface.ntp_serve is arista.avd.defined %}
-{%         if ethernet_interface.ntp_serve is arista.avd.defined(true) %}
+{%         if ethernet_interface.ntp_serve %}
    ntp serve
-{%         elif ethernet_interface.ntp_serve is arista.avd.defined(false) %}
+{%         else %}
    no ntp serve
 {%         endif %}
 {%     endif %}

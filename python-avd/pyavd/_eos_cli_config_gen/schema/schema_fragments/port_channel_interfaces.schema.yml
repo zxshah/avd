@@ -489,7 +489,7 @@ keys:
                   type: bool
         ntp_serve:
           type: bool
-          description: Enable/disable serving NTP to clients
+          description: Enable/disable serving NTP to clients.
         trunk_private_vlan_secondary:
           type: bool
           deprecation:

@@ -106,12 +106,11 @@ keys:
         convert_types:
           - int
       serve:
-        description: Enable Serving NTP to clients
+        description: Enable Serving NTP to clients.
         type: dict
         keys:
           serve_all:
             type: bool
-            required: true
           access_group:
             type: str
             description: Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
@@ -126,12 +125,10 @@ keys:
               keys:
                 name:
                   type: str
-                  required: true
                   convert_types:
                     - int
                 serve_all:
                   type: bool
-                  required: true
                 access_group:
                   type: str
                 ipv6_access_group:

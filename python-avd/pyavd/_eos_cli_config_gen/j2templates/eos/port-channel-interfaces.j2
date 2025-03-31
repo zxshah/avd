@@ -488,9 +488,9 @@ interface {{ port_channel_interface.name }}
 {%         endif %}
 {%     endif %}
 {%     if port_channel_interface.ntp_serve is arista.avd.defined %}
-{%         if port_channel_interface.ntp_serve is arista.avd.defined(true) %}
+{%         if port_channel_interface.ntp_serve %}
    ntp serve
-{%         elif port_channel_interface.ntp_serve is arista.avd.defined(false) %}
+{%         else %}
    no ntp serve
 {%         endif %}
 {%     endif %}

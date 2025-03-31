@@ -86,4 +86,5 @@ class LoopbackInterfacesMixin(Protocol):
             vrf=vrf.name,
             ip_address=f"{self.shared_utils.ip_addressing.vrf_loopback_ip(loopback_ipv4_pool)}/32" if loopback_ipv4_pool else None,
             ipv6_address=f"{self.shared_utils.ip_addressing.vrf_loopback_ipv6(loopback_ipv6_pool)}/128" if loopback_ipv6_pool else None,
+            hardware_forwarding_id=vrf.vtep_diagnostic.hardware_forwarding if vrf.vtep_diagnostic.hardware_forwarding else None,
         )

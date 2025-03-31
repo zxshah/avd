@@ -59,5 +59,7 @@ class VlansMixin(Protocol):
                 if uplink["peer"] == self.shared_utils.hostname:
                     if (peer_trunk_groups := get(uplink, "peer_trunk_groups")) is None:
                         continue
-                    for vlan in range_expand(uplink["vlans"]):
-                        vlans.obtain(int(vlan)).trunk_groups.extend(peer_trunk_groups)
+                    for vlan_id in map(int, range_expand(uplink["vlans"])):
+                        vlan_item_trunk_groups = vlans.obtain(vlan_id).trunk_groups
+                        for trunk_group in peer_trunk_groups:
+                            vlan_item_trunk_groups.append_unique(trunk_group)

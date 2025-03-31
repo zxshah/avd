@@ -68,7 +68,7 @@ class UtilsMixin(Protocol):
 
         return evpn_route_servers
 
-    # The next four should probably be moved to facts
+    # The next three should probably be moved to facts
     @cached_property
     def _is_mpls_server(self: AvdStructuredConfigOverlayProtocol) -> bool:
         return self.shared_utils.mpls_overlay_role == "server" or (self.shared_utils.evpn_role == "server" and self.shared_utils.overlay_evpn_mpls)
@@ -81,7 +81,7 @@ class UtilsMixin(Protocol):
 
     @cached_property
     def _mpls_route_reflectors(self: AvdStructuredConfigOverlayProtocol) -> dict:
-        if (self.shared_utils.mpls_overlay_role == "client" or (self.shared_utils.evpn_role == "client" and self.shared_utils.overlay_evpn_mpls)) is not True:
+        if not (self.shared_utils.mpls_overlay_role == "client" or (self.shared_utils.evpn_role == "client" and self.shared_utils.overlay_evpn_mpls)):
             return {}
 
         mpls_route_reflectors = {}

@@ -21156,7 +21156,7 @@ keys:
               convert_types:
               - int
   serial_number:
-    documentation_settings:
+    documentation_options:
       table: metadata
     description: 'Serial Number of the device.
 

@@ -2651,7 +2651,7 @@ keys:
             l1:
               type: bool
               default: false
-              description: ??
+              description: Point-to-point services
             l2:
               type: bool
               default: false
@@ -4669,6 +4669,8 @@ keys:
     type: bool
     default: false
   underlay_ospf_graceful_restart:
+    documentation_options:
+      table: ospf-settings
     type: bool
     default: false
     description: Enable graceful restart for OSPF underlay.
@@ -9096,6 +9098,11 @@ $defs:
               table: node-type-l2-mlag-configuration
             type: bool
             default: false
+          spanning_tree_mst_pvst_boundary:
+            documentation_options:
+              table: node-type-l2-mlag-configuration
+            type: bool
+            description: Enable MST PVST border ports.
           virtual_router_mac_address:
             documentation_options:
               table: node-type-l2-mlag-configuration

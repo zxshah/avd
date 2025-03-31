@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from functools import cached_property
-from typing import TYPE_CHECKING, Protocol
+from typing import Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.structured_config.structured_config_generator import (
@@ -12,7 +12,7 @@ from pyavd._eos_designs.structured_config.structured_config_generator import (
     StructuredConfigGeneratorProtocol,
     structured_config_contributor,
 )
-from pyavd._errors import AristaAvdInvalidInputsError, AristaAvdMissingVariableError
+from pyavd._errors import AristaAvdInvalidInputsError
 from pyavd._utils import default, get
 from pyavd.j2filters import natural_sort
 
@@ -21,9 +21,6 @@ from .platform_mixin import PlatformMixin
 from .router_general import RouterGeneralMixin
 from .snmp_server import SnmpServerMixin
 from .utils import UtilsMixin
-
-if TYPE_CHECKING:
-    from pyavd._eos_designs.schema import EosDesigns
 
 
 class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMixin, PlatformMixin, UtilsMixin, StructuredConfigGeneratorProtocol, Protocol):
@@ -103,15 +100,10 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
         if self.inputs.bgp_graceful_restart.enabled:
             self.structured_config.router_bgp.graceful_restart._update(enabled=True, restart_time=self.inputs.bgp_graceful_restart.restart_time)
 
-        for neighbor_info in self.shared_utils.l3_bgp_neighbors:
-            self.structured_config.router_bgp.neighbors.append_new(
-                ip_address=neighbor_info["ip_address"],
-                remote_as=neighbor_info["remote_as"],
-                description=neighbor_info["description"] or None,
-                route_map_in=get(neighbor_info, "route_map_in"),
-                route_map_out=get(neighbor_info, "route_map_out"),
-            )
-            self.structured_config.router_bgp.address_family_ipv4.neighbors.append_new(ip_address=neighbor_info["ip_address"], activate=True)
+        # Add neighbors
+        self.structured_config.router_bgp.neighbors.extend(self.shared_utils.l3_bgp_neighbors)
+        for neighbor in self.shared_utils.l3_bgp_neighbors:
+            self.structured_config.router_bgp.address_family_ipv4.neighbors.append_new(ip_address=neighbor.ip_address, activate=True)
 
     @structured_config_contributor
     def static_routes(self) -> None:
@@ -592,52 +584,11 @@ class AvdStructuredConfigBaseProtocol(NtpMixin, SnmpServerMixin, RouterGeneralMi
 
     @structured_config_contributor
     def prefix_lists(self) -> None:
-        for neighbor in self.shared_utils.l3_bgp_neighbors:
-            if (prefix_list_in := get(neighbor, "ipv4_prefix_list_in")) and prefix_list_in:
-                pfx_list = self._get_prefix_list(prefix_list_in)._cast_as(EosCliConfigGen.PrefixListsItem)
-                self.structured_config.prefix_lists.append(pfx_list)
-
-            if (prefix_list_out := get(neighbor, "ipv4_prefix_list_out")) and prefix_list_out:
-                pfx_list = self._get_prefix_list(prefix_list_out)._cast_as(EosCliConfigGen.PrefixListsItem)
-                self.structured_config.prefix_lists.append(pfx_list)
-
-    def _get_prefix_list(self, name: str) -> EosDesigns.Ipv4PrefixListCatalogItem:
-        if name not in self.inputs.ipv4_prefix_list_catalog:
-            msg = f"ipv4_prefix_list_catalog[name={name}]"
-            raise AristaAvdMissingVariableError(msg)
-        return self.inputs.ipv4_prefix_list_catalog[name]
+        self.structured_config.prefix_lists.extend(self.shared_utils.l3_bgp_prefix_lists)
 
     @structured_config_contributor
     def route_maps(self) -> None:
-        for neighbor in self.shared_utils.l3_bgp_neighbors:
-            # RM-BGP-<PEER-IP>-IN
-            if prefix_list_in := get(neighbor, "ipv4_prefix_list_in"):
-                route_maps_item = EosCliConfigGen.RouteMapsItem(name=neighbor["route_map_in"])
-                sequence_number = EosCliConfigGen.RouteMapsItem.SequenceNumbersItem(
-                    sequence=10, type="permit", match=EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Match([f"ip address prefix-list {prefix_list_in}"])
-                )
-
-                # set no advertise is set only for WAN neighbors, which will also have prefix_list_in
-                if neighbor.get("set_no_advertise"):
-                    sequence_number.set.append("community no-advertise additive")
-
-                route_maps_item.sequence_numbers.append(sequence_number)
-                self.structured_config.route_maps.append(route_maps_item)
-
-            # RM-BGP-<PEER-IP>-OUT
-            route_maps_item = EosCliConfigGen.RouteMapsItem(name=neighbor["route_map_out"])
-            if prefix_list_out := get(neighbor, "ipv4_prefix_list_out"):
-                route_maps_item.sequence_numbers.append_new(
-                    sequence=10, type="permit", match=EosCliConfigGen.RouteMapsItem.SequenceNumbersItem.Match([f"ip address prefix-list {prefix_list_out}"])
-                )
-                route_maps_item.sequence_numbers.append_new(sequence=20, type="deny")
-            else:
-                route_maps_item.sequence_numbers.append_new(
-                    sequence=10,
-                    type="deny",
-                )
-
-            self.structured_config.route_maps.append(route_maps_item)
+        self.structured_config.route_maps.extend(self.shared_utils.l3_bgp_route_maps)
 
     @structured_config_contributor
     def struct_cfgs(self) -> None:

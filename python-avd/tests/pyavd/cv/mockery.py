@@ -113,7 +113,7 @@ async def mocked_cv_client_aenter(self: CVClient) -> CVClient:
         def close(self) -> None:
             pass
 
-        def request(self, *_args: list[Any], **_kwargs: dict[str, Any]) -> NoReturn:
+        def request(self, *_args: tuple[Any, ...], **_kwargs: dict[str, Any]) -> NoReturn:
             msg = (
                 "The MockedChannel instance was called from the regular ServiceStub which should never happen. "
                 "Something went wrong with patching the aristaproto.ServiceStub."

@@ -331,7 +331,6 @@
 
 #### Agent NotRendered
 
-
 #### Agents Device Configuration
 
 ```eos

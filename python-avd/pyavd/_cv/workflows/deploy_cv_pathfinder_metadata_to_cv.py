@@ -180,7 +180,7 @@ def upsert_pathfinder(metadata: dict, device: CVDevice, studio_inputs: dict, stu
             warnings.append(warning)
 
     found_index = None
-    studio_inputs_pathfinders = studio_inputs.get("pathfinders", [])
+    studio_inputs_pathfinders = studio_inputs.setdefault("pathfinders", [])
     if not isinstance(studio_inputs_pathfinders, list):
         # Resetting the pathfinders field to a list in case of invalid data.
         studio_inputs_pathfinders = studio_inputs["pathfinders"] = []
@@ -245,7 +245,7 @@ def upsert_edge(metadata: dict, device: CVDevice, studio_inputs: dict, studio_sc
         edge_metadata["inputs"]["router"]["services"] = internet_exit_metadata
 
     found_index = None
-    studio_inputs_routers = studio_inputs.get("routers", [])
+    studio_inputs_routers = studio_inputs.setdefault("routers", [])
     if not isinstance(studio_inputs_routers, list):
         # Resetting the routers field to a list in case of invalid data.
         studio_inputs_routers = studio_inputs["routers"] = []

@@ -7,6 +7,7 @@ from functools import cached_property
 from re import findall
 from typing import TYPE_CHECKING, Literal, Protocol
 
+from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._eos_designs.schema import EosDesigns
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError, AristaAvdMissingVariableError
 from pyavd._utils import default, get, get_ip_from_ip_prefix, strip_empties_from_dict
@@ -86,15 +87,6 @@ class WanMixin(Protocol):
         return EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3PortChannels(
             [port_channel for port_channel in self.node_config.l3_port_channels if port_channel.wan_carrier]
         )
-
-    @cached_property
-    def _wan_port_channel_member_interfaces(self: SharedUtilsProtocol) -> dict:
-        """Dictionary with mapping of member ethernet interface to wan port_channel for a device."""
-        member_intfs = {}
-        for port_channel_intf in self.wan_port_channels:
-            for member_eth_intf in port_channel_intf.member_interfaces:
-                member_intfs[member_eth_intf.name] = port_channel_intf.name
-        return member_intfs
 
     @cached_property
     def wan_local_carriers(self: SharedUtilsProtocol) -> list:
@@ -307,7 +299,7 @@ class WanMixin(Protocol):
         return self.inputs.cv_pathfinder_regions[node_defined_region]
 
     @property
-    def wan_zone(self: SharedUtilsProtocol) -> dict:
+    def wan_zone(self: SharedUtilsProtocol) -> EosCliConfigGen.RouterAdaptiveVirtualTopology.Zone:
         """
         WAN zone for Pathfinder.
 
@@ -319,7 +311,7 @@ class WanMixin(Protocol):
             msg = "Could not find 'cv_pathfinder_region' so it is not possible to auto-generate the zone."
             raise AristaAvdInvalidInputsError(msg)
 
-        return {"name": f"{self.wan_region.name}-ZONE", "id": 1}
+        return EosCliConfigGen.RouterAdaptiveVirtualTopology.Zone(name=f"{self.wan_region.name}-ZONE", id=1)
 
     @cached_property
     def filtered_wan_route_servers(self: SharedUtilsProtocol) -> EosDesigns.WanRouteServers:
@@ -531,7 +523,7 @@ class WanMixin(Protocol):
         raise AristaAvdError(msg)
 
     @cached_property
-    def wan_ha_interfaces(self: SharedUtilsProtocol) -> list:
+    def wan_ha_interfaces(self: SharedUtilsProtocol) -> list[str]:
         """
         Return the list of interfaces for WAN HA.
 

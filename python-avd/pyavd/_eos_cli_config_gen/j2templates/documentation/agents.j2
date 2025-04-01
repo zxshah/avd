@@ -21,6 +21,7 @@
 {%             endfor %}
 {%         endif %}
 
+{%         if agent.shutdown is arista.avd.defined or agent.shutdown_supervisor_active is arista.avd.defined or agent.shutdown_supervisor_standby is arista.avd.defined%}
 ##### Shutdown
 
 | Setting | Value |
@@ -28,6 +29,7 @@
 | Shutdown | {{ agent.shutdown | arista.avd.default("-") }} |
 | Shutdown Supervisor Active | {{ agent.shutdown_supervisor_active | arista.avd.default("-") }} |
 | Shutdown Supervisor Standby | {{ agent.shutdown_supervisor_standby | arista.avd.default("-") }} |
+{%         endif %}
 {%     endfor %}
 
 #### Agents Device Configuration

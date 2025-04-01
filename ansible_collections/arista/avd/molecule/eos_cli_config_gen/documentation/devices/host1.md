@@ -331,13 +331,6 @@
 
 #### Agent NotRendered
 
-##### Shutdown
-
-| Setting | Value |
-| ------- | ----- |
-| Shutdown | - |
-| Shutdown Supervisor Active | - |
-| Shutdown Supervisor Standby | - |
 
 #### Agents Device Configuration
 

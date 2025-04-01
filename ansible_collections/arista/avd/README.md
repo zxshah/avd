@@ -23,6 +23,9 @@ The AVD collection has the following requirements:
 
 - Python 3.10 or above
 - Ansible Core 2.16.0 to 2.18.x
+<!--
+  TODO: This link is broken and we should not have a relative link but we don't document this anywhere in our doc anymore.
+  -->
 - [Additional Python Dependencies](#additional-python-dependencies)
 - Modify the `ansible.cfg` file to support additional Jinja2 extensions
 
@@ -52,7 +55,7 @@ ansible-galaxy collection install arista.avd --upgrade
 You can also install a specific version of the collection, for example, if you need to downgrade when something is broken in the latest version (please report an issue in this repository). Use the following syntax to install version 4.7.1:
 
 ```shell
-ansible-galaxy collection install arista.avd:==4.7.1
+ansible-galaxy collection install arista.avd:==5.2.3
 ```
 
 See [using Ansible collections](https://docs.ansible.com/ansible/devel/collections_guide/index.html) for more details.
@@ -81,7 +84,7 @@ duplicate_dict_key=error
 Please see the documentation for examples in data center, campus, and wide area network environments.
 
 - [Getting started](https://avd.arista.com/stable/docs/getting-started/intro-to-ansible-and-avd.html)
-- [Examples](https://avd.arista.com/stable/examples/single-dc-l3ls/index.html)
+- [Examples](https://avd.arista.com/stable/ansible_collections/arista/avd/examples/single-dc-l3ls/index.html)
 
 ### Testing
 
@@ -100,6 +103,9 @@ You can also open an [issue](https://github.com/aristanetworks/avd/issues) to re
 
 ## Release Notes and Roadmap
 
+<!--
+  TODO: should we add a symlink to our latest release notes to make this link less useless?
+-->
 Please see the [release notes](https://avd.arista.com) for the latest updates to the AVD collection.
 
 ## Related Information

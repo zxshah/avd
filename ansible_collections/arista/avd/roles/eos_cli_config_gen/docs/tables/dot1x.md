@@ -42,7 +42,7 @@
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;filter_id</samp>](## "dot1x.radius_av_pair.filter_id") | Dictionary |  |  |  |  |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delimiter_period</samp>](## "dot1x.radius_av_pair.filter_id.delimiter_period") | Boolean |  |  |  | Use period as the delimiter. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ipv4_ipv6_required</samp>](## "dot1x.radius_av_pair.filter_id.ipv4_ipv6_required") | Boolean |  |  |  | Enable filters for IPv4 and IPv6 traffic. |
-    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple</samp>](## "dot1x.radius_av_pair.filter_id.multiple") | Boolean |  |  |  | Multiple attribute |
+    | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;multiple</samp>](## "dot1x.radius_av_pair.filter_id.multiple") | Boolean |  |  |  | Multiple attribute. |
     | [<samp>&nbsp;&nbsp;aaa</samp>](## "dot1x.aaa") | Dictionary |  |  |  | Configure AAA parameters. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;unresponsive</samp>](## "dot1x.aaa.unresponsive") | Dictionary |  |  |  | Configure AAA timeout options. |
     | [<samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;eap_response</samp>](## "dot1x.aaa.unresponsive.eap_response") | String |  |  | Valid Values:<br>- <code>success</code><br>- <code>disabled</code> | EAP response to send. |
@@ -144,7 +144,7 @@
           # Enable filters for IPv4 and IPv6 traffic.
           ipv4_ipv6_required: <bool>
 
-          # Multiple attribute
+          # Multiple attribute.
           multiple: <bool>
 
       # Configure AAA parameters.

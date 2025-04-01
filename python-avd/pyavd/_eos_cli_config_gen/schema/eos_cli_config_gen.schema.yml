@@ -1765,7 +1765,7 @@ keys:
                 description: Enable filters for IPv4 and IPv6 traffic.
               multiple:
                 type: bool
-                description: Multiple attribute
+                description: Multiple attribute.
       aaa:
         type: dict
         description: Configure AAA parameters.

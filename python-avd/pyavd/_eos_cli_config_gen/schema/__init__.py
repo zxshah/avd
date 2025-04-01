@@ -4397,7 +4397,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ipv4_ipv6_required: bool | None
                 """Enable filters for IPv4 and IPv6 traffic."""
                 multiple: bool | None
-                """Multiple attribute"""
+                """Multiple attribute."""
 
                 if TYPE_CHECKING:
 
@@ -4417,7 +4417,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         Args:
                             delimiter_period: Use period as the delimiter.
                             ipv4_ipv6_required: Enable filters for IPv4 and IPv6 traffic.
-                            multiple: Multiple attribute
+                            multiple: Multiple attribute.
 
                         """
 

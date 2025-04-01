@@ -8,10 +8,9 @@
 
 ### Agents
 {%     for agent in agents | arista.avd.natural_sort('name') %}
-{# For now only environment_variables supported so if not present do not show the agent at all as no config would be rendered #}
-{%         if agent.environment_variables is arista.avd.defined %}
 
 #### Agent {{ agent.name }}
+{%         if agent.environment_variables is arista.avd.defined %}
 
 ##### Environment Variables
 
@@ -21,6 +20,14 @@
 | {{ envvar.name }} | {{ envvar.value }} |
 {%             endfor %}
 {%         endif %}
+
+##### Shutdown
+
+| Setting | Value |
+| ------- | ----- |
+| Shutdown | {{ agent.shutdown | arista.avd.default("-") }} |
+| Shutdown Supervisor Active | {{ agent.shutdown_supervisor_active | arista.avd.default("-") }} |
+| Shutdown Supervisor Standby | {{ agent.shutdown_supervisor_standby | arista.avd.default("-") }} |
 {%     endfor %}
 
 #### Agents Device Configuration

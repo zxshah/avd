@@ -305,6 +305,14 @@
 | V1 | 42 |
 | V2 | 666 |
 
+##### Shutdown
+
+| Setting | Value |
+| ------- | ----- |
+| Shutdown | True |
+| Shutdown Supervisor Active | True |
+| Shutdown Supervisor Standby | True |
+
 #### Agent KernelFib
 
 ##### Environment Variables
@@ -312,6 +320,24 @@
 | Name | Value |
 | ---- | ----- |
 | KERNELFIB_PROGRAM_ALL_ECMP | true |
+
+##### Shutdown
+
+| Setting | Value |
+| ------- | ----- |
+| Shutdown | - |
+| Shutdown Supervisor Active | True |
+| Shutdown Supervisor Standby | True |
+
+#### Agent NotRendered
+
+##### Shutdown
+
+| Setting | Value |
+| ------- | ----- |
+| Shutdown | - |
+| Shutdown Supervisor Active | - |
+| Shutdown Supervisor Standby | - |
 
 #### Agents Device Configuration
 

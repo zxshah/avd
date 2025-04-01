@@ -1441,27 +1441,23 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
         EnvironmentVariables._item_type = EnvironmentVariablesItem
 
-        class ShutdownSupervisors(AvdList[str]):
-            """Subclass of AvdList with `str` items."""
-
-        ShutdownSupervisors._item_type = str
-
         _fields: ClassVar[dict] = {
             "name": {"type": str},
             "environment_variables": {"type": EnvironmentVariables},
-            "shutdown_supervisors": {"type": ShutdownSupervisors},
+            "shutdown": {"type": bool},
+            "shutdown_supervisor_active": {"type": bool},
+            "shutdown_supervisor_standby": {"type": bool},
         }
         name: str
         """Agent name."""
         environment_variables: EnvironmentVariables
         """Subclass of AvdIndexedList with `EnvironmentVariablesItem` items. Primary key is `name` (`str`)."""
-        shutdown_supervisors: ShutdownSupervisors
-        """
-        Shutdown the agent process for all, active or standby supervisors.
-
-        Subclass of AvdList with `str`
-        items.
-        """
+        shutdown: bool | None
+        """Shutdown the agent process."""
+        shutdown_supervisor_active: bool | None
+        """Shutdown the agent process for active supervisors"""
+        shutdown_supervisor_standby: bool | None
+        """Shutdown the agent process for standby supervisors"""
 
         if TYPE_CHECKING:
 
@@ -1470,7 +1466,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 *,
                 name: str | UndefinedType = Undefined,
                 environment_variables: EnvironmentVariables | UndefinedType = Undefined,
-                shutdown_supervisors: ShutdownSupervisors | UndefinedType = Undefined,
+                shutdown: bool | None | UndefinedType = Undefined,
+                shutdown_supervisor_active: bool | None | UndefinedType = Undefined,
+                shutdown_supervisor_standby: bool | None | UndefinedType = Undefined,
             ) -> None:
                 """
                 AgentsItem.
@@ -1481,11 +1479,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 Args:
                     name: Agent name.
                     environment_variables: Subclass of AvdIndexedList with `EnvironmentVariablesItem` items. Primary key is `name` (`str`).
-                    shutdown_supervisors:
-                       Shutdown the agent process for all, active or standby supervisors.
-
-                       Subclass of AvdList with `str`
-                       items.
+                    shutdown: Shutdown the agent process.
+                    shutdown_supervisor_active: Shutdown the agent process for active supervisors
+                    shutdown_supervisor_standby: Shutdown the agent process for standby supervisors
 
                 """
 

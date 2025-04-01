@@ -280,7 +280,7 @@ class RouterBgpMixin(Protocol):
             if self.inputs.evpn_import_pruning:
                 self.structured_config.router_bgp.address_family_evpn.route.import_match_failure_action = "discard"
 
-        if self.shared_utils.overlay_dpath is True:
+        if self.shared_utils.overlay_dpath:
             self.structured_config.router_bgp.address_family_evpn.domain_identifier = self.shared_utils.node_config.ipvpn_gateway.evpn_domain_id
 
         if self.shared_utils.is_wan_server:

@@ -1,16 +1,13 @@
+---
+# This title is used for search results
+title: Campus Fabric
+link: https://avd.arista.com/stable/ansible_collections/arista/avd/examples/campus-fabric/index.html
+---
 <!--
   ~ Copyright (c) 2025 Arista Networks, Inc.
   ~ Use of this source code is governed by the Apache License 2.0
   ~ that can be found in the LICENSE file.
   -->
-
----
-
-# This title is used for search results
-
-title: Campus Fabric
-link: https://avd.arista.com/stable/ansible_collections/arista/avd/examples/campus-fabric/index.html
----
 
 # Campus Fabric
 

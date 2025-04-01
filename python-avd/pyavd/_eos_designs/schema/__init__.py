@@ -20512,6 +20512,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -21053,6 +21054,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -21410,6 +21413,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -21794,6 +21798,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.
@@ -24501,6 +24506,7 @@ class EosDesigns(EosDesignsRootModel):
                             "spanning_tree_mode": {"type": str},
                             "spanning_tree_priority": {"type": int, "default": 32768},
                             "spanning_tree_root_super": {"type": bool, "default": False},
+                            "spanning_tree_mst_pvst_boundary": {"type": bool},
                             "virtual_router_mac_address": {"type": str},
                             "inband_mgmt_interface": {"type": str},
                             "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -25052,6 +25058,8 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         spanning_tree_root_super: bool
                         """Default value: `False`"""
+                        spanning_tree_mst_pvst_boundary: bool | None
+                        """Enable MST PVST border ports."""
                         virtual_router_mac_address: str | None
                         """Virtual router mac address for anycast gateway."""
                         inband_mgmt_interface: str | None
@@ -25411,6 +25419,7 @@ class EosDesigns(EosDesignsRootModel):
                                 spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                                 spanning_tree_priority: int | UndefinedType = Undefined,
                                 spanning_tree_root_super: bool | UndefinedType = Undefined,
+                                spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                                 virtual_router_mac_address: str | None | UndefinedType = Undefined,
                                 inband_mgmt_interface: str | None | UndefinedType = Undefined,
                                 inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -25802,6 +25811,7 @@ class EosDesigns(EosDesignsRootModel):
                                        For `rapid-pvst` the priority can also be
                                        set per VLAN under network services.
                                     spanning_tree_root_super: spanning_tree_root_super
+                                    spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                     virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                     inband_mgmt_interface:
                                        Pointer to interface used for inband management.
@@ -28434,6 +28444,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -28988,6 +28999,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -29347,6 +29360,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -29740,6 +29754,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.
@@ -32431,6 +32446,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -32982,6 +32998,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -33341,6 +33359,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -33732,6 +33751,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.
@@ -43105,6 +43125,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -43646,6 +43667,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -44003,6 +44026,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -44387,6 +44411,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.
@@ -47094,6 +47119,7 @@ class EosDesigns(EosDesignsRootModel):
                             "spanning_tree_mode": {"type": str},
                             "spanning_tree_priority": {"type": int, "default": 32768},
                             "spanning_tree_root_super": {"type": bool, "default": False},
+                            "spanning_tree_mst_pvst_boundary": {"type": bool},
                             "virtual_router_mac_address": {"type": str},
                             "inband_mgmt_interface": {"type": str},
                             "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -47645,6 +47671,8 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         spanning_tree_root_super: bool
                         """Default value: `False`"""
+                        spanning_tree_mst_pvst_boundary: bool | None
+                        """Enable MST PVST border ports."""
                         virtual_router_mac_address: str | None
                         """Virtual router mac address for anycast gateway."""
                         inband_mgmt_interface: str | None
@@ -48004,6 +48032,7 @@ class EosDesigns(EosDesignsRootModel):
                                 spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                                 spanning_tree_priority: int | UndefinedType = Undefined,
                                 spanning_tree_root_super: bool | UndefinedType = Undefined,
+                                spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                                 virtual_router_mac_address: str | None | UndefinedType = Undefined,
                                 inband_mgmt_interface: str | None | UndefinedType = Undefined,
                                 inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -48395,6 +48424,7 @@ class EosDesigns(EosDesignsRootModel):
                                        For `rapid-pvst` the priority can also be
                                        set per VLAN under network services.
                                     spanning_tree_root_super: spanning_tree_root_super
+                                    spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                     virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                     inband_mgmt_interface:
                                        Pointer to interface used for inband management.
@@ -51027,6 +51057,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -51581,6 +51612,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -51940,6 +51973,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -52333,6 +52367,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.
@@ -55024,6 +55059,7 @@ class EosDesigns(EosDesignsRootModel):
                         "spanning_tree_mode": {"type": str},
                         "spanning_tree_priority": {"type": int, "default": 32768},
                         "spanning_tree_root_super": {"type": bool, "default": False},
+                        "spanning_tree_mst_pvst_boundary": {"type": bool},
                         "virtual_router_mac_address": {"type": str},
                         "inband_mgmt_interface": {"type": str},
                         "inband_mgmt_vlan": {"type": int, "default": 4092},
@@ -55575,6 +55611,8 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     spanning_tree_root_super: bool
                     """Default value: `False`"""
+                    spanning_tree_mst_pvst_boundary: bool | None
+                    """Enable MST PVST border ports."""
                     virtual_router_mac_address: str | None
                     """Virtual router mac address for anycast gateway."""
                     inband_mgmt_interface: str | None
@@ -55934,6 +55972,7 @@ class EosDesigns(EosDesignsRootModel):
                             spanning_tree_mode: Literal["mstp", "rstp", "rapid-pvst", "none"] | None | UndefinedType = Undefined,
                             spanning_tree_priority: int | UndefinedType = Undefined,
                             spanning_tree_root_super: bool | UndefinedType = Undefined,
+                            spanning_tree_mst_pvst_boundary: bool | None | UndefinedType = Undefined,
                             virtual_router_mac_address: str | None | UndefinedType = Undefined,
                             inband_mgmt_interface: str | None | UndefinedType = Undefined,
                             inband_mgmt_vlan: int | UndefinedType = Undefined,
@@ -56325,6 +56364,7 @@ class EosDesigns(EosDesignsRootModel):
                                    For `rapid-pvst` the priority can also be
                                    set per VLAN under network services.
                                 spanning_tree_root_super: spanning_tree_root_super
+                                spanning_tree_mst_pvst_boundary: Enable MST PVST border ports.
                                 virtual_router_mac_address: Virtual router mac address for anycast gateway.
                                 inband_mgmt_interface:
                                    Pointer to interface used for inband management.

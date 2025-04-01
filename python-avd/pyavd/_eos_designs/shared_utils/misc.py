@@ -377,9 +377,6 @@ class MiscMixin(Protocol):
             description=description,
         )
 
-        # TODO: Remove when reviewing in Github
-        # This used to check for "or set_no_advertise" which was equivalent to "is_wan_interface"
-        # Above we raise if is_wan_interface but the In prefix list is not set so the OR was redundant.
         if interface.bgp.ipv4_prefix_list_in:
             if interface.bgp.ipv4_prefix_list_in not in prefix_lists:
                 prefix_lists.append(self.get_prefix_list(interface.bgp.ipv4_prefix_list_in))

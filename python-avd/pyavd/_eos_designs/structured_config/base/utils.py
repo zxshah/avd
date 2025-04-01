@@ -18,7 +18,6 @@ if TYPE_CHECKING:
         "T_Source_Interfaces",
         EosCliConfigGen.IpHttpClientSourceInterfaces,
         EosCliConfigGen.IpDomainLookup.SourceInterfaces,
-        # Notice special handling for SSH since VRF is not optional there.
         EosCliConfigGen.IpSshClientSourceInterfaces,
         EosCliConfigGen.IpTacacsSourceInterfaces,
         EosCliConfigGen.SnmpServer.LocalInterfaces,

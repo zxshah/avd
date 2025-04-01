@@ -5,12 +5,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Protocol
 
+from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 from pyavd._errors import AristaAvdError, AristaAvdInvalidInputsError
 
 if TYPE_CHECKING:
     from typing import TypeVar
-
-    from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
 
     from . import AvdStructuredConfigBaseProtocol
 
@@ -18,6 +17,7 @@ if TYPE_CHECKING:
         "T_Source_Interfaces",
         EosCliConfigGen.IpHttpClientSourceInterfaces,
         EosCliConfigGen.IpDomainLookup.SourceInterfaces,
+        # Notice special handling for SSH since VRF is not optional there.
         EosCliConfigGen.IpSshClientSourceInterfaces,
         EosCliConfigGen.IpTacacsSourceInterfaces,
         EosCliConfigGen.SnmpServer.LocalInterfaces,
@@ -64,15 +64,22 @@ class UtilsMixin(Protocol):
                 raise AristaAvdInvalidInputsError(msg)
 
             # Check for duplicate VRF
-            # inband_mgmt_vrf returns None in case of VRF "default", but here we want the "default" VRF name to have proper duplicate detection.
-            inband_mgmt_vrf = self.shared_utils.inband_mgmt_vrf or "default"
+            inband_mgmt_vrf = self.shared_utils.node_config.inband_mgmt_vrf
             if [source_interface for source_interface in source_interfaces if (source_interface.vrf or "default") == inband_mgmt_vrf]:
                 msg = f"Unable to configure multiple {error_context} source-interfaces for the same VRF '{inband_mgmt_vrf}'."
                 raise AristaAvdError(msg)
 
-            source_interfaces.append_new(
-                name=self.shared_utils.inband_mgmt_interface,
-                vrf=self.shared_utils.inband_mgmt_vrf if self.shared_utils.inband_mgmt_vrf != "default" else None,
-            )
+            if isinstance(source_interfaces, EosCliConfigGen.IpSshClientSourceInterfaces):
+                # The SSH model requires the VRF field including "default"
+                source_interfaces.append_new(
+                    name=self.shared_utils.inband_mgmt_interface,
+                    vrf=inband_mgmt_vrf,
+                )
+            else:
+                # Other models only get the VRF if it is different than "default"
+                source_interfaces.append_new(
+                    name=self.shared_utils.inband_mgmt_interface,
+                    vrf=self.shared_utils.inband_mgmt_vrf,
+                )
 
         return source_interfaces

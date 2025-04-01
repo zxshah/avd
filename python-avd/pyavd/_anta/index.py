@@ -13,6 +13,9 @@ from .constants import StructuredConfigKey
 
 AVD_TEST_INDEX: list[TestSpec] = [
     TestSpec(
+        test_class=VerifyAgentLogs,
+    ),
+    TestSpec(
         test_class=VerifyAPIHttpsSSL,
         conditional_keys=[StructuredConfigKey.HTTPS_SSL_PROFILE],
         input_dict={"profile": StructuredConfigKey.HTTPS_SSL_PROFILE},
@@ -36,7 +39,13 @@ AVD_TEST_INDEX: list[TestSpec] = [
         input_factory=VerifyBGPPeerSessionInputFactory,
     ),
     TestSpec(
+        test_class=VerifyCoredump,
+    ),
+    TestSpec(
         test_class=VerifyEnvironmentSystemCooling,
+    ),
+    TestSpec(
+        test_class=VerifyFileSystemUtilization,
     ),
     TestSpec(
         test_class=VerifyIllegalLACP,
@@ -75,6 +84,9 @@ AVD_TEST_INDEX: list[TestSpec] = [
     ),
     TestSpec(
         test_class=VerifyLoggingErrors,
+    ),
+    TestSpec(
+        test_class=VerifyMemoryUtilization,
     ),
     TestSpec(
         test_class=VerifyMlagConfigSanity,

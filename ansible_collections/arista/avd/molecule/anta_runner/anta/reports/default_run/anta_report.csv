@@ -309,6 +309,10 @@ dc1-wan1,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the d
 dc1-wan1,VerifySTPBlockedPorts,unset,,Verifies there is no STP blocked ports.,STP
 dc1-wan1,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
 dc1-wan1,VerifyStunClientTranslation,unset,,Verifies the translation for a source address on a STUN client.,STUN
+dc1-wan1,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+dc1-wan1,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+dc1-wan1,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+dc1-wan1,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
 dc1-wan1,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-wan1,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc1-wan2,VerifyAVTPathHealth,unset,,Verifies the status of all AVT paths for all VRFs.,AVT
@@ -341,6 +345,10 @@ dc1-wan2,VerifyTerminAttrVersion,unset,,Verifies the TerminAttr version of the d
 dc1-wan2,VerifySTPBlockedPorts,unset,,Verifies there is no STP blocked ports.,STP
 dc1-wan2,VerifySTPCounters,unset,,Verifies there is no errors in STP BPDU packets.,STP
 dc1-wan2,VerifyStunClientTranslation,unset,,Verifies the translation for a source address on a STUN client.,STUN
+dc1-wan2,VerifyAgentLogs,unset,,Verifies there are no agent crash reports.,System
+dc1-wan2,VerifyCoredump,unset,,Verifies there are no core dump files.,System
+dc1-wan2,VerifyFileSystemUtilization,unset,,Verifies that no partition is utilizing more than 75% of its disk space.,System
+dc1-wan2,VerifyMemoryUtilization,unset,,Verifies whether the memory utilization is below 75%.,System
 dc1-wan2,VerifyNTP,unset,,Verifies if NTP is synchronised.,System
 dc1-wan2,VerifyReloadCause,unset,,Verifies the last reload cause of the device.,System
 dc2-leaf1a,VerifyBFDPeersHealth,unset,,Verifies the health of IPv4 BFD peers across all VRFs.,BFD

@@ -11453,6 +11453,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ospf_message_digest_keys": {"type": OspfMessageDigestKeys},
             "pim": {"type": Pim},
             "mac_security": {"type": MacSecurity},
+            "ntp_serve": {"type": bool},
             "tcp_mss_ceiling": {"type": TcpMssCeiling},
             "channel_group": {"type": ChannelGroup},
             "isis_enable": {"type": str},
@@ -11654,6 +11655,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         mac_security: MacSecurity
         """Subclass of AvdModel."""
+        ntp_serve: bool | None
+        """Enable/disable serving NTP to clients."""
         tcp_mss_ceiling: TcpMssCeiling
         """
         The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
@@ -11847,6 +11850,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ospf_message_digest_keys: OspfMessageDigestKeys | UndefinedType = Undefined,
                 pim: Pim | UndefinedType = Undefined,
                 mac_security: MacSecurity | UndefinedType = Undefined,
+                ntp_serve: bool | None | UndefinedType = Undefined,
                 tcp_mss_ceiling: TcpMssCeiling | UndefinedType = Undefined,
                 channel_group: ChannelGroup | UndefinedType = Undefined,
                 isis_enable: str | None | UndefinedType = Undefined,
@@ -12001,6 +12005,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ospf_message_digest_keys: Subclass of AvdIndexedList with `OspfMessageDigestKeysItem` items. Primary key is `id` (`int`).
                     pim: Subclass of AvdModel.
                     mac_security: Subclass of AvdModel.
+                    ntp_serve: Enable/disable serving NTP to clients.
                     tcp_mss_ceiling:
                        The TCP MSS clamping feature involves clamping the maximum segment size (MSS) in the TCP header
                        of
@@ -16378,6 +16383,437 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         _primary_key: ClassVar[str] = "name"
 
     Ipv6PrefixLists._item_type = Ipv6PrefixListsItem
+
+    class Ipv6RouterOspf(AvdModel):
+        """Subclass of AvdModel."""
+
+        class ProcessIdsItem(AvdModel):
+            """Subclass of AvdModel."""
+
+            class Redistribute(AvdModel):
+                """Subclass of AvdModel."""
+
+                class Bgp(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}, "include_leaked": {"type": bool}}
+                    enabled: bool
+                    route_map: str | None
+                    include_leaked: bool | None
+                    """Include leaked routes while redistributing."""
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            enabled: bool | UndefinedType = Undefined,
+                            route_map: str | None | UndefinedType = Undefined,
+                            include_leaked: bool | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            Bgp.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: enabled
+                                route_map: route_map
+                                include_leaked: Include leaked routes while redistributing.
+
+                            """
+
+                class Connected(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}, "include_leaked": {"type": bool}}
+                    enabled: bool
+                    route_map: str | None
+                    include_leaked: bool | None
+                    """Include leaked routes while redistributing."""
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            enabled: bool | UndefinedType = Undefined,
+                            route_map: str | None | UndefinedType = Undefined,
+                            include_leaked: bool | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            Connected.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: enabled
+                                route_map: route_map
+                                include_leaked: Include leaked routes while redistributing.
+
+                            """
+
+                class Isis(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {
+                        "enabled": {"type": bool},
+                        "isis_level": {"type": str},
+                        "route_map": {"type": str},
+                        "include_leaked": {"type": bool},
+                    }
+                    enabled: bool
+                    isis_level: Literal["level-1", "level-2", "level-1-2"] | None
+                    """Redistribute IS-IS route level."""
+                    route_map: str | None
+                    include_leaked: bool | None
+                    """Include leaked routes while redistributing."""
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            enabled: bool | UndefinedType = Undefined,
+                            isis_level: Literal["level-1", "level-2", "level-1-2"] | None | UndefinedType = Undefined,
+                            route_map: str | None | UndefinedType = Undefined,
+                            include_leaked: bool | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            Isis.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: enabled
+                                isis_level: Redistribute IS-IS route level.
+                                route_map: route_map
+                                include_leaked: Include leaked routes while redistributing.
+
+                            """
+
+                class Ospfv3(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    class MatchExternal(AvdModel):
+                        """Subclass of AvdModel."""
+
+                        _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}, "include_leaked": {"type": bool}}
+                        enabled: bool
+                        route_map: str | None
+                        include_leaked: bool | None
+                        """Include leaked routes while redistributing."""
+
+                        if TYPE_CHECKING:
+
+                            def __init__(
+                                self,
+                                *,
+                                enabled: bool | UndefinedType = Undefined,
+                                route_map: str | None | UndefinedType = Undefined,
+                                include_leaked: bool | None | UndefinedType = Undefined,
+                            ) -> None:
+                                """
+                                MatchExternal.
+
+
+                                Subclass of AvdModel.
+
+                                Args:
+                                    enabled: enabled
+                                    route_map: route_map
+                                    include_leaked: Include leaked routes while redistributing.
+
+                                """
+
+                    class MatchInternal(AvdModel):
+                        """Subclass of AvdModel."""
+
+                        _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}}
+                        enabled: bool
+                        route_map: str | None
+
+                        if TYPE_CHECKING:
+
+                            def __init__(self, *, enabled: bool | UndefinedType = Undefined, route_map: str | None | UndefinedType = Undefined) -> None:
+                                """
+                                MatchInternal.
+
+
+                                Subclass of AvdModel.
+
+                                Args:
+                                    enabled: enabled
+                                    route_map: route_map
+
+                                """
+
+                    class MatchNssaExternal(AvdModel):
+                        """Subclass of AvdModel."""
+
+                        _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}}
+                        enabled: bool
+                        route_map: str | None
+
+                        if TYPE_CHECKING:
+
+                            def __init__(self, *, enabled: bool | UndefinedType = Undefined, route_map: str | None | UndefinedType = Undefined) -> None:
+                                """
+                                MatchNssaExternal.
+
+
+                                Subclass of AvdModel.
+
+                                Args:
+                                    enabled: enabled
+                                    route_map: route_map
+
+                                """
+
+                    _fields: ClassVar[dict] = {
+                        "enabled": {"type": bool},
+                        "match_external": {"type": MatchExternal},
+                        "match_internal": {"type": MatchInternal},
+                        "match_nssa_external": {"type": MatchNssaExternal},
+                        "route_map": {"type": str},
+                    }
+                    enabled: bool | None
+                    """Redistribute OSPFv3 routes."""
+                    match_external: MatchExternal
+                    """
+                    Redistribute OSPFv3 routes learned from external sources.
+
+                    Subclass of AvdModel.
+                    """
+                    match_internal: MatchInternal
+                    """
+                    Redistribute OSPFv3 routes learned from internal sources.
+
+                    Subclass of AvdModel.
+                    """
+                    match_nssa_external: MatchNssaExternal
+                    """
+                    Redistribute OSPFv3 routes learned from external NSSA sources.
+
+                    Subclass of AvdModel.
+                    """
+                    route_map: str | None
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            enabled: bool | None | UndefinedType = Undefined,
+                            match_external: MatchExternal | UndefinedType = Undefined,
+                            match_internal: MatchInternal | UndefinedType = Undefined,
+                            match_nssa_external: MatchNssaExternal | UndefinedType = Undefined,
+                            route_map: str | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            Ospfv3.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: Redistribute OSPFv3 routes.
+                                match_external:
+                                   Redistribute OSPFv3 routes learned from external sources.
+
+                                   Subclass of AvdModel.
+                                match_internal:
+                                   Redistribute OSPFv3 routes learned from internal sources.
+
+                                   Subclass of AvdModel.
+                                match_nssa_external:
+                                   Redistribute OSPFv3 routes learned from external NSSA sources.
+
+                                   Subclass of AvdModel.
+                                route_map: route_map
+
+                            """
+
+                class Static(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}, "include_leaked": {"type": bool}}
+                    enabled: bool
+                    route_map: str | None
+                    include_leaked: bool | None
+                    """Include leaked routes while redistributing."""
+
+                    if TYPE_CHECKING:
+
+                        def __init__(
+                            self,
+                            *,
+                            enabled: bool | UndefinedType = Undefined,
+                            route_map: str | None | UndefinedType = Undefined,
+                            include_leaked: bool | None | UndefinedType = Undefined,
+                        ) -> None:
+                            """
+                            Static.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: enabled
+                                route_map: route_map
+                                include_leaked: Include leaked routes while redistributing.
+
+                            """
+
+                class Dhcp(AvdModel):
+                    """Subclass of AvdModel."""
+
+                    _fields: ClassVar[dict] = {"enabled": {"type": bool}, "route_map": {"type": str}}
+                    enabled: bool
+                    route_map: str | None
+
+                    if TYPE_CHECKING:
+
+                        def __init__(self, *, enabled: bool | UndefinedType = Undefined, route_map: str | None | UndefinedType = Undefined) -> None:
+                            """
+                            Dhcp.
+
+
+                            Subclass of AvdModel.
+
+                            Args:
+                                enabled: enabled
+                                route_map: route_map
+
+                            """
+
+                _fields: ClassVar[dict] = {
+                    "bgp": {"type": Bgp},
+                    "connected": {"type": Connected},
+                    "isis": {"type": Isis},
+                    "ospfv3": {"type": Ospfv3},
+                    "static": {"type": Static},
+                    "dhcp": {"type": Dhcp},
+                }
+                bgp: Bgp
+                """Subclass of AvdModel."""
+                connected: Connected
+                """Subclass of AvdModel."""
+                isis: Isis
+                """Subclass of AvdModel."""
+                ospfv3: Ospfv3
+                """Subclass of AvdModel."""
+                static: Static
+                """Subclass of AvdModel."""
+                dhcp: Dhcp
+                """Subclass of AvdModel."""
+
+                if TYPE_CHECKING:
+
+                    def __init__(
+                        self,
+                        *,
+                        bgp: Bgp | UndefinedType = Undefined,
+                        connected: Connected | UndefinedType = Undefined,
+                        isis: Isis | UndefinedType = Undefined,
+                        ospfv3: Ospfv3 | UndefinedType = Undefined,
+                        static: Static | UndefinedType = Undefined,
+                        dhcp: Dhcp | UndefinedType = Undefined,
+                    ) -> None:
+                        """
+                        Redistribute.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            bgp: Subclass of AvdModel.
+                            connected: Subclass of AvdModel.
+                            isis: Subclass of AvdModel.
+                            ospfv3: Subclass of AvdModel.
+                            static: Subclass of AvdModel.
+                            dhcp: Subclass of AvdModel.
+
+                        """
+
+            _fields: ClassVar[dict] = {
+                "id": {"type": int},
+                "vrf": {"type": str},
+                "router_id": {"type": str},
+                "redistribute": {"type": Redistribute},
+                "auto_cost_reference_bandwidth": {"type": int},
+            }
+            id: int
+            """OSPF process ID."""
+            vrf: str | None
+            """VRF name for OSPF process. Must be unique across all OSPFv3 instances."""
+            router_id: str | None
+            """IPv4 Address."""
+            redistribute: Redistribute
+            """
+            Redistribute routes with OSPFv3.
+
+            Subclass of AvdModel.
+            """
+            auto_cost_reference_bandwidth: int | None
+            """Bandwidth in mbps."""
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    id: int | UndefinedType = Undefined,
+                    vrf: str | None | UndefinedType = Undefined,
+                    router_id: str | None | UndefinedType = Undefined,
+                    redistribute: Redistribute | UndefinedType = Undefined,
+                    auto_cost_reference_bandwidth: int | None | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    ProcessIdsItem.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        id: OSPF process ID.
+                        vrf: VRF name for OSPF process. Must be unique across all OSPFv3 instances.
+                        router_id: IPv4 Address.
+                        redistribute:
+                           Redistribute routes with OSPFv3.
+
+                           Subclass of AvdModel.
+                        auto_cost_reference_bandwidth: Bandwidth in mbps.
+
+                    """
+
+        class ProcessIds(AvdIndexedList[int, ProcessIdsItem]):
+            """Subclass of AvdIndexedList with `ProcessIdsItem` items. Primary key is `id` (`int`)."""
+
+            _primary_key: ClassVar[str] = "id"
+
+        ProcessIds._item_type = ProcessIdsItem
+
+        _fields: ClassVar[dict] = {"process_ids": {"type": ProcessIds}}
+        process_ids: ProcessIds
+        """Subclass of AvdIndexedList with `ProcessIdsItem` items. Primary key is `id` (`int`)."""
+
+        if TYPE_CHECKING:
+
+            def __init__(self, *, process_ids: ProcessIds | UndefinedType = Undefined) -> None:
+                """
+                Ipv6RouterOspf.
+
+
+                Subclass of AvdModel.
+
+                Args:
+                    process_ids: Subclass of AvdIndexedList with `ProcessIdsItem` items. Primary key is `id` (`int`).
+
+                """
 
     class Ipv6StandardAccessListsItem(AvdModel):
         """Subclass of AvdModel."""
@@ -24609,6 +25045,87 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
         AuthenticationKeys._item_type = AuthenticationKeysItem
 
+        class Serve(AvdModel):
+            """Subclass of AvdModel."""
+
+            class VrfsItem(AvdModel):
+                """Subclass of AvdModel."""
+
+                _fields: ClassVar[dict] = {
+                    "name": {"type": str},
+                    "serve_all": {"type": bool},
+                    "access_group": {"type": str},
+                    "ipv6_access_group": {"type": str},
+                }
+                name: str
+                serve_all: bool | None
+                access_group: str | None
+                ipv6_access_group: str | None
+
+                if TYPE_CHECKING:
+
+                    def __init__(
+                        self,
+                        *,
+                        name: str | UndefinedType = Undefined,
+                        serve_all: bool | None | UndefinedType = Undefined,
+                        access_group: str | None | UndefinedType = Undefined,
+                        ipv6_access_group: str | None | UndefinedType = Undefined,
+                    ) -> None:
+                        """
+                        VrfsItem.
+
+
+                        Subclass of AvdModel.
+
+                        Args:
+                            name: name
+                            serve_all: serve_all
+                            access_group: access_group
+                            ipv6_access_group: ipv6_access_group
+
+                        """
+
+            class Vrfs(AvdIndexedList[str, VrfsItem]):
+                """Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
+
+            Vrfs._item_type = VrfsItem
+
+            _fields: ClassVar[dict] = {"serve_all": {"type": bool}, "access_group": {"type": str}, "ipv6_access_group": {"type": str}, "vrfs": {"type": Vrfs}}
+            serve_all: bool | None
+            access_group: str | None
+            """Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction."""
+            ipv6_access_group: str | None
+            """Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction."""
+            vrfs: Vrfs
+            """Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`)."""
+
+            if TYPE_CHECKING:
+
+                def __init__(
+                    self,
+                    *,
+                    serve_all: bool | None | UndefinedType = Undefined,
+                    access_group: str | None | UndefinedType = Undefined,
+                    ipv6_access_group: str | None | UndefinedType = Undefined,
+                    vrfs: Vrfs | UndefinedType = Undefined,
+                ) -> None:
+                    """
+                    Serve.
+
+
+                    Subclass of AvdModel.
+
+                    Args:
+                        serve_all: serve_all
+                        access_group: Standard ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
+                        ipv6_access_group: Standard IPv6 ACL to apply to NTP serve. All ACLs are applied in the 'in' direction.
+                        vrfs: Subclass of AvdIndexedList with `VrfsItem` items. Primary key is `name` (`str`).
+
+                    """
+
         _fields: ClassVar[dict] = {
             "local_interface": {"type": LocalInterface},
             "servers": {"type": Servers},
@@ -24616,6 +25133,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "authenticate_servers_only": {"type": bool},
             "authentication_keys": {"type": AuthenticationKeys},
             "trusted_keys": {"type": str},
+            "serve": {"type": Serve},
         }
         local_interface: LocalInterface
         """Subclass of AvdModel."""
@@ -24627,6 +25145,12 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdIndexedList with `AuthenticationKeysItem` items. Primary key is `id` (`int`)."""
         trusted_keys: str | None
         """List of trusted-keys as string ex. 10-12,15."""
+        serve: Serve
+        """
+        Enable Serving NTP to clients.
+
+        Subclass of AvdModel.
+        """
 
         if TYPE_CHECKING:
 
@@ -24639,6 +25163,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 authenticate_servers_only: bool | None | UndefinedType = Undefined,
                 authentication_keys: AuthenticationKeys | UndefinedType = Undefined,
                 trusted_keys: str | None | UndefinedType = Undefined,
+                serve: Serve | UndefinedType = Undefined,
             ) -> None:
                 """
                 Ntp.
@@ -24653,6 +25178,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     authenticate_servers_only: authenticate_servers_only
                     authentication_keys: Subclass of AvdIndexedList with `AuthenticationKeysItem` items. Primary key is `id` (`int`).
                     trusted_keys: List of trusted-keys as string ex. 10-12,15.
+                    serve:
+                       Enable Serving NTP to clients.
+
+                       Subclass of AvdModel.
 
                 """
 
@@ -30307,6 +30836,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "bfd": {"type": Bfd},
             "service_policy": {"type": ServicePolicy},
             "mpls": {"type": Mpls},
+            "ntp_serve": {"type": bool},
             "trunk_private_vlan_secondary": {"type": bool},
             "pvlan_mapping": {"type": str},
             "vlan_translations": {"type": VlanTranslations},
@@ -30456,6 +30986,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         mpls: Mpls
         """Subclass of AvdModel."""
+        ntp_serve: bool | None
+        """Enable/disable serving NTP to clients."""
         trunk_private_vlan_secondary: bool | None
         pvlan_mapping: str | None
         """List of vlans as string."""
@@ -30608,6 +31140,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 bfd: Bfd | UndefinedType = Undefined,
                 service_policy: ServicePolicy | UndefinedType = Undefined,
                 mpls: Mpls | UndefinedType = Undefined,
+                ntp_serve: bool | None | UndefinedType = Undefined,
                 trunk_private_vlan_secondary: bool | None | UndefinedType = Undefined,
                 pvlan_mapping: str | None | UndefinedType = Undefined,
                 vlan_translations: VlanTranslations | UndefinedType = Undefined,
@@ -30732,6 +31265,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
                     mpls: Subclass of AvdModel.
+                    ntp_serve: Enable/disable serving NTP to clients.
                     trunk_private_vlan_secondary: trunk_private_vlan_secondary
                     pvlan_mapping: List of vlans as string.
                     vlan_translations: Subclass of AvdList with `VlanTranslationsItem` items.
@@ -62150,7 +62684,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ipv6_access_group_out": {"type": str},
             "multicast": {"type": Multicast},
             "ospf_network_point_to_point": {"type": bool},
+            "ipv6_ospf_network_point_to_point": {"type": bool},
             "ospf_area": {"type": str},
+            "ipv6_ospf_area": {"type": str},
             "ospf_cost": {"type": int},
             "ospf_authentication": {"type": str},
             "ospf_authentication_key": {"type": str},
@@ -62169,6 +62705,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             "ipv6_attached_host_route_export": {"type": Ipv6AttachedHostRouteExport},
             "bfd": {"type": Bfd},
             "service_policy": {"type": ServicePolicy},
+            "ntp_serve": {"type": bool},
             "pvlan_mapping": {"type": str},
             "tenant": {"type": str},
             "tags": {"type": Tags},
@@ -62269,7 +62806,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         multicast: Multicast
         """Subclass of AvdModel."""
         ospf_network_point_to_point: bool | None
+        ipv6_ospf_network_point_to_point: bool | None
         ospf_area: str | None
+        ipv6_ospf_area: str | None
         ospf_cost: int | None
         ospf_authentication: Literal["none", "simple", "message-digest"] | None
         ospf_authentication_key: str | None
@@ -62309,6 +62848,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         """Subclass of AvdModel."""
         service_policy: ServicePolicy
         """Subclass of AvdModel."""
+        ntp_serve: bool | None
+        """Enable/disable serving NTP to clients."""
         pvlan_mapping: str | None
         """List of VLANs as string."""
         tenant: str | None
@@ -62372,7 +62913,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ipv6_access_group_out: str | None | UndefinedType = Undefined,
                 multicast: Multicast | UndefinedType = Undefined,
                 ospf_network_point_to_point: bool | None | UndefinedType = Undefined,
+                ipv6_ospf_network_point_to_point: bool | None | UndefinedType = Undefined,
                 ospf_area: str | None | UndefinedType = Undefined,
+                ipv6_ospf_area: str | None | UndefinedType = Undefined,
                 ospf_cost: int | None | UndefinedType = Undefined,
                 ospf_authentication: Literal["none", "simple", "message-digest"] | None | UndefinedType = Undefined,
                 ospf_authentication_key: str | None | UndefinedType = Undefined,
@@ -62391,6 +62934,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ipv6_attached_host_route_export: Ipv6AttachedHostRouteExport | UndefinedType = Undefined,
                 bfd: Bfd | UndefinedType = Undefined,
                 service_policy: ServicePolicy | UndefinedType = Undefined,
+                ntp_serve: bool | None | UndefinedType = Undefined,
                 pvlan_mapping: str | None | UndefinedType = Undefined,
                 tenant: str | None | UndefinedType = Undefined,
                 tags: Tags | UndefinedType = Undefined,
@@ -62464,7 +63008,9 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ipv6_access_group_out: IPv6 access-list name.
                     multicast: Subclass of AvdModel.
                     ospf_network_point_to_point: ospf_network_point_to_point
+                    ipv6_ospf_network_point_to_point: ipv6_ospf_network_point_to_point
                     ospf_area: ospf_area
+                    ipv6_ospf_area: ipv6_ospf_area
                     ospf_cost: ospf_cost
                     ospf_authentication: ospf_authentication
                     ospf_authentication_key: Encrypted password used for simple authentication.
@@ -62491,6 +63037,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     ipv6_attached_host_route_export: Subclass of AvdModel.
                     bfd: Subclass of AvdModel.
                     service_policy: Subclass of AvdModel.
+                    ntp_serve: Enable/disable serving NTP to clients.
                     pvlan_mapping: List of VLANs as string.
                     tenant: Key only used for documentation or validation purposes.
                     tags:
@@ -63719,6 +64266,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         "ipv6_icmp_redirect": {"type": bool},
         "ipv6_neighbor": {"type": Ipv6Neighbor},
         "ipv6_prefix_lists": {"type": Ipv6PrefixLists},
+        "ipv6_router_ospf": {"type": Ipv6RouterOspf},
         "ipv6_standard_access_lists": {"type": Ipv6StandardAccessLists},
         "ipv6_static_routes": {"type": Ipv6StaticRoutes},
         "ipv6_unicast_routing": {"type": bool},
@@ -64107,6 +64655,8 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
     """Subclass of AvdModel."""
     ipv6_prefix_lists: Ipv6PrefixLists
     """Subclass of AvdIndexedList with `Ipv6PrefixListsItem` items. Primary key is `name` (`str`)."""
+    ipv6_router_ospf: Ipv6RouterOspf
+    """Subclass of AvdModel."""
     ipv6_standard_access_lists: Ipv6StandardAccessLists
     """Subclass of AvdIndexedList with `Ipv6StandardAccessListsItem` items. Primary key is `name` (`str`)."""
     ipv6_static_routes: Ipv6StaticRoutes
@@ -64461,6 +65011,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             ipv6_icmp_redirect: bool | None | UndefinedType = Undefined,
             ipv6_neighbor: Ipv6Neighbor | UndefinedType = Undefined,
             ipv6_prefix_lists: Ipv6PrefixLists | UndefinedType = Undefined,
+            ipv6_router_ospf: Ipv6RouterOspf | UndefinedType = Undefined,
             ipv6_standard_access_lists: Ipv6StandardAccessLists | UndefinedType = Undefined,
             ipv6_static_routes: Ipv6StaticRoutes | UndefinedType = Undefined,
             ipv6_unicast_routing: bool | None | UndefinedType = Undefined,
@@ -64757,6 +65308,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 ipv6_icmp_redirect: ipv6_icmp_redirect
                 ipv6_neighbor: Subclass of AvdModel.
                 ipv6_prefix_lists: Subclass of AvdIndexedList with `Ipv6PrefixListsItem` items. Primary key is `name` (`str`).
+                ipv6_router_ospf: Subclass of AvdModel.
                 ipv6_standard_access_lists: Subclass of AvdIndexedList with `Ipv6StandardAccessListsItem` items. Primary key is `name` (`str`).
                 ipv6_static_routes: Subclass of AvdList with `Ipv6StaticRoutesItem` items.
                 ipv6_unicast_routing: ipv6_unicast_routing

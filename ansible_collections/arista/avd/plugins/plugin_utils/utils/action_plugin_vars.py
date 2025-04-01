@@ -3,7 +3,7 @@
 # that can be found in the LICENSE file.
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from ansible.vars.hostvars import HostVarsVars
 
@@ -47,7 +47,7 @@ class ActionPluginVars:
         variables = self._get_raw_variables(hostname)
         return HostVarsVars(variables=variables, loader=self.loader)
 
-    def _get_raw_variables(self, hostname: str) -> dict:
+    def _get_raw_variables(self, hostname: str) -> dict[str, Any]:
         """Retrieves the raw variables for a specific host using the captured context.
 
         Args:
@@ -61,7 +61,7 @@ class ActionPluginVars:
         """
         host = self.inventory.get_host(hostname)
         if host is None:
-            msg = f"Host '{hostname}' not found in Ansible inventory"
+            msg = f"Host '{hostname}' not found in Ansible inventory."
             raise KeyError(msg)
 
         return self.variable_manager.get_vars(

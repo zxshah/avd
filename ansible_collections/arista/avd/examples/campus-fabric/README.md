@@ -1,17 +1,14 @@
+<!--
+  ~ Copyright (c) 2025 Arista Networks, Inc.
+  ~ Use of this source code is governed by the Apache License 2.0
+  ~ that can be found in the LICENSE file.
+  -->
+
 ---
 # This title is used for search results
 title: Campus Fabric
 link: https://avd.arista.com/stable/ansible_collections/arista/avd/examples/campus-fabric/index.html
 ---
-<!--
-  ~ TODO: This license is not consistent with the license used in the project.
-  ~       Delete the inconsistent license and above line and rerun pre-commit to insert a good license.
-  ~ TODO: This license is not consistent with the license used in the project.
-  ~       Delete the inconsistent license and above line and rerun pre-commit to insert a good license.
-  ~ Copyright (c) 2023-2025 Arista Networks, Inc.
-  ~ Use of this source code is governed by the Apache License 2.0
-  ~ that can be found in the LICENSE file.
-  -->
 
 # Campus Fabric
 

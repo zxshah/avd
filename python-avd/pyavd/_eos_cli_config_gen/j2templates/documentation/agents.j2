@@ -20,7 +20,7 @@
 | {{ envvar.name }} | {{ envvar.value }} |
 {%             endfor %}
 {%         endif %}
-{%         if agent.shutdown is arista.avd.defined or agent.shutdown_supervisor_active is arista.avd.defined or agent.shutdown_supervisor_standby is arista.avd.defined%}
+{%         if agent.shutdown is arista.avd.defined or agent.shutdown_supervisor_active is arista.avd.defined or agent.shutdown_supervisor_standby is arista.avd.defined %}
 
 ##### Shutdown
 

@@ -96,5 +96,5 @@ application_classification:
     - name: OTHER-TEST
 
 expected_error_message: >-
-  The application profile TEST used in policy DEFAULT-POLICY is undefined
+  Application Profile 'TEST' referenced in policy 'DEFAULT-POLICY' is not defined
   in 'application_classification.application_profiles'.

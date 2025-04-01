@@ -105,5 +105,5 @@ cv_pathfinder_internet_exit_policies:
     type: direct
 
 expected_error_message: >-
-  Ethernet1 peer_ip needs to be set. When using wan interface for direct type internet exit,
-  peer_ip is used for nexthop, and connectivity monitoring.
+  'l3_interfaces[name=Ethernet1].peer_ip' needs to be set. When using WAN interface for direct type Internet exit, 'peer_ip'
+  is used for nexthop, and connectivity monitoring.

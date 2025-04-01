@@ -49,8 +49,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
                 atr.application_profiles.append(self.get_default_control_plane_application_profile())
             else:
                 msg = (
-                    f"The application profile {virtual_topology.application_profile} used in policy {policy_name} "
-                    "is undefined in 'application_classification.application_profiles'."
+                    f"Application Profile '{virtual_topology.application_profile}' referenced in policy '{policy_name}' "
+                    "is not defined in 'application_classification.application_profiles'."
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
@@ -85,8 +85,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         for category in application_profile.categories:
             if category.name not in self.inputs.application_classification.categories:
                 msg = (
-                    f"The application profile {application_profile.name} uses the category {category.name} "
-                    "undefined in 'application_classification.categories'."
+                    f"Category '{category.name}' referenced in the Application Profile '{application_profile.name}' "
+                    "is not defined in 'application_classification.categories'."
                 )
                 raise AristaAvdInvalidInputsError(msg)
 
@@ -167,8 +167,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
             atr.field_sets.ipv4_prefixes.append(self.get_default_control_plane_prefix_set())
         else:
             msg = (
-                f"The IPv4 prefix field set {prefix_set_name} used in the application {application_name} "
-                "is undefined in 'application_classification.fields_sets.ipv4_prefixes'."
+                f"IPv4 prefix field set '{prefix_set_name}' referenced in the application '{application_name}' "
+                "is not defined in 'application_classification.fields_sets.ipv4_prefixes'."
             )
             raise AristaAvdInvalidInputsError(msg)
 
@@ -188,8 +188,8 @@ class ApplicationTrafficRecognitionMixin(Protocol):
         """
         if port_set_name not in self.inputs.application_classification.field_sets.l4_ports:
             msg = (
-                f"The L4 Ports field set {port_set_name} used in the application {application_name} "
-                "is undefined in 'application_classification.fields_sets.l4_ports'."
+                f"L4 Ports field set '{port_set_name}' referenced in the application '{application_name}' "
+                "is not defined in 'application_classification.fields_sets.l4_ports'."
             )
             raise AristaAvdInvalidInputsError(msg)
 

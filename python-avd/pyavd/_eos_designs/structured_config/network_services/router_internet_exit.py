@@ -93,7 +93,7 @@ class RouterInternetExitMixin(Protocol):
         for wan_interface in local_wan_l3_interfaces:
             if not wan_interface.peer_ip:
                 msg = (
-                    f"'l3_interfaces[name={wan_interface.name}].peer_ip` needs to be set. When using WAN interface "
+                    f"'l3_interfaces[name={wan_interface.name}].peer_ip' needs to be set. When using WAN interface "
                     "for direct type Internet exit, 'peer_ip' is used for nexthop, and connectivity monitoring."
                 )
                 raise AristaAvdInvalidInputsError(msg)
@@ -109,7 +109,7 @@ class RouterInternetExitMixin(Protocol):
             if not ip_address:  # pragma: no cover
                 # This cannot raise in theory as it is currently caught in underlay so we can't test it with our scenarii.
                 msg = (
-                    f"l3_interfaces[name={wan_interface.name}].ip_address' or 'dhcp_ip' needs to be set when using WAN interface for 'direct' "
+                    f"'l3_interfaces[name={wan_interface.name}].ip_address' or 'dhcp_ip' needs to be set when using WAN interface for 'direct' "
                     "type Internet Exit."
                 )
                 raise AristaAvdInvalidInputsError(msg)

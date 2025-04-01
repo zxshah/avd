@@ -72,7 +72,7 @@ class UtilsMixin(Protocol):
 
             source_interfaces.append_new(
                 name=self.shared_utils.inband_mgmt_interface,
-                vrf=self.shared_utils.inband_mgmt_vrf if self.shared_utils.inband_mgmt_vrf != "default" else None,
+                vrf=self.shared_utils.inband_mgmt_vrf,
             )
 
         return source_interfaces

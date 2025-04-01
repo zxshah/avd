@@ -2,6 +2,7 @@ name: Feature Request
 description: Ask for new feature or feature enhancement
 title: "Feature request Title"
 labels: ["type: enhancement", triage]
+# TODO: consider adding types here instead of label
 body:
   - type: markdown
     attributes:

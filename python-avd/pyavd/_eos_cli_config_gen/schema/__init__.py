@@ -15869,15 +15869,14 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
     class IpSshClientSourceInterfacesItem(AvdModel):
         """Subclass of AvdModel."""
 
-        _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str, "default": "default"}}
+        _fields: ClassVar[dict] = {"name": {"type": str}, "vrf": {"type": str}}
         name: str | None
         """Interface Name."""
-        vrf: str
-        """Default value: `"default"`"""
+        vrf: str | None
 
         if TYPE_CHECKING:
 
-            def __init__(self, *, name: str | None | UndefinedType = Undefined, vrf: str | UndefinedType = Undefined) -> None:
+            def __init__(self, *, name: str | None | UndefinedType = Undefined, vrf: str | None | UndefinedType = Undefined) -> None:
                 """
                 IpSshClientSourceInterfacesItem.
 

@@ -1,7 +1,7 @@
 name: Bug Report
-description: Report a bug impacting AVD collection
+description: Report a bug impacting AVD
 title: "Bug Report Title"
-labels: ['type: bug', triage]
+labels: ["type: bug", triage]
 body:
   - type: markdown
     attributes:
@@ -21,36 +21,39 @@ body:
   - type: dropdown
     id: component
     attributes:
-      label: Which component(s) of AVD impacted
+      label: Which components of AVD are impacted
       multiple: true
       options:
+        - eos_cli_config_gen
+        - eos_designs
         - anta_runner
         - cv_deploy
-        - eos_cli_config_gen
         - eos_config_deploy_cvp
-        - eos_designs
         - eos_validate_state
         - PyAVD
         - others
+    validations:
+      required: true
 
-  - type: textarea
-    id: versions
+  - type: input
+    id: avd-version
     attributes:
-      label: Component versions
-      description: Please provide the AVD, Ansible, and Python version. e.g provide pip freeze output.
-      render: shell
+      label: AVD version
+      description: Which AVD version are you using?
+    validations:
+      required: true
 
-  - type: dropdown
-    id: environment
+  - type: input
+    id: ansible-version
     attributes:
-      label: How do you run AVD ?
-      multiple: false
-      options:
-        - System Python environment
-        - Python virtual environment (e.g. venv/uv)
-        - AVD container
-        - RedHat AAP / Ansible execution environments
-        - Other
+      label: Ansible version
+      description: If relevant, provide the Ansible version.
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python version
+      description: If relevant, on which Python version(s) have you found this bug?
 
   - type: dropdown
     id: runner
@@ -59,8 +62,8 @@ body:
       multiple: false
       options:
         - Ansible CLI (with virtual-env or native python)
-        - Ansible CLI with AVD Runner
-        - Ansible AWX/Tower/AAP
+        - AVD container
+        - RedHat AAP / Ansible execution environments
         - PyAVD
         - CV Workflows
 
@@ -84,5 +87,5 @@ body:
       label: Contributing Guide
       description: By submitting this issue, you agree to follow our [Contributing Guide](https://avd.arista.com/devel/docs/contribution/overview.html)
       options:
-        - label: I agree to follow this project's Code of Conduct
+        - label: I agree to follow this project Code of Conduct
           required: true

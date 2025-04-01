@@ -86,7 +86,6 @@ class UtilsMixin(Protocol):
     @cached_property
     def _filtered_network_ports(self: AvdStructuredConfigConnectedEndpointsProtocol) -> EosDesigns.NetworkPorts:
         """Return list of endpoints defined under "network_ports" which are connected to this switch."""
-
         filtered_network_ports = EosDesigns.NetworkPorts()
         for index, network_port in enumerate(self.inputs.network_ports):
             network_port_settings = self.shared_utils.get_merged_adapter_settings(network_port)

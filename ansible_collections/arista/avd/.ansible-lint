@@ -9,6 +9,6 @@ kinds:
   - yaml: "**/molecule/**/inventory/host_vars/host1/roles.yml"
 exclude_paths:
   - .cache/
-  # Excluding task files depending on other collections since ansible-lint is running in offline mode on galaxy / automation hub
+  # Excluding task files depending on other collections since ansible-lint is running in offline mode on galaxy/automation hub
   - roles/eos_config_deploy_eapi/tasks/main.yml
   - roles/eos_snapshot/tasks/main.yml

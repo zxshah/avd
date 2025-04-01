@@ -303,8 +303,6 @@ ansible_collections/arista/avd/examples/single-dc-l3ls/group_vars/CONNECTED_ENDP
 --8<--
 ```
 
-This defines the settings for the relevant switch ports to which the endpoints connect, in this case the two servers `dc1-leaf1-server1` and `dc1-leaf2-server1`.
-
 ## The playbooks
 
 In this example, three playbooks are included, of which two must be used:

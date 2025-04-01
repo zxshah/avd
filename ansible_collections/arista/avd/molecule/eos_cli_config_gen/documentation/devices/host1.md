@@ -560,6 +560,7 @@ ntp server 10.1.1.1
 ntp server 10.1.1.2 prefer
 ntp server 20.20.20.1 key <removed>
 ntp server ie.pool.ntp.org iburst key <removed>
+ntp serve all
 ```
 
 ### PTP
@@ -4305,6 +4306,7 @@ interface Ethernet9
    multicast ipv4 boundary ACL_MULTICAST out
    multicast ipv6 static
    mpls ip
+   ntp serve
    isis authentication mode sha key-id 2 rx-disabled
    isis authentication key 0 <removed>
 !
@@ -4314,6 +4316,7 @@ interface Ethernet10
    ip address 172.31.128.10/31
    no mpls ldp interface
    no mpls ip
+   no ntp serve
    isis authentication mode sha key-id 2
    isis authentication key 0 <removed>
 !
@@ -5300,6 +5303,7 @@ interface Port-Channel5
    l2 mtu 8000
    l2 mru 8000
    mlag 5
+   ntp serve
    ptp enable
    ptp mpass
    ptp delay-mechanism e2e
@@ -5408,6 +5412,7 @@ interface Port-Channel15
    switchport mode trunk
    switchport
    mlag 15
+   no ntp serve
    service-policy type qos input pmap_test1
    service-profile experiment
    qos trust cos
@@ -6252,6 +6257,7 @@ interface Vlan25
    ipv6 virtual-router address 1b11:3a00:22b0:16::15
 !
 interface Vlan26
+   ntp serve
    ip ospf cost 99
    ip ospf network point-to-point
    ip ospf authentication message-digest
@@ -6330,6 +6336,7 @@ interface Vlan75
    multicast ipv6 boundary ff00::/16 out
    multicast ipv6 boundary ff01::/16 out
    multicast ipv4 static
+   no ntp serve
    ip address virtual 10.10.75.1/24
    ipv6 virtual-router address 1b11:3a00:22b0:1000::1
 !

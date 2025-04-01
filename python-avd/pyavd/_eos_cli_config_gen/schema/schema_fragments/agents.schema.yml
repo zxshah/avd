@@ -38,6 +38,6 @@ keys:
           items:
             type: str
             valid_values:
-              - "all"
-              - "active"
-              - "standby"
+              - all
+              - active
+              - standby

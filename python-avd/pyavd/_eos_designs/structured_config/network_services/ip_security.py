@@ -65,5 +65,6 @@ class IpSecurityMixin(Protocol):
                 ),
                 connection="start",
             )
-        if self.inputs.ipsec_settings.bind_connection_to_interface:
+
+        if is_ipsec_policy_in_use:
             self.structured_config.ip_security.connection_tx_interface_match_source_ip = True

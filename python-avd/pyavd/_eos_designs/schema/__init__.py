@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class EosDesigns(EosDesignsRootModel):
-    """Subclass of AvdModel."""
+    """Subclass of EosDesignsRootModel."""
 
     class BfdMultihop(AvdModel):
         """Subclass of AvdModel."""
@@ -59823,7 +59823,7 @@ class EosDesigns(EosDesignsRootModel):
             EosDesigns.
 
 
-            Subclass of AvdModel.
+            Subclass of EosDesignsRootModel.
 
             Args:
                 application_classification: Application traffic recognition configuration.

@@ -35230,8 +35230,7 @@ class EosDesigns(EosDesignsRootModel):
                         hardware_forwarding: bool | None
                         """
                         Enable hardware forwarding for diagnostic loopbacks. This is required for correct forwarding in VRFs
-                        where there are no
-                        physical interfaces present.
+                        without physical interfaces.
                         """
 
                         if TYPE_CHECKING:
@@ -35291,8 +35290,7 @@ class EosDesigns(EosDesignsRootModel):
                                        Subclass of AvdIndexedList with `LoopbackIpPoolsItem` items. Primary key is `pod` (`str`).
                                     hardware_forwarding:
                                        Enable hardware forwarding for diagnostic loopbacks. This is required for correct forwarding in VRFs
-                                       where there are no
-                                       physical interfaces present.
+                                       without physical interfaces.
 
                                 """
 
@@ -37859,9 +37857,8 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         hardware_forwarding: bool | None
                         """
-                        Enable hardware forwarding for this loopback. This is required for correct forwarding in VRFs where
-                        there are no
-                        physical interfaces present.
+                        Enable hardware forwarding for this loopback. This is required for correct forwarding in VRFs
+                        without physical interfaces.
                         """
                         raw_eos_cli: str | None
                         """EOS CLI rendered directly on the Loopback interface in the final EOS configuration."""
@@ -37897,9 +37894,8 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     hardware_forwarding:
-                                       Enable hardware forwarding for this loopback. This is required for correct forwarding in VRFs where
-                                       there are no
-                                       physical interfaces present.
+                                       Enable hardware forwarding for this loopback. This is required for correct forwarding in VRFs
+                                       without physical interfaces.
                                     raw_eos_cli: EOS CLI rendered directly on the Loopback interface in the final EOS configuration.
 
                                 """

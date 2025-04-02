@@ -6682,10 +6682,8 @@ $defs:
                   hardware_forwarding:
                     type: bool
                     description: 'Enable hardware forwarding for diagnostic loopbacks.
-                      This is required for correct forwarding in VRFs where there
-                      are no
-
-                      physical interfaces present.
+                      This is required for correct forwarding in VRFs without physical
+                      interfaces.
 
                       '
               ospf:
@@ -7335,10 +7333,8 @@ $defs:
                     hardware_forwarding:
                       type: bool
                       description: 'Enable hardware forwarding for this loopback.
-                        This is required for correct forwarding in VRFs where there
-                        are no
-
-                        physical interfaces present.
+                        This is required for correct forwarding in VRFs without physical
+                        interfaces.
 
                         '
                     raw_eos_cli:

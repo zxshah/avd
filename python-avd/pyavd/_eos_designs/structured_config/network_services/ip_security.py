@@ -65,14 +65,5 @@ class IpSecurityMixin(Protocol):
                 ),
                 connection="start",
             )
-        if is_ipsec_policy_in_use:
-            self._set_ipsec_parameters()
-
-    def _set_ipsec_parameters(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """
-        Set any parameters relevant to all ipsec connections.
-
-        Note: Duplicated in overlay/ip_security.py.
-        """
         if self.inputs.ipsec_settings.bind_connection_to_interface:
             self.structured_config.ip_security.connection_tx_interface_match_source_ip = True

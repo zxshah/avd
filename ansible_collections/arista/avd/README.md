@@ -23,13 +23,12 @@ The AVD collection has the following requirements:
 
 - Python 3.10 or above
 - Ansible Core 2.16.0 to 2.18.x
-<!--
-  TODO: This link is broken and we should not have a relative link but we don't document this anywhere in our doc anymore.
-  -->
-- [Additional Python Dependencies](#additional-python-dependencies)
+- the Python package `pyavd[ansible-collection]` matching the collection version
 - Modify the `ansible.cfg` file to support additional Jinja2 extensions
 
-## Installations
+## Installation
+
+Follow the [installation guide](https://avd.arista.com/stable/docs/installation/collection-installation.html) to install the requirements.
 
 Before using this collection, you need to install it with the Ansible Galaxy command-line tool:
 
@@ -111,7 +110,6 @@ Please see the [release notes](https://avd.arista.com) for the latest updates to
 ## Related Information
 
 - [arista.avd documentation](https://avd.arista.com)
-- [Arista NetDevOps Examples](https://github.com/aristanetworks/netdevops-examples)
 
 ## License Information
 

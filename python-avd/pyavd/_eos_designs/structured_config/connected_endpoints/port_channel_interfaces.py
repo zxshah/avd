@@ -256,8 +256,8 @@ class PortChannelInterfacesMixin(Protocol):
             )
 
         if subinterface.structured_config:
-            self.custom_structured_configs.nested.port_channel_interfaces.obtain(port_channel_interface.name)._deepmerge(
-                adapter.port_channel.structured_config, list_merge=self.custom_structured_configs.list_merge_strategy
+            self.custom_structured_configs.nested.port_channel_interfaces.obtain(port_channel_subinterface_name)._deepmerge(
+                subinterface.structured_config, list_merge=self.custom_structured_configs.list_merge_strategy
             )
 
         return strip_null_from_data(port_channel_interface, strip_values_tuple=(None, ""))

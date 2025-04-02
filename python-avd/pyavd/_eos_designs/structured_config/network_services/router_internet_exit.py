@@ -77,6 +77,9 @@ class RouterInternetExitMixin(Protocol):
             self._set_direct_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
         else:  # internet_exit_policy.type == "zscaler"
             self._set_zscaler_internet_exit_policy(internet_exit_policy, local_wan_l3_interfaces)
+            # TODO: Technically we need this ONLY if there is ANY Zscaler policy
+            if self.inputs.ipsec_settings.bind_connection_to_interface:
+                self.structured_config.ip_security.connection_tx_interface_match_source_ip = True
 
     def _set_direct_internet_exit_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,

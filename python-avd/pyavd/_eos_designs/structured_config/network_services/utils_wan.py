@@ -121,7 +121,7 @@ class UtilsWanMixin(Protocol):
         vrf: EosDesigns.WanVirtualTopologies.VrfsItem,
         *,
         control_plane: bool = False,
-    ) -> EosCliConfigGen.RouterPathSelection.PoliciesItem:
+    ) -> None:
         """Add a router path-selection policy to the strutcured_config."""
         index = 1
         output_policy = EosCliConfigGen.RouterPathSelection.PoliciesItem(name=policy.name)
@@ -183,7 +183,6 @@ class UtilsWanMixin(Protocol):
             raise AristaAvdError(msg)
 
         self.structured_config.router_path_selection.policies.append(output_policy)
-        return output_policy
 
     def _append_cv_pathfinder_policy(
         self: AvdStructuredConfigNetworkServicesProtocol,

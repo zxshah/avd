@@ -6,9 +6,13 @@
 {# doc - kernel software forwarding #}
 {% if kernel.software_forwarding_ecmp is arista.avd.defined(true) %}
 
-## Kernel Software Forwarding
+## Kernel Settings
 
-Kernel software forwarding ecmp enabled
+### Kernel Device Summary
+
+- Kernel software forwarding ecmp enabled
+
+### Kernel Device configuration
 
 ```eos
 {%     include 'eos/kernel.j2' %}

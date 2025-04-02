@@ -68,7 +68,9 @@
 - [System Boot Settings](#system-boot-settings)
   - [Boot Secret Summary](#boot-secret-summary)
   - [System Boot Device Configuration](#system-boot-device-configuration)
-- [Kernel Software Forwarding](#kernel-software-forwarding)
+- [Kernel Settings](#kernel-settings)
+  - [Kernel Device Summary](#kernel-device-summary)
+  - [Kernel Device configuration](#kernel-device-configuration)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
   - [Custom daemons](#custom-daemons)
@@ -1885,9 +1887,13 @@ dhcp server vrf VRF01
 boot secret 5 <removed>
 ```
 
-## Kernel Software Forwarding
+## Kernel Settings
 
-Kernel software forwarding ecmp enabled
+### Kernel Device Summary
+
+- Kernel software forwarding ecmp enabled
+
+### Kernel Device configuration
 
 ```eos
 !

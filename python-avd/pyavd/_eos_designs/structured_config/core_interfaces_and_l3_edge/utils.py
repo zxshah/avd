@@ -306,9 +306,11 @@ class UtilsMixin(Protocol):
 
     def _get_channel_id(self: AvdStructuredConfigCoreInterfacesAndL3EdgeProtocol, p2p_link: T_P2pLinksItem, node_data: dict) -> int:
         """Returns a channel ID for one p2p_link."""
-        if p2p_link.port_channel.channel_id_generation == "p2p_link_id":
-            default_channel_id = p2p_link.id + p2p_link.port_channel._get("channel_id_offset", 0)
+        if node_data.channel_id:
+            return node_data.channel_id
+        elif p2p_link.port_channel.channel_id_generation == "p2p_link_id" and p2p_link.id:
+            channel_id = p2p_link.id + p2p_link.port_channel._get("channel_id_offset", 0)
         else:
-            default_channel_id = int("".join(re.findall(r"\d", node_data.interfaces[0])))
+            channel_id = int("".join(re.findall(r"\d", node_data.interfaces[0])))
 
-        return node_data.channel_id or default_channel_id
+        return channel_id

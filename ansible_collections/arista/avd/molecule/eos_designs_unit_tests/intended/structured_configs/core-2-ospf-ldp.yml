@@ -220,6 +220,24 @@ ethernet_interfaces:
   peer: core-1-isis-sr-ldp
   peer_interface: Ethernet19
   peer_type: core_router
+- name: Ethernet26
+  description: P2P_LINK_TO_CORE-1-ISIS-SR-LDP_Ethernet26
+  shutdown: false
+  channel_group:
+    id: 26
+    mode: active
+  peer: core-1-isis-sr-ldp
+  peer_interface: Ethernet26
+  peer_type: core_router
+- name: Ethernet27
+  description: P2P_LINK_TO_CORE-1-ISIS-SR-LDP_Ethernet27
+  shutdown: false
+  channel_group:
+    id: 26
+    mode: active
+  peer: core-1-isis-sr-ldp
+  peer_interface: Ethernet27
+  peer_type: core_router
 hostname: core-2-ospf-ldp
 ip_routing: true
 ipv6_unicast_routing: true
@@ -328,6 +346,22 @@ port_channel_interfaces:
   peer_type: core_router
   switchport:
     enabled: false
+- name: Port-Channel26
+  description: P2P_LINK_TO_core-1-isis-sr-ldp_Port-Channel26
+  shutdown: false
+  mtu: 1600
+  mpls:
+    ip: true
+    ldp:
+      interface: true
+      igp_sync: true
+  ospf_network_point_to_point: true
+  ospf_area: 0.0.0.0
+  peer: core-1-isis-sr-ldp
+  peer_interface: Port-Channel26
+  peer_type: core_router
+  switchport:
+    enabled: false
 ptp:
   mode: boundary
   clock_identity: 00:1C:73:7f:00:02
@@ -367,6 +401,7 @@ router_ospf:
     - Port-Channel9
     - Port-Channel109
     - Port-Channel18
+    - Port-Channel26
     max_lsa: 12000
 service_routing_protocols_model: multi-agent
 spanning_tree:

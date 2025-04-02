@@ -308,7 +308,7 @@ class UtilsMixin(Protocol):
         """Returns a channel ID for one p2p_link."""
         if node_data.channel_id:
             return node_data.channel_id
-        elif p2p_link.port_channel.channel_id_generation == "p2p_link_id" and p2p_link.id:
+        if p2p_link.port_channel.channel_id_generation == "p2p_link_id" and p2p_link.id:
             channel_id = p2p_link.id + p2p_link.port_channel._get("channel_id_offset", 0)
         else:
             channel_id = int("".join(re.findall(r"\d", node_data.interfaces[0])))

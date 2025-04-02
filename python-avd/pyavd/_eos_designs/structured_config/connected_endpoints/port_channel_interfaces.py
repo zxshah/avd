@@ -239,7 +239,9 @@ class PortChannelInterfacesMixin(Protocol):
         """Return structured_config for one port_channel_interface (subinterface)."""
         # Common port_channel_interface settings
         port_channel_interface = EosCliConfigGen.PortChannelInterfacesItem(
-            name=port_channel_subinterface_name, vlan_id=subinterface.vlan_id or subinterface.number, eos_cli=subinterface.raw_eos_cli,
+            name=port_channel_subinterface_name,
+            vlan_id=subinterface.vlan_id or subinterface.number,
+            eos_cli=subinterface.raw_eos_cli,
         )
         port_channel_interface.encapsulation_vlan.client._update(
             encapsulation="dot1q", vlan=subinterface.encapsulation_vlan.client_dot1q or subinterface.number

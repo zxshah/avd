@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class EosDesignsFactsProtocol(Protocol):
-    """Subclass of AvdModel."""
+    """Subclass of Protocol."""
 
     class DownlinkPoolsItem(AvdModel):
         """Subclass of AvdModel."""
@@ -1177,7 +1177,7 @@ class EosDesignsFactsProtocol(Protocol):
             EosDesignsFactsProtocol.
 
 
-            Subclass of AvdModel.
+            Subclass of Protocol.
 
             Args:
                 id: id

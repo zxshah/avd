@@ -300,6 +300,7 @@ class SrcGenDict(SrcGenBase):
             return None
 
         classes, fields = self.get_children_classes_and_fields()
+        base_classes = self.get_base_classes() or ["AvdModel"]
         return ModelSrc(
             name=self.get_class_name(),
             base_classes=self.get_base_classes(),
@@ -307,7 +308,7 @@ class SrcGenDict(SrcGenBase):
             fields=fields,
             imports=self.get_imports(),
             allow_extra=self.schema.allow_other_keys or False,
-            description="Subclass of AvdModel.",
+            description=f"Subclass of {', '.join(base_classes)}.",
         )
 
     def get_base_classes(self) -> list[str]:

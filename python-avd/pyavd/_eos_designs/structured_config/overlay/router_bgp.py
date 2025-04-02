@@ -608,7 +608,7 @@ class RouterBgpMixin(Protocol):
                 continue
 
             peer_facts = self.shared_utils.get_peer_facts(fabric_switch)
-            if self._is_peer_mpls_client(peer_facts) is not True:
+            if not self._is_peer_mpls_client(peer_facts):
                 continue
 
             if not (ip_address := peer_facts.overlay.peering_address):

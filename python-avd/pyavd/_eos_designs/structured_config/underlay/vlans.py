@@ -55,10 +55,10 @@ class VlansMixin(Protocol):
         for peer in self.facts.downlink_switches:
             peer_facts = self.shared_utils.get_peer_facts(peer)
             for uplink in peer_facts.uplinks:
-                if uplink.peer == self.shared_utils.hostname:
-                    if not uplink.peer_trunk_groups or not uplink.vlans:
-                        continue
-                    for vlan_id in map(int, range_expand(uplink.vlans)):
-                        vlan_item_trunk_groups = vlans.obtain(vlan_id).trunk_groups
-                        for trunk_group in uplink.peer_trunk_groups:
-                            vlan_item_trunk_groups.append_unique(trunk_group)
+                if uplink.peer != self.shared_utils.hostname or not uplink.peer_trunk_groups or not uplink.vlans:
+                    continue
+
+                for vlan_id in map(int, range_expand(uplink.vlans)):
+                    vlan_item_trunk_groups = vlans.obtain(vlan_id).trunk_groups
+                    for trunk_group in uplink.peer_trunk_groups:
+                        vlan_item_trunk_groups.append_unique(trunk_group)

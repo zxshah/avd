@@ -39,14 +39,14 @@ class MiscMixin(Protocol):
         Will be sourced from different places depending on the context.
 
         If running under eos_designs_structured_config:
-            Use 'self.hostvars.switch.id' or None
+            Use 'id' from EosDesignsFacts or None
 
         If running under eos_designs_facts and pool manager is activated:
-            Use pool manager requesting the value of 'self.switch_data_combined.id' if set.
+            Use pool manager requesting the value of 'self.node_config.id' if set.
             If the 'id' field is set but not available in the pool, an error will be raised.
 
         If running under eos_designs_facts and pool manager is _not_ activated:
-            Use 'self.switch_data_combined.id' which is the ID defined in the node type config or None.
+            Use 'self.node_config.id' which is the ID defined in the node type config or None.
         """
         # Check if we are running from eos_designs_structured_config (facts is an instance of EosDesignsFacts and not EosDesignsFactsGenerator)
         if isinstance(self.switch_facts, EosDesignsFacts):

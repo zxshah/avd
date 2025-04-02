@@ -73,7 +73,7 @@ class RouteMapsMixin(Protocol):
                         uplink.peer == self.shared_utils.hostname
                         and uplink.type == "underlay_p2p"
                         and uplink.ip_address
-                        and "unnumbered" not in uplink.ip_address
+                        and "unnumbered" not in uplink.ip_address.lower()
                         and peer_facts.inband_ztp
                     ):
                         add_p2p_links = True

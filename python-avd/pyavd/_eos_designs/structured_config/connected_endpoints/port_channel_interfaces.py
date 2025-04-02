@@ -170,8 +170,6 @@ class PortChannelInterfacesMixin(Protocol):
         )
         port_channel_interface.sflow.enable = default(adapter.sflow, self.inputs.fabric_sflow.endpoints)
 
-        port_channel_interface.sflow.enable = default(adapter.sflow, self.inputs.fabric_sflow.endpoints)
-
         if adapter.port_channel.subinterfaces:
             port_channel_interface.switchport.enabled = False
         else:

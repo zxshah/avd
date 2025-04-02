@@ -75,7 +75,7 @@ class MlagMixin(EosDesignsFactsProtocol, Protocol):
         """
         Exposed in avd_switch_facts.
 
-        Returns the switch id's of both primary and secondary switches for a given node group
+        Returns the switch ids of both primary and secondary switches for a given node group or an empty class.
         {"primary": int, "secondary": int}
         """
         if not (mlag_switch_ids := self.shared_utils.mlag_switch_ids):

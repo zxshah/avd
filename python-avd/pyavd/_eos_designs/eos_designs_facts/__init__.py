@@ -29,6 +29,13 @@ if TYPE_CHECKING:
 class EosDesignsFactsGeneratorProtocol(
     MlagMixin, ShortEsiMixin, OverlayMixin, WanMixin, UplinksMixin, UtilsMixin, VlansMixin, EosDesignsFactsProtocol, AvdFactsProtocol, Protocol
 ):
+    """
+    This Protocol is only used by EosDesignsFactsGenerator.
+
+    It is implemented as a protocol because of the Mixin layout and to get proper type checking in the Mixin classes.
+    Used as type hint on `self` in the Mixin methods.
+    """
+
     peer_generators: dict[str, EosDesignsFactsGenerator]
 
     # Placeholders that are filled out by the peers' generators.
@@ -344,7 +351,11 @@ class EosDesignsFactsGeneratorProtocol(
 
 class EosDesignsFactsGenerator(AvdFacts, EosDesignsFactsGeneratorProtocol, EosDesignsFactsProtocol):
     """
-    `EosDesignsFactsGenerator` is based on `AvdModel` to emulate a schema, so make sure to read the description there first.
+    `EosDesignsFactsGenerator` is used to generate facts according to the EosDesignsFactsProtocol.
+
+    The class inherits from `AvdFacts`, to get the render() method, so make sure to read the description there as well.
+
+    The generator's properties can also be accessed directly, to allow computation of facts based on other facts.
 
     The class is instantiated once per device. Methods may use references to other device instances using `self.peer_generators`,
     which is a dict of `EosDesignsfactsGenerator` instances covering all devices.

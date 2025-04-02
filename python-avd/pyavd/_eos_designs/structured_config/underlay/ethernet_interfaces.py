@@ -87,7 +87,7 @@ class EthernetInterfacesMixin(Protocol):
 
                 # IP address
                 if link.ip_address:
-                    if "unnumbered" in link.ip_address:
+                    if "unnumbered" in link.ip_address.lower():
                         ethernet_interface.ip_address = link.ip_address
                     else:
                         ethernet_interface.ip_address = f"{link.ip_address}/{link.prefix_length}"

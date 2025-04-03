@@ -6664,7 +6664,7 @@ interface Vlan4094
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
 | 110 | 10110 | - | 239.9.1.4 |
-| 111 | 10111 | 10.1.1.10<br/>10.1.1.11 | - |
+| 111 | 10111 | 10.1.1.10<br/>10.1.1.11<br/>232.1.1.21 | - |
 | 112 | - | - | 239.9.1.6 |
 
 ##### VRF to VNI and Multicast Group Mappings
@@ -6701,6 +6701,7 @@ interface Vxlan1
    bfd vtep evpn prefix-list PL-TEST
    vxlan flood vtep 10.1.0.10 10.1.0.11
    vxlan vlan 111 flood vtep 10.1.1.10 10.1.1.11
+   vxlan vlan 111 flood group 232.1.1.21
    vxlan vlan 110 multicast group 239.9.1.4
    vxlan vlan 112 multicast group 239.9.1.6
    vxlan vrf Tenant_A_OP_Zone multicast group 232.0.0.10

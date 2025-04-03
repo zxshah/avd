@@ -177,7 +177,6 @@ class VxlanInterfaceMixin(Protocol):
         Can be used for both svis and l2vlans
         """
         vxlan_vlan = EosCliConfigGen.VxlanInterface.Vxlan1.Vxlan.VlansItem(id=vlan.id)
-
         if vlan.vni_override:
             vxlan_vlan.vni = vlan.vni_override
         else:
@@ -196,6 +195,22 @@ class VxlanInterfaceMixin(Protocol):
                 tenant.evpn_l2_multicast.underlay_l2_multicast_group_ipv4_pool,
                 vlan.id,
                 tenant.evpn_l2_multicast.underlay_l2_multicast_group_ipv4_pool_offset,
+            )
+        if vlan.vxlan_flood_multicast.enabled is not None:
+            vxlan_vlan.flood_group = (
+                vlan.vxlan_flood_multicast.underlay_multicast_group
+                if vlan.vxlan_flood_multicast.underlay_multicast_group and vlan.vxlan_flood_multicast.enabled is True
+                else None
+            )
+        elif tenant.vxlan_flood_multicast.enabled is True:
+            if not tenant.vxlan_flood_multicast.underlay_l2_multicast_group_ipv4_pool:
+                msg = f"'vxlan_flood_multicast.underlay_l2_multicast_group_ipv4_pool' for Tenant: {tenant.name} is required."
+                raise AristaAvdInvalidInputsError(msg)
+
+            vxlan_vlan.flood_group = self.shared_utils.ip_addressing.evpn_underlay_l2_flood_group(
+                tenant.vxlan_flood_multicast.underlay_l2_multicast_group_ipv4_pool,
+                vlan.id,
+                tenant.vxlan_flood_multicast.underlay_l2_multicast_group_ipv4_pool_offset,
             )
 
         if self.shared_utils.overlay_her and self.inputs.overlay_her_flood_list_per_vni and (vlan_id_entry := self._overlay_her_flood_lists.get(vlan.id)):

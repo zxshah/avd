@@ -34,4 +34,5 @@ core_interfaces:
           - node: peer1
             interfaces: [ Ethernet26, Ethernet27 ]
 
-expected_error_message: "'id' is not set for p2p link <P2pLinksItem(nodes=<Nodes(['core-interfaces-missing-id-with-channel-id-algorithm', 'peer1'])>, port_channel=<PortChannel(mode=active, channel_id_algorithm=p2p_link_id, nodes_child_interfaces=<NodesChildInterfaces([<NodesChildInterfacesItem(node=core-interfaces-missing-id-with-channel-id-algorithm, interfaces=<Interfaces(['Ethernet26', 'Ethernet27'])>, channel_id=None)>, <NodesChildInterfacesItem(node=peer1, interfaces=<Interfaces(['Ethernet26', 'Ethernet27'])>)>])>)>, profile=None, ip=<Ip([])>, subnet=None, ip_pool=None, field_as=<As([])>, descriptions=<Descriptions([])>, id=None)> but the selected 'channel_id_algorithm' is 'p2p_link_id'."
+expected_error_message: >-
+  'id' is not set for p2p link on core-interfaces-missing-id-with-channel-id-algorithm but the selected 'channel_id_algorithm' is 'p2p_link_id'.

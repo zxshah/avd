@@ -288,7 +288,6 @@ class RouterBgpMixin(Protocol):
             self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes.enable = True
             self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes.inter_domain = True
 
-
     def _set_address_family_ipv4_sr_te(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Set the structured config for IPv4 SR-TE address family."""
         if not self.shared_utils.is_cv_pathfinder_router:

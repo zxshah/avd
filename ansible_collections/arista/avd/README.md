@@ -10,7 +10,7 @@
 
 - **Flexibility with Open Data Models:** Extensible fabric-wide network models, simplifying configuration, delivering consistency, and reducing errors
 - **Simplification through Multi-Domain Automation:** A framework that can automate the data center, campus or wide area network, enabled by a consistent EOS software image and management platform
-- **Comprehensive Workflows:** Automating the full life cycle of network provisioning from config generation to pre- and post-deployment validation, and self-documentation of the network
+- **Comprehensive Workflows:** Automating the full life cycle of network provisioning from config generation to pre- and post-deployment validation and self-documentation of the network
 
 AVD Documentation:
 
@@ -91,7 +91,7 @@ Every pull request is thoroughly tested by our extensive CI pipeline and reviewe
 
 ## Contributing
 
-Contributing pull requests are gladly welcomed for this repository. If you are planning a big change, please start a discussion first to make sure we'll be able to merge it. Please see [contribution guide](https://avd.arista.com/stable/docs/contribution/overview.html) for additional details.
+Contributing pull requests are gladly welcomed for this repository. If you are planning a significant change, please start a discussion first to ensure we can merge it. Please see [contribution guide](https://avd.arista.com/stable/docs/contribution/overview.html) for additional details.
 
 You can also open an [issue](https://github.com/aristanetworks/avd/issues) to report any problems or submit requests for enhancements.
 

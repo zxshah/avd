@@ -115,7 +115,8 @@ class UtilsWanMixin(Protocol):
                 raise AristaAvdInvalidInputsError(msg)
 
     def _verify_internet_exit_policy(self: AvdStructuredConfigNetworkServicesProtocol, ie_policy_name: str, policy_name: str) -> None:
-        """Check if the Internet Exit policy name is configured.
+        """
+        Check if the Internet Exit policy name is configured.
 
         If not raise an AristaAvdInvalidInputsError.
 

@@ -68,7 +68,8 @@ class RouterPathSelectionMixin(Protocol):
         *,
         control_plane: bool = False,
     ) -> None:
-        """Add a router path-selection policy and its dependencies to the structured_config.
+        """
+        Add a router path-selection policy and its dependencies to the structured_config.
 
         Router-path selection policies are used in autovpn mode.
         """

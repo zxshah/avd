@@ -101,7 +101,8 @@ class RouterAdaptiveVirtualTopologyMixin(Protocol):
         *,
         control_plane: bool = False,
     ) -> EosCliConfigGen.RouterAdaptiveVirtualTopology.VrfsItem.Profiles:
-        """Add a router adaptive-virtual-topology policy to the structured_config.
+        """
+        Add a router adaptive-virtual-topology policy to the structured_config.
 
         TODO: Split this up in smaller methods.
 

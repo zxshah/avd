@@ -72,7 +72,8 @@ class IpAccesslistsMixin(Protocol):
             self.structured_config.ip_access_lists.append(acl)
 
     def _set_zscaler_ie_policy_acl(self: AvdStructuredConfigNetworkServicesProtocol, acl_name: str) -> None:
-        """Configure an IP access list for the Zscaler Internet policy.
+        """
+        Configure an IP access list for the Zscaler Internet policy.
 
         Args:
             acl_name: the name of the ACL to configure.

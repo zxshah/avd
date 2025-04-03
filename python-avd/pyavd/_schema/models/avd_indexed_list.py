@@ -12,6 +12,7 @@ from pyavd._schema.coerce_type import coerce_type
 from pyavd._utils import Undefined, UndefinedType
 
 from .avd_base import AvdBase
+from .input_path import InputPath, PathIndexedListKey
 from .type_vars import T_AvdModel, T_PrimaryKey
 
 if TYPE_CHECKING:
@@ -45,30 +46,46 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
     """
 
     @classmethod
-    def _load(cls, data: Sequence) -> Self:
+    def _load(cls, data: Sequence, data_source: InputPath | None = None) -> Self:
         """Returns a new instance loaded with the data from the given list."""
-        return cls._from_list(data)
+        return cls._from_list(data, data_source=data_source)
 
     @classmethod
-    def _from_list(cls, data: Sequence) -> Self:
+    def _from_list(cls, data: Sequence, data_source: InputPath | None = None) -> Self:
         """Returns a new instance loaded with the data from the given list."""
+        data_source = data_source or InputPath()
         if not isinstance(data, Sequence):
             msg = f"Expecting 'data' as a 'Sequence' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
 
-        cls_items = cast("Iterable[T_AvdModel]", (coerce_type(item, cls._item_type) for item in data))
-        return cls(cls_items)
+        cls_items = []
+        # Handle _DynamicKeys slightly differently
+        for index, item in enumerate(data):
+            # Need to retrieve the key from the data not from the model.
+            item_key = cls._item_type._field_to_key_map.get(cls._primary_key, cls._primary_key)
+            # TODO: Find a better way for Dynamic
+            child_data_source = (
+                InputPath(item[item_key])
+                if cls.__name__.startswith("Dynamic")
+                else data_source.create_descendant(PathIndexedListKey(index, item_key, item[item_key]))
+            )
+            cls_items.append(cast("Iterable[T_AvdModel]", (coerce_type(item, cls._item_type, data_source=child_data_source))))
 
-    def __init__(self, items: Iterable[T_AvdModel] = ()) -> None:
+        return cls(cls_items, source=data_source)
+
+    def __init__(self, items: Iterable[T_AvdModel] = (), source: InputPath | None = None) -> None:
         """
         AvdIndexedList subclass.
 
         Args:
             items: Iterable holding items of the correct type to be loaded into the indexed list.
+            source: The InputPath to use as source for this list.
         """
-        self._items = {getattr(item, self._primary_key): item for item in items}
-
         super().__init__()
+
+        self._items = {getattr(item, self._primary_key): item for item in items}
+        if source:
+            self._source = source
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""
@@ -139,6 +156,13 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
 
             Returns the new item, or in case of an identical duplicate item it returns the existing item.
             """
+            if "_source" not in kwargs:
+                item_key = self._item_type._field_to_key_map.get(self._primary_key, self._primary_key)
+                kwargs["_source"] = (
+                    InputPath(kwargs[item_key])
+                    if self.__class__.__name__.startswith("Dynamic")
+                    else self._source.create_descendant(PathIndexedListKey(len(self), item_key, kwargs[item_key]))
+                )
             new_item = self._item_type(*args, **kwargs)
             self.append(new_item)
             return self._items[kwargs[self._primary_key]]
@@ -235,6 +259,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
                 continue
 
             # Existing item of same type, so deepmerge.
+            # TODO: when prepending the source of the object should be the one of new_item.
             self[primary_key]._deepmerge(new_item, list_merge=list_merge)
 
         if prepend_items:
@@ -259,6 +284,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
         for primary_key, new_item in other.items():
             if self.get(primary_key) is Undefined:
                 # New item so we can just append
+                # TODO: this contradict docstring which states new items are not added.
                 self[primary_key] = new_item
                 continue
 
@@ -273,6 +299,7 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
 
         Useful when inheriting from profiles.
         """
+        # TODO: support an extra keyword param to override source in _cast_as
         cls = type(self)
         if not issubclass(new_type, AvdIndexedList):
             msg = f"Unable to cast '{cls}' as type '{new_type}' since '{new_type}' is not an AvdIndexedList subclass."
@@ -283,6 +310,8 @@ class AvdIndexedList(Sequence[T_AvdModel], Generic[T_PrimaryKey, T_AvdModel], Av
         # Pass along the internal flags
         new_instance._created_from_null = self._created_from_null
         new_instance._block_inheritance = self._block_inheritance
+        # Copy the source
+        new_instance._source = self._source
 
         return new_instance
 

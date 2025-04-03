@@ -12,6 +12,7 @@ from pyavd._utils import Undefined, UndefinedType
 
 from .avd_base import AvdBase
 from .avd_model import AvdModel
+from .input_path import InputPath
 from .type_vars import T, T_AvdList, T_ItemType
 
 if TYPE_CHECKING:
@@ -27,7 +28,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     Other lists are *not* using this model.
     """
 
-    __slots__ = ("_items",)
+    __slots__ = ("_items", "_items_source")
 
     _item_type: ClassVar[type]  # pylint: disable=declare-non-slot # pylint bug #9950
     """Type of items. This is used instead of inspecting the type-hints to improve performance significantly."""
@@ -36,36 +37,45 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     Internal attribute holding the actual data. Using a dict keyed by the primary key value of each item to improve performance
     significantly when searching for a specific item.
     """
+    _items_source: list[InputPath]
+    """Source based on index."""
 
     @classmethod
-    def _load(cls, data: Sequence) -> Self:
+    def _load(cls, data: Sequence, data_source: InputPath | None = None) -> Self:
         """Returns a new instance loaded with the data from the given list."""
-        return cls._from_list(data)
+        return cls._from_list(data, data_source=data_source)
 
     @classmethod
-    def _from_list(cls, data: Sequence) -> Self:
+    def _from_list(cls, data: Sequence, data_source: InputPath | None = None) -> Self:
         """Returns a new instance loaded with the data from the given list."""
         if not isinstance(data, Sequence):
             msg = f"Expecting 'data' as a 'Sequence' when loading data into '{cls.__name__}'. Got '{type(data)}"
             raise TypeError(msg)
 
+        data_source = data_source or InputPath()
+
         item_type = cls._item_type
         if item_type is Any:
             return cls(data)
 
-        cls_items = [coerce_type(item, item_type) for item in data]
-        return cls(cls_items)
+        cls_items: Iterable[T_ItemType] = [coerce_type(item, item_type, data_source=data_source.create_descendant(index)) for index, item in enumerate(data)]
 
-    def __init__(self, items: Iterable[T_ItemType] = ()) -> None:
+        return cls(cls_items, source=data_source)
+
+    def __init__(self, items: Iterable[T_ItemType] = (), source: InputPath | None = None) -> None:
         """
         AvdList subclass.
 
         Args:
             items: Iterable holding items of the correct type to be loaded into the list.
+            source: The InputPath to use as source for this list.
         """
-        self._items = list(items)
-
         super().__init__()
+
+        self._items = list(items)
+        if source:
+            self._source = source
+        self._items_source = [self._source.create_descendant(index) for index in range(len(self._items))]
 
     def __repr__(self) -> str:
         """Returns a repr with all the items including any nested models."""
@@ -91,6 +101,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
     def __getitem__(self, index: int | slice[int | None, int | None, int | None]) -> T_ItemType | list[T_ItemType]:
         return self._items.__getitem__(index)
 
+    # TODO: If need source to be changed for item then need a wrapper
     def __setitem__(self, index: int, value: T_ItemType) -> None:
         self._items[index] = value
 
@@ -102,6 +113,7 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
 
     def append(self, item: T_ItemType) -> None:
         self._items.append(item)
+        self._items_source.append(self._source.create_descendant(len(self._items_source)))
 
     def append_unique(self, item: T_ItemType) -> None:
         """Append the item if not there already. Otherwise ignore."""
@@ -198,22 +210,36 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
         match list_merge:
             case "append_unique":
                 # Append non-existing items.
-                self._items.extend(new_item for new_item in other._items if new_item not in self._items)
+                for index, new_item in enumerate(other._items):
+                    if new_item not in self._items:
+                        self._items.append(new_item)
+                        self._items_source.append(other._items_source[index])
             case "append":
                 # Append all items.
                 self._items.extend(other._items)
+                self._items_source.extend(other._items_source)
             case "replace":
                 # Replace with the "other" list.
                 self._items = other._items.copy()
+                self._items_source = other._items_source.copy()
                 return
             case "keep":
                 # We only get here if there was a defined instance of the old list, so we "keep" the existing list as-is.
+                # TODO: check for source
                 return
             case "prepend_unique":
                 # Prepend non-existing items.
-                self._items[:0] = [new_item for new_item in other._items if new_item not in self._items]
+                prepend_unique = []
+                prepend_unique_source = []
+                for index, new_item in enumerate(other._items):
+                    if new_item not in self._items:
+                        prepend_unique.append(new_item)
+                        prepend_unique_source.append(other._items_source[index])
+                self._items[:0] = prepend_unique
+                self._items_source[:0] = prepend_unique_source
             case "prepend":
                 self._items[:0] = other._items
+                self._items_source[:0] = other._items_source
 
     def _cast_as(self, new_type: type[T_AvdList], ignore_extra_keys: bool = False) -> T_AvdList:
         """
@@ -240,6 +266,8 @@ class AvdList(Sequence[T_ItemType], Generic[T_ItemType], AvdBase):
 
         # Pass along the _created_from_null flag
         new_instance._created_from_null = self._created_from_null
+        # Copy the source
+        new_instance._source = self._source
 
         return new_instance
 

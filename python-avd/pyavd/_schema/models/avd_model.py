@@ -5,7 +5,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from copy import deepcopy
-from logging import getLogger
 from typing import TYPE_CHECKING, Any, ClassVar, Literal, cast
 
 from pyavd._schema.coerce_type import coerce_type
@@ -13,6 +12,7 @@ from pyavd._utils import Undefined, UndefinedType, merge
 
 from .avd_base import AvdBase
 from .avd_indexed_list import AvdIndexedList
+from .input_path import InputPath
 
 if TYPE_CHECKING:
     from collections.abc import ItemsView
@@ -21,13 +21,11 @@ if TYPE_CHECKING:
 
     from .type_vars import T_AvdModel
 
-LOGGER = getLogger(__name__)
-
 
 class AvdModel(AvdBase):
     """Base class used for schema-based data classes holding dictionaries loaded from AVD inputs."""
 
-    __slots__ = ("_custom_data",)
+    __slots__ = ("_custom_data", "_field_source")
 
     _allow_other_keys: ClassVar[bool] = False
     """Attribute telling if this class should fail or ignore unknown keys found during loading in _from_dict()."""
@@ -40,6 +38,8 @@ class AvdModel(AvdBase):
     """Map of field name to original dict key. Used when fields have the field_ prefix to get the original key."""
     _key_to_field_map: ClassVar[dict[str, str]] = {}
     """Map of dict key to field name. Used when the key is names with a reserved keyword or mixed case. E.g. `Vxlan1` or `as`."""
+    _field_source: dict[str, InputPath]
+    """Map of field name to field source."""
 
     _custom_data: dict[str, Any]
     """
@@ -48,12 +48,12 @@ class AvdModel(AvdBase):
     """
 
     @classmethod
-    def _load(cls, data: Mapping) -> Self:
+    def _load(cls, data: Mapping[Any, Any], data_source: InputPath | None = None) -> Self:
         """Returns a new instance loaded with the data from the given dict."""
-        return cls._from_dict(data)
+        return cls._from_dict(data, data_source=data_source)
 
     @classmethod
-    def _from_dict(cls: type[T_AvdModel], data: Mapping, keep_extra_keys: bool = False) -> T_AvdModel:
+    def _from_dict(cls: type[T_AvdModel], data: Mapping, data_source: InputPath | None = None, *, keep_extra_keys: bool = False) -> T_AvdModel:
         """
         Returns a new instance loaded with the data from the given dict.
 
@@ -65,6 +65,8 @@ class AvdModel(AvdBase):
 
         cls_args = {}
         custom_data = {}
+
+        data_source = data_source or InputPath()
 
         for key in data:
             if not (field := cls._get_field_name(key)):
@@ -79,8 +81,11 @@ class AvdModel(AvdBase):
                 msg = f"Invalid key '{key}'. Not available on '{cls.__name__}'."
                 raise KeyError(msg)
 
-            cls_args[field] = coerce_type(data[key], cls._fields[field]["type"])
+            # Handle Dynamic Keys path slightly differently
+            child_data_source = data_source if cls.__name__.startswith("Dynamic") and key == "value" else data_source.create_descendant(key)
+            cls_args[field] = coerce_type(data[key], cls._fields[field]["type"], data_source=child_data_source)
 
+        cls_args["_source"] = data_source
         if custom_data:
             cls_args["_custom_data"] = custom_data
 
@@ -91,6 +96,15 @@ class AvdModel(AvdBase):
         """Returns the field name for the given key. Returns None if the key is not matching a valid field."""
         field_name = cls._key_to_field_map.get(key, key)
         return field_name if field_name in cls._fields else None
+
+    def _get_field_source(self, key: str) -> str:
+        """Returns the field source for the given key."""
+        # TODO: discuss if we should include the item path in error messages so that if the field come from a profile we
+        # get both info
+        field_name = self._key_to_field_map.get(key, key)
+        if (source := self._field_source.get(field_name, None)) is not None:
+            return str(source)
+        return str(self._source.create_descendant(field_name))
 
     @classmethod
     def _get_field_default_value(cls, name: str) -> Any:
@@ -128,10 +142,16 @@ class AvdModel(AvdBase):
 
         This method is typically overridden when TYPE_CHECKING is True, to provide proper suggestions and type hints for the arguments.
         """
-        self._custom_data = {}
-        [setattr(self, arg, arg_value) for arg, arg_value in kwargs.items() if arg_value is not Undefined]
-
         super().__init__()
+
+        self._custom_data = {}
+        self._field_source = {}
+        self._source: InputPath = kwargs.pop("_source", InputPath())
+        for arg, arg_value in kwargs.items():
+            if arg_value is Undefined:
+                continue
+            setattr(self, arg, arg_value)
+            self._field_source[arg] = arg._source if isinstance(arg, AvdBase) else self._source.create_descendant(arg)
 
     def __getattr__(self, name: str) -> Any:
         """
@@ -286,6 +306,7 @@ class AvdModel(AvdBase):
             # Force all fields on this instance back to unset if other is a "null" class.
             self.__dict__ = {}
             self._custom_data = {}
+            self._source = InputPath()
 
         for field, new_value in other.items():
             old_value = self._get_defined_attr(field)
@@ -296,6 +317,8 @@ class AvdModel(AvdBase):
             if not isinstance(old_value, type(new_value)):
                 # Different types so we can just replace with the new value.
                 setattr(self, field, new_value)
+                # Keep the source of the merged value field
+                self._field_source[field] = other._get_field_source(field)
                 continue
 
             # Merge new value
@@ -305,6 +328,7 @@ class AvdModel(AvdBase):
                 old_value = cast("AvdBase", old_value)
                 new_value = cast("AvdBase", new_value)
                 old_value._deepmerge(new_value, list_merge=list_merge)
+                self._field_source[field] = other._get_field_source(field)
                 continue
 
             if field_type is dict:
@@ -315,6 +339,7 @@ class AvdModel(AvdBase):
                 continue
 
             setattr(self, field, new_value)
+            self._field_source[field] = other._get_field_source(field)
 
         if other._created_from_null:
             # Inherit the _created_from_null attribute to make sure we output null values instead of empty dicts.
@@ -351,6 +376,8 @@ class AvdModel(AvdBase):
             # Inherit the field only if the old value is Undefined.
             if old_value is Undefined:
                 setattr(self, field, new_value)
+                # Keep the source of the inherited field
+                self._field_source[field] = other._field_source[field]
                 continue
 
             # Merge new value if it is a class with inheritance support.
@@ -369,6 +396,7 @@ class AvdModel(AvdBase):
                 continue
 
             if field_type is dict:
+                # TODO: This cannot keep the _source
                 # In-place deepmerge in to the existing dict without schema.
                 merge(old_value, deepcopy(new_value), same_key_strategy="use_existing", list_merge="keep")
 
@@ -417,6 +445,8 @@ class AvdModel(AvdBase):
 
             new_args[field] = value
 
+        # Copy the source
+        new_args["_source"] = self._source
         new_instance = new_type(**new_args)
 
         # Pass along the internal flags

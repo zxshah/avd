@@ -15,3 +15,12 @@ keys:
     type: list
     items:
       type: int
+  some_object:
+    type: dict
+    keys:
+      name:
+        type: str
+      some_int:
+        type: int
+      some_str:
+        type: str

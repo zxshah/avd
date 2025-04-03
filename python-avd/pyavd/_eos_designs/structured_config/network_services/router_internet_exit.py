@@ -29,9 +29,10 @@ class RouterInternetExitMixin(Protocol):
         policy_name: str,
     ) -> None:
         """
-        Set the internet exit policy for a given Virtual Topology if required.
+        Set the internet-exit policy for a given Virtual Topology if required.
 
-        TODO Make this description nice
+        This will also call the relevant method to set the NAT, IP access list, monitor connections,
+        router_service_insertion, static_route, ip_security and ethernet or tunnel interfaces in the structured config.
         """
         if not self.shared_utils.is_cv_pathfinder_client:
             return
@@ -86,7 +87,12 @@ class RouterInternetExitMixin(Protocol):
         internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
         local_wan_l3_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
     ) -> None:
-        """TODO."""
+        """
+        Set the direct internet-exit policy in structured_config.
+
+        This will also call the relevant method to set the NAT, IP access list, monitor connections,
+        router_service_insertion, static_route and ethernet interfaces in the structured config.
+        """
         policy_exit_groups = EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroups()
         """Track the exit groups for the Internet Exit policy."""
 
@@ -146,7 +152,12 @@ class RouterInternetExitMixin(Protocol):
         internet_exit_policy: EosDesigns.CvPathfinderInternetExitPoliciesItem,
         local_wan_l3_interfaces: EosDesigns._DynamicKeys.DynamicNodeTypesItem.NodeTypes.NodesItem.L3Interfaces,
     ) -> None:
-        """TODO."""
+        """
+        Set the Zscaler internet-exit policy in structured_config.
+
+        This will also call the relevant method to set the NAT, IP access list, monitor connections,
+        router_service_insertion, static_route, ip_security and tunnel interfaces in the structured config.
+        """
         policy_exit_groups = EosCliConfigGen.RouterInternetExit.PoliciesItem.ExitGroups()
         """Track the exit groups for the Internet Exit policy."""
         metadata_tunnels = EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem.Tunnels()
@@ -201,8 +212,7 @@ class RouterInternetExitMixin(Protocol):
                 metadata_tunnels.append_new(
                     name=f"Tunnel{tunnel_id}",
                     preference="Preferred" if preference == "primary" else "Alternate",
-                    # TODO: type error
-                    endpoint=zscaler_endpoint,
+                    endpoint=zscaler_endpoint._cast_as(EosCliConfigGen.Metadata.CvPathfinder.InternetExitPoliciesItem.TunnelsItem.Endpoint),
                 )
 
                 # Adding exit group

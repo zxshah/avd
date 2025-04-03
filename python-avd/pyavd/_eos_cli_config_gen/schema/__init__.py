@@ -35313,6 +35313,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "bfd": {"type": bool},
                 "bfd_timers": {"type": BfdTimers},
                 "ebgp_multihop": {"type": int},
+                "next_hop_peer": {"type": bool},
                 "next_hop_self": {"type": bool},
                 "password": {"type": str},
                 "passive": {"type": bool},
@@ -35381,6 +35382,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             """
             ebgp_multihop: int | None
             """Time-to-live in range of hops."""
+            next_hop_peer: bool | None
             next_hop_self: bool | None
             password: str | None
             passive: bool | None
@@ -35442,6 +35444,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     bfd: bool | None | UndefinedType = Undefined,
                     bfd_timers: BfdTimers | UndefinedType = Undefined,
                     ebgp_multihop: int | None | UndefinedType = Undefined,
+                    next_hop_peer: bool | None | UndefinedType = Undefined,
                     next_hop_self: bool | None | UndefinedType = Undefined,
                     password: str | None | UndefinedType = Undefined,
                     passive: bool | None | UndefinedType = Undefined,
@@ -35501,6 +35504,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                            Subclass of AvdModel.
                         ebgp_multihop: Time-to-live in range of hops.
+                        next_hop_peer: next_hop_peer
                         next_hop_self: next_hop_self
                         password: password
                         passive: passive
@@ -35923,6 +35927,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 "missing_policy": {"type": MissingPolicy},
                 "allowas_in": {"type": AllowasIn},
                 "ebgp_multihop": {"type": int},
+                "next_hop_peer": {"type": bool},
                 "next_hop_self": {"type": bool},
                 "link_bandwidth": {"type": LinkBandwidth},
                 "rib_in_pre_policy_retain": {"type": RibInPrePolicyRetain},
@@ -36001,6 +36006,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             """Subclass of AvdModel."""
             ebgp_multihop: int | None
             """Time-to-live in range of hops."""
+            next_hop_peer: bool | None
             next_hop_self: bool | None
             link_bandwidth: LinkBandwidth
             """Subclass of AvdModel."""
@@ -36051,6 +36057,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     missing_policy: MissingPolicy | UndefinedType = Undefined,
                     allowas_in: AllowasIn | UndefinedType = Undefined,
                     ebgp_multihop: int | None | UndefinedType = Undefined,
+                    next_hop_peer: bool | None | UndefinedType = Undefined,
                     next_hop_self: bool | None | UndefinedType = Undefined,
                     link_bandwidth: LinkBandwidth | UndefinedType = Undefined,
                     rib_in_pre_policy_retain: RibInPrePolicyRetain | UndefinedType = Undefined,
@@ -36113,6 +36120,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                            Subclass of AvdModel.
                         allowas_in: Subclass of AvdModel.
                         ebgp_multihop: Time-to-live in range of hops.
+                        next_hop_peer: next_hop_peer
                         next_hop_self: next_hop_self
                         link_bandwidth: Subclass of AvdModel.
                         rib_in_pre_policy_retain: Subclass of AvdModel.
@@ -46331,6 +46339,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     "description": {"type": str},
                     "route_reflector_client": {"type": bool},
                     "ebgp_multihop": {"type": int},
+                    "next_hop_peer": {"type": bool},
                     "next_hop_self": {"type": bool},
                     "shutdown": {"type": bool},
                     "bfd": {"type": bool},
@@ -46386,6 +46395,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 route_reflector_client: bool | None
                 ebgp_multihop: int | None
                 """Time-to-live in range of hops."""
+                next_hop_peer: bool | None
                 next_hop_self: bool | None
                 shutdown: bool | None
                 bfd: bool | None
@@ -46440,6 +46450,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                         description: str | None | UndefinedType = Undefined,
                         route_reflector_client: bool | None | UndefinedType = Undefined,
                         ebgp_multihop: int | None | UndefinedType = Undefined,
+                        next_hop_peer: bool | None | UndefinedType = Undefined,
                         next_hop_self: bool | None | UndefinedType = Undefined,
                         shutdown: bool | None | UndefinedType = Undefined,
                         bfd: bool | None | UndefinedType = Undefined,
@@ -46491,6 +46502,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                             description: description
                             route_reflector_client: route_reflector_client
                             ebgp_multihop: Time-to-live in range of hops.
+                            next_hop_peer: next_hop_peer
                             next_hop_self: next_hop_self
                             shutdown: shutdown
                             bfd: Enable BFD.

@@ -34595,6 +34595,7 @@ class EosDesigns(EosDesignsRootModel):
                         "bfd": {"type": bool},
                         "bfd_timers": {"type": BfdTimers},
                         "ebgp_multihop": {"type": int},
+                        "next_hop_peer": {"type": bool},
                         "next_hop_self": {"type": bool},
                         "password": {"type": str},
                         "passive": {"type": bool},
@@ -34677,6 +34678,7 @@ class EosDesigns(EosDesignsRootModel):
                     """
                     ebgp_multihop: int | None
                     """Time-to-live in range of hops."""
+                    next_hop_peer: bool | None
                     next_hop_self: bool | None
                     password: str | None
                     passive: bool | None
@@ -34741,6 +34743,7 @@ class EosDesigns(EosDesignsRootModel):
                             bfd: bool | None | UndefinedType = Undefined,
                             bfd_timers: BfdTimers | UndefinedType = Undefined,
                             ebgp_multihop: int | None | UndefinedType = Undefined,
+                            next_hop_peer: bool | None | UndefinedType = Undefined,
                             next_hop_self: bool | None | UndefinedType = Undefined,
                             password: str | None | UndefinedType = Undefined,
                             passive: bool | None | UndefinedType = Undefined,
@@ -34810,6 +34813,7 @@ class EosDesigns(EosDesignsRootModel):
 
                                    Subclass of AvdModel.
                                 ebgp_multihop: Time-to-live in range of hops.
+                                next_hop_peer: next_hop_peer
                                 next_hop_self: next_hop_self
                                 password: password
                                 passive: passive
@@ -38931,6 +38935,7 @@ class EosDesigns(EosDesignsRootModel):
                             "bfd": {"type": bool},
                             "bfd_timers": {"type": BfdTimers},
                             "ebgp_multihop": {"type": int},
+                            "next_hop_peer": {"type": bool},
                             "next_hop_self": {"type": bool},
                             "password": {"type": str},
                             "passive": {"type": bool},
@@ -39013,6 +39018,7 @@ class EosDesigns(EosDesignsRootModel):
                         """
                         ebgp_multihop: int | None
                         """Time-to-live in range of hops."""
+                        next_hop_peer: bool | None
                         next_hop_self: bool | None
                         password: str | None
                         passive: bool | None
@@ -39077,6 +39083,7 @@ class EosDesigns(EosDesignsRootModel):
                                 bfd: bool | None | UndefinedType = Undefined,
                                 bfd_timers: BfdTimers | UndefinedType = Undefined,
                                 ebgp_multihop: int | None | UndefinedType = Undefined,
+                                next_hop_peer: bool | None | UndefinedType = Undefined,
                                 next_hop_self: bool | None | UndefinedType = Undefined,
                                 password: str | None | UndefinedType = Undefined,
                                 passive: bool | None | UndefinedType = Undefined,
@@ -39146,6 +39153,7 @@ class EosDesigns(EosDesignsRootModel):
 
                                        Subclass of AvdModel.
                                     ebgp_multihop: Time-to-live in range of hops.
+                                    next_hop_peer: next_hop_peer
                                     next_hop_self: next_hop_self
                                     password: password
                                     passive: passive

@@ -1,4 +1,0 @@
----
-### NTP tests for authenticate
-ntp:
-  authenticate: true

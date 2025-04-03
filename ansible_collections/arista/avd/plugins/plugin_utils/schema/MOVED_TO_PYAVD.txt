@@ -1,1 +1,0 @@
-The schema code and metaschema have been moved to PyAVD in the folder /python-avd/pyavd/_schema/

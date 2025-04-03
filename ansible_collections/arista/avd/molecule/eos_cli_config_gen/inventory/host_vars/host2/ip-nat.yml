@@ -1,7 +1,0 @@
----
-### IP NAT ###
-ip_nat:
-  synchronization:
-    shutdown: false
-    port_range:
-      split_disabled: false

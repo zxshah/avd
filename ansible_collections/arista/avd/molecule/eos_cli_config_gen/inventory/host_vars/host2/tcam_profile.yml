@@ -1,5 +1,0 @@
----
-tcam_profile:
-  profiles:
-    - name: MY_TCAM_PROFILE
-      config: Thisisnotaidealinput

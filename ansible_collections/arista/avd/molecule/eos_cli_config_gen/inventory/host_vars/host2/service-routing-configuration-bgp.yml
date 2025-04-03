@@ -1,3 +1,0 @@
----
-service_routing_configuration_bgp:
-  no_equals_default: false

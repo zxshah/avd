@@ -1,8 +1,0 @@
----
-### stun
-stun:
-  server:
-    local_interfaces:
-      - Ethernet1
-    ssl_connection_lifetime:
-      hours: 3

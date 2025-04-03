@@ -1,5 +1,0 @@
----
-management_api_http:
-  enable_http: true
-  enable_https: false
-  default_services: false

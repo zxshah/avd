@@ -1,3 +1,0 @@
----
-monitor_session_default_encapsulation_gre:
-  payload: inner-packet

@@ -1,6 +1,0 @@
----
-### MCS Client ###
-mcs_client:
-  shutdown: true
-  cvx_secondary:
-    name: default

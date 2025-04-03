@@ -22621,7 +22621,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             """Subclass of AvdModel."""
 
             _fields: ClassVar[dict] = {"name": {"type": str}, "interfaces": {"type": str}}
-            name: str | None
+            name: str
             interfaces: str | None
             """
             Interface range(s) should be of same type, Ethernet, Loopback, Management etc.
@@ -22631,7 +22631,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
             if TYPE_CHECKING:
 
-                def __init__(self, *, name: str | None | UndefinedType = Undefined, interfaces: str | None | UndefinedType = Undefined) -> None:
+                def __init__(self, *, name: str | UndefinedType = Undefined, interfaces: str | None | UndefinedType = Undefined) -> None:
                     """
                     InterfaceSetsItem.
 
@@ -22647,8 +22647,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                     """
 
-        class InterfaceSets(AvdList[InterfaceSetsItem]):
-            """Subclass of AvdList with `InterfaceSetsItem` items."""
+        class InterfaceSets(AvdIndexedList[str, InterfaceSetsItem]):
+            """Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`)."""
+
+            _primary_key: ClassVar[str] = "name"
 
         InterfaceSets._item_type = InterfaceSetsItem
 
@@ -22732,12 +22734,12 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 """Subclass of AvdModel."""
 
                 _fields: ClassVar[dict] = {"name": {"type": str}, "interfaces": {"type": str}}
-                name: str | None
+                name: str
                 interfaces: str | None
 
                 if TYPE_CHECKING:
 
-                    def __init__(self, *, name: str | None | UndefinedType = Undefined, interfaces: str | None | UndefinedType = Undefined) -> None:
+                    def __init__(self, *, name: str | UndefinedType = Undefined, interfaces: str | None | UndefinedType = Undefined) -> None:
                         """
                         InterfaceSetsItem.
 
@@ -22750,8 +22752,10 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
 
                         """
 
-            class InterfaceSets(AvdList[InterfaceSetsItem]):
-                """Subclass of AvdList with `InterfaceSetsItem` items."""
+            class InterfaceSets(AvdIndexedList[str, InterfaceSetsItem]):
+                """Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`)."""
+
+                _primary_key: ClassVar[str] = "name"
 
             InterfaceSets._item_type = InterfaceSetsItem
 
@@ -22840,7 +22844,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
             """VRF Name."""
             description: str | None
             interface_sets: InterfaceSets
-            """Subclass of AvdList with `InterfaceSetsItem` items."""
+            """Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`)."""
             local_interfaces: str | None
             address_only: bool
             """
@@ -22876,7 +22880,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                     Args:
                         name: VRF Name.
                         description: description
-                        interface_sets: Subclass of AvdList with `InterfaceSetsItem` items.
+                        interface_sets: Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`).
                         local_interfaces: local_interfaces
                         address_only:
                            When address-only is configured, the source IP of the packet is set to the interface
@@ -22908,7 +22912,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
         shutdown: bool | None
         interval: int | None
         interface_sets: InterfaceSets
-        """Subclass of AvdList with `InterfaceSetsItem` items."""
+        """Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`)."""
         local_interfaces: str | None
         address_only: bool
         """
@@ -22950,7 +22954,7 @@ class EosCliConfigGen(EosCliConfigGenRootModel):
                 Args:
                     shutdown: shutdown
                     interval: interval
-                    interface_sets: Subclass of AvdList with `InterfaceSetsItem` items.
+                    interface_sets: Subclass of AvdIndexedList with `InterfaceSetsItem` items. Primary key is `name` (`str`).
                     local_interfaces: local_interfaces
                     address_only:
                        When address-only is configured, the source IP of the packet is set to the interface

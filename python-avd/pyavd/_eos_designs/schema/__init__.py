@@ -7366,6 +7366,8 @@ class EosDesigns(EosDesignsRootModel):
                     "short_esi": {"type": str},
                     "vlan_id": {"type": int},
                     "encapsulation_vlan": {"type": EncapsulationVlan},
+                    "raw_eos_cli": {"type": str},
+                    "structured_config": {"type": EosCliConfigGen.PortChannelInterfacesItem},
                 }
                 number: int | None
                 """Subinterface number."""
@@ -7387,6 +7389,10 @@ class EosDesigns(EosDesignsRootModel):
 
                 Subclass of AvdModel.
                 """
+                raw_eos_cli: str | None
+                """EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration."""
+                structured_config: EosCliConfigGen.PortChannelInterfacesItem
+                """Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen."""
 
                 if TYPE_CHECKING:
 
@@ -7397,6 +7403,8 @@ class EosDesigns(EosDesignsRootModel):
                         short_esi: str | None | UndefinedType = Undefined,
                         vlan_id: int | None | UndefinedType = Undefined,
                         encapsulation_vlan: EncapsulationVlan | UndefinedType = Undefined,
+                        raw_eos_cli: str | None | UndefinedType = Undefined,
+                        structured_config: EosCliConfigGen.PortChannelInterfacesItem | UndefinedType = Undefined,
                     ) -> None:
                         """
                         SubinterfacesItem.
@@ -7418,6 +7426,8 @@ class EosDesigns(EosDesignsRootModel):
 
 
                                Subclass of AvdModel.
+                            raw_eos_cli: EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration.
+                            structured_config: Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen.
 
                         """
 
@@ -11017,6 +11027,8 @@ class EosDesigns(EosDesignsRootModel):
                     "short_esi": {"type": str},
                     "vlan_id": {"type": int},
                     "encapsulation_vlan": {"type": EncapsulationVlan},
+                    "raw_eos_cli": {"type": str},
+                    "structured_config": {"type": EosCliConfigGen.PortChannelInterfacesItem},
                 }
                 number: int | None
                 """Subinterface number."""
@@ -11038,6 +11050,10 @@ class EosDesigns(EosDesignsRootModel):
 
                 Subclass of AvdModel.
                 """
+                raw_eos_cli: str | None
+                """EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration."""
+                structured_config: EosCliConfigGen.PortChannelInterfacesItem
+                """Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen."""
 
                 if TYPE_CHECKING:
 
@@ -11048,6 +11064,8 @@ class EosDesigns(EosDesignsRootModel):
                         short_esi: str | None | UndefinedType = Undefined,
                         vlan_id: int | None | UndefinedType = Undefined,
                         encapsulation_vlan: EncapsulationVlan | UndefinedType = Undefined,
+                        raw_eos_cli: str | None | UndefinedType = Undefined,
+                        structured_config: EosCliConfigGen.PortChannelInterfacesItem | UndefinedType = Undefined,
                     ) -> None:
                         """
                         SubinterfacesItem.
@@ -11069,6 +11087,8 @@ class EosDesigns(EosDesignsRootModel):
 
 
                                Subclass of AvdModel.
+                            raw_eos_cli: EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration.
+                            structured_config: Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen.
 
                         """
 
@@ -17340,6 +17360,8 @@ class EosDesigns(EosDesignsRootModel):
                                 "short_esi": {"type": str},
                                 "vlan_id": {"type": int},
                                 "encapsulation_vlan": {"type": EncapsulationVlan},
+                                "raw_eos_cli": {"type": str},
+                                "structured_config": {"type": EosCliConfigGen.PortChannelInterfacesItem},
                             }
                             number: int | None
                             """Subinterface number."""
@@ -17361,6 +17383,10 @@ class EosDesigns(EosDesignsRootModel):
 
                             Subclass of AvdModel.
                             """
+                            raw_eos_cli: str | None
+                            """EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration."""
+                            structured_config: EosCliConfigGen.PortChannelInterfacesItem
+                            """Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen."""
 
                             if TYPE_CHECKING:
 
@@ -17371,6 +17397,8 @@ class EosDesigns(EosDesignsRootModel):
                                     short_esi: str | None | UndefinedType = Undefined,
                                     vlan_id: int | None | UndefinedType = Undefined,
                                     encapsulation_vlan: EncapsulationVlan | UndefinedType = Undefined,
+                                    raw_eos_cli: str | None | UndefinedType = Undefined,
+                                    structured_config: EosCliConfigGen.PortChannelInterfacesItem | UndefinedType = Undefined,
                                 ) -> None:
                                     """
                                     SubinterfacesItem.
@@ -17392,6 +17420,8 @@ class EosDesigns(EosDesignsRootModel):
 
 
                                            Subclass of AvdModel.
+                                        raw_eos_cli: EOS CLI rendered directly on the port-channel subinterface in the final EOS configuration.
+                                        structured_config: Custom structured config added under subinterfaces.[name=<interface>] for eos_cli_config_gen.
 
                                     """
 

@@ -1891,7 +1891,7 @@ boot secret 5 <removed>
 
 ### Kernel Device Summary
 
-- Kernel software forwarding ecmp enabled
+- Kernel software forwarding ECMP enabled
 
 ### Kernel Device configuration
 

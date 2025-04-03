@@ -310,8 +310,8 @@
 | Setting | Value |
 | ------- | ----- |
 | Shutdown All Supervisors| True |
-| Shutdown Active Supervisor | True |
-| Shutdown Standby Supervisor | True |
+| Shutdown Active Supervisors | True |
+| Shutdown Standby Supervisors | True |
 
 #### Agent KernelFib
 
@@ -326,8 +326,8 @@
 | Setting | Value |
 | ------- | ----- |
 | Shutdown All Supervisors| - |
-| Shutdown Active Supervisor | True |
-| Shutdown Standby Supervisor | True |
+| Shutdown Active Supervisors | True |
+| Shutdown Standby Supervisors | True |
 
 #### Agent NotRendered
 

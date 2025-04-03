@@ -1076,7 +1076,7 @@ class EosDesigns(EosDesignsRootModel):
                 _fields: ClassVar[dict] = {
                     "description": {"type": str},
                     "mode": {"type": str, "default": "active"},
-                    "channel_id_generation": {"type": str, "default": "first_port"},
+                    "channel_id_algorithm": {"type": str, "default": "first_port"},
                     "channel_id_offset": {"type": int},
                     "nodes_child_interfaces": {"type": NodesChildInterfaces},
                 }
@@ -1103,7 +1103,7 @@ class EosDesigns(EosDesignsRootModel):
                 """
                 mode: Literal["on", "active", "passive"]
                 """Default value: `"active"`"""
-                channel_id_generation: Literal["first_port", "p2p_link_id"]
+                channel_id_algorithm: Literal["first_port", "p2p_link_id"]
                 """
                 Configures how to generate the port-channel ID. By default an id is generated based on the first
                 switch port from node_child_interfaces[].interfaces.
@@ -1124,7 +1124,7 @@ class EosDesigns(EosDesignsRootModel):
                         *,
                         description: str | None | UndefinedType = Undefined,
                         mode: Literal["on", "active", "passive"] | UndefinedType = Undefined,
-                        channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                        channel_id_algorithm: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
                         channel_id_offset: int | None | UndefinedType = Undefined,
                         nodes_child_interfaces: NodesChildInterfaces | UndefinedType = Undefined,
                     ) -> None:
@@ -1155,7 +1155,7 @@ class EosDesigns(EosDesignsRootModel):
                                By default the description is templated from the
                                name and port_channel interface of the peer.
                             mode: mode
-                            channel_id_generation:
+                            channel_id_algorithm:
                                Configures how to generate the port-channel ID. By default an id is generated based on the first
                                switch port from node_child_interfaces[].interfaces.
 
@@ -1639,7 +1639,7 @@ class EosDesigns(EosDesignsRootModel):
                 _fields: ClassVar[dict] = {
                     "description": {"type": str},
                     "mode": {"type": str, "default": "active"},
-                    "channel_id_generation": {"type": str, "default": "first_port"},
+                    "channel_id_algorithm": {"type": str, "default": "first_port"},
                     "channel_id_offset": {"type": int},
                     "nodes_child_interfaces": {"type": NodesChildInterfaces},
                 }
@@ -1666,7 +1666,7 @@ class EosDesigns(EosDesignsRootModel):
                 """
                 mode: Literal["on", "active", "passive"]
                 """Default value: `"active"`"""
-                channel_id_generation: Literal["first_port", "p2p_link_id"]
+                channel_id_algorithm: Literal["first_port", "p2p_link_id"]
                 """
                 Configures how to generate the port-channel ID. By default an id is generated based on the first
                 switch port from node_child_interfaces[].interfaces.
@@ -1687,7 +1687,7 @@ class EosDesigns(EosDesignsRootModel):
                         *,
                         description: str | None | UndefinedType = Undefined,
                         mode: Literal["on", "active", "passive"] | UndefinedType = Undefined,
-                        channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                        channel_id_algorithm: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
                         channel_id_offset: int | None | UndefinedType = Undefined,
                         nodes_child_interfaces: NodesChildInterfaces | UndefinedType = Undefined,
                     ) -> None:
@@ -1718,7 +1718,7 @@ class EosDesigns(EosDesignsRootModel):
                                By default the description is templated from the
                                name and port_channel interface of the peer.
                             mode: mode
-                            channel_id_generation:
+                            channel_id_algorithm:
                                Configures how to generate the port-channel ID. By default an id is generated based on the first
                                switch port from node_child_interfaces[].interfaces.
 
@@ -4990,7 +4990,7 @@ class EosDesigns(EosDesignsRootModel):
                 _fields: ClassVar[dict] = {
                     "description": {"type": str},
                     "mode": {"type": str, "default": "active"},
-                    "channel_id_generation": {"type": str, "default": "first_port"},
+                    "channel_id_algorithm": {"type": str, "default": "first_port"},
                     "channel_id_offset": {"type": int},
                     "nodes_child_interfaces": {"type": NodesChildInterfaces},
                 }
@@ -5017,7 +5017,7 @@ class EosDesigns(EosDesignsRootModel):
                 """
                 mode: Literal["on", "active", "passive"]
                 """Default value: `"active"`"""
-                channel_id_generation: Literal["first_port", "p2p_link_id"]
+                channel_id_algorithm: Literal["first_port", "p2p_link_id"]
                 """
                 Configures how to generate the port-channel ID. By default an id is generated based on the first
                 switch port from node_child_interfaces[].interfaces.
@@ -5038,7 +5038,7 @@ class EosDesigns(EosDesignsRootModel):
                         *,
                         description: str | None | UndefinedType = Undefined,
                         mode: Literal["on", "active", "passive"] | UndefinedType = Undefined,
-                        channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                        channel_id_algorithm: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
                         channel_id_offset: int | None | UndefinedType = Undefined,
                         nodes_child_interfaces: NodesChildInterfaces | UndefinedType = Undefined,
                     ) -> None:
@@ -5069,7 +5069,7 @@ class EosDesigns(EosDesignsRootModel):
                                By default the description is templated from the
                                name and port_channel interface of the peer.
                             mode: mode
-                            channel_id_generation:
+                            channel_id_algorithm:
                                Configures how to generate the port-channel ID. By default an id is generated based on the first
                                switch port from node_child_interfaces[].interfaces.
 
@@ -5553,7 +5553,7 @@ class EosDesigns(EosDesignsRootModel):
                 _fields: ClassVar[dict] = {
                     "description": {"type": str},
                     "mode": {"type": str, "default": "active"},
-                    "channel_id_generation": {"type": str, "default": "first_port"},
+                    "channel_id_algorithm": {"type": str, "default": "first_port"},
                     "channel_id_offset": {"type": int},
                     "nodes_child_interfaces": {"type": NodesChildInterfaces},
                 }
@@ -5580,7 +5580,7 @@ class EosDesigns(EosDesignsRootModel):
                 """
                 mode: Literal["on", "active", "passive"]
                 """Default value: `"active"`"""
-                channel_id_generation: Literal["first_port", "p2p_link_id"]
+                channel_id_algorithm: Literal["first_port", "p2p_link_id"]
                 """
                 Configures how to generate the port-channel ID. By default an id is generated based on the first
                 switch port from node_child_interfaces[].interfaces.
@@ -5601,7 +5601,7 @@ class EosDesigns(EosDesignsRootModel):
                         *,
                         description: str | None | UndefinedType = Undefined,
                         mode: Literal["on", "active", "passive"] | UndefinedType = Undefined,
-                        channel_id_generation: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
+                        channel_id_algorithm: Literal["first_port", "p2p_link_id"] | UndefinedType = Undefined,
                         channel_id_offset: int | None | UndefinedType = Undefined,
                         nodes_child_interfaces: NodesChildInterfaces | UndefinedType = Undefined,
                     ) -> None:
@@ -5632,7 +5632,7 @@ class EosDesigns(EosDesignsRootModel):
                                By default the description is templated from the
                                name and port_channel interface of the peer.
                             mode: mode
-                            channel_id_generation:
+                            channel_id_algorithm:
                                Configures how to generate the port-channel ID. By default an id is generated based on the first
                                switch port from node_child_interfaces[].interfaces.
 

@@ -10485,7 +10485,7 @@ $defs:
               - active
               - passive
               default: active
-            channel_id_generation:
+            channel_id_algorithm:
               type: str
               valid_values:
               - first_port

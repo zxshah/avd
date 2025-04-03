@@ -12,6 +12,9 @@ cv_pathfinder_regions:  # (1)!
       - name: SITE1
         id: 101
         location: Copenhagen, Denmark
+      - name: SITE4
+        id: 102
+        location: Stockholm, Sweden
   - name: REGION2
     id: 2
     sites:

@@ -215,6 +215,10 @@ prefix_lists:
   sequence_numbers:
   - sequence: 10
     action: permit 192.168.42.0/24 eq 32
+- name: PL-DPS-WAN-OVERLAY
+  sequence_numbers:
+  - sequence: 10
+    action: permit 192.168.142.14/32 eq 32
 route_maps:
 - name: RM-CONN-2-BGP
   sequence_numbers:
@@ -224,6 +228,10 @@ route_maps:
     - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
     set:
     - extcommunity soo 192.168.42.14:12 additive
+  - sequence: 80
+    type: permit
+    match:
+    - ip address prefix-list PL-DPS-WAN-OVERLAY
 - name: RM-BGP-UNDERLAY-PEERS-IN
   sequence_numbers:
   - sequence: 40
@@ -253,6 +261,7 @@ route_maps:
     - extcommunity ECL-EVPN-SOO
 router_adaptive_virtual_topology:
   topology_role: edge
+  gateway_vxlan: true
   region:
     name: AVD_Land_West
     id: 42
@@ -357,7 +366,7 @@ router_bgp:
   neighbors:
   - ip_address: 172.18.0.26
     peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65042'
+    remote_as: '65000'
     peer: leaf-wan-use-evpn-on-lan
     description: leaf-wan-use-evpn-on-lan_Ethernet2
   - ip_address: 192.168.144.1
@@ -369,11 +378,16 @@ router_bgp:
       enabled: true
       route_map: RM-CONN-2-BGP
   address_family_evpn:
+    neighbor_default:
+      next_hop_self_received_evpn_routes:
+        enable: true
+        inter_domain: true
     peer_groups:
     - name: WAN-OVERLAY-PEERS
       activate: true
       route_map_in: RM-EVPN-SOO-IN
       route_map_out: RM-EVPN-SOO-OUT
+      domain_remote: true
       encapsulation: path-selection
   address_family_ipv4:
     peer_groups:

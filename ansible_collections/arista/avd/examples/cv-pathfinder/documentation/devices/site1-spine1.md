@@ -1,4 +1,4 @@
-# mpls-cloud
+# site1-spine1
 
 ## Table of Contents
 
@@ -14,6 +14,7 @@
   - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
+  - [Flow Tracking](#flow-tracking)
 - [Spanning Tree](#spanning-tree)
   - [Spanning Tree Summary](#spanning-tree-summary)
   - [Spanning Tree Device Configuration](#spanning-tree-device-configuration)
@@ -48,7 +49,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.17.30/24 | 192.168.17.1 |
+| Management1 | OOB_MANAGEMENT | oob | MGMT | 192.168.17.101/24 | 192.168.17.1 |
 
 ##### IPv6
 
@@ -64,7 +65,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf MGMT
-   ip address 192.168.17.30/24
+   ip address 192.168.17.101/24
    no lldp transmit
    no lldp receive
 ```
@@ -205,6 +206,41 @@ daemon TerminAttr
    no shutdown
 ```
 
+### Flow Tracking
+
+#### Flow Tracking Sampled
+
+| Sample Size | Minimum Sample Size | Hardware Offload for IPv4 | Hardware Offload for IPv6 | Encapsulations |
+| ----------- | ------------------- | ------------------------- | ------------------------- | -------------- |
+| 10000 | default | disabled | disabled | - |
+
+##### Trackers Summary
+
+| Tracker Name | Record Export On Inactive Timeout | Record Export On Interval | MPLS | Number of Exporters | Applied On | Table Size |
+| ------------ | --------------------------------- | ------------------------- | ---- | ------------------- | ---------- | ---------- |
+| FLOW-TRACKER | 70000 | 5000 | - | 1 | Ethernet1<br>Ethernet2 | - |
+
+##### Exporters Summary
+
+| Tracker Name | Exporter Name | Collector IP/Host | Collector Port | Local Interface |
+| ------------ | ------------- | ----------------- | -------------- | --------------- |
+| FLOW-TRACKER | CV-TELEMETRY | - | - | Loopback0 |
+
+#### Flow Tracking Device Configuration
+
+```eos
+!
+flow tracking sampled
+   sample 10000
+   tracker FLOW-TRACKER
+      record export on inactive timeout 70000
+      record export on interval 5000
+      exporter CV-TELEMETRY
+         collector 127.0.0.1
+         local interface Loopback0
+   no shutdown
+```
+
 ## Spanning Tree
 
 ### Spanning Tree Summary
@@ -250,52 +286,28 @@ vlan internal order ascending range 1006 1199
 
 | Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
 | --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | pf1-Ethernet1 | - | 172.18.100.1/24 | default | - | False | - | - |
-| Ethernet2 | pf2-Ethernet1 | - | 172.18.200.1/24 | default | - | False | - | - |
-| Ethernet5 | site1-wan1-Ethernet3 | - | 172.18.10.1/24 | default | - | False | - | - |
-| Ethernet6 | site1-wan2-Ethernet3 | - | 172.18.11.1/24 | default | - | False | - | - |
-| Ethernet7 | site2-wan1-Ethernet3 | - | 172.18.20.1/24 | default | - | False | - | - |
-| Ethernet8 | site4-wan1-Ethernet3 | - | 172.18.40.1/24 | default | - | False | - | - |
+| Ethernet1 | P2P_site1-border1_Ethernet1 | - | 10.0.5.8/31 | default | 9214 | False | - | - |
+| Ethernet2 | P2P_site1-border2_Ethernet1 | - | 10.0.5.10/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
 ```eos
 !
 interface Ethernet1
-   description pf1-Ethernet1
+   description P2P_site1-border1_Ethernet1
    no shutdown
+   mtu 9214
    no switchport
-   ip address 172.18.100.1/24
+   flow tracker sampled FLOW-TRACKER
+   ip address 10.0.5.8/31
 !
 interface Ethernet2
-   description pf2-Ethernet1
+   description P2P_site1-border2_Ethernet1
    no shutdown
+   mtu 9214
    no switchport
-   ip address 172.18.200.1/24
-!
-interface Ethernet5
-   description site1-wan1-Ethernet3
-   no shutdown
-   no switchport
-   ip address 172.18.10.1/24
-!
-interface Ethernet6
-   description site1-wan2-Ethernet3
-   no shutdown
-   no switchport
-   ip address 172.18.11.1/24
-!
-interface Ethernet7
-   description site2-wan1-Ethernet3
-   no shutdown
-   no switchport
-   ip address 172.18.20.1/24
-!
-interface Ethernet8
-   description site4-wan1-Ethernet3
-   no shutdown
-   no switchport
-   ip address 172.18.40.1/24
+   flow tracker sampled FLOW-TRACKER
+   ip address 10.0.5.10/31
 ```
 
 ### Loopback Interfaces
@@ -306,7 +318,7 @@ interface Ethernet8
 
 | Interface | Description | VRF | IP Address |
 | --------- | ----------- | --- | ---------- |
-| Loopback0 | ROUTER_ID | default | 172.31.255.22/32 |
+| Loopback0 | ROUTER_ID | default | 192.168.255.18/32 |
 
 ##### IPv6
 
@@ -321,7 +333,7 @@ interface Ethernet8
 interface Loopback0
    description ROUTER_ID
    no shutdown
-   ip address 172.31.255.22/32
+   ip address 192.168.255.18/32
 ```
 
 ## Routing
@@ -384,7 +396,7 @@ ASN Notation: asplain
 
 | BGP AS | Router ID |
 | ------ | --------- |
-| 65042 | 172.31.255.22 |
+| 65110 | 192.168.255.18 |
 
 | BGP Tuning |
 | ---------- |
@@ -413,6 +425,17 @@ ASN Notation: asplain
 | Send community | all |
 | Maximum routes | 12000 |
 
+#### BGP Neighbors
+
+| Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
+| -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
+| 10.0.5.9 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 10.0.5.11 | 65101 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
+| 192.168.255.3 | 65000 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 192.168.255.4 | 65000 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 192.168.255.5 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+| 192.168.255.6 | 65101 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
+
 #### Router BGP EVPN Address Family
 
 ##### EVPN Peer Groups
@@ -425,8 +448,8 @@ ASN Notation: asplain
 
 ```eos
 !
-router bgp 65042
-   router-id 172.31.255.22
+router bgp 65110
+   router-id 192.168.255.18
    no bgp default ipv4-unicast
    maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group
@@ -439,6 +462,24 @@ router bgp 65042
    neighbor IPv4-UNDERLAY-PEERS peer group
    neighbor IPv4-UNDERLAY-PEERS send-community
    neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
+   neighbor 10.0.5.9 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.0.5.9 remote-as 65101
+   neighbor 10.0.5.9 description site1-border1_Ethernet1
+   neighbor 10.0.5.11 peer group IPv4-UNDERLAY-PEERS
+   neighbor 10.0.5.11 remote-as 65101
+   neighbor 10.0.5.11 description site1-border2_Ethernet1
+   neighbor 192.168.255.3 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.3 remote-as 65000
+   neighbor 192.168.255.3 description site1-wan1_Loopback0
+   neighbor 192.168.255.4 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.4 remote-as 65000
+   neighbor 192.168.255.4 description site1-wan2_Loopback0
+   neighbor 192.168.255.5 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.5 remote-as 65101
+   neighbor 192.168.255.5 description site1-border1_Loopback0
+   neighbor 192.168.255.6 peer group EVPN-OVERLAY-PEERS
+   neighbor 192.168.255.6 remote-as 65101
+   neighbor 192.168.255.6 description site1-border2_Loopback0
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn
@@ -477,14 +518,14 @@ router bfd
 
 | Sequence | Action |
 | -------- | ------ |
-| 10 | permit 172.31.255.0/24 eq 32 |
+| 10 | permit 192.168.255.0/24 eq 32 |
 
 #### Prefix-lists Device Configuration
 
 ```eos
 !
 ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-   seq 10 permit 172.31.255.0/24 eq 32
+   seq 10 permit 192.168.255.0/24 eq 32
 ```
 
 ### Route-maps

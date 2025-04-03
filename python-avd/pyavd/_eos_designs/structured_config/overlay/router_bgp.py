@@ -117,7 +117,7 @@ class RouterBgpMixin(Protocol):
                 peer_groups.append(mpls_peer_group)
 
             # TODO: AVD 6.0.0 remove the check for WAN routers.
-            if self.shared_utils.overlay_evpn_vxlan is True and (not self.shared_utils.is_wan_router or self.inputs.wan_use_evpn_node_settings_for_lan):
+            if self.shared_utils.overlay_evpn_vxlan is True:
                 evpn_overlay_peer_group = self._generate_base_peer_group("evpn", "evpn_overlay_peers")
                 evpn_overlay_peer_group.remote_as = self.shared_utils.bgp_as
                 # EVPN OVERLAY peer group - also in EBGP..
@@ -176,7 +176,7 @@ class RouterBgpMixin(Protocol):
                 peer_groups.append_new(name=self.inputs.bgp_peer_groups.wan_rr_overlay_peers.name, activate=False)
 
         # TODO: no elif
-        elif self.shared_utils.overlay_evpn_vxlan is True:
+        if self.shared_utils.overlay_evpn_vxlan is True:
             peer_groups.append_new(name=self.inputs.bgp_peer_groups.evpn_overlay_peers.name, activate=False)
 
         if self.shared_utils.overlay_routing_protocol == "ebgp" and (
@@ -202,6 +202,10 @@ class RouterBgpMixin(Protocol):
                 activate=True,
                 encapsulation=self.inputs.wan_encapsulation,
             )
+
+            if self.shared_utils.evpn_wan_gateway:
+                wan_overlay_peer_group.domain_remote = True
+
             if self.shared_utils.wan_role != "server":
                 wan_overlay_peer_group._update(
                     route_map_in="RM-EVPN-SOO-IN",
@@ -279,6 +283,10 @@ class RouterBgpMixin(Protocol):
                 activate=True,
                 encapsulation=self.inputs.wan_encapsulation,
             )
+
+        if self.shared_utils.evpn_wan_gateway:
+            self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes.enable = True
+            self.structured_config.router_bgp.address_family_evpn.neighbor_default.next_hop_self_received_evpn_routes.inter_domain = True
 
     def _set_address_family_ipv4_sr_te(self: AvdStructuredConfigOverlayProtocol) -> None:
         """Set the structured config for IPv4 SR-TE address family."""

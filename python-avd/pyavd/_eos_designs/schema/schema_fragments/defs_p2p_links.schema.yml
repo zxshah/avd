@@ -188,6 +188,22 @@ $defs:
               type: str
               valid_values: ["on", "active", "passive"]
               default: active
+            channel_id_algorithm:
+              type: str
+              valid_values:
+                - "first_port"
+                - "p2p_link_id"
+              default: "first_port"
+              description: |-
+                  Configures how to generate the port-channel ID. By default an id is generated based on the first switch port from node_child_interfaces[].interfaces.
+
+                  The `p2p_link_id` setting will use the `id` for each link added with the `channel_id_offset` to determine the port-channel interface name.
+            channel_id_offset:
+              type: int
+              convert_types:
+                - str
+              min: 0
+              max: 900000
             nodes_child_interfaces:
               type: list
               primary_key: node

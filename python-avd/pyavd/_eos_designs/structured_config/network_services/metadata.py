@@ -50,7 +50,8 @@ class MetadataMixin(Protocol):
         self.structured_config.metadata.cv_pathfinder.internet_exit_policies.append(exit_policy)
 
     def set_cv_pathfinder_metadata_applications(self: AvdStructuredConfigNetworkServicesProtocol) -> None:
-        """Set the metadata.cv_pathfinder.applications if available.
+        """
+        Set the metadata.cv_pathfinder.applications if available.
 
         This is called after the structured_config has been populated.
         """

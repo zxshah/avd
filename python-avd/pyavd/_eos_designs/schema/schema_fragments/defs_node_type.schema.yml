@@ -1457,6 +1457,45 @@ $defs:
               new_key: inband_mgmt_vlan
               remove_in_version: 5.0.0
             type: int
+          underlay_multicast:
+            type: dict
+            keys:
+              pim_sm:
+                type: dict
+                keys:
+                  enabled:
+                    type: bool
+                    description: Enable/Disable Protocol Independent Multicast sparse mode in the underlay on all p2p uplink interfaces, mlag l3 peer interface and core interfaces for the specific node.
+                  uplinks:
+                    type: bool
+                    default: true
+                    description: Enable/Disable Protocol Independent Multicast sparse mode in the underlay on specific p2p uplink interfaces. If not set, all uplinks will be enabled. Set as False to remove all uplinks.
+                  uplink_interfaces:
+                    description: Uplink Interface names to enable for Protocol Independent Multicast sparse mode.
+                    type: list
+                    items:
+                      type: str
+                  mlag:
+                    description: Enable/Disable Protocol Independent Multicast sparse mode in the underlay on all mlag l3 peer interface and core interfaces for the specific node.
+                    type: bool
+              static:
+                type: dict
+                keys:
+                  enabled:
+                    type: bool
+                    description: Enable/Disable static Multicast in the underlay on all p2p uplink interfaces, mlag l3 peer interface and core interfaces for the specific node.
+                  uplinks:
+                    type: bool
+                    default: true
+                    description: Enable/Disable static Protocol Independent Multicast in the underlay on specific p2p uplink interfaces. If not set, all uplinks will be enabled. Set as False to remove all uplinks.
+                  uplink_interfaces:
+                    description: Uplink Interface names to enable for static multicast.
+                    type: list
+                    items:
+                      type: str
+                  mlag:
+                    description: Enable/Disable static Multicast in the underlay on all mlag l3 peer interface and core interfaces for the specific node.
+                    type: bool
       node_groups:
         type: list
         description: Define variables related to all nodes part of this group.

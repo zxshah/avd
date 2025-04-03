@@ -7,6 +7,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
+from pyavd._utils import default
 
 if TYPE_CHECKING:
     from . import SharedUtilsProtocol
@@ -62,8 +63,16 @@ class UnderlayMixin(Protocol):
         return self.inputs.underlay_multicast and self.underlay_router
 
     @cached_property
+    def underlay_multicast_pim_sm(self: SharedUtilsProtocol) -> bool | None:
+        return self.inputs.underlay_multicast_pim_sm and self.underlay_router
+
+    @cached_property
+    def underlay_multicast_static(self: SharedUtilsProtocol) -> bool | None:
+        return self.inputs.underlay_multicast_static and self.underlay_router
+
+    @cached_property
     def underlay_multicast_rp_interfaces(self: SharedUtilsProtocol) -> list[EosCliConfigGen.LoopbackInterfacesItem] | None:
-        if not self.underlay_multicast or not self.inputs.underlay_multicast_rps:
+        if not (self.underlay_multicast or self.underlay_multicast_pim_sm) or not self.inputs.underlay_multicast_rps:
             return None
 
         underlay_multicast_rp_interfaces = []
@@ -83,3 +92,19 @@ class UnderlayMixin(Protocol):
             return underlay_multicast_rp_interfaces
 
         return None
+
+    @cached_property
+    def underlay_multicast_pim_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.pim_sm.enabled, self.underlay_multicast_pim_sm))
+
+    @cached_property
+    def underlay_multicast_static_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.static.enabled, self.underlay_multicast_static))
+
+    @cached_property
+    def underlay_multicast_pim_mlag_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.pim_sm.mlag, self.underlay_multicast_pim_enabled))
+
+    @cached_property
+    def underlay_multicast_static_mlag_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.static.mlag, self.underlay_multicast_static_enabled))

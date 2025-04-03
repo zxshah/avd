@@ -78,6 +78,7 @@ class UtilsMixin(Protocol):
                     short_esi=uplink.peer_short_esi,
                     mlag=uplink.peer_mlag,
                     underlay_multicast=uplink.underlay_multicast,
+                    underlay_multicast_settings=uplink.underlay_multicast_settings,
                     ipv6_enable=uplink.ipv6_enable,
                     sflow_enabled=self.inputs.fabric_sflow.downlinks,
                     flow_tracking=downlinks_flow_tracking,

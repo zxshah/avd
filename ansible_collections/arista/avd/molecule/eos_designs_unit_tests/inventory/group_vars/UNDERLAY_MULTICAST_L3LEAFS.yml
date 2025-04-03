@@ -34,6 +34,12 @@ l3leaf:
           id: 2
           mgmt_ip: 192.168.200.106/24
           uplink_switch_interfaces: [Ethernet2, Ethernet2]
+          underlay_multicast:
+            pim_sm:
+              enabled: true
+              uplinks:
+                - Ethernet2
+              mlag: false
     # Test multicast configuration with mlag pair sharing same vlan for l3 peering (4094)
     # Expected results:
     # - router multicast enabled for ipv4

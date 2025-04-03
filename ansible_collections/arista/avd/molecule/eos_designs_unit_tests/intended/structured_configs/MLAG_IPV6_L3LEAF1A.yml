@@ -162,9 +162,6 @@ vlan_interfaces:
   description: MLAG
   shutdown: false
   ipv6_address: 2001:db8:0:2::1/64
-  multicast:
-    ipv4:
-      static: true
   mtu: 9214
   no_autostate: true
 vlan_internal_order:

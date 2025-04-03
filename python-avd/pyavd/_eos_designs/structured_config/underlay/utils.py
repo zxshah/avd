@@ -46,7 +46,6 @@ class UtilsMixin(Protocol):
             uplink["flow_tracking"] = self.inputs.fabric_flow_tracking.uplinks
 
         downlinks_flow_tracking = self.inputs.fabric_flow_tracking.downlinks if self.inputs.fabric_flow_tracking.downlinks.enabled else None
-
         for peer in self._avd_peers:
             peer_facts = self.shared_utils.get_peer_facts(peer, required=True)
             for uplink in peer_facts["uplinks"]:
@@ -75,8 +74,10 @@ class UtilsMixin(Protocol):
                         "short_esi": get(uplink, "peer_short_esi"),
                         "mlag": get(uplink, "peer_mlag"),
                         "underlay_multicast": get(uplink, "underlay_multicast"),
-                        "underlay_multicast_pim_sm": get(uplink, "underlay_multicast_pim_sm"),
-                        "underlay_multicast_static": get(uplink, "underlay_multicast_static"),
+                        "underlay_multicast_pim_sm_enabled": get(uplink, "underlay_multicast_pim_sm_enabled"),
+                        "underlay_multicast_static_enabled": get(uplink, "underlay_multicast_static_enabled"),
+                        "underlay_multicast_pim_sm_uplinks": get(uplink, "underlay_multicast_pim_sm_uplinks"),
+                        "underlay_multicast_static_uplinks": get(uplink, "underlay_multicast_static_uplinks"),
                         "ipv6_enable": get(uplink, "ipv6_enable"),
                         "sflow": {"enable": self.inputs.fabric_sflow.downlinks},
                         "flow_tracking": downlinks_flow_tracking,

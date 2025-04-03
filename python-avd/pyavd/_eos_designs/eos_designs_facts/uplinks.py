@@ -196,11 +196,15 @@ class UplinksMixin(Protocol):
         if self.shared_utils.underlay_multicast is True and uplink_switch_facts.shared_utils.underlay_multicast is True:
             uplink["underlay_multicast"] = True
 
-        if self.shared_utils.underlay_multicast_pim_sm and uplink_switch_facts.shared_utils.underlay_multicast_pim_sm:
-            uplink["underlay_multicast_pim_sm"] = True
+        if self.shared_utils.underlay_multicast_pim_enabled and uplink_switch_facts.shared_utils.underlay_multicast_pim_enabled:
+            uplink["underlay_multicast_pim_sm_enabled"] = True
+            if self.shared_utils.node_config.underlay_multicast.pim_sm.uplinks:
+                uplink["underlay_multicast_pim_sm_uplinks"] = self.shared_utils.node_config.underlay_multicast.pim_sm.uplinks
 
-        if self.shared_utils.underlay_multicast_static and uplink_switch_facts.shared_utils.underlay_multicast_static:
-            uplink["underlay_multicast_static"] = True
+        if self.shared_utils.underlay_multicast_static_enabled and uplink_switch_facts.shared_utils.underlay_multicast_static_enabled:
+            uplink["underlay_multicast_static_enabled"] = True
+            if self.shared_utils.node_config.underlay_multicast.static.uplinks:
+                uplink["underlay_multicast_static_uplinks"] = self.shared_utils.node_config.underlay_multicast.static.uplinks
 
         if self.inputs.underlay_rfc5549:
             uplink["ipv6_enable"] = True

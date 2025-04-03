@@ -31,8 +31,6 @@ class EthernetInterfacesMixin(Protocol):
                 ethernet_interface.ptp = self._get_ptp_config_interface(p2p_link, output_type=EosCliConfigGen.EthernetInterfacesItem.Ptp)
                 ethernet_interface.description = self._p2p_link_ethernet_description(p2p_link_data)
                 ethernet_interface.speed = p2p_link.speed
-                if p2p_link.underlay_multicast_static and self.shared_utils.underlay_multicast_static:
-                    ethernet_interface.multicast.ipv4.static = True
                 self.structured_config.ethernet_interfaces.append(ethernet_interface)
 
             # Port-Channel members

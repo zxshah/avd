@@ -162,9 +162,6 @@ vlan_interfaces:
   description: MLAG
   shutdown: false
   ipv6_address: 2001:db8:0:2::2/64
-  pim:
-    ipv4:
-      sparse_mode: true
   mtu: 9214
   no_autostate: true
 vlan_internal_order:

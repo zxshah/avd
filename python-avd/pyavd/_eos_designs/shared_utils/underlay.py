@@ -7,6 +7,7 @@ from functools import cached_property
 from typing import TYPE_CHECKING, Protocol
 
 from pyavd._eos_cli_config_gen.schema import EosCliConfigGen
+from pyavd._utils import default
 
 if TYPE_CHECKING:
     from . import SharedUtilsProtocol
@@ -93,37 +94,17 @@ class UnderlayMixin(Protocol):
         return None
 
     @cached_property
-    def underlay_multicast_pim_enabled(self: SharedUtilsProtocol) -> bool | None:
-        if self.node_config.underlay_multicast.pim_sm.enabled:
-            return True
-        return None
+    def underlay_multicast_pim_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.pim_sm.enabled, self.underlay_multicast_pim_sm))
 
     @cached_property
-    def underlay_multicast_pim_uplinks(self: SharedUtilsProtocol) -> list[str] | None:
-        if not self.node_config.underlay_multicast.pim_sm.uplinks:
-            return None
-        return [str(interface) for interface in self.node_config.underlay_multicast.pim_sm.uplinks]
+    def underlay_multicast_static_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.static.enabled, self.underlay_multicast_static))
 
     @cached_property
-    def underlay_multicast_pim_mlag(self: SharedUtilsProtocol) -> bool | None:
-        if self.node_config.underlay_multicast.pim_sm.mlag:
-            return True
-        return None
+    def underlay_multicast_pim_mlag_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.pim_sm.mlag, self.underlay_multicast_pim_enabled))
 
     @cached_property
-    def underlay_multicast_static_enabled(self: SharedUtilsProtocol) -> bool | None:
-        if self.node_config.underlay_multicast.static.enabled:
-            return True
-        return None
-
-    @cached_property
-    def underlay_multicast_static_uplinks(self: SharedUtilsProtocol) -> list[str] | None:
-        if not self.node_config.underlay_multicast.static.uplinks:
-            return None
-        return [str(interface) for interface in self.node_config.underlay_multicast.static.uplinks]
-
-    @cached_property
-    def underlay_multicast_static_mlag(self: SharedUtilsProtocol) -> bool | None:
-        if self.node_config.underlay_multicast.static.mlag:
-            return True
-        return None
+    def underlay_multicast_static_mlag_enabled(self: SharedUtilsProtocol) -> bool:
+        return bool(default(self.node_config.underlay_multicast.static.mlag, self.underlay_multicast_static_enabled))

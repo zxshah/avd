@@ -127,11 +127,37 @@ jobs:
           pip install -r .github/requirements-ci-dev.txt -r ansible_collections/arista/avd/requirements-dev.txt --upgrade
 
   # ----------------------------------- #
+  # Build Collection
+  # ----------------------------------- #
+  build_pyavd:
+    name: Build pyavd
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: |
+            3.12
+      - name: Create wheel packages of pyavd dependencies
+        run: |
+          pip install build
+          cd python-avd
+          python -m build --wheel --outdir /tmp/pyavd
+      - name: Compress wheel packages
+        run: tar -czf /tmp/pyavd.tar.gz -C /tmp pyavd
+      - name: Upload pyavd artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyavd
+          path: /tmp/pyavd.tar.gz
+
+  # ----------------------------------- #
   # EOS CLI CONFIG GEN MOLECULE
   # ----------------------------------- #
   molecule_eos_cli_config_gen:
     name: Validate eos_cli_config_gen
     runs-on: ubuntu-latest
+    needs: [build_pyavd, file-changes]
     strategy:
       fail-fast: true
       matrix:
@@ -140,26 +166,33 @@ jobs:
           - "eos_cli_config_gen_deprecated_vars"
           - "eos_cli_config_gen_negative_unit_tests"
         ansible_version:
-          - "ansible-core<2.19.0 --upgrade"
+          - "ansible-core<2.19.0"
         # Also test minimum ansible version for one scenario.
         include:
           - avd_scenario: "eos_cli_config_gen"
             ansible_version: "ansible-core==2.16.0"
-    needs: [file-changes]
     if: needs.file-changes.outputs.config_gen == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: "ansible_collections/arista/avd"
-          molecule_command: "test"
-          molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-          pip_file: .github/requirements-ci-dev.txt
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install pyavd, Ansible Version & Run Molecule
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: molecule-${{ matrix.avd_scenario }}-artifacts
@@ -175,22 +208,30 @@ jobs:
       fail-fast: true
       matrix:
         avd_scenario: ["dhcp_configuration", "dhcp_provisioning"]
-        ansible_version: ["ansible-core<2.19.0 --upgrade"]
-    needs: [file-changes]
+        ansible_version: ["ansible-core<2.19.0"]
+    needs: [build_pyavd, file-changes]
     if: needs.file-changes.outputs.dhcp == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: "ansible_collections/arista/avd"
-          molecule_command: "test"
-          molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-          pip_file: .github/requirements-ci-dev.txt
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install pyavd, Ansible Version & Run Tests
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: molecule-${{ matrix.avd_scenario }}-artifacts
@@ -225,41 +266,38 @@ jobs:
           - "example-cv-pathfinder"
         ansible_version:
           # Testing all scenario with 2.16.x, due to bug with in 2.17.0 with and the way we test eos_designs_negative_unit_tests https://github.com/ansible/ansible/issues/83292
-          - "ansible-core>=2.16.0,<2.17.0 --upgrade"
-        pip_requirements:
-          - ".github/requirements-ci-dev.txt"
+          - "ansible-core>=2.16.0,<2.17.0"
         # Also test minimum ansible version for one scenario.
         include:
           - avd_scenario: "eos_designs_unit_tests"
-            ansible_version: "ansible-core==2.16.0 --upgrade"
-            pip_requirements: ".github/requirements-ci-dev.txt"
+            ansible_version: "ansible-core==2.16.0"
           - avd_scenario: "eos_designs_unit_tests"
-            ansible_version: "ansible-core<2.18.0 --upgrade"
-            pip_requirements: ".github/requirements-ci-dev.txt"
+            ansible_version: "ansible-core<2.18.0"
           - avd_scenario: "eos_designs_unit_tests"
-            ansible_version: "ansible-core<2.19.0 --upgrade"
-            pip_requirements: ".github/requirements-ci-dev.txt"
-    needs: [file-changes]
+            ansible_version: "ansible-core<2.19.0"
+    needs: [build_pyavd, file-changes]
     if: needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.config_gen == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Build minimum requirements
-        run: |
-          pip install uv
-          uv pip compile .github/requirements-ci-dev.txt --resolution=lowest-direct > ${{ matrix.pip_requirements }}
-          cat ${{ matrix.pip_requirements }}
-        if: matrix.pip_requirements == 'tmp-requirements-minimum.txt'
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: "ansible_collections/arista/avd"
-          molecule_command: "test"
-          molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-          pip_file: ${{ matrix.pip_requirements }}
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install pyavd, Ansible Version & Run Tests
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: molecule-${{ matrix.avd_scenario }}-artifacts
@@ -276,26 +314,34 @@ jobs:
         avd_scenario:
           - "eos_config_deploy_cvp"
         ansible_version:
-          - "ansible-core<2.19.0 --upgrade"
+          - "ansible-core<2.19.0"
         include:
           - avd_scenario: "eos_config_deploy_cvp"
             ansible_version: "ansible-core==2.16.0"
-    needs: [file-changes]
+    needs: [build_pyavd, file-changes]
     if: needs.file-changes.outputs.cloudvision == 'true' || needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.config_gen == 'true'
 
     steps:
       - uses: actions/checkout@v4
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: "ansible_collections/arista/avd"
-          molecule_command: "test"
-          molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-          pip_file: .github/requirements-ci-dev.txt
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install pyavd, Ansible Version & Run Tests
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
       # - uses: actions/upload-artifact@v4
       #   with:
       #     name: molecule-${{ matrix.avd_scenario }}-artifacts
@@ -313,25 +359,33 @@ jobs:
         avd_scenario:
           - 'anta_runner'
         ansible_version:
-          - 'ansible-core<2.19.0 --upgrade'
+          - 'ansible-core<2.19.0'
         include:
           - avd_scenario: 'anta_runner'
             ansible_version: 'ansible-core==2.16.0'
-    needs: [ file-changes ]
+    needs: [build_pyavd, file-changes]
     if: needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.anta_runner == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: 'ansible_collections/arista/avd'
-          molecule_command: 'test'
-          molecule_args: '--scenario-name ${{ matrix.avd_scenario }}'
-          pip_file: .github/requirements-ci-dev.txt
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install pyavd, Ansible Version & Run Tests
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
 
   # ----------------------------------- #
   # EOS Validate State MOLECULE
@@ -345,25 +399,33 @@ jobs:
         avd_scenario:
           - "eos_validate_state"
         ansible_version:
-          - "ansible-core<2.19.0 --upgrade"
+          - "ansible-core<2.19.0"
         include:
           - avd_scenario: "eos_validate_state"
             ansible_version: "ansible-core==2.16.0"
-    needs: [file-changes]
+    needs: [build_pyavd, file-changes]
     if: needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.validate_state == 'true'
     steps:
       - uses: actions/checkout@v4
-      - name: Run molecule action
-        uses: arista-netdevops-community/action-molecule-avd@v1.8.1
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
         with:
-          molecule_parentdir: "ansible_collections/arista/avd"
-          molecule_command: "test"
-          molecule_args: "--scenario-name ${{ matrix.avd_scenario }}"
-          pip_file: .github/requirements-ci-dev.txt
-          galaxy_file: "ansible_collections/arista/avd/collections.yml"
-          ansible: ${{ matrix.ansible_version }}
-          check_git: true
-          check_git_enforced: true
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: Install Ansible Version & Run Tests
+        run: |
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          python -m pip install --upgrade "${{ matrix.ansible_version }}"
+          cd ansible_collections/arista/avd
+          molecule test --scenario-name ${{ matrix.avd_scenario }}
+      - name: Check GIT status
+        run: |
+          .github/molecule-runner.sh
+        env:
+          INPUT_CHECK_GIT: true
+          INPUT_CHECK_GIT_ENFORCED: true
 
   # ----------------------------------- #
   # Ansible tests
@@ -371,7 +433,7 @@ jobs:
   ansible_test_sanity:
     name: Run ansible-test sanity validation
     runs-on: ubuntu-latest
-    needs: [file-changes]
+    needs: [build_pyavd, file-changes]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3
@@ -382,9 +444,17 @@ jobs:
             3.11
             3.12
             3.13
-      - name: "Install Python requirements"
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: "Install pyavd and Ansible requirements"
         run: |
-          pip install "ansible-core<2.19.0" -r .github/requirements-ci-dev.txt --upgrade
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          pip install "ansible-core<2.19.0"
       - name: "Run ansible-test sanity"
         run: |
           cd ansible_collections/arista/avd/
@@ -393,7 +463,7 @@ jobs:
   ansible_test_units:
     name: Run ansible-test units test cases
     runs-on: ubuntu-latest
-    needs: [file-changes]
+    needs: [build_pyavd, file-changes]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3
@@ -401,10 +471,18 @@ jobs:
         with:
           python-version: |
             3.12
-      - name: "Install Python requirements"
+      - name: Download pyavd Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pyavd
+          path: /tmp/
+      - name: Extract pyavd wheel package
+        run: tar -xzf /tmp/pyavd.tar.gz -C /tmp
+      - name: "Install pyavd and ansible requirements"
         run: |
-          pip install pyyaml "ansible-core<2.19.0" -r .github/requirements-ci-dev.txt --upgrade
-      - name: "Run ansible-test units test cases"
+          python -m pip install --no-cache-dir /tmp/pyavd/*.whl
+          pip install "ansible-core<2.19.0"
+      - name: "Run ansible-test units"
         run: |
           cd ansible_collections/arista/avd/
           ansible-test units --coverage --requirements -vv

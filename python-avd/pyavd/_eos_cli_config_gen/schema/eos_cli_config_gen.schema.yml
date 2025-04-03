@@ -517,7 +517,7 @@ keys:
                 required: true
                 description: Environment variable value.
         shutdown:
-          description: Shutdown the agent process.
+          description: Shutdown the agent process for all supervisors.
           type: bool
         shutdown_supervisor_active:
           description: Shutdown the agent process for active supervisors

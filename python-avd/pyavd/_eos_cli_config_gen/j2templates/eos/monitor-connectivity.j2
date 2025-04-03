@@ -54,8 +54,14 @@ monitor connectivity
          url {{ host.url }}
 {%                     endif %}
 {%                 endif %}
+         !
+{#    EOS issue #}
+         exit
 {%             endfor %}
 {%         endif %}
+      !
+{#    EOS issue #}
+      exit
 {%     endfor %}
 {%     if monitor_connectivity.name_server_group is arista.avd.defined %}
    name-server group {{ monitor_connectivity.name_server_group }}

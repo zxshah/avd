@@ -3016,6 +3016,8 @@ monitor connectivity
          local-interfaces VRF_GLOBAL_SET
          ip 10.10.20.1
          url https://server2.local.com
+         !
+         exit
       !
       host server5
          description
@@ -3023,8 +3025,14 @@ monitor connectivity
          local-interfaces VRF_GLOBAL_SET address-only
          ip 10.10.20.11
          url https://server5.local.com
+         !
+         exit
       !
       host server6
+         !
+         exit
+      !
+      exit
    !
    vrf red
       interface set VRF_GLOBAL_SET Vlan21-24, Vlan29-32
@@ -3040,8 +3048,14 @@ monitor connectivity
          ip 10.10.20.1
          icmp echo size 1300
          url https://server2.local.com
+         !
+         exit
+      !
+      exit
    !
    vrf yellow
+      !
+      exit
    name-server group mynameserver1
    interval 5
    no shutdown

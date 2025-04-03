@@ -9862,10 +9862,15 @@ $defs:
                       mode in the underlay on all p2p uplink interfaces, mlag l3 peer
                       interface and core interfaces for the specific node.
                   uplinks:
+                    type: bool
+                    default: true
                     description: Enable/Disable Protocol Independent Multicast sparse
                       mode in the underlay on specific p2p uplink interfaces. If not
-                      set, all uplinks will be enabled. Set as an empty list to remove
-                      all uplinks.
+                      set, all uplinks will be enabled. Set as False to remove all
+                      uplinks.
+                  uplink_interfaces:
+                    description: Uplink Interface names to enable for Protocol Independent
+                      Multicast sparse mode.
                     type: list
                     items:
                       type: str
@@ -9883,10 +9888,13 @@ $defs:
                       all p2p uplink interfaces, mlag l3 peer interface and core interfaces
                       for the specific node.
                   uplinks:
+                    type: bool
+                    default: true
                     description: Enable/Disable static Protocol Independent Multicast
                       in the underlay on specific p2p uplink interfaces. If not set,
-                      all uplinks will be enabled. Set as an empty list to remove
-                      all uplinks.
+                      all uplinks will be enabled. Set as False to remove all uplinks.
+                  uplink_interfaces:
+                    description: Uplink Interface names to enable for static multicast.
                     type: list
                     items:
                       type: str

@@ -37,9 +37,8 @@ l3leaf:
           underlay_multicast:
             pim_sm:
               enabled: true
-              uplinks:
-                - Ethernet2
-              mlag: false
+              uplinks: false
+              mlag: true
     # Test multicast configuration with mlag pair sharing same vlan for l3 peering (4094)
     # Expected results:
     # - router multicast enabled for ipv4

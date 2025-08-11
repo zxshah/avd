@@ -27,7 +27,7 @@ jobs:
       requirements: ${{ steps.filter.outputs.requirements }}
       docs: ${{ steps.filter.outputs.docs }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -103,7 +103,7 @@ jobs:
           - "3.12"
           - "3.13"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
@@ -134,7 +134,7 @@ jobs:
     needs: [file-changes]
     if: needs.file-changes.outputs.config_gen == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         uses: arista-netdevops-community/action-molecule-avd@v1.8.1
         with:
@@ -165,7 +165,7 @@ jobs:
     needs: [file-changes]
     if: needs.file-changes.outputs.dhcp == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         uses: arista-netdevops-community/action-molecule-avd@v1.8.1
         with:
@@ -227,7 +227,7 @@ jobs:
     needs: [file-changes]
     if: needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.config_gen == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build minimum requirements
         run: |
           pip install uv
@@ -269,7 +269,7 @@ jobs:
     if: needs.file-changes.outputs.cloudvision == 'true' || needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.config_gen == 'true'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         uses: arista-netdevops-community/action-molecule-avd@v1.8.1
         with:
@@ -305,7 +305,7 @@ jobs:
     needs: [file-changes]
     if: needs.file-changes.outputs.eos_design == 'true' || needs.file-changes.outputs.validate_state == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         uses: arista-netdevops-community/action-molecule-avd@v1.8.1
         with:
@@ -326,7 +326,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [file-changes]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
@@ -348,7 +348,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [file-changes]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
@@ -367,7 +367,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [file-changes]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
@@ -387,7 +387,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [file-changes]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:
@@ -417,7 +417,7 @@ jobs:
         with:
           python-version: |
             3.10
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: "Install Python & Ansible requirements"
         run: |
           pip install "ansible-core<2.19.0" -r .github/requirements-ci-dev.txt --upgrade
@@ -452,7 +452,7 @@ jobs:
       matrix:
         python: ["3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set up Python 3
         uses: actions/setup-python@v5
         with:

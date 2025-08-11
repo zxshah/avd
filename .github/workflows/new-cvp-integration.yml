@@ -30,7 +30,7 @@ jobs:
         ansible_version:
           - "ansible-core<2.19.0 --upgrade"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         env:
           CVAAS_AAWG_CI: ${{ secrets.CVAAS_AAWG_CI }}
@@ -59,7 +59,7 @@ jobs:
         ansible_version:
           - "ansible-core<2.19.0 --upgrade"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Run molecule action
         env:
           CVAAS_AAWG_CI: ${{ secrets.CVAAS_AAWG_CI }}
